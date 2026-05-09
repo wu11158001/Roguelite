@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -12,6 +13,12 @@ public class PlayerView : BaseObject
         base.Setup(myRef);
 
         _viewModel.Setup();
+
+        CinemachineCamera vcam = GameObject.FindFirstObjectByType<CinemachineCamera>();
+        if(vcam != null)
+        {
+            vcam.Target.TrackingTarget = gameObject.transform;
+        }
     }
 
     private void Update()
