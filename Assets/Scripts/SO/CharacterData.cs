@@ -14,4 +14,8 @@ public class CharacterData : ScriptableObject
     public AssetReferenceGameObject PrefabReference;
     [Label("角色Icon")]
     public Sprite Icon;
+    [Label("移動速度")]
+    public float MoveSpeed = 3.0f;
+    [Label("轉向速度")]
+    public float RotationSpeed = 10.0f;
 }

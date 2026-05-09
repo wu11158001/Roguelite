@@ -26,6 +26,13 @@ public class GameLauncher : MonoBehaviour
             .Completed += handle =>
             {
                 GameObject playerInstance = handle.Result;
+
+                PlayerView playerView = playerInstance.GetComponent<PlayerView>();
+                if (playerView == null)
+                {
+                    playerView = playerInstance.AddComponent<PlayerView>();
+                }
+                playerView.Setup(selectedData.PrefabReference);
             };
     }
 }
