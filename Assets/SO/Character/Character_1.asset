@@ -20,3 +20,5 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Icon: {fileID: 0}
+  MoveSpeed: 10
+  RotationSpeed: 10

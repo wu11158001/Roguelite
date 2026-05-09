@@ -1,4 +1,3 @@
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -14,10 +13,10 @@ public class PlayerView : BaseObject
 
         _viewModel.Setup();
 
-        CinemachineCamera vcam = GameObject.FindFirstObjectByType<CinemachineCamera>();
-        if(vcam != null)
+        GameCameraView gameCameraView = GameObject.FindFirstObjectByType<GameCameraView>();
+        if(gameCameraView != null)
         {
-            vcam.Target.TrackingTarget = gameObject.transform;
+            gameCameraView.Setup(transform);
         }
     }
 
