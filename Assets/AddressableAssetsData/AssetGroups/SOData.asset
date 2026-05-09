@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: View
+  m_Name: SOData
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: View
-  m_GUID: da20523853f72474caac648441210c51
+  m_GroupName: SOData
+  m_GUID: 64d82d11a684d854cb522f9dfb5a6396
   m_SerializeEntries:
-  - m_GUID: 6ce6444b39d111040b231a2d7358843b
-    m_Address: View
+  - m_GUID: cfa723b760815ed4e829ee8644a50ed3
+    m_Address: SO
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 50febc42c81c83148ac201765ed0d7a1, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 0b3cd2db99491c74ba99797902bb8c93, type: 2}
-    - {fileID: 11400000, guid: 096be47ab86c6824baa52841b59fc84c, type: 2}
+    - {fileID: 11400000, guid: 7734476f65bee62478f9e2b5c133d836, type: 2}
+    - {fileID: 11400000, guid: e70c39a98a6578840844513f6cc75f63, type: 2}
