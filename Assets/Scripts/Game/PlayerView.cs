@@ -4,8 +4,45 @@ using UnityEngine.InputSystem;
 
 public class PlayerView : BaseObject
 {
-    private PlayerViewModel _viewModel = new();
+    private PlayerInput _playerInput;
     private Vector2 _inputVector;
+
+    private PlayerViewModel _viewModel = new();
+
+    private void Awake()
+    {
+        GameConfigData gameConfigData = GameStateData.GameConfig.Value;
+
+        // 輸入控制腳本
+        if (!gameObject.TryGetComponent(out PlayerInput playerInput))
+        {
+            playerInput = gameObject.AddComponent<PlayerInput>();
+        }
+        playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
+        playerInput.actions = gameConfigData.InputAction;
+        playerInput.defaultActionMap = "Player";
+        playerInput.defaultControlScheme = "Keyboard&Mouse";
+        var moveAction = playerInput.actions["Move"];
+
+        // 訂閱：當按鍵按下或移動時
+        moveAction.performed += OnMoveInternal;
+        // 訂閱：當按鍵放開時
+        moveAction.canceled += OnMoveInternal;
+
+        _playerInput = playerInput;
+    }
+
+    public override void OnDestroy()
+    {
+        if (_playerInput != null)
+        {
+            var moveAction = _playerInput.actions["Move"];
+            moveAction.performed -= OnMoveInternal;
+            moveAction.canceled -= OnMoveInternal;
+        }
+
+        base.OnDestroy();
+    }
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
@@ -41,11 +78,20 @@ public class PlayerView : BaseObject
     }
 
     /// <summary>
+    /// 移動處理
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnMoveInternal(InputAction.CallbackContext context)
+    {
+        _inputVector = context.ReadValue<Vector2>();
+    }
+
+    /// <summary>
     /// 移動
     /// </summary>
     /// <param name="value"></param>
-    public void OnMove(InputValue value)
+    public void OnMove(Vector2 value)
     {
-        _inputVector = value.Get<Vector2>();
+        _inputVector = value;
     }
 }

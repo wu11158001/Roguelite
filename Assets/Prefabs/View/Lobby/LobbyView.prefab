@@ -725,11 +725,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyView
   ViewType: 0
-  _gameState: {fileID: 11400000, guid: c6c7ed92f3f4be244a6188b4ee6fb4bc, type: 2}
   _selectCharcters:
   - Name: "\u89D2\u82721\u865F"
     Tog: {fileID: 8362954887171084166}
-    CharacterDataRef:
+    CharacterConfigDataRef:
       m_AssetGUID: 128a54e705dd84744998a4d231e0d29b
       m_SubObjectName: 
       m_SubObjectType: 
@@ -737,7 +736,7 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
   - Name: "\u89D2\u82722\u865F"
     Tog: {fileID: 9179604528850538838}
-    CharacterDataRef:
+    CharacterConfigDataRef:
       m_AssetGUID: f34575c4d16b28942bb1b3e75a312812
       m_SubObjectName: 
       m_SubObjectType: 

@@ -3,10 +3,10 @@ using NaughtyAttributes;
 using UnityEngine.AddressableAssets;
 
 /// <summary>
-/// 角色資料
+/// 角色配置資料
 /// </summary>
-[CreateAssetMenu(fileName = "Character", menuName = "SO Data/Character")]
-public class CharacterData : ScriptableObject
+[CreateAssetMenu(fileName = "Character Config", menuName = "SO Config Data/Character Config")]
+public class CharacterConfigData : ScriptableObject
 {
     [Label("角色名稱")]
     public string CharacterName;

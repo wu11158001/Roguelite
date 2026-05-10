@@ -13,10 +13,10 @@ public class PlayerViewModel
 
     public void Setup()
     {
-        CharacterData selectedData = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData selectedCharacter = GameStateData.SelectedCharacter.Value;
 
-        MoveSpeed = selectedData.MoveSpeed;
-        RotationSpeed = selectedData.RotationSpeed;
+        MoveSpeed = selectedCharacter.MoveSpeed;
+        RotationSpeed = selectedCharacter.RotationSpeed;
     }
 
     /// <summary>

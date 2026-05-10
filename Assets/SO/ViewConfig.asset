@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 127b68a27c817f14f8da29cc7565ef4c, type: 3}
-  m_Name: ViewConfigData
+  m_Name: ViewConfig
   m_EditorClassIdentifier: Assembly-CSharp::ViewConfigData
   Mappings:
   - Type: 0

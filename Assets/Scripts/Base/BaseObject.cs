@@ -20,7 +20,7 @@ public class BaseObject : MonoBehaviour
     }
 
     /// <summary>
-    /// 關閉並釋放資源
+    /// 移除並釋放資源
     /// </summary>
     public virtual void Remove()
     {

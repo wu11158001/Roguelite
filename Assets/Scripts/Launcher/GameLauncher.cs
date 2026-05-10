@@ -3,8 +3,11 @@ using Cysharp.Threading.Tasks;
 
 public class GameLauncher : MonoBehaviour
 {
+    [SerializeField] private GameConfigData _gameConfig;
+
     private void Start()
     {
+        GameStateData.GameConfig.Value = _gameConfig;
         ViewManager.Instance.OpenView<BaseView>(viewType: ViewEnum.GameView).Forget();
         SpawnPlayer();
     }
@@ -14,25 +17,24 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     private void SpawnPlayer()
     {
-        CharacterData selectedData = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData selectedCharacter = GameStateData.SelectedCharacter.Value;
 
-        if (selectedData == null)
+        if (selectedCharacter == null)
         {
             Debug.LogError("找不到選擇的角色資料！");
             return;
         }
 
-        selectedData.PrefabReference.InstantiateAsync(Vector3.zero, Quaternion.identity)
+        selectedCharacter.PrefabReference.InstantiateAsync(Vector3.zero, Quaternion.identity)
             .Completed += handle =>
             {
                 GameObject playerInstance = handle.Result;
 
-                PlayerView playerView = playerInstance.GetComponent<PlayerView>();
-                if (playerView == null)
+                if(!playerInstance.TryGetComponent(out PlayerView playerView))
                 {
                     playerView = playerInstance.AddComponent<PlayerView>();
                 }
-                playerView.Setup(selectedData.PrefabReference);
+                playerView.Setup(selectedCharacter.PrefabReference);
             };
     }
 }

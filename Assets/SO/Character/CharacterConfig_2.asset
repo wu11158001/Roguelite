@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
-  m_Name: Character_2
+  m_Name: CharacterConfig_2
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   CharacterName: "\u89D2\u82722\u865F"
   PrefabReference:

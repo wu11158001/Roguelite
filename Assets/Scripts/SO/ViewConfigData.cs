@@ -10,9 +10,9 @@ public enum ViewEnum
 }
 
 /// <summary>
-/// 介面資料
+/// 介面配置資料
 /// </summary>
-[CreateAssetMenu(fileName = "UIConfig", menuName = "SO Data/View Config")]
+[CreateAssetMenu(fileName = "View Config", menuName = "SO Config Data/View Config")]
 public class ViewConfigData : ScriptableObject
 {
     public List<ViewMapping> Mappings;

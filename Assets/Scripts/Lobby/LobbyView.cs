@@ -21,7 +21,7 @@ public class LobbyView : BaseView
         public Toggle Tog;
 
         [Tooltip("角色資料")]
-        public AssetReferenceT<CharacterData> CharacterDataRef;
+        public AssetReferenceT<CharacterConfigData> CharacterConfigDataRef;
     }
 
     [Label("角色選擇資料列表")] [ReorderableList]
@@ -38,9 +38,9 @@ public class LobbyView : BaseView
         {
             var currentEntry = entry;
 
-            entry.CharacterDataRef.LoadAssetAsync().Completed += handle =>
+            entry.CharacterConfigDataRef.LoadAssetAsync().Completed += handle =>
             {
-                CharacterData loadedData = handle.Result;
+                CharacterConfigData loadedData = handle.Result;
 
                 // 綁定 Toggle
                 currentEntry.Tog.OnValueChangedAsObservable()

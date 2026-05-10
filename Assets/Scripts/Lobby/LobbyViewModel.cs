@@ -7,7 +7,7 @@ public class LobbyViewModel
     /// 選擇角色
     /// </summary>
     /// <param name="data"></param>
-    public void OnSelectChacter(CharacterData data)
+    public void OnSelectChacter(CharacterConfigData data)
     {
         if(data == null)
         {
