@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::GameConfigData
   InputAction: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  MaxMonsterCount: 5
+  SpawnMonsterTime: 0.5
+  SpawnMonsterDistance: 10
