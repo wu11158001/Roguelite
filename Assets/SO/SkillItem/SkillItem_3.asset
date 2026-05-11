@@ -19,7 +19,7 @@ MonoBehaviour:
     SkillIcon: {fileID: 0}
     SkillDescribe: "\u6280\u80FD3\u7B49\u7D1A1"
   - SkillType: 2
-    SkillLevel: 1
+    SkillLevel: 2
     SkillName: "\u6280\u80FD3"
     SkillIcon: {fileID: 0}
     SkillDescribe: "\u6280\u80FD3\u7B49\u7D1A2"
