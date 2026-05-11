@@ -16,9 +16,11 @@ MonoBehaviour:
   MaxMonsterCount: 5
   SpawnMonsterTime: 0.5
   SpawnMonsterDistance: 10
+  MaxLevel: 50
+  BaseUpgradeExp: 3
   ExpConfig:
   - ExpType: 0
-    ExpAddValue: 30
+    ExpAddValue: 1
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
@@ -26,12 +28,19 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
   - ExpType: 1
-    ExpAddValue: 45
+    ExpAddValue: 2
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  BaseUpgradeExp: 100
-  UpgradeExpMultiplier: 1.1
+  UpgradeExpMultiplier:
+  - LevelRange: 5
+    AddNeedValue: 1
+  - LevelRange: 10
+    AddNeedValue: 2
+  - LevelRange: 15
+    AddNeedValue: 6
+  - LevelRange: 20
+    AddNeedValue: 10
