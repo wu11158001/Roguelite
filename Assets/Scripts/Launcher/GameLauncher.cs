@@ -9,7 +9,18 @@ public class GameLauncher : MonoBehaviour
     {
         GameStateData.GameConfig.Value = _gameConfig;
         ViewManager.Instance.OpenView<BaseView>(viewType: ViewEnum.GameView).Forget();
+        SpawnGameContorller();
         SpawnPlayer();
+    }
+
+    /// <summary>
+    /// 產生遊戲控制器
+    /// </summary>
+    private void SpawnGameContorller()
+    {
+        GameObject obj = new();
+        obj.name = "GameController";
+        GameStateData.CurrentGameController.Value = obj.AddComponent<GameController>();
     }
 
     /// <summary>
@@ -34,7 +45,7 @@ public class GameLauncher : MonoBehaviour
                 {
                     playerView = playerInstance.AddComponent<PlayerView>();
                 }
-                playerView.Setup(selectedCharacter.PrefabReference);
+                playerView.Setup(myRef: selectedCharacter.PrefabReference);
             };
     }
 }

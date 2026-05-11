@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
+/// <summary>
+/// 介面物件
+/// </summary>
 public abstract class BaseView : MonoBehaviour
 {
     public ViewEnum ViewType;

@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class BaseObject : MonoBehaviour
+/// <summary>
+/// 遊戲內物件
+/// </summary>
+public class BaseGameObject : MonoBehaviour
 {
     // 儲存自己的 Addressable 引用，用於釋放
     protected AssetReferenceGameObject _myRef;

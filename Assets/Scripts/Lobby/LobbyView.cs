@@ -51,7 +51,7 @@ public class LobbyView : BaseView
         }
 
         // 開始按鈕
-        _btn_Start.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnStartGame());
+        _btn_Start.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnStartGame()).AddTo(this);
     }
 
     public override void Setup(AssetReferenceGameObject myRef)

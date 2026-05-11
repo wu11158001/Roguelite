@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 
-public class PlayerView : BaseObject
+public class PlayerView : BaseGameObject
 {
     private PlayerInput _playerInput;
     private Vector2 _inputVector;
@@ -75,6 +75,8 @@ public class PlayerView : BaseObject
                 Time.deltaTime * _viewModel.RotationSpeed
             );
         }
+
+        TextExp();
     }
 
     /// <summary>
@@ -93,5 +95,21 @@ public class PlayerView : BaseObject
     public void OnMove(Vector2 value)
     {
         _inputVector = value;
+    }
+
+    /// <summary>
+    /// 測試用:經驗值增加
+    /// </summary>
+    private void TextExp()
+    {
+        if(Keyboard.current.aKey.wasPressedThisFrame)
+        {
+            GameStateData.CurrentGameController.Value.OnGainExp(expType: ExpEnum.Exp_1);
+        }
+
+        if (Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            GameStateData.CurrentGameController.Value.OnGainExp(expType: ExpEnum.Exp_2);
+        }
     }
 }

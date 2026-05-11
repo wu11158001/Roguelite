@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 /// <summary>
 /// 角色配置資料
 /// </summary>
-[CreateAssetMenu(fileName = "Character Config", menuName = "SO Config/Character Config")]
+[CreateAssetMenu(fileName = "CharacterConfig", menuName = "SO Config/Character Config")]
 public class CharacterConfigData : ScriptableObject
 {
     [Label("角色名稱")]
