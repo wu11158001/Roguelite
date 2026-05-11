@@ -1,13 +1,20 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using NaughtyAttributes;
+using System.Collections.Generic;
 
 public class GameLauncher : MonoBehaviour
 {
+    [Label("遊戲配置")]
     [SerializeField] private GameConfigData _gameConfig;
+    [Label("技能項目配置")]
+    [SerializeField] private List<SkillItemConfig> _skillItemConfigs;
 
     private void Start()
     {
         GameStateData.GameConfig.Value = _gameConfig;
+        GameStateData.SkillItemConfigs.Value = _skillItemConfigs;
+
         ViewManager.Instance.OpenView(viewType: ViewEnum.GameView).Forget();
         SpawnGameContorller();
         SpawnPlayer();

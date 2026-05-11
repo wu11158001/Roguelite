@@ -702,6 +702,26 @@ PrefabInstance:
       propertyPath: _gameConfig
       value: 
       objectReference: {fileID: 11400000, guid: ade2e5e99dc80e4489aaa90419167376, type: 2}
+    - target: {fileID: -8457871974657430561, guid: 566d12c4c19e22a41afb2c6f1c06f3bf, type: 3}
+      propertyPath: _skillItemConfigs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8457871974657430561, guid: 566d12c4c19e22a41afb2c6f1c06f3bf, type: 3}
+      propertyPath: '_skillItemConfigs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 067a85895cd07d64f892366fe3dd9704, type: 2}
+    - target: {fileID: -8457871974657430561, guid: 566d12c4c19e22a41afb2c6f1c06f3bf, type: 3}
+      propertyPath: '_skillItemConfigs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2b31a41e6a08995498c8c07793506086, type: 2}
+    - target: {fileID: -8457871974657430561, guid: 566d12c4c19e22a41afb2c6f1c06f3bf, type: 3}
+      propertyPath: '_skillItemConfigs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: b35e89e5bf0cf124b82f910824b97296, type: 2}
+    - target: {fileID: -8457871974657430561, guid: 566d12c4c19e22a41afb2c6f1c06f3bf, type: 3}
+      propertyPath: '_skillItemConfigs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: d7027253b39bd4d4d891b775d70bdb86, type: 2}
     - target: {fileID: 228381043676535540, guid: 566d12c4c19e22a41afb2c6f1c06f3bf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

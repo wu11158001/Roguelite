@@ -1,5 +1,5 @@
 using UniRx;
-using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// 全域遊戲資料
@@ -12,4 +12,6 @@ public static class GameStateData
     public static ReactiveProperty<GameConfigData> GameConfig = new();
     /// <summary> 當前使用的遊戲控制器 </summary>
     public static ReactiveProperty<GameController> CurrentGameController = new();
+    /// <summary> 技能項目配置 </summary>
+    public static ReactiveProperty<List<SkillItemConfig>> SkillItemConfigs = new();
 }

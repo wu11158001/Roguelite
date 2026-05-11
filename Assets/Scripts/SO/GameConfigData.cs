@@ -62,11 +62,11 @@ public enum ExpEnum
 [Serializable]
 public struct ExpEntry
 {
-    [Label("經驗值類型")]
+    [Tooltip("經驗值類型")]
     public ExpEnum ExpType;
-    [Label("經驗值增加值")]
+    [Tooltip("經驗值增加值")]
     public int ExpAddValue;
-    [Label("經驗值對應模型")]
+    [Tooltip("經驗值對應模型")]
     public AssetReferenceGameObject PrefabReference;
 }
 
@@ -76,9 +76,9 @@ public struct ExpEntry
 [Serializable]
 public struct UpgradeExpNeedEntry
 {
-    [Label("等級範圍(Ex:包含5級以下)")]
+    [Tooltip("等級範圍(Ex:包含5級以下)")]
     public int LevelRange;
-    [Label("增加所需經驗值")]
+    [Tooltip("增加所需經驗值")]
     public int AddNeedValue;
 }
 

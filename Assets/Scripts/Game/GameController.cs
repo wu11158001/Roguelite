@@ -125,4 +125,24 @@ public class GameController : MonoBehaviour
     }
 
     #endregion
+
+    #region 技能
+
+    /// <summary>
+    /// 獲取可選技能
+    /// </summary>
+    /// <returns></returns>
+    public List<SkillItemEntry> GetSelectSkillDatas()
+    {
+        List<SkillItemEntry> datas = new()
+        {
+            GameStateData.SkillItemConfigs.Value[0].SkillItems[0],
+            GameStateData.SkillItemConfigs.Value[1].SkillItems[0],
+            GameStateData.SkillItemConfigs.Value[2].SkillItems[1],
+        };
+
+        return datas;
+    }
+
+    #endregion
 }

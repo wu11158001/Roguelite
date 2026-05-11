@@ -3,8 +3,8 @@ using UnityEngine.UI;
 using UniRx;
 using TMPro;
 using UnityEngine.AddressableAssets;
-using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
+using System.Collections.Generic;
 
 public class GameView : BaseView
 {
@@ -33,7 +33,7 @@ public class GameView : BaseView
     /// 更新等級
     /// </summary>
     /// <param name="level"></param>
-    private void UpdateLevel(int level)
+    private async void UpdateLevel(int level)
     {
         Text_Level.text = $"等級:{level + 1}";
 
@@ -43,7 +43,12 @@ public class GameView : BaseView
             // 遊戲暫停
             GameStateData.CurrentGameController.Value.IsGamePause.Value = true;
             // 開啟選擇技能介面
-            ViewManager.Instance.OpenView(viewType: ViewEnum.SelectSkillView).Forget();
+            var view = await ViewManager.Instance.OpenView(viewType: ViewEnum.SelectSkillView);             
+            if (view.TryGetComponent(out SelectSkillView selectSkillView))
+            {
+                List<SkillItemEntry> items = GameStateData.CurrentGameController.Value.GetSelectSkillDatas();
+                selectSkillView.SetSkillItemData(items);
+            }
         }
     }
 
