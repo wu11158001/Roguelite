@@ -8,7 +8,7 @@ public class GameLauncher : MonoBehaviour
     private void Start()
     {
         GameStateData.GameConfig.Value = _gameConfig;
-        ViewManager.Instance.OpenView<BaseView>(viewType: ViewEnum.GameView).Forget();
+        ViewManager.Instance.OpenView(viewType: ViewEnum.GameView).Forget();
         SpawnGameContorller();
         SpawnPlayer();
     }

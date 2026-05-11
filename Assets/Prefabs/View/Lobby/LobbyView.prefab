@@ -683,6 +683,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2937826649306496955}
   - component: {fileID: 2837476270999749836}
+  - component: {fileID: 5631810766051315946}
   m_Layer: 5
   m_Name: LobbyView
   m_TagString: Untagged
@@ -725,6 +726,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyView
   ViewType: 0
+  _isUsingMask: 0
+  _isCanClickMask: 0
+  _btn_Start: {fileID: 7218303727034587638}
   _selectCharcters:
   - Name: "\u89D2\u82721\u865F"
     Tog: {fileID: 8362954887171084166}
@@ -742,7 +746,18 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  _btn_Start: {fileID: 7218303727034587638}
+--- !u!225 &5631810766051315946
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3896843883425238949}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4228587992403050007
 GameObject:
   m_ObjectHideFlags: 0

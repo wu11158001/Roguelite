@@ -5,8 +5,12 @@ using UnityEngine.AddressableAssets;
 
 public enum ViewEnum
 {
-    LobbyView,
-    GameView,
+    BackgroundView = 0,
+
+    LobbyView = 100,
+    
+    GameView = 200,
+    SelectSkillView,
 }
 
 /// <summary>

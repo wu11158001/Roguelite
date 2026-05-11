@@ -167,6 +167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3213981867450388838}
   - component: {fileID: 4033843130144737368}
+  - component: {fileID: 1507179741366332853}
   m_Layer: 5
   m_Name: GameView
   m_TagString: Untagged
@@ -208,10 +209,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a41143ffefd3f41bfc909836163e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameView
-  ViewType: 1
+  ViewType: 200
+  _isUsingMask: 0
+  _isCanClickMask: 0
   _btn_Exit: {fileID: 7703854661477712508}
   Text_Level: {fileID: 1494172683142104395}
   Sli_ExpBar: {fileID: 7021690543666017242}
+--- !u!225 &1507179741366332853
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128277889296126537}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2396829424130220392
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,16 +6,17 @@ using System.Collections.Generic;
 
 public class GameController : MonoBehaviour
 {
+    [Label("是否停止遊戲行為(升級/暫停)")]
+    public ReactiveProperty<bool> IsGamePause = new ReactiveProperty<bool>(false);
+
+    [HorizontalLine(color: EColor.Gray)]
     [Label("當前等級")]
     public IReadOnlyReactiveProperty<int> CurrentLevel = new IntReactiveProperty(0);
-
     [Label("當前經驗值")]
     private IntReactiveProperty _currentExp = new IntReactiveProperty(0);
     public IReadOnlyReactiveProperty<int> CurrentExp => _currentExp;
-
     [Label("當前經驗值進度(0~1)")]
     public IReadOnlyReactiveProperty<float> CurrentExpprogress = new FloatReactiveProperty(0);
-
     [Label("當前怪物數量")]
     private IntReactiveProperty _currentMonsterCount = new IntReactiveProperty(0);
     public IReadOnlyReactiveProperty<int> CurrentMonsterCount => _currentMonsterCount;

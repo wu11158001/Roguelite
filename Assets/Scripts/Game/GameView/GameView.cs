@@ -3,9 +3,13 @@ using UnityEngine.UI;
 using UniRx;
 using TMPro;
 using UnityEngine.AddressableAssets;
+using Cysharp.Threading.Tasks;
+using NaughtyAttributes;
 
 public class GameView : BaseView
 {
+    [HorizontalLine(color: EColor.Gray)]
+    [Header("GameView")]
     [SerializeField] private Button _btn_Exit;
     [SerializeField] private TextMeshProUGUI Text_Level;
     [SerializeField] private Slider Sli_ExpBar;
@@ -28,10 +32,19 @@ public class GameView : BaseView
     /// <summary>
     /// 更新等級
     /// </summary>
-    /// <param name="value"></param>
-    private void UpdateLevel(int value)
+    /// <param name="level"></param>
+    private void UpdateLevel(int level)
     {
-        Text_Level.text = $"等級:{value + 1}";
+        Text_Level.text = $"等級:{level + 1}";
+
+        // 升級
+        if(level > 0)
+        {
+            // 遊戲暫停
+            GameStateData.CurrentGameController.Value.IsGamePause.Value = true;
+            // 開啟選擇技能介面
+            ViewManager.Instance.OpenView(viewType: ViewEnum.SelectSkillView).Forget();
+        }
     }
 
     /// <summary>

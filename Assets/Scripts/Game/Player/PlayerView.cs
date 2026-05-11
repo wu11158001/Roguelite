@@ -59,6 +59,10 @@ public class PlayerView : BaseGameObject
 
     private void Update()
     {
+        // 遊戲暫停
+        if (GameStateData.CurrentGameController.Value.IsGamePause.Value)
+            return;
+
         // 更新 ViewModel 狀態
         _viewModel.ProcessInput(_inputVector);
 

@@ -6,28 +6,34 @@ using UniRx;
 using NaughtyAttributes;
 using UnityEngine.AddressableAssets;
 
+/// <summary>
+/// 選擇角色
+/// </summary>
+[Serializable]
+public struct SelectCharcterEntry
+{
+    [Tooltip("作為 Key 使用")]
+    public string Name;
+
+    [Tooltip("Toggle")]
+    public Toggle Tog;
+
+    [Tooltip("角色資料")]
+    public AssetReferenceT<CharacterConfigData> CharacterConfigDataRef;
+}
+
+/// <summary>
+/// 大廳介面
+/// </summary>
 public class LobbyView : BaseView
 {
-    /// <summary>
-    /// 選擇角色
-    /// </summary>
-    [Serializable]
-    public struct SelectCharcterEntry
-    {
-        [Tooltip("作為 Key 使用")]
-        public string Name;
+    [HorizontalLine(color: EColor.Gray)]
+    [Header("LobbyView")]
+    [SerializeField] private Button _btn_Start;
 
-        [Tooltip("Toggle")]
-        public Toggle Tog;
-
-        [Tooltip("角色資料")]
-        public AssetReferenceT<CharacterConfigData> CharacterConfigDataRef;
-    }
-
+    [HorizontalLine(color: EColor.Gray)]
     [Label("角色選擇資料列表")] [ReorderableList]
     [SerializeField] private List<SelectCharcterEntry> _selectCharcters;
-
-    [SerializeField] private Button _btn_Start;
 
     private LobbyViewModel _viewModel = new();
 

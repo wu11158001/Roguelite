@@ -15,14 +15,28 @@ MonoBehaviour:
   Mappings:
   - Type: 0
     PrefabRef:
+      m_AssetGUID: 765c79c8696e09849aa7ace8fbe9bfe8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - Type: 100
+    PrefabRef:
       m_AssetGUID: 5f43cedb2c4ec8b409370fbd9dae18ad
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  - Type: 1
+  - Type: 200
     PrefabRef:
       m_AssetGUID: d3dd3b5a4d99d8645a41fca55a7ef826
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - Type: 201
+    PrefabRef:
+      m_AssetGUID: 3a0f1b6a18dc60c4da41a67b0df4d07b
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 

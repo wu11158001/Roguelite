@@ -5,6 +5,6 @@ public class LobbyLauncher : MonoBehaviour
 {
     private void Start()
     {
-        ViewManager.Instance.OpenView<BaseView>(viewType: ViewEnum.LobbyView).Forget();
+        ViewManager.Instance.OpenView(viewType: ViewEnum.LobbyView).Forget();
     }
 }

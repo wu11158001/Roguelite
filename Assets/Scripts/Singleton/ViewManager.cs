@@ -6,15 +6,16 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
 {
     [SerializeField] private ViewConfigData _viewConfig;
 
+    public ViewConfigData ViewConfig => _viewConfig;
+
     private List<BaseView> _activeViews = new();
 
     /// <summary>
     /// 開啟介面
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     /// <param name="viewType"></param>
     /// <returns></returns>
-    public async UniTask<T> OpenView<T>(ViewEnum viewType) where T : BaseView
+    public async UniTask<BaseView> OpenView(ViewEnum viewType)
     {
         // 從 SO 獲取引用
         var prefabRef = _viewConfig.GetPrefabRef(viewType);
@@ -30,7 +31,7 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
         var handle = prefabRef.InstantiateAsync(canvusRoot);
         GameObject obj = await handle.Task;
 
-        T view = obj.GetComponent<T>();
+        BaseView view = obj.GetComponent<BaseView>();
         view.Setup(prefabRef);
 
         obj.transform.SetAsLastSibling();
