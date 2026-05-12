@@ -60,7 +60,7 @@ public class PlayerView : BaseGameObject
     private void Update()
     {
         // 遊戲暫停
-        if (GameStateData.CurrentGameController.Value.IsGamePause.Value)
+        if (GameStateData.CurrentGameController.Value.IsGamePause)
             return;
 
         // 更新 ViewModel 狀態
@@ -108,12 +108,12 @@ public class PlayerView : BaseGameObject
     {
         if(Keyboard.current.aKey.wasPressedThisFrame)
         {
-            GameStateData.CurrentGameController.Value.OnGainExp(expType: ExpEnum.Exp_1);
+            _viewModel.GainExp(expType: ExpEnum.Exp_1);
         }
 
         if (Keyboard.current.sKey.wasPressedThisFrame)
         {
-            GameStateData.CurrentGameController.Value.OnGainExp(expType: ExpEnum.Exp_2);
+            _viewModel.GainExp(expType: ExpEnum.Exp_2);
         }
     }
 }

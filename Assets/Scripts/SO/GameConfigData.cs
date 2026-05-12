@@ -33,6 +33,10 @@ public class GameConfigData : ScriptableObject
     [Label("升級所需經驗值配置")]
     public List<UpgradeExpNeedEntry> UpgradeExpMultiplier;
 
+    [HorizontalLine(color: EColor.Gray)]
+    [Label("最大技能數量")]
+    public int MaxSkillCount;
+
     /// <summary>
     /// 取得獲得的經驗值
     /// </summary>

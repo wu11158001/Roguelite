@@ -18,4 +18,6 @@ public class CharacterConfigData : ScriptableObject
     public float MoveSpeed = 3.0f;
     [Label("轉向速度")]
     public float RotationSpeed = 10.0f;
+    [Label("初始技能")]
+    public SkillEnum InitSkill;
 }

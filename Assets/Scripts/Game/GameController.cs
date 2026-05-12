@@ -3,21 +3,20 @@ using UniRx;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 public class GameController : MonoBehaviour
 {
-    [Label("是否停止遊戲行為(升級/暫停)")]
-    public ReactiveProperty<bool> IsGamePause = new ReactiveProperty<bool>(false);
-
-    [HorizontalLine(color: EColor.Gray)]
-    [Label("當前等級")]
+    /// <summary> 是否遊戲暫停 </summary>
+    public bool IsGamePause { get; set; }
+    /// <summary> 當前等級 </summary>
     public IReadOnlyReactiveProperty<int> CurrentLevel = new IntReactiveProperty(0);
-    [Label("當前經驗值")]
+    /// <summary> 當前經驗值 </summary>
     private IntReactiveProperty _currentExp = new IntReactiveProperty(0);
     public IReadOnlyReactiveProperty<int> CurrentExp => _currentExp;
-    [Label("當前經驗值進度(0~1)")]
+    /// <summary> 當前經驗值進度(0~1) </summary>
     public IReadOnlyReactiveProperty<float> CurrentExpprogress = new FloatReactiveProperty(0);
-    [Label("當前怪物數量")]
+    /// <summary> 當前怪物數量 </summary>
     private IntReactiveProperty _currentMonsterCount = new IntReactiveProperty(0);
     public IReadOnlyReactiveProperty<int> CurrentMonsterCount => _currentMonsterCount;
 
@@ -131,17 +130,15 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// 獲取可選技能
     /// </summary>
+    /// <param name="count">可選技能數量</param>
     /// <returns></returns>
-    public List<SkillItemEntry> GetSelectSkillDatas()
+    public List<SkillItemData> GetRandomSkillDatas(int count = 3)
     {
-        List<SkillItemEntry> datas = new()
-        {
-            GameStateData.SkillItemConfigs.Value[0].SkillItems[0],
-            GameStateData.SkillItemConfigs.Value[1].SkillItems[0],
-            GameStateData.SkillItemConfigs.Value[2].SkillItems[1],
-        };
-
-        return datas;
+        return GameStateData.SkillItemConfigs
+            .SelectMany(c => c.SkillItems)
+            .OrderBy(x => Guid.NewGuid())
+            .Take(count)
+            .ToList();
     }
 
     #endregion

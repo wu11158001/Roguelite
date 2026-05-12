@@ -1,10 +1,11 @@
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 
 public class SelectSkillView : BaseView
 {
+    [HorizontalLine(color: EColor.Gray)]
+    [Header("SelectSkillView")]
     [SerializeField] private GameObject _selectSkillItemView;
     [SerializeField] private Transform _itemGroup;
 
@@ -12,7 +13,7 @@ public class SelectSkillView : BaseView
     /// 設置可選技能項目
     /// </summary>
     /// <param name="datas"></param>
-    public void SetSkillItemData(List<SkillItemEntry> datas)
+    public void SetSkillItemData(List<SkillItemData> datas)
     {
         _selectSkillItemView.SetActive(false);
 
@@ -34,12 +35,12 @@ public class SelectSkillView : BaseView
     /// 玩家選擇技能
     /// </summary>
     /// <param name="data"></param>
-    private void SelectSkill(SkillItemEntry data)
+    private void SelectSkill(SkillItemData data)
     {
-        Debug.Log($"玩家選擇技能: {data.SkillType} 等級: {data.SkillLevel}");
-
+        // 學習技能
+        GameStateData.CurrentSkillController.Value.OnGainSkill(data);
         // 遊戲暫停結束
-        GameStateData.CurrentGameController.Value.IsGamePause.Value = false;
+        GameStateData.CurrentGameController.Value.IsGamePause = false;
 
         Close();
     }

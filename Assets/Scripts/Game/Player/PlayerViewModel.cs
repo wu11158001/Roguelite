@@ -11,12 +11,14 @@ public class PlayerViewModel
     // 轉向靈敏度
     public float RotationSpeed { get; private set; }
 
+    protected CharacterConfigData _selectedCharacter;
+
     public void Setup()
     {
-        CharacterConfigData selectedCharacter = GameStateData.SelectedCharacter.Value;
+        _selectedCharacter = GameStateData.SelectedCharacter.Value;
 
-        MoveSpeed = selectedCharacter.MoveSpeed;
-        RotationSpeed = selectedCharacter.RotationSpeed;
+        MoveSpeed = _selectedCharacter.MoveSpeed;
+        RotationSpeed = _selectedCharacter.RotationSpeed;
     }
 
     /// <summary>
@@ -33,5 +35,14 @@ public class PlayerViewModel
         {
             TargetRotation = Quaternion.LookRotation(MoveDirection);
         }
+    }
+
+    /// <summary>
+    /// 獲取經驗值
+    /// </summary>
+    /// <param name="expType"></param>
+    public void GainExp(ExpEnum expType)
+    {
+        GameStateData.CurrentGameController.Value.OnGainExp(expType: expType);
     }
 }

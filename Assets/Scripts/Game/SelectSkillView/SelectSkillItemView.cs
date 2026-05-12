@@ -15,15 +15,15 @@ public class SelectSkillItemView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _text_Describe;
     [SerializeField] private GameObject _text_New;
 
-    private SkillItemEntry _skillData;
-    private Action<SkillItemEntry> _callback;
+    private SkillItemData _skillData;
+    private Action<SkillItemData> _callback;
 
     private void Start()
     {
         _btn_Item.OnClickAsObservable().First().Subscribe(_ => _callback?.Invoke(_skillData)).AddTo(this);
     }
 
-    public void Setup(SkillItemEntry data, Action<SkillItemEntry> callback)
+    public void Setup(SkillItemData data, Action<SkillItemData> callback)
     {
         _callback = callback;
 

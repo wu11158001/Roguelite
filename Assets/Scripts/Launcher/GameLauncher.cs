@@ -1,7 +1,9 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
+using UniRx;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameLauncher : MonoBehaviour
 {
@@ -13,10 +15,14 @@ public class GameLauncher : MonoBehaviour
     private void Start()
     {
         GameStateData.GameConfig.Value = _gameConfig;
-        GameStateData.SkillItemConfigs.Value = _skillItemConfigs;
+        foreach (var skillConfig in _skillItemConfigs)
+        {
+            GameStateData.SkillItemConfigs.Add(skillConfig);
+        }
 
         ViewManager.Instance.OpenView(viewType: ViewEnum.GameView).Forget();
         SpawnGameContorller();
+        SpawnSkillContorller();
         SpawnPlayer();
     }
 
@@ -28,6 +34,16 @@ public class GameLauncher : MonoBehaviour
         GameObject obj = new();
         obj.name = "GameController";
         GameStateData.CurrentGameController.Value = obj.AddComponent<GameController>();
+    }
+
+    /// <summary>
+    /// 產生技能控制器
+    /// </summary>
+    private void SpawnSkillContorller()
+    {
+        GameObject obj = new();
+        obj.name = "SkillController";
+        GameStateData.CurrentSkillController.Value = obj.AddComponent<SkillController>();
     }
 
     /// <summary>

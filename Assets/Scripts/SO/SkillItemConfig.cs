@@ -19,14 +19,14 @@ public enum SkillEnum
 [CreateAssetMenu(fileName = "SkillItemConfig", menuName = "SO Config/SkillItem Config")]
 public class SkillItemConfig : ScriptableObject
 {
-    public List<SkillItemEntry> SkillItems;
+    public List<SkillItemData> SkillItems;
 }
 
 /// <summary>
 /// 技能項目資料
 /// </summary>
 [Serializable]
-public struct SkillItemEntry
+public class SkillItemData
 {
     [Tooltip("技能類型")]
     public SkillEnum SkillType;
