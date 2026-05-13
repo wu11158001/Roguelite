@@ -26,7 +26,7 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
             return null;
         }
 
-        Transform canvusRoot = GameObject.FindFirstObjectByType<Canvas>().transform;
+        Transform canvusRoot = GameObject.Find("Canvas").transform;
 
         var handle = prefabRef.InstantiateAsync(canvusRoot);
         GameObject obj = await handle.Task;

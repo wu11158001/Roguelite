@@ -44,6 +44,20 @@ public class LauncherController : MonoBehaviour
 
         _text_Loading.text = "完成！進入大廳...";
 
+        await PreloadLobbyView();
+
         SceneLoader.Instance.LoadSceneAsync(sceneType: SceneEnum.Lobby).Forget();
+    }
+
+    /// <summary>
+    /// 預載大廳
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask PreloadLobbyView()
+    {
+        var prefabRef = ViewManager.Instance.ViewConfig.GetPrefabRef(ViewEnum.LobbyView);
+        // 預載入記憶體
+        var handle = prefabRef.LoadAssetAsync<GameObject>();
+        await handle.Task;
     }
 }

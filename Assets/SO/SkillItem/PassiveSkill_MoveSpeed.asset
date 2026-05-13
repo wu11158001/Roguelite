@@ -20,4 +20,4 @@ MonoBehaviour:
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6++"
     IsPassive: 1
     PassiveType: 2
-    PassiveAddValue: 0.3
+    PassiveAddValue: 0.5

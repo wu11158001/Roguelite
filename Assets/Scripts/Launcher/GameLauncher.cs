@@ -12,7 +12,7 @@ public class GameLauncher : MonoBehaviour
     [Label("技能項目配置")]
     [SerializeField] private List<SkillItemConfig> _skillItemConfigs;
 
-    private void Start()
+    private async void Start()
     {
         GameStateData.GameConfig.Value = _gameConfig;
         foreach (var skillConfig in _skillItemConfigs)
@@ -20,10 +20,12 @@ public class GameLauncher : MonoBehaviour
             GameStateData.SkillItemConfigs.Add(skillConfig);
         }
 
-        ViewManager.Instance.OpenView(viewType: ViewEnum.GameView).Forget();
         SpawnGameContorller();
         SpawnSkillContorller();
-        SpawnPlayer();
+        await ViewManager.Instance.OpenView(viewType: ViewEnum.GameView);
+        await SpawnPlayer();
+
+        SceneLoader.Instance.CloseLoading();
     }
 
     /// <summary>
@@ -49,7 +51,7 @@ public class GameLauncher : MonoBehaviour
     /// <summary>
     /// 產生控制角色
     /// </summary>
-    private void SpawnPlayer()
+    private async UniTask SpawnPlayer()
     {
         CharacterConfigData selectedCharacter = GameStateData.SelectedCharacter.Value;
 
@@ -59,16 +61,16 @@ public class GameLauncher : MonoBehaviour
             return;
         }
 
-        selectedCharacter.PrefabReference.InstantiateAsync(Vector3.zero, Quaternion.identity)
-            .Completed += handle =>
-            {
-                GameObject playerInstance = handle.Result;
+        GameObject playerInstance = await selectedCharacter.PrefabReference
+         .InstantiateAsync(Vector3.zero, Quaternion.identity)
+         .ToUniTask();
 
-                if(!playerInstance.TryGetComponent(out PlayerView playerView))
-                {
-                    playerView = playerInstance.AddComponent<PlayerView>();
-                }
-                playerView.Setup(myRef: selectedCharacter.PrefabReference);
-            };
+        // 檢查元件並 Setup
+        if (!playerInstance.TryGetComponent(out PlayerView playerView))
+        {
+            playerView = playerInstance.AddComponent<PlayerView>();
+        }
+
+        playerView.Setup(myRef: selectedCharacter.PrefabReference);
     }
 }
