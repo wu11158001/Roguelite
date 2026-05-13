@@ -42,7 +42,7 @@ public class GameConfigData : ScriptableObject
     /// </summary>
     /// <param name="expType"></param>
     /// <returns></returns>
-    public int GetGainExp(ExpEnum expType)
+    public int GetGainExp(EXP_TYPE expType)
     {
         var entry = ExpConfig.FirstOrDefault(x => x.ExpType == expType);
         return entry.ExpAddValue;
@@ -54,7 +54,7 @@ public class GameConfigData : ScriptableObject
 /// <summary>
 /// 經驗值類型
 /// </summary>
-public enum ExpEnum
+public enum EXP_TYPE
 {
     Exp_1,
     Exp_2
@@ -67,7 +67,7 @@ public enum ExpEnum
 public struct ExpEntry
 {
     [Tooltip("經驗值類型")]
-    public ExpEnum ExpType;
+    public EXP_TYPE ExpType;
     [Tooltip("經驗值增加值")]
     public int ExpAddValue;
     [Tooltip("經驗值對應模型")]

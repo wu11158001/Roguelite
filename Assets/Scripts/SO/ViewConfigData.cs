@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public enum ViewEnum
+public enum VIEW_TYPE
 {
     BackgroundView = 0,
 
@@ -24,7 +24,7 @@ public class ViewConfigData : ScriptableObject
     [Serializable]
     public struct ViewMapping
     {
-        public ViewEnum Type;
+        public VIEW_TYPE Type;
         public AssetReferenceGameObject PrefabRef;
     }
 
@@ -33,7 +33,7 @@ public class ViewConfigData : ScriptableObject
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public AssetReferenceGameObject GetPrefabRef(ViewEnum type)
+    public AssetReferenceGameObject GetPrefabRef(VIEW_TYPE type)
     {
         return Mappings.Find(m => m.Type == type).PrefabRef;
     }

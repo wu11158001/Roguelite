@@ -23,6 +23,6 @@ public class LobbyViewModel
     /// </summary>
     public void OnStartGame()
     {
-        SceneLoader.Instance.LoadSceneAsync(sceneType: SceneEnum.Game).Forget();
+        SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Game).Forget();
     }
 }

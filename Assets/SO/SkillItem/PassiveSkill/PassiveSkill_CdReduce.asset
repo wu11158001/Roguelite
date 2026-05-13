@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdcbea22e895b54db0ea1c1cb76cd35, type: 3}
-  m_Name: PassiveSkill_Attack
+  m_Name: PassiveSkill_CdReduce
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
   - SkillType: 6
     SkillLevel: 1
-    SkillName: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA"
-    SkillIcon: {fileID: 21300000, guid: 5e498092c8a3bac40bfd0f56dc30dd41, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA++"
+    SkillName: "\u88AB\u52D5\u6280\u80FD-CD\u6E1B\u5C11"
+    SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C111"
     IsPassive: 1
-    PassiveType: 0
-    PassiveAddValue: 2
+    PassiveType: 5
+    PassiveAddValue: 1.1

@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
     /// 獲得經驗值
     /// </summary>
     /// <param name="expType"></param>
-    public void OnGainExp(ExpEnum expType)
+    public void OnGainExp(EXP_TYPE expType)
     {
         int addValue = GameStateData.GameConfig.Value.GetGainExp(expType);
         _currentExp.Value += addValue;
@@ -121,56 +121,6 @@ public class GameController : MonoBehaviour
         float totalInLevel = endExp - startExp;
 
         return Mathf.Clamp01(currentInLevel / totalInLevel);
-    }
-
-    #endregion
-
-    #region 技能
-
-    /// <summary>
-    /// 獲取可選技能
-    /// </summary>
-    /// <param name="count">可選技能數量</param>
-    /// <returns></returns>
-    public List<SkillItemData> GetRandomSkillDatas(int count = 3)
-    {
-        // 取得所有配置中的第一級技能 (種子技能)
-        var allConfigs = GameStateData.SkillItemConfigs.SelectMany(c => c.SkillItems).ToList();
-        var lv1Skills = allConfigs.Where(s => s.SkillLevel == 1).ToList();
-
-        // 取得玩家目前擁有的技能
-        var ownedSkills = GameStateData.CurrentSkillController.Value.OwnSkills.ToList();
-        var activeOwned = ownedSkills.Where(s => !s.IsPassive).ToList();
-
-        // 建立「可用候選清單」
-        List<SkillItemData> candidates = new();
-
-        // 處理已擁有的主動技能 -> 放入「下一級」作為候選
-        foreach (var owned in activeOwned)
-        {
-            var nextLevel = allConfigs.FirstOrDefault(s =>
-                s.SkillType == owned.SkillType && s.SkillLevel == owned.SkillLevel + 1);
-
-            if (nextLevel != null) candidates.Add(nextLevel);
-        }
-
-        // 處理未擁有的技能 -> 如果主動技能格未滿 6 個，則放入所有 Lv1 主動技能
-        if (activeOwned.Count < 6)
-        {
-            var unownedActives = lv1Skills.Where(s =>
-                !s.IsPassive && !activeOwned.Any(o => o.SkillType == s.SkillType));
-            candidates.AddRange(unownedActives);
-        }
-
-        // 處理被動技能 -> 永遠放入候選 (Lv1)
-        var passiveSkills = lv1Skills.Where(s => s.IsPassive);
-        candidates.AddRange(passiveSkills);
-
-        // 從候選名單中隨機抽取
-        return candidates
-            .OrderBy(x => Guid.NewGuid())
-            .Take(count)
-            .ToList();
     }
 
     #endregion

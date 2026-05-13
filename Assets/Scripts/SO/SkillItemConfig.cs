@@ -7,7 +7,7 @@ using NaughtyAttributes;
 /// <summary>
 /// 技能類型
 /// </summary>
-public enum SkillEnum
+public enum SKILL_TYPE
 {
     Skill_1,
     Skill_2,
@@ -21,14 +21,31 @@ public enum SkillEnum
 /// <summary>
 /// 被動技能類型
 /// </summary>
-public enum PassiveEnum
+public enum PASSIVE_SKILL_TYPE
 {
-    // 攻擊增加
+    /// <summary> 攻擊增加 </summary>
     Attack,
-    // 最大生命增加
+    /// <summary> 最大生命增加(%) </summary>
     MaxHp,
-    // 移動速度增加
+    /// <summary> 移動速度增加 </summary>
     MoveSpeed,
+    /// <summary> 傷害減少 </summary>
+    Defense,
+    /// <summary> 每秒生命回復 </summary>
+    LifeRecovery,
+    /// <summary> 技能CD時間減少(%) </summary>
+    CdReduce,
+    /// <summary> 拾取範圍 </summary>
+    PickupRange,
+}
+
+/// <summary>
+/// 道具技能類型
+/// </summary>
+public enum PROPS_SKILL_TYPE
+{
+    /// <summary> 生命回復(%) </summary>
+    HpRecovery,
 }
 
 /// <summary>
@@ -46,12 +63,12 @@ public class SkillItemConfig : ScriptableObject
 [Serializable]
 public class SkillItemData
 {
-    [AllowNesting][Label("技能類型")]
-    [HideIf("IsPassive")]
-    public SkillEnum SkillType;
+    [AllowNesting][Label("種動技能類型")]
+    [ShowIf("_isShowSkill")]
+    public SKILL_TYPE SkillType;
 
     [AllowNesting][Label("技能等級")]
-    [HideIf("IsPassive")]
+    [HideIf("IsProps")]
     public int SkillLevel;
 
     [AllowNesting][Label("技能名稱")]
@@ -63,17 +80,34 @@ public class SkillItemData
     [AllowNesting][Label("技能描述")]
     [TextArea] public string SkillDescribe;
 
-    [AllowNesting]
-    [Label("是否為被動技能(被動技能可重複選擇，不會有升級)")]
+    [AllowNesting][Label("是否為被動技能")]
+    [HideIf("IsProps")]
     public bool IsPassive;
 
     [AllowNesting][Label("被動技能類型")]
-    [ShowIf("IsPassive")]
-    public PassiveEnum PassiveType;
+    [ShowIf("_isShowPassive")]
+    public PASSIVE_SKILL_TYPE PassiveType;
 
     [AllowNesting][Label("被動技能增加值")]
-    [ShowIf("IsPassive")]
+    [ShowIf("_isShowPassive")]
     public float PassiveAddValue;
+
+    [AllowNesting][Label("是否為道具技能")]
+    [HideIf("IsPassive")]
+    public bool IsProps;
+    [AllowNesting][Label("道具技能類型")]
+    [ShowIf("_isShowProps")]
+    public PROPS_SKILL_TYPE PropsSkillType;
+    [AllowNesting][Label("道具技能增加值")]
+    [ShowIf("_isShowProps")]
+    public float PropsAddValue;
+
+    // 是否顯示主動技能欄位
+    private bool _isShowSkill => !IsPassive && !IsProps;
+    // 是否顯示被動技能欄位
+    private bool _isShowPassive => IsPassive && !IsProps;
+    // 是否顯示道具技能欄位
+    private bool _isShowProps => !IsPassive && IsProps;
 
     /// <summary>
     /// 獲取下一級的資料(主動技能)
@@ -82,6 +116,18 @@ public class SkillItemData
     /// <returns></returns>
     public SkillItemData GetNextLevelData(List<SkillItemData> configList)
     {
-        return configList.FirstOrDefault(s => s.SkillType == this.SkillType && s.SkillLevel == this.SkillLevel + 1);
+        // 道具沒有下一級
+        if (IsProps) return null;
+
+        if (IsPassive)
+        {
+            return configList.FirstOrDefault(s =>
+                s.IsPassive && s.PassiveType == this.PassiveType && s.SkillLevel == this.SkillLevel + 1);
+        }
+        else
+        {
+            return configList.FirstOrDefault(s =>
+                !s.IsPassive && !s.IsProps && s.SkillType == this.SkillType && s.SkillLevel == this.SkillLevel + 1);
+        }
     }
 }

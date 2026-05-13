@@ -13,7 +13,12 @@ public class GameView : BaseView
     [SerializeField] private Button _btn_Exit;
     [SerializeField] private TextMeshProUGUI Text_Level;
     [SerializeField] private Slider Sli_ExpBar;
+
+    [Header("技能欄")]
     [SerializeField] private SkillItemView[] _skillItemViews = new SkillItemView[6];
+
+    [Header("被動技能欄")]
+    [SerializeField] private SkillItemView[] _passiveSkillItemViews = new SkillItemView[6];
 
     [Header("角色能力")]
     [SerializeField] private TextMeshProUGUI Text_Attack;
@@ -38,6 +43,11 @@ public class GameView : BaseView
         foreach (var skillItemView in _skillItemViews)
         {
             skillItemView.Setup();
+        }
+
+        foreach (var passiveSkillItemView in _passiveSkillItemViews)
+        {
+            passiveSkillItemView.Setup();
         }
     }
 
@@ -71,10 +81,10 @@ public class GameView : BaseView
             // 遊戲暫停
             GameStateData.CurrentGameController.Value.IsGamePause = true;
             // 開啟選擇技能介面
-            var view = await ViewManager.Instance.OpenView(viewType: ViewEnum.SelectSkillView);             
+            var view = await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.SelectSkillView);             
             if (view.TryGetComponent(out SelectSkillView selectSkillView))
             {
-                List<SkillItemData> items = GameStateData.CurrentGameController.Value.GetRandomSkillDatas();
+                List<SkillItemData> items = GameStateData.CurrentSkillController.Value.GetRandomSkillDatas();
                 selectSkillView.SetSkillItemData(items);
             }
         }
@@ -94,9 +104,21 @@ public class GameView : BaseView
     /// </summary>
     private void UpdateSkillItems(GainSkillMessage skillItemDatas)
     {
-        for (int i = 0; i < skillItemDatas.OwnSkills.Count; i++)
+        int skillIndex = 0;
+        int passiveIndex = 0;
+
+        foreach (var skill in skillItemDatas.OwnSkills)
         {
-            _skillItemViews[i].SetSkillIte(skillItemDatas.OwnSkills[i]);
+            if(skill.IsPassive)
+            {
+                _passiveSkillItemViews[passiveIndex].SetSkillIte(skill);
+                passiveIndex++;
+            }
+            else
+            {
+                _skillItemViews[skillIndex].SetSkillIte(skill);
+                skillIndex++;
+            }
         }
     }
 }

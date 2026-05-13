@@ -15,7 +15,7 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     /// </summary>
     /// <param name="viewType"></param>
     /// <returns></returns>
-    public async UniTask<BaseView> OpenView(ViewEnum viewType)
+    public async UniTask<BaseView> OpenView(VIEW_TYPE viewType)
     {
         // 從 SO 獲取引用
         var prefabRef = _viewConfig.GetPrefabRef(viewType);

@@ -22,7 +22,7 @@ public static class GameStateData
     /// </summary>
     /// <param name="skillType"></param>
     /// <returns></returns>
-    public static SkillItemData GetSkillItemData(SkillEnum skillType)
+    public static SkillItemData GetSkillItemData(SKILL_TYPE skillType)
     {
         var targetSkill = SkillItemConfigs
             .SelectMany(config => config.SkillItems)

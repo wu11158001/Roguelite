@@ -8,6 +8,6 @@ public class GameViewModel
     /// </summary>
     public void OnExit()
     {
-        SceneLoader.Instance.LoadSceneAsync(sceneType: SceneEnum.Lobby).Forget();
+        SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
     }
 }

@@ -51,7 +51,7 @@ public class PlayerViewModel
     /// 獲取經驗值
     /// </summary>
     /// <param name="expType"></param>
-    public void GainExp(ExpEnum expType)
+    public void GainExp(EXP_TYPE expType)
     {
         GameStateData.CurrentGameController.Value.OnGainExp(expType: expType);
     }

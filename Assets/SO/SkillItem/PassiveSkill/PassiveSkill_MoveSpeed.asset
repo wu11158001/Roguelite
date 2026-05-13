@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afdcbea22e895b54db0ea1c1cb76cd35, type: 3}
+  m_Name: PassiveSkill_MoveSpeed
+  m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
+  SkillItems:
+  - SkillType: 6
+    SkillLevel: 1
+    SkillName: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6"
+    SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA61"
+    IsPassive: 1
+    PassiveType: 2
+    PassiveAddValue: 1.1

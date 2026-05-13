@@ -22,7 +22,7 @@ public class GameLauncher : MonoBehaviour
 
         SpawnGameContorller();
         SpawnSkillContorller();
-        await ViewManager.Instance.OpenView(viewType: ViewEnum.GameView);
+        await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.GameView);
         await SpawnPlayer();
 
         SceneLoader.Instance.CloseLoading();

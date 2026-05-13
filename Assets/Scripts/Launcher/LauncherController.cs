@@ -46,7 +46,7 @@ public class LauncherController : MonoBehaviour
 
         await PreloadLobbyView();
 
-        SceneLoader.Instance.LoadSceneAsync(sceneType: SceneEnum.Lobby).Forget();
+        SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class LauncherController : MonoBehaviour
     /// <returns></returns>
     private async UniTask PreloadLobbyView()
     {
-        var prefabRef = ViewManager.Instance.ViewConfig.GetPrefabRef(ViewEnum.LobbyView);
+        var prefabRef = ViewManager.Instance.ViewConfig.GetPrefabRef(VIEW_TYPE.LobbyView);
         // 預載入記憶體
         var handle = prefabRef.LoadAssetAsync<GameObject>();
         await handle.Task;

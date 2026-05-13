@@ -9,7 +9,7 @@ using Cysharp.Threading.Tasks;
 public abstract class BaseView : MonoBehaviour
 {
     [Header("BaseView")]
-    public ViewEnum ViewType;
+    public VIEW_TYPE ViewType;
     [HorizontalLine(color: EColor.Gray)]
     [Label("是否開啟遮罩")]
     [SerializeField] private bool _isUsingMask;
@@ -79,7 +79,7 @@ public abstract class BaseView : MonoBehaviour
 
         if(_canvasGroup != null) _canvasGroup.alpha = 0;
 
-        var prefabRef = ViewManager.Instance.ViewConfig.GetPrefabRef(ViewEnum.BackgroundView);
+        var prefabRef = ViewManager.Instance.ViewConfig.GetPrefabRef(VIEW_TYPE.BackgroundView);
 
         if (prefabRef == null)
         {

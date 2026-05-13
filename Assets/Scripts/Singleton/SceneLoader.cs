@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum SceneEnum
+public enum SCENE_TYPE
 {
     Lobby,
     Game,
@@ -24,7 +24,7 @@ public class SceneLoader : SingletonMonoBehaviour<SceneLoader>
     /// </summary>
     /// <param name="sceneType"></param>
     /// <returns></returns>
-    public async UniTask LoadSceneAsync(SceneEnum sceneType)
+    public async UniTask LoadSceneAsync(SCENE_TYPE sceneType)
     {
         _canvasGroup.alpha = 1;
 

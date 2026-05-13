@@ -112,14 +112,14 @@ public class PlayerView : BaseGameObject
     /// </summary>
     private void TextExp()
     {
-        if(Keyboard.current.aKey.wasPressedThisFrame)
+        if(Keyboard.current.jKey.wasPressedThisFrame)
         {
-            _viewModel.GainExp(expType: ExpEnum.Exp_1);
+            _viewModel.GainExp(expType: EXP_TYPE.Exp_1);
         }
 
-        if (Keyboard.current.sKey.wasPressedThisFrame)
+        if (Keyboard.current.kKey.wasPressedThisFrame)
         {
-            _viewModel.GainExp(expType: ExpEnum.Exp_2);
+            _viewModel.GainExp(expType: EXP_TYPE.Exp_2);
         }
     }
 }
