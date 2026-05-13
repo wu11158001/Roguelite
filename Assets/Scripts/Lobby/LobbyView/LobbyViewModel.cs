@@ -15,7 +15,7 @@ public class LobbyViewModel
             return;
         }
 
-        GameStateData.SelectedCharacter.Value = data;
+        GameStateData.SelectedCharacter.Value = data.Clone();
     }
 
     /// <summary>

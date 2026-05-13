@@ -10,18 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdcbea22e895b54db0ea1c1cb76cd35, type: 3}
-  m_Name: SkillItem_1
+  m_Name: SkillItem_6
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillType: 0
+  - SkillType: 5
     IsPassive: 0
     SkillLevel: 1
-    SkillName: "\u6280\u80FD1"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
-    SkillDescribe: "\u6280\u80FD1\u7B49\u7D1A1"
-  - SkillType: 0
-    IsPassive: 0
-    SkillLevel: 2
-    SkillName: "\u6280\u80FD1"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
-    SkillDescribe: "\u6280\u80FD1\u7B49\u7D1A2"
+    SkillName: "\u6280\u80FD6"
+    SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
+    SkillDescribe: "\u6280\u80FD6\u7B49\u7D1A1"

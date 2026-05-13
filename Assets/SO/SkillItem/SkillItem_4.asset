@@ -14,12 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
   - SkillType: 3
+    IsPassive: 0
     SkillLevel: 1
     SkillName: "\u6280\u80FD4"
-    SkillIcon: {fileID: 0}
+    SkillIcon: {fileID: 21300000, guid: 361266d61a3657b41bad4bbd4d233fd8, type: 3}
     SkillDescribe: "\u6280\u80FD4\u7B49\u7D1A1"
-  - SkillType: 3
-    SkillLevel: 2
-    SkillName: "\u6280\u80FD4"
-    SkillIcon: {fileID: 0}
-    SkillDescribe: "\u6280\u80FD4\u7B49\u7D1A2"

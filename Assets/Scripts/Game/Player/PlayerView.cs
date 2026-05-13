@@ -44,6 +44,12 @@ public class PlayerView : BaseGameObject
         base.OnDestroy();
     }
 
+    public override void Remove()
+    {
+        _viewModel.Dispose();
+        base.Remove();
+    }
+
     public override void Setup(AssetReferenceGameObject myRef)
     {
         base.Setup(myRef);

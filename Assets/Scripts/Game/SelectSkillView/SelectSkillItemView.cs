@@ -31,6 +31,6 @@ public class SelectSkillItemView : MonoBehaviour
         _img_Icon.sprite = data.SkillIcon;
         _text_Name.text = data.SkillName;
         _text_Describe.text = data.SkillDescribe;
-        _text_New.SetActive(data.SkillLevel == 1);
+        _text_New.SetActive(!data.IsPassive && data.SkillLevel == 1);
     }
 }

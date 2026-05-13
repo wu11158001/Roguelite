@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 
 public class PlayerViewModel
 {
@@ -13,12 +14,21 @@ public class PlayerViewModel
 
     protected CharacterConfigData _selectedCharacter;
 
+    // 用來收集所有訂閱的容器
+    private readonly CompositeDisposable _disposables = new();
+
     public void Setup()
     {
         _selectedCharacter = GameStateData.SelectedCharacter.Value;
+        _selectedCharacter.MoveSpeed.Subscribe(s => MoveSpeed = s).AddTo(_disposables);
 
-        MoveSpeed = _selectedCharacter.MoveSpeed;
+        MoveSpeed = _selectedCharacter.MoveSpeed.Value;
         RotationSpeed = _selectedCharacter.RotationSpeed;
+    }
+
+    public void Dispose()
+    {
+        _disposables.Dispose();
     }
 
     /// <summary>

@@ -20,5 +20,14 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Icon: {fileID: 0}
-  MoveSpeed: 10
+  _baseMoveSpeed: 10
+  MoveSpeed:
+    value: 0
   RotationSpeed: 10
+  _baseAttack: 2
+  Attack:
+    value: 0
+  _baseMaxHp: 20
+  MaxHp:
+    value: 0
+  InitSkill: 0

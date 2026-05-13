@@ -16,6 +16,7 @@ public class SkillController : MonoBehaviour
 {
     // 已學習技能
     private ReactiveCollection<SkillItemData> _ownSkills;
+    public IReactiveCollection<SkillItemData> OwnSkills => _ownSkills;
     private Subject<GainSkillMessage> _onSkillChanged = new();
     public IObservable<GainSkillMessage> OnSkillChanged => _onSkillChanged;
 

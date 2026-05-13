@@ -15,10 +15,21 @@ public class GameView : BaseView
     [SerializeField] private Slider Sli_ExpBar;
     [SerializeField] private SkillItemView[] _skillItemViews = new SkillItemView[6];
 
+    [Header("角色能力")]
+    [SerializeField] private TextMeshProUGUI Text_Attack;
+    [SerializeField] private TextMeshProUGUI Text_MaxHp;
+    [SerializeField] private TextMeshProUGUI Text_MoveSpeed;
+
     private GameViewModel _viewModel = new();
 
     private void Start()
     {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        characterConfig.Attack.Subscribe(x => Text_Attack.text = $"攻擊力:{x}");
+        characterConfig.MaxHp.Subscribe(x => Text_MaxHp.text = $"最大生命:{x}");
+        characterConfig.MoveSpeed.Subscribe(x => Text_MoveSpeed.text = $"移動速度:{x}");
+
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnExit());
     }
 
