@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+ï»¿using NaughtyAttributes;
 using System;
 using UnityEngine;
 
@@ -15,27 +15,27 @@ public enum ENEMY_TYPE
 
 public abstract class BasicAttributeData : ScriptableObject
 {
-    [Label("¼Ä¤H¥N¸¹")]
+    [Label("æ•µäººä»£è™Ÿ")]
     [SerializeField]
-    public ENEMY_TYPE enemyType;      //¼Ä¤H¥N¸¹
-    [Label("°òÂ¦²¾°Ê³t«×")]
+    public ENEMY_TYPE enemyType;      //æ•µäººä»£è™Ÿ
+    [Label("åŸºç¤ç§»å‹•é€Ÿåº¦")]
     [SerializeField]
-    private float _basicMoveSpeed;      //²¾°Ê³t«×
-    [Label("°òÂ¦§ğÀ»¤O")]
+    private float _basicMoveSpeed;      //ç§»å‹•é€Ÿåº¦
+    [Label("åŸºç¤æ”»æ“ŠåŠ›")]
     [SerializeField]
-    private float _basicATK;            //§ğÀ»¤O
-    [Label("°òÂ¦¨¾¿m¤O")]
+    private float _basicATK;            //æ”»æ“ŠåŠ›
+    [Label("åŸºç¤é˜²ç¦¦åŠ›")]
     [SerializeField]
-    private float _basicDEF;            //¨¾¿m¤O
-    [Label("°òÂ¦¦å¶q")]
+    private float _basicDEF;            //é˜²ç¦¦åŠ›
+    [Label("åŸºç¤è¡€é‡")]
     [SerializeField]
-    private float _basicHp;             //°òÂ¦¦å¶q
-    [Label("°òÂ¦Å]¤O")]
+    private float _basicHp;             //åŸºç¤è¡€é‡
+    [Label("åŸºç¤é­”åŠ›")]
     [SerializeField]
-    private float _basicMp;             //°òÂ¦Å]¤O
-    [Label("§ğÀ»ÀW²v")]
+    private float _basicMp;             //åŸºç¤é­”åŠ›
+    [Label("æ”»æ“Šé »ç‡")]
     [SerializeField]
-    private float _atkSpeed;            //§ğÀ»ÀW²v
+    private float _atkSpeed;            //æ”»æ“Šé »ç‡
 
     public Action _OnDieNotify;
     private float _teampHp;
@@ -55,7 +55,7 @@ public abstract class BasicAttributeData : ScriptableObject
             _teampHp = value;
             if (_teampHp <= 0)
             {
-                Debug.Log("¦¹©Çª«¦º¤`");
+                Debug.Log("æ­¤æ€ªç‰©æ­»äº¡");
                 OnDieNotify();
             }
         }

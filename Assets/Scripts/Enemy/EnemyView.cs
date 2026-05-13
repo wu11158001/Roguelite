@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -14,7 +14,7 @@ public class EnemyView : BaseGameObject
     {
         _enemyModel = new(data);
         if(cb != null) _callBack = cb;
-        Debug.Log("ªì©l HP [" + _enemyModel.ConfigData.currentHp + "]");
+        Debug.Log("åˆå§‹ HP [" + _enemyModel.ConfigData.currentHp + "]");
     }
     private void Start()
     {
@@ -31,7 +31,7 @@ public class EnemyView : BaseGameObject
     }
     private void Update()
     {
-        // ¹CÀ¸¼È°±
+        // éŠæˆ²æš«åœ
         if (GameStateData.CurrentGameController.Value.IsGamePause)
             return;
         _attackedTimes += Time.deltaTime;
@@ -57,12 +57,12 @@ public class EnemyView : BaseGameObject
         if (other.CompareTag("Player") && _attackedTimes > _enemyModel.ConfigData.atkSpeed)
         {
             _attackedTimes = 0;
-            Debug.Log("[" + gameObject.name + "]"+"¸I¨ìª±®a¤F HP ["+ _enemyModel.ConfigData.currentHp + "]");
+            Debug.Log("[" + gameObject.name + "]"+"ç¢°åˆ°çŽ©å®¶äº† HP ["+ _enemyModel.ConfigData.currentHp + "]");
             _enemyModel.ConfigData.currentHp -= 1;
         }
     }
     public void OnDieNotify() {
-        Debug.Log("Ä²µo¦º¤`");
+        Debug.Log("è§¸ç™¼æ­»äº¡");
         _callBack?.Invoke(_enemyModel.ConfigData.enemyType,gameObject);
     }
 }

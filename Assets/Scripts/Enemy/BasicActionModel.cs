@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public abstract class BasicActionModel
 {
-    // ²¾°Ê¦V¶q
+    // ç§»å‹•å‘é‡
     public Vector3 currentPos { get; private set; }
     protected BasicAttributeData _basicAttributeData;
     public float _attackedInterval;
@@ -14,13 +14,13 @@ public abstract class BasicActionModel
     }
     public BasicAttributeData ConfigData { get { return _basicAttributeData; } }
 
-    //¨ü¨ì§ğÀ»
+    //å—åˆ°æ”»æ“Š
     public void OnAttacked(BasicAttributeData attackerPlayer, BasicAttributeData victimPlayer)
     {
         float harm = victimPlayer.currentDEF() - attackerPlayer.currentATK();
         if (harm <= 0)
         {
-            Debug.Log($"¦¹¦¸§ğÀ»¶Ë®`¬° : [{harm}]");
+            Debug.Log($"æ­¤æ¬¡æ”»æ“Šå‚·å®³ç‚º : [{harm}]");
             return;
         }
         victimPlayer.currentHp -= harm;
