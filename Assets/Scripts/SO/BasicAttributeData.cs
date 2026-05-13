@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System;
 using UnityEngine;
 
 public enum PLAYER_STATE_TPYE
@@ -35,15 +36,30 @@ public abstract class BasicAttributeData : ScriptableObject
     [Label("§ðÀ»ÀW²v")]
     [SerializeField]
     private float _atkSpeed;            //§ðÀ»ÀW²v
-    public BasicAttributeData()
+
+    public Action _OnDieNotify;
+    private float _teampHp;
+    public void SetUp()
     {
-        currentHp = _basicHp;
+        _teampHp = _basicHp;
         currentMp = _basicMp;
     }
     public PLAYER_STATE_TPYE currentState() {
         return currentHp > 0f ? PLAYER_STATE_TPYE.LIVING : PLAYER_STATE_TPYE.DIE;
     }
-    public float currentHp;
+    public float currentHp
+    {
+        get { return _teampHp; }
+        set
+        {
+            _teampHp = value;
+            if (_teampHp <= 0)
+            {
+                Debug.Log("¦¹©Çª«¦º¤`");
+                OnDieNotify();
+            }
+        }
+    }
     public float currentMp;
     public float currentATK() {
         return _basicATK;
@@ -53,5 +69,9 @@ public abstract class BasicAttributeData : ScriptableObject
         return _basicDEF;
     }
     public float moveSpeed { get { return _basicMoveSpeed; } }
-   
+    public float atkSpeed { get { return _atkSpeed; } }
+    private void OnDieNotify() {
+        _OnDieNotify?.Invoke();
+    }
+
 }

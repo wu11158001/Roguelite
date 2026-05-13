@@ -8,7 +8,11 @@ public class EnemyModel : BasicActionModel
     public Vector3 _trackingTargetV3;
     public EnemyModel(BasicAttributeData data) : base(data)
     {
-        
+       
+    }
+    public void Reset()
+    {
+        _basicAttributeData.SetUp();
     }
 
 }

@@ -10,11 +10,10 @@ public abstract class BasicActionModel
     {
         _basicAttributeData = data;
         _attackedInterval = 1.0f;
+        _basicAttributeData.SetUp();
     }
-    public BasicAttributeData ConfigData()
-    {
-        return _basicAttributeData;
-    }
+    public BasicAttributeData ConfigData { get { return _basicAttributeData; } }
+
     //¨ü¨ì§ðÀ»
     public void OnAttacked(BasicAttributeData attackerPlayer, BasicAttributeData victimPlayer)
     {

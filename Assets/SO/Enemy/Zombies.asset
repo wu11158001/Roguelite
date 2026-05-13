@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Zombies
   m_EditorClassIdentifier: Assembly-CSharp::EnemyConfigData
   enemyType: 1
-  _basicMoveSpeed: 1
+  _basicMoveSpeed: 3
   _basicATK: 3
   _basicDEF: 1
   _basicHp: 10
   _basicMp: 0
   _atkSpeed: 1
-  currentHp: 0
   currentMp: 0
   PrefabReference:
     m_AssetGUID: 992cdd76d69b7864d99b90fcabfabe1d

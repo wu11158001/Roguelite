@@ -15,18 +15,30 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField]
     private GameObject Player = null;
-
+    [SerializeField]
+    private bool IsCreaterEnemy;
+    [SerializeField]
+    private int craterEnemyCount = 10; 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        createrEnemy(ENEMY_TYPE.ZOMBIES, 1);
-        Player = GameObject.FindWithTag("Player");
+        createrEnemy(ENEMY_TYPE.ZOMBIES, craterEnemyCount);
+        if(Player == null) { Player = GameObject.FindWithTag("Player"); }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (IsCreaterEnemy)
+        {
+            IsCreaterEnemy = false;
+            unitTest();
+        }
+    }
+    void unitTest()
+    {
+        createrEnemy(ENEMY_TYPE.ZOMBIES, craterEnemyCount);
+
     }
     async void createrEnemy(ENEMY_TYPE type, int count)
     {
@@ -49,14 +61,14 @@ public class EnemyManager : MonoBehaviour
             Vector3 finalSpawnPosition = this.transform.position + new Vector3(randomCircle.x, 1, randomCircle.y);
 
             // 3. 加上 await，這會讓迴圈「等待」這一隻生完後才跑下一次迴圈
-            GameObject enemy = await GetEnemy(config, finalSpawnPosition);
-
+            GameObject enemy = await GetEnemy(Instantiate(config), finalSpawnPosition, i);
+       
             // 在這裡可以針對生成的 enemy 做初始化
             // enemy.transform.position = ...
             Debug.Log($"第 {i + 1} 隻怪物已就位");
         }
     }
-    async Task <GameObject> GetEnemy(EnemyConfigData data,Vector3 enemyPosition)
+    async Task <GameObject> GetEnemy(EnemyConfigData data,Vector3 enemyPosition,int count)
     {
         if (!enemyPool.ContainsKey(data.enemyType))
         {
@@ -65,7 +77,10 @@ public class EnemyManager : MonoBehaviour
         // 1. 如果池子裡有，直接回傳（不需要 await）
         if (enemyPool[data.enemyType].Count > 0)
         {
-            return enemyPool[data.enemyType].Pop();
+            var enemy = enemyPool[data.enemyType].Pop();
+            enemy.SetActive(true);
+            enemy.transform.position = enemyPosition;
+            return enemy;
         }
 
         // 2. 非同步生成
@@ -77,10 +92,12 @@ public class EnemyManager : MonoBehaviour
         // 3. 檢查組件
         if (!enemyInstance.TryGetComponent(out EnemyView view))
         {
+            enemyInstance.name = "enemy_" + count;
             //添加敵人代碼
             enemyInstance.AddComponent<EnemyView>();
-            enemyInstance.GetComponent<EnemyView>().SetUp(data);
-            enemyInstance.GetComponent<EnemyView>().SetupMoveTarget(Player.transform.position, Player);
+            enemyInstance.GetComponent<EnemyView>().SetUp(data,ReturnEnemy);
+           //enemyInstance.GetComponent<EnemyView>().SetupMoveTarget(Player.transform.position, Player);
+            
         }
         return enemyInstance;
     }
