@@ -24,6 +24,7 @@ public class GameLauncher : MonoBehaviour
 
         _controllParent = new GameObject(name = "ControllerGroup").transform;
 
+        SpawnPool();
         SpawnGameContorller();
         SpawnCharacterContorller();
         SpawnSkillContorller();
@@ -31,6 +32,15 @@ public class GameLauncher : MonoBehaviour
         await SpawnPlayer();
 
         SceneLoader.Instance.CloseLoading();
+    }
+
+    /// <summary>
+    /// 產生遊戲場景物件池
+    /// </summary>
+    private void SpawnPool()
+    {
+        GameObject obj = new(name = "ObjectPool");
+        GameStateData.CurrentObjectPool.Value = obj.AddComponent<GameScenePool>();
     }
 
     /// <summary>
@@ -87,5 +97,7 @@ public class GameLauncher : MonoBehaviour
         }
 
         playerView.Setup(myRef: selectedCharacter.PrefabReference);
+
+        GameStateData.ControlCharacter.Value = playerView;
     }
 }

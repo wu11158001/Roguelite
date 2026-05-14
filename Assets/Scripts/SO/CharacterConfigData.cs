@@ -30,9 +30,9 @@ public class CharacterConfigData : ScriptableObject
     [HideInInspector] public ReactiveProperty<float> MoveSpeed;
 
     [BoxGroup("角色可動態變更數值")]
-    [Label("攻擊力")]
-    [SerializeField] private int _baseAttack = 2;
-    [HideInInspector] public ReactiveProperty<int> Attack;
+    [Label("增加攻擊力")]
+    [SerializeField] private int _baseAddAttack = 2;
+    [HideInInspector] public ReactiveProperty<int> AddAttack;
 
     [BoxGroup("角色可動態變更數值")]
     [Label("最大生命")]
@@ -65,7 +65,7 @@ public class CharacterConfigData : ScriptableObject
     public void Initialize()
     {
         MoveSpeed = new ReactiveProperty<float>(_baseMoveSpeed);
-        Attack = new ReactiveProperty<int>(_baseAttack);
+        AddAttack = new ReactiveProperty<int>(_baseAddAttack);
         MaxHp = new ReactiveProperty<int>(_baseMaxHp);
         Defense = new ReactiveProperty<int>(_baseDefense);
         LifeRecovery = new ReactiveProperty<int>(_baseLifeRecovery);

@@ -3,19 +3,30 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using NaughtyAttributes;
+using UnityEngine.AddressableAssets;
 
 /// <summary>
 /// 技能類型
 /// </summary>
 public enum SKILL_TYPE
 {
-    Skill_1,
+    /// <summary> 追蹤 </summary>
+    Skill_Tracking,
     Skill_2,
     Skill_3,
     Skill_4,
     Skill_5,
     Skill_6,
     Skill_7,
+}
+
+/// <summary>
+/// 技能攻擊模式
+/// </summary>
+public enum SKILL_ATTACK_MODE_TYPE
+{
+    /// <summary> 追蹤 </summary>
+    Tracking,
 }
 
 /// <summary>
@@ -63,6 +74,7 @@ public class SkillItemConfig : ScriptableObject
 [Serializable]
 public class SkillItemData
 {
+    // --------主動技能--------
     [AllowNesting][Label("種動技能類型")]
     [ShowIf("_isShowSkill")]
     public SKILL_TYPE SkillType;
@@ -77,13 +89,55 @@ public class SkillItemData
     [AllowNesting][Label("技能Icon")]
     public Sprite SkillIcon;
 
-    [AllowNesting][Label("技能CD")]
-    [ShowIf("_isShowSkill")]
-    public float SkillCd;
-
     [AllowNesting][Label("技能描述")]
     [TextArea] public string SkillDescribe;
 
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("技能攻擊模式")]
+    [ShowIf("_isShowSkill")]
+    public SKILL_ATTACK_MODE_TYPE SkillAttackModeType;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("技能對應模型")]
+    [ShowIf("_isShowSkill")]
+    public AssetReferenceGameObject PrefabReference;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("技能CD")]
+    [ShowIf("_isShowSkill")]
+    public float SkillCd;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("技能攻擊力")]
+    [ShowIf("_isShowSkill")]
+    public int SkillAttack;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("發射數量")]
+    [ShowIf("_isShowSkill")]
+    public int SkillShotCount;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("發射間隔")]
+    [ShowIf("_isShowSkill")]
+    public float SkillShotInterval;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("穿透數量")]
+    [ShowIf("_isShowSkill")]
+    public int SkillPenetrate;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("飛行速度")]
+    [ShowIf("_isShowSkill")]
+    public int SkillFlightSpeed;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("擊退效果")]
+    [ShowIf("_isShowSkill")]
+    public float SkillKnockback;
+
+    // --------被動技能--------
     [AllowNesting][Label("是否為被動技能")]
     [HideIf("IsProps")]
     public bool IsPassive;
@@ -96,6 +150,7 @@ public class SkillItemData
     [ShowIf("_isShowPassive")]
     public float PassiveAddValue;
 
+    // --------道具技能--------
     [AllowNesting][Label("是否為道具技能")]
     [HideIf("IsPassive")]
     public bool IsProps;
@@ -114,7 +169,7 @@ public class SkillItemData
     private bool _isShowProps => !IsPassive && IsProps;
 
     /// <summary>
-    /// 獲取下一級的資料(主動技能)
+    /// 獲取下一級的資料
     /// </summary>
     /// <param name="configList"></param>
     /// <returns></returns>

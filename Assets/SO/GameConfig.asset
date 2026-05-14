@@ -16,7 +16,7 @@ MonoBehaviour:
   MaxMonsterCount: 5
   SpawnMonsterTime: 0.5
   SpawnMonsterDistance: 10
-  MaxLevel: 50
+  MaxLevel: 100
   BaseUpgradeExp: 3
   ExpConfig:
   - ExpType: 0
@@ -44,3 +44,4 @@ MonoBehaviour:
     AddNeedValue: 6
   - LevelRange: 20
     AddNeedValue: 10
+  MaxSkillCount: 0

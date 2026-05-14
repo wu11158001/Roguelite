@@ -24,6 +24,7 @@ public class GameView : BaseView
     [SerializeField] private TextMeshProUGUI Text_Attack;
     [SerializeField] private TextMeshProUGUI Text_MaxHp;
     [SerializeField] private TextMeshProUGUI Text_MoveSpeed;
+    [SerializeField] private TextMeshProUGUI Text_Hp;
 
     private GameViewModel _viewModel = new();
 
@@ -31,9 +32,10 @@ public class GameView : BaseView
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
 
-        characterConfig.Attack.Subscribe(x => Text_Attack.text = $"攻擊力:{x}");
+        characterConfig.AddAttack.Subscribe(x => Text_Attack.text = $"攻擊力:{x}");
         characterConfig.MaxHp.Subscribe(x => Text_MaxHp.text = $"最大生命:{x}");
         characterConfig.MoveSpeed.Subscribe(x => Text_MoveSpeed.text = $"移動速度:{x}");
+        characterConfig.Hp.Subscribe(x => Text_Hp.text = $"當前Hp:{x}");
 
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnExit());
     }

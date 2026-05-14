@@ -3,6 +3,7 @@ using UniRx;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 
 /// <summary>
 /// 獲取或提升技能事件
@@ -18,6 +19,9 @@ public class GainSkillMessage
 /// </summary>
 public class SkillController : MonoBehaviour
 {
+    /// <summary> 技能物件距離玩家多遠移除 </summary>
+    public float SkillRemoveDistance = 50;
+
     // 已學習技能
     private ReactiveCollection<SkillItemData> _ownSkills;
     public IReactiveCollection<SkillItemData> OwnSkills => _ownSkills;
@@ -46,84 +50,16 @@ public class SkillController : MonoBehaviour
         _ownSkills.ObserveReplace().Subscribe(x => OnSkillListChanged(x.NewValue));
     }
 
-    #region 技能CD與執行
-
     /// <summary>
-    /// 技能變更
+    /// 計算技能傷害(技能攻擊力+被動攻擊力)
     /// </summary>
-    /// <param name="skill"></param>
-    private void OnSkillListChanged(SkillItemData skill)
-    {
-        // 只要是主動技能更新，就重啟該計時器
-        if (!skill.IsPassive && !skill.IsProps)
-        {
-            StartSkillTimer(skill);
-        }
-        // 如果是被動技能且是 CD 類型，強制所有主動技能重啟
-        else if (skill.IsPassive && skill.PassiveType == PASSIVE_SKILL_TYPE.CdReduce)
-        {
-            foreach (var active in _ownSkills.Where(s => !s.IsPassive && !s.IsProps))
-            {
-                StartSkillTimer(active);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 獲取技能CD時間(與被動加乘)
-    /// </summary>
-    /// <param name="skill"></param>
+    /// <param name="skillAttack"></param>
     /// <returns></returns>
-    private float GetActualCd(SkillItemData skill)
+    public int CalculateAttack(int skillAttack)
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
-
-        if(characterConfig.CdReduce.Value == 0)
-        {
-            return skill.SkillCd;
-        }
-
-        float actualCd = skill.SkillCd * (1 - characterConfig.CdReduce.Value);
-        return Mathf.Max(0.1f, actualCd);
+        return skillAttack + characterConfig.AddAttack.Value;
     }
-
-    /// <summary>
-    /// 開始技能倒數
-    /// </summary>
-    /// <param name="skill"></param>
-    private void StartSkillTimer(SkillItemData skill)
-    {
-        StopSkillTimer(skill);
-
-        float cd = GetActualCd(skill);
-        _skillTimers[skill.SkillType] = Observable.Timer(TimeSpan.FromSeconds(cd), TimeSpan.FromSeconds(cd), Scheduler.MainThread)
-            .Subscribe(_ => ExecuteSkill(skill))
-            .AddTo(this);
-    }
-
-    /// <summary>
-    /// 停止技能倒數
-    /// </summary>
-    /// <param name="skill"></param>
-    private void StopSkillTimer(SkillItemData skill)
-    {
-        if (_skillTimers.TryGetValue(skill.SkillType, out var d))
-        {
-            d.Dispose();
-            _skillTimers.Remove(skill.SkillType);
-        }
-    }
-
-    /// <summary>
-    /// 執行技能
-    /// </summary>
-    /// <param name="skill"></param>
-    private void ExecuteSkill(SkillItemData skill)
-    {
-        //Debug.Log($"[發射] {skill.SkillName} | 實際 CD: {GetActualCd(skill):F2}s");
-    }
-
-    #endregion
 
     #region 獲取或升級技能
 
@@ -134,7 +70,7 @@ public class SkillController : MonoBehaviour
     public void OnGainPassiveHandle(SkillItemData data)
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
-
+ 
         if (data.IsPassive)
         {
             switch (data.PassiveType)
@@ -144,9 +80,9 @@ public class SkillController : MonoBehaviour
                     characterConfig.MoveSpeed.Value += data.PassiveAddValue;
                     break;
 
-                // 攻擊力(%)
+                // 增加攻擊力
                 case PASSIVE_SKILL_TYPE.Attack:
-                    characterConfig.Attack.Value = (int)(characterConfig.Attack.Value * data.PassiveAddValue);
+                    characterConfig.AddAttack.Value = (int)(characterConfig.AddAttack.Value + data.PassiveAddValue);
                     break;
 
                 // 最大生命(%)
@@ -328,6 +264,136 @@ public class SkillController : MonoBehaviour
 
         // 推播事件
         MessageBroker.Default.Publish(new GainSkillMessage { OwnSkills = _ownSkills });
+    }
+
+    #endregion
+
+    #region 技能CD與執行
+
+    /// <summary>
+    /// 技能變更
+    /// </summary>
+    /// <param name="skill"></param>
+    private void OnSkillListChanged(SkillItemData skill)
+    {
+        // 只要是主動技能更新，就重啟該計時器
+        if (!skill.IsPassive && !skill.IsProps)
+        {
+            StartSkillTimer(skill);
+        }
+        // 如果是被動技能且是 CD 類型，強制所有主動技能重啟
+        else if (skill.IsPassive && skill.PassiveType == PASSIVE_SKILL_TYPE.CdReduce)
+        {
+            foreach (var active in _ownSkills.Where(s => !s.IsPassive && !s.IsProps))
+            {
+                StartSkillTimer(active);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 獲取技能CD時間(技能本生與被動加乘)
+    /// </summary>
+    /// <param name="skill"></param>
+    /// <returns></returns>
+    private float GetActualCd(SkillItemData skill)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        if(characterConfig.CdReduce.Value == 0)
+        {
+            return skill.SkillCd;
+        }
+
+        float actualCd = skill.SkillCd * (1 - characterConfig.CdReduce.Value);
+        return Mathf.Max(0.1f, actualCd);
+    }
+
+    /// <summary>
+    /// 開始技能倒數
+    /// </summary>
+    /// <param name="skill"></param>
+    private void StartSkillTimer(SkillItemData skill)
+    {
+        StopSkillTimer(skill);
+
+        float cd = GetActualCd(skill);
+        _skillTimers[skill.SkillType] = Observable.Timer(TimeSpan.FromSeconds(cd), TimeSpan.FromSeconds(cd), Scheduler.MainThread)
+            .Subscribe(_ => ExecuteSkill(skill))
+            .AddTo(this);
+    }
+
+    /// <summary>
+    /// 停止技能倒數
+    /// </summary>
+    /// <param name="skill"></param>
+    private void StopSkillTimer(SkillItemData skill)
+    {
+        if (_skillTimers.TryGetValue(skill.SkillType, out var d))
+        {
+            d.Dispose();
+            _skillTimers.Remove(skill.SkillType);
+        }
+    }
+
+    /// <summary>
+    /// 執行技能
+    /// </summary>
+    /// <param name="skill"></param>
+    private void ExecuteSkill(SkillItemData skill)
+    {
+        //Debug.LogError($"[發射] {skill.SkillName} | 實際 CD: {GetActualCd(skill):F2}s");
+
+        switch (skill.SkillAttackModeType)
+        {
+            // 發射技能_追蹤
+            case SKILL_ATTACK_MODE_TYPE.Tracking:
+                StartCoroutine(IShotSkillTracking(skill));
+                break;
+        }
+    }
+
+    #endregion
+
+    #region 技能發射
+
+    /// <summary>
+    /// 產生技能在角色前方
+    /// </summary>
+    /// <param name="data"></param>
+    private void SpawnSkillInFrontOfCharacter(SkillItemData data)
+    {
+        PlayerView playerView = GameStateData.ControlCharacter.Value;
+
+        GameStateData.CurrentObjectPool.Value.SpawnObject(
+            parentName: data.SkillName,
+            assetRef: data.PrefabReference,
+            position: playerView.SkillShotPoint.position,
+            rotation: Quaternion.identity,
+            callback: (obj) =>
+            {
+                if (obj.TryGetComponent(out Skill_TrackingView skill))
+                {
+                    skill.Setup(data);
+                }
+            });
+    }
+
+    /// <summary>
+    /// 發射技能_追蹤
+    /// </summary>
+    private IEnumerator IShotSkillTracking(SkillItemData skill)
+    {
+        for (int i = 0; i < skill.SkillShotCount; i++)
+        {
+            SpawnSkillInFrontOfCharacter(skill);
+
+            // 如果發射數量大於 1 且還沒發射完，則等待間隔時間
+            if (skill.SkillShotCount > 1 && i < skill.SkillShotCount - 1)
+            {
+                yield return new WaitForSeconds(skill.SkillShotInterval);
+            }
+        }
     }
 
     #endregion

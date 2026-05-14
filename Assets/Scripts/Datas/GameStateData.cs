@@ -8,6 +8,8 @@ public static class GameStateData
 {
     /// <summary> 選擇的角色資料 </summary>
     public static ReactiveProperty<CharacterConfigData> SelectedCharacter = new();
+    /// <summary> 操作角色角色 </summary>
+    public static ReactiveProperty<PlayerView> ControlCharacter = new();
     /// <summary> 遊戲配置資料 </summary>
     public static ReactiveProperty<GameConfigData> GameConfig = new();
     /// <summary> 當前使用的遊戲控制器 </summary>
@@ -18,6 +20,8 @@ public static class GameStateData
     public static ReactiveProperty<SkillController> CurrentSkillController = new();
     /// <summary> 當前使用的角色控制器 </summary>
     public static ReactiveProperty<CharacterController> CurrentCharacterController = new();
+    /// <summary> 當前使用的遊戲場景物件池 </summary>
+    public static ReactiveProperty<GameScenePool> CurrentObjectPool = new();
 
     /// <summary>
     /// 獲取技能資料

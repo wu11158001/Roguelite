@@ -7,10 +7,15 @@ public class PlayerView : BaseGameObject
     private PlayerInput _playerInput;
     private Vector2 _inputVector;
 
+    /// <summary> 技能發射點 </summary>
+    public Transform SkillShotPoint { get; private set; }
+
     private PlayerViewModel _viewModel = new();
 
     private void Awake()
     {
+        SkillShotPoint = transform.Find("SkillShotPoint");
+
         GameConfigData gameConfigData = GameStateData.GameConfig.Value;
 
         // 輸入控制腳本
