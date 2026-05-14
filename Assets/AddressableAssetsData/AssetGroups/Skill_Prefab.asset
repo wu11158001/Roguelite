@@ -10,20 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Character_Models
+  m_Name: Skill_Prefab
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: Character_Models
-  m_GUID: ef251b8343e83234b98ed41bf1bb1d9f
+  m_GroupName: Skill_Prefab
+  m_GUID: 52b42e65b1884e94cac35bd6fa7991f3
   m_SerializeEntries:
-  - m_GUID: d1d718a96a2906a46a9edc2c25c27111
-    m_Address: Character
+  - m_GUID: 0ffae75431c0fa544a8364701ea6d118
+    m_Address: Assets/Prefabs/Skill
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 50febc42c81c83148ac201765ed0d7a1, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 95e0d3ba6843bad4ebd74cc5bff08878, type: 2}
-    - {fileID: 11400000, guid: b720a36d4d2087942ac0f4684f7a4a81, type: 2}
+    - {fileID: 11400000, guid: a0ceeae37aa6ee44fbc759062b8fbcc6, type: 2}
+    - {fileID: 11400000, guid: 9516298a402026341adde53101e26dbb, type: 2}
