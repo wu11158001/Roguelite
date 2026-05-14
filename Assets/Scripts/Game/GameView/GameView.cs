@@ -57,8 +57,8 @@ public class GameView : BaseView
 
         Init();
 
-        GameStateData.CurrentGameController.Value.CurrentLevel.Subscribe(value => UpdateLevel(value));
-        GameStateData.CurrentGameController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value));
+        GameStateData.CurrentCharacterController.Value.CurrentLevel.Subscribe(value => UpdateLevel(value));
+        GameStateData.CurrentCharacterController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value));
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
 
         // 初始技能添加
@@ -79,7 +79,7 @@ public class GameView : BaseView
         if(level > 0)
         {
             // 遊戲暫停
-            GameStateData.CurrentGameController.Value.IsGamePause = true;
+            GameStateData.CurrentGameController.Value.GanePause(true);
             // 開啟選擇技能介面
             var view = await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.SelectSkillView);             
             if (view.TryGetComponent(out SelectSkillView selectSkillView))

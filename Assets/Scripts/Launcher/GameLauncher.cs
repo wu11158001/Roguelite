@@ -12,6 +12,8 @@ public class GameLauncher : MonoBehaviour
     [Label("技能項目配置")]
     [SerializeField] private List<SkillItemConfig> _skillItemConfigs;
 
+    private Transform _controllParent;
+
     private async void Start()
     {
         GameStateData.GameConfig.Value = _gameConfig;
@@ -20,7 +22,10 @@ public class GameLauncher : MonoBehaviour
             GameStateData.SkillItemConfigs.Add(skillConfig);
         }
 
+        _controllParent = new GameObject(name = "ControllerGroup").transform;
+
         SpawnGameContorller();
+        SpawnCharacterContorller();
         SpawnSkillContorller();
         await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.GameView);
         await SpawnPlayer();
@@ -33,9 +38,19 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     private void SpawnGameContorller()
     {
-        GameObject obj = new();
-        obj.name = "GameController";
+        GameObject obj = new(name = "GameController");
         GameStateData.CurrentGameController.Value = obj.AddComponent<GameController>();
+        obj.transform.parent = _controllParent;
+    }
+
+    /// <summary>
+    /// 產生角色控制器
+    /// </summary>
+    private void SpawnCharacterContorller()
+    {
+        GameObject obj = new(name = "CharacterController");
+        GameStateData.CurrentCharacterController.Value = obj.AddComponent<CharacterController>();
+        obj.transform.parent = _controllParent;
     }
 
     /// <summary>
@@ -43,9 +58,9 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     private void SpawnSkillContorller()
     {
-        GameObject obj = new();
-        obj.name = "SkillController";
+        GameObject obj = new(name = "SkillController");
         GameStateData.CurrentSkillController.Value = obj.AddComponent<SkillController>();
+        obj.transform.parent = _controllParent;
     }
 
     /// <summary>

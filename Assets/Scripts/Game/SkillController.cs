@@ -13,6 +13,9 @@ public class GainSkillMessage
     public ReactiveCollection<SkillItemData> OwnSkills;
 }
 
+/// <summary>
+/// 技能控制器
+/// </summary>
 public class SkillController : MonoBehaviour
 {
     // 已學習技能
@@ -22,6 +25,181 @@ public class SkillController : MonoBehaviour
     // 獲取或提升技能事件
     private Subject<GainSkillMessage> _onSkillChanged = new();
     public IObservable<GainSkillMessage> OnSkillChanged => _onSkillChanged;
+
+    // 用來存放每個技能的計時訂閱
+    private Dictionary<SKILL_TYPE, IDisposable> _skillTimers = new();
+
+    private void OnDestroy()
+    {
+        foreach (var timer in _skillTimers.Values)
+        {
+            timer.Dispose();
+        }
+        _skillTimers.Clear();
+    }
+
+    private void Start()
+    {
+        _ownSkills ??= new();
+
+        _ownSkills.ObserveAdd().Subscribe(x => OnSkillListChanged(x.Value));
+        _ownSkills.ObserveReplace().Subscribe(x => OnSkillListChanged(x.NewValue));
+    }
+
+    #region 技能CD與執行
+
+    /// <summary>
+    /// 技能變更
+    /// </summary>
+    /// <param name="skill"></param>
+    private void OnSkillListChanged(SkillItemData skill)
+    {
+        // 只要是主動技能更新，就重啟該計時器
+        if (!skill.IsPassive && !skill.IsProps)
+        {
+            StartSkillTimer(skill);
+        }
+        // 如果是被動技能且是 CD 類型，強制所有主動技能重啟
+        else if (skill.IsPassive && skill.PassiveType == PASSIVE_SKILL_TYPE.CdReduce)
+        {
+            foreach (var active in _ownSkills.Where(s => !s.IsPassive && !s.IsProps))
+            {
+                StartSkillTimer(active);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 獲取技能CD時間(與被動加乘)
+    /// </summary>
+    /// <param name="skill"></param>
+    /// <returns></returns>
+    private float GetActualCd(SkillItemData skill)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        if(characterConfig.CdReduce.Value == 0)
+        {
+            return skill.SkillCd;
+        }
+
+        float actualCd = skill.SkillCd * (1 - characterConfig.CdReduce.Value);
+        return Mathf.Max(0.1f, actualCd);
+    }
+
+    /// <summary>
+    /// 開始技能倒數
+    /// </summary>
+    /// <param name="skill"></param>
+    private void StartSkillTimer(SkillItemData skill)
+    {
+        StopSkillTimer(skill);
+
+        float cd = GetActualCd(skill);
+        _skillTimers[skill.SkillType] = Observable.Timer(TimeSpan.FromSeconds(cd), TimeSpan.FromSeconds(cd), Scheduler.MainThread)
+            .Subscribe(_ => ExecuteSkill(skill))
+            .AddTo(this);
+    }
+
+    /// <summary>
+    /// 停止技能倒數
+    /// </summary>
+    /// <param name="skill"></param>
+    private void StopSkillTimer(SkillItemData skill)
+    {
+        if (_skillTimers.TryGetValue(skill.SkillType, out var d))
+        {
+            d.Dispose();
+            _skillTimers.Remove(skill.SkillType);
+        }
+    }
+
+    /// <summary>
+    /// 執行技能
+    /// </summary>
+    /// <param name="skill"></param>
+    private void ExecuteSkill(SkillItemData skill)
+    {
+        //Debug.Log($"[發射] {skill.SkillName} | 實際 CD: {GetActualCd(skill):F2}s");
+    }
+
+    #endregion
+
+    #region 獲取或升級技能
+
+    /// <summary>
+    /// 獲取被動技能處理
+    /// </summary>
+    /// <param name="data"></param>
+    public void OnGainPassiveHandle(SkillItemData data)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        if (data.IsPassive)
+        {
+            switch (data.PassiveType)
+            {
+                // 移動速度
+                case PASSIVE_SKILL_TYPE.MoveSpeed:
+                    characterConfig.MoveSpeed.Value += data.PassiveAddValue;
+                    break;
+
+                // 攻擊力(%)
+                case PASSIVE_SKILL_TYPE.Attack:
+                    characterConfig.Attack.Value = (int)(characterConfig.Attack.Value * data.PassiveAddValue);
+                    break;
+
+                // 最大生命(%)
+                case PASSIVE_SKILL_TYPE.MaxHp:
+                    characterConfig.MaxHp.Value = (int)(characterConfig.MaxHp.Value * data.PassiveAddValue);
+                    break;
+
+                // 傷害減少
+                case PASSIVE_SKILL_TYPE.Defense:
+                    characterConfig.Defense.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 每秒生命回復
+                case PASSIVE_SKILL_TYPE.LifeRecovery:
+                    characterConfig.LifeRecovery.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 技能CD時間減少(%)
+                case PASSIVE_SKILL_TYPE.CdReduce:
+                    characterConfig.CdReduce.Value += data.PassiveAddValue;
+                    break;
+
+                // 拾取範圍
+                case PASSIVE_SKILL_TYPE.PickupRange:
+                    characterConfig.PickupRange.Value += data.PassiveAddValue;
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 獲取道具技能處理
+    /// </summary>
+    /// <param name="data"></param>
+    public void OnGainPropsHandle(SkillItemData data)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        if (data.IsProps)
+        {
+            switch (data.PropsSkillType)
+            {
+                // 生命回復(%)
+                case PROPS_SKILL_TYPE.HpRecovery:
+                    int addValue = (int)(characterConfig.MaxHp.Value * data.PropsAddValue);
+                    characterConfig.Hp.Value = Mathf.Min(characterConfig.MaxHp.Value, characterConfig.Hp.Value + addValue);
+                    break;
+            }
+
+            // 道具技能不觸發學習技能
+            return;
+        }
+    }
 
     /// <summary>
     /// 獲取可選技能
@@ -123,7 +301,6 @@ public class SkillController : MonoBehaviour
     /// <param name="newSkill"></param>
     public void OnGainSkill(SkillItemData newSkill)
     {
-        // 確保列表已初始化
         _ownSkills ??= new();
 
         // 尋找是否已有相同「類型」的技能
@@ -152,4 +329,6 @@ public class SkillController : MonoBehaviour
         // 推播事件
         MessageBroker.Default.Publish(new GainSkillMessage { OwnSkills = _ownSkills });
     }
+
+    #endregion
 }

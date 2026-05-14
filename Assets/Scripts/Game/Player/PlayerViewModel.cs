@@ -53,6 +53,6 @@ public class PlayerViewModel
     /// <param name="expType"></param>
     public void GainExp(EXP_TYPE expType)
     {
-        GameStateData.CurrentGameController.Value.OnGainExp(expType: expType);
+        GameStateData.CurrentCharacterController.Value.OnGainExp(expType: expType);
     }
 }

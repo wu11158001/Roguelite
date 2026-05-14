@@ -56,7 +56,7 @@ public class PlayerView : BaseGameObject
 
         _viewModel.Setup();
 
-        GameCameraView gameCameraView = GameObject.FindFirstObjectByType<GameCameraView>();
+        GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
         if(gameCameraView != null)
         {
             gameCameraView.Setup(transform);

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameCameraView : MonoBehaviour
+public class GameCamera : MonoBehaviour
 {
     [SerializeField] private Vector3 offset = new(0, 6.5f, -8.0f);
 

@@ -16,6 +16,8 @@ public static class GameStateData
     public static ReactiveCollection<SkillItemConfig> SkillItemConfigs = new();
     /// <summary> 當前使用的技能控制器 </summary>
     public static ReactiveProperty<SkillController> CurrentSkillController = new();
+    /// <summary> 當前使用的角色控制器 </summary>
+    public static ReactiveProperty<CharacterController> CurrentCharacterController = new();
 
     /// <summary>
     /// 獲取技能資料

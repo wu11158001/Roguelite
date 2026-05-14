@@ -77,6 +77,10 @@ public class SkillItemData
     [AllowNesting][Label("技能Icon")]
     public Sprite SkillIcon;
 
+    [AllowNesting][Label("技能CD")]
+    [ShowIf("_isShowSkill")]
+    public float SkillCd;
+
     [AllowNesting][Label("技能描述")]
     [TextArea] public string SkillDescribe;
 
