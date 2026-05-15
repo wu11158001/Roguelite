@@ -386,7 +386,7 @@ public class SkillController : MonoBehaviour
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: playerView.SkillShotPoint.position,
-            rotation: Quaternion.identity,
+            rotation: playerView.SkillShotPoint.rotation,
             callback: (obj) =>
             {
                 if (obj.TryGetComponent(out Skill_TrackingView skill))
