@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -48,7 +48,7 @@ public class EnemyView : BaseGameObject
         _attackedTimes += Time.deltaTime;
         Move();
     }
-    public void OnAttacked(SkillItemData data ,BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
+    public void OnAttacked(HitData data, BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
     {
         _enemyModel.OnAttacked(data ,attackerPlayer, victimPlayer);
     }
@@ -69,6 +69,17 @@ public class EnemyView : BaseGameObject
         {
             _attackedTimes = 0;
             Debug.Log("[" + gameObject.name + "]"+"碰到玩家了 HP ["+ _enemyModel.ConfigData.currentHp + "]");
+
+            HitData hitData = new()
+            {
+                Attack = (int)_enemyModel.ConfigData.currentATK(),
+                IsCritical = false,
+                Knockback = 0
+            };
+
+            PlayerView playerView = other.GetComponent<PlayerView>();
+            playerView?.OnGetHit(hitData);
+
             _enemyModel.ConfigData.currentHp -= 1;
             Attacked_Ani();
         }

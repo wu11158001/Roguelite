@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using System.Collections.Generic;
 
 public class Skill_TrackingView : BaseSkill
 {
@@ -42,7 +43,7 @@ public class Skill_TrackingView : BaseSkill
     {
         if (other.gameObject.layer == _targetLayer)
         {
-            _viewModel.HitEnemy(other.gameObject);
+            _viewModel.HitEnemy(other.gameObject, CalculateAttack);
         }
     }
 
@@ -55,18 +56,20 @@ public class Skill_TrackingView : BaseSkill
     /// <returns></returns>
     public Transform GetNearestEnemy(Vector3 origin, float radius, LayerMask layer)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(origin, radius, layer);
+        EnemyManager enemyManager = GameStateData.EnemyManager.Value;
+        List<GameObject> enemyObjs = new(enemyManager.LivingEnemyPool);
+
         Transform nearestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
 
-        foreach (Collider hitCollider in hitColliders)
+        foreach (GameObject obj in enemyObjs)
         {
-            Vector3 directionToTarget = hitCollider.transform.position - origin;
+            Vector3 directionToTarget = obj.transform.position - origin;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr)
             {
                 closestDistanceSqr = dSqrToTarget;
-                nearestTarget = hitCollider.transform;
+                nearestTarget = obj.transform;
             }
         }
         return nearestTarget;

@@ -90,7 +90,7 @@ public class CharacterConfigData : ScriptableObject
         CriticalMultiplier = new ReactiveProperty<float>(_baseCriticalMultiplier);
         AddProjectileCount = new ReactiveProperty<int>(_baseAddProjectileCount);
 
-        Hp = MaxHp;
+        Hp = new ReactiveProperty<int>(MaxHp.Value);
     }
 
     public CharacterConfigData Clone()

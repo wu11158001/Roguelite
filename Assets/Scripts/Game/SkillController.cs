@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UniRx;
 using System.Linq;
 using System;
@@ -12,6 +12,19 @@ public class GainSkillMessage
 {
     /// <summary> 當前擁有技能 </summary>
     public ReactiveCollection<SkillItemData> OwnSkills;
+}
+
+/// <summary>
+/// 擊中資料
+/// </summary>
+public class HitData
+{
+    /// <summary> 造成傷害 </summary>
+    public int Attack;
+    /// <summary> 是否爆擊 </summary>
+    public bool IsCritical;
+    /// <summary> 擊退值 </summary>
+    public float Knockback;
 }
 
 /// <summary>
@@ -50,38 +63,6 @@ public class SkillController : MonoBehaviour
 
         _ownSkills.ObserveAdd().Subscribe(x => OnSkillListChanged(x.Value));
         _ownSkills.ObserveReplace().Subscribe(x => OnSkillListChanged(x.NewValue));
-    }
-
-    /// <summary>
-    /// 計算技能傷害
-    /// </summary>
-    /// <param name="data"></param>
-    /// <returns></returns>
-    public int CalculateAttack(SkillItemData data)
-    {
-        if(data == null)
-        {
-            Debug.LogError("計算技能傷害錯誤! 資料null");
-            return 0;
-        }
-
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
-
-        // 攻擊力:技能攻擊力+被動攻擊力
-        int totalAttack = data.SkillAttack + characterConfig.AddAttack.Value;
-
-        // 爆擊機率:技能爆擊機率+被動爆擊機率
-        int totalCritical = data.SkillCriticalChance + characterConfig.AddCriticalChance.Value;
-
-        int chance = UnityEngine.Random.Range(0, 101);
-        if (chance <= totalCritical)
-        {
-            float totalCriticalMultiplier = data.SkillCriticalMultiplier + characterConfig.CriticalMultiplier.Value;
-
-            totalAttack = (int)(totalAttack * totalCriticalMultiplier);
-        }
-
-        return totalAttack;
     }
 
     #region 獲取或升級技能

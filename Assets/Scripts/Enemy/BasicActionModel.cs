@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public abstract class BasicActionModel
 {
@@ -15,7 +15,7 @@ public abstract class BasicActionModel
     public BasicAttributeData ConfigData { get { return _basicAttributeData; } }
 
     //受到攻擊
-    public void OnAttacked(SkillItemData data, BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
+    public void OnAttacked(HitData data, BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
     {
         float harm = victimPlayer.currentDEF() - attackerPlayer.currentATK();
         if (harm <= 0)

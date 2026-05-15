@@ -10,33 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: SOData
+  m_Name: SO_Enemy
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: SOData
+  m_GroupName: SO_Enemy
   m_GUID: 64d82d11a684d854cb522f9dfb5a6396
   m_SerializeEntries:
-  - m_GUID: 551903141090e644abacae02ec8ba046
-    m_Address: Character/CharacterMaterial_2.mat
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5606d8ff9d6cb254daed7c1f7aba73a0
-    m_Address: Assets/SO/Enemy/Zombies.asset
+  - m_GUID: d90d67452c6e031468e6035b2bdb1974
+    m_Address: Assets/SO/Enemy
     m_ReadOnly: 0
     m_SerializedLabels:
     - EnmeyConfigs
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: af41d637c8f841c40b79352177c273a9
-    m_Address: Assets/SO/Enemy/Slime.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EnmeyConfigs
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cfa723b760815ed4e829ee8644a50ed3
-    m_Address: Assets/SO
-    m_ReadOnly: 0
-    m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0

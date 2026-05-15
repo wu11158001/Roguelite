@@ -12,12 +12,8 @@ public enum SKILL_TYPE
 {
     /// <summary> 追蹤 </summary>
     Skill_Tracking,
-    Skill_2,
-    Skill_3,
-    Skill_4,
-    Skill_5,
-    Skill_6,
-    Skill_7,
+    /// <summary> 面向方向投射物 </summary>
+    Skill_Projectile,
 }
 
 /// <summary>

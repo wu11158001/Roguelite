@@ -5,11 +5,14 @@ using UnityEngine;
 public class BaseSkill : BaseGameObject
 {
     protected GameObject _playerObject;
+    protected SkillItemData _data;
 
     protected CompositeDisposable _disposables = new();
 
     public virtual void Setup(SkillItemData data)
     {
+        _data = data;
+
         // 清理舊的訂閱
         _disposables.Clear();
 
@@ -21,6 +24,44 @@ public class BaseSkill : BaseGameObject
             .Where(dist => dist >= GameStateData.CurrentSkillController.Value.SkillRemoveDistance)
             .Subscribe(_ => Recycle())
             .AddTo(_disposables);
+    }
+
+    /// <summary>
+    /// 計算技能傷害
+    /// </summary>
+    public HitData CalculateAttack()
+    {
+        if (_data == null)
+        {
+            Debug.LogError("計算技能傷害錯誤! 資料null");
+            return null;
+        }
+
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        // 攻擊力:技能攻擊力+被動攻擊力
+        int totalAttack = _data.SkillAttack + characterConfig.AddAttack.Value;
+
+        // 爆擊機率:技能爆擊機率+被動爆擊機率
+        int totalCritical = _data.SkillCriticalChance + characterConfig.AddCriticalChance.Value;
+
+        int chance = UnityEngine.Random.Range(0, 101);
+        bool isCritical = chance <= totalCritical;
+        if (isCritical)
+        {
+            float totalCriticalMultiplier = _data.SkillCriticalMultiplier + characterConfig.CriticalMultiplier.Value;
+
+            totalAttack = (int)(totalAttack * totalCriticalMultiplier);
+        }
+
+        HitData hitData = new()
+        {
+            Attack = totalAttack,
+            IsCritical = isCritical,
+            Knockback = _data.SkillKnockback
+        };
+
+        return hitData;
     }
 
     /// <summary>

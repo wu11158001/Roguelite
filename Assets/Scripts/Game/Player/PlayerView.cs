@@ -10,6 +10,8 @@ public class PlayerView : BaseGameObject
     /// <summary> 技能發射點 </summary>
     public Transform SkillShotPoint { get; private set; }
 
+    private CharacterConfigData _characterConfig;
+
     private PlayerViewModel _viewModel = new();
 
     private void Awake()
@@ -61,6 +63,8 @@ public class PlayerView : BaseGameObject
 
         _viewModel.Setup();
 
+        _characterConfig = GameStateData.SelectedCharacter.Value;
+
         GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
         if(gameCameraView != null)
         {
@@ -110,6 +114,19 @@ public class PlayerView : BaseGameObject
     public void OnMove(Vector2 value)
     {
         _inputVector = value;
+    }
+
+    /// <summary>
+    /// 角色受到攻擊
+    /// </summary>
+    public void OnGetHit(HitData hitData)
+    {
+        if (_characterConfig.Hp.Value <= 0)
+        {
+            return;
+        }
+
+        _characterConfig.Hp.Value = Mathf.Max(0, _characterConfig.Hp.Value - hitData.Attack);
     }
 
     /// <summary>

@@ -80,7 +80,7 @@ public class Skill_TrackingViewModel: IDisposable
     /// 擊中敵人
     /// </summary>
     /// <param name="enemyObj">敵人物件</param>
-    public void HitEnemy(GameObject enemyObj)
+    public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
     {
         if(_isExpired.Value || _hitTargets.Contains(enemyObj))
         {
@@ -94,11 +94,13 @@ public class Skill_TrackingViewModel: IDisposable
         _isTracking = false;
         _target = null;
 
-        // 計算技能傷害
-        int attack = GameStateData.CurrentSkillController.Value.CalculateAttack(_data);
+        // 攻擊敵人
+        HitData hitData = calculateAttackFunc.Invoke();
+        EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
+        enemyView?.OnAttacked(hitData);
 
-        //Debug.LogError($"擊中敵人:{enemyObj.name} || 傷害:{attack}");
- 
+        Debug.LogError($"擊中敵人:{enemyObj.name} || 傷害:{hitData.Attack} || 爆擊:{hitData.IsCritical}");
+
         _hitTargets.Add(enemyObj);
 
         if (_penetrate < 0)
