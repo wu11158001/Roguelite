@@ -31,6 +31,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillFlightSpeed: 20
+    SkillKnockback: 1.3
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -55,6 +56,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillFlightSpeed: 20
+    SkillKnockback: 10
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -79,6 +81,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillFlightSpeed: 20
+    SkillKnockback: 10
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -103,6 +106,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillFlightSpeed: 20
+    SkillKnockback: 10
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -127,6 +131,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillFlightSpeed: 20
+    SkillKnockback: 10
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -151,6 +156,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillFlightSpeed: 20
+    SkillKnockback: 10
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -175,6 +181,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 1
     SkillFlightSpeed: 20
+    SkillKnockback: 10
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -199,6 +206,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 1
     SkillFlightSpeed: 20
+    SkillKnockback: 10
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
