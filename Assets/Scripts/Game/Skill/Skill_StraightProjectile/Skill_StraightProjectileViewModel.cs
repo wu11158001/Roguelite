@@ -1,9 +1,10 @@
 using UnityEngine;
 using UniRx;
-using System;
+using UniRx.Triggers;
 using System.Collections.Generic;
+using System;
 
-public class Skill_TrackingViewModel: IDisposable
+public class Skill_StraightProjectileViewModel: IDisposable
 {
     public IReadOnlyReactiveProperty<Vector3> Position => _position;
     private readonly ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
@@ -20,15 +21,12 @@ public class Skill_TrackingViewModel: IDisposable
     // 穿透值
     private float _penetrate;
 
-    private Transform _target;
-    private bool _isTracking;
-
     private SkillItemData _data;
 
     // 穿透使用，紀錄已擊中的目標
     private List<GameObject> _hitTargets = new();
 
-    public Skill_TrackingViewModel(SkillItemData data, Vector3 startPos, Quaternion startRot, Transform target)
+    public Skill_StraightProjectileViewModel(SkillItemData data, Vector3 startPos, Quaternion startRot)
     {
         _data = data;
 
@@ -36,9 +34,6 @@ public class Skill_TrackingViewModel: IDisposable
         _rotation.Value = startRot;
 
         _penetrate = data.SkillPenetrate;
-
-        _target = target;
-        _isTracking = target != null;
 
         _hitTargets.Clear();
     }
@@ -51,28 +46,6 @@ public class Skill_TrackingViewModel: IDisposable
     {
         if (_isExpired.Value) return;
 
-        // 計算旋轉
-        if (_isTracking && _target != null && _target.gameObject.activeInHierarchy)
-        {
-            Vector3 targetDir = (_target.position - _position.Value).normalized;
-            if (targetDir != Vector3.zero)
-            {
-                float angle = Vector3.Angle(_rotation.Value * Vector3.forward, targetDir);
-                if (angle <= 10f)
-                {
-                    // 角度在範圍內停止追蹤
-                    _isTracking = false;
-                    _rotation.Value = Quaternion.LookRotation(targetDir);
-                }
-                else
-                {
-                    // 追蹤目標
-                    Quaternion targetRot = Quaternion.LookRotation(targetDir);
-                    _rotation.Value = Quaternion.Slerp(_rotation.Value, targetRot, (1.0f / 0.07f) * deltaTime);
-                }
-            }
-        }
-
         // 計算位移
         _position.Value += (_rotation.Value * Vector3.forward) * _data.SkillFlightSpeed * deltaTime;
     }
@@ -83,17 +56,13 @@ public class Skill_TrackingViewModel: IDisposable
     /// <param name="enemyObj">敵人物件</param>
     public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
     {
-        if(_isExpired.Value || _hitTargets.Contains(enemyObj))
+        if (_isExpired.Value || _hitTargets.Contains(enemyObj))
         {
             return;
         }
 
         // 穿透
         _penetrate--;
-
-        // 擊中主要目標後停止追蹤
-        _isTracking = false;
-        _target = null;
 
         // 攻擊敵人
         HitData hitData = calculateAttackFunc.Invoke();

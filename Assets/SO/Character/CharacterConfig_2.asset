@@ -21,7 +21,7 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   Icon: {fileID: 0}
   RotationSpeed: 10
-  InitSkill: 0
+  InitSkill: 1
   _baseMoveSpeed: 10
   MoveSpeed:
     value: 0
@@ -42,6 +42,15 @@ MonoBehaviour:
     value: 0
   _basePickupRange: 0
   PickupRange:
+    value: 0
+  _baseAddCriticalChance: 0
+  AddCriticalChance:
+    value: 0
+  _baseCriticalMultiplier: 2
+  CriticalMultiplier:
+    value: 0
+  _baseAddProjectileCount: 0
+  AddProjectileCount:
     value: 0
   Hp:
     value: 0

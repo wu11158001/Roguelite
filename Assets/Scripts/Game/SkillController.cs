@@ -361,11 +361,21 @@ public class SkillController : MonoBehaviour
     /// <param name="skill"></param>
     private void ExecuteSkill(SkillItemData skill)
     {
+        // 技能產生類型
         switch (skill.SkillAttackModeType)
         {
-            // 發射技能_追蹤
-            case SKILL_ATTACK_MODE_TYPE.Tracking:
-                StartCoroutine(IShotSkillTracking(skill));
+            // 產生在角色發射點
+            case SKILL_SPAWN_MODEL_TYPE.InPoint:
+                StartCoroutine(IShotSkill(
+                    skillData: skill, 
+                    spawnAction: () => { SpawnSkillInPoint(skill); }));
+                break;
+
+            // 產生在角色發射點周圍隨機位置
+            case SKILL_SPAWN_MODEL_TYPE.InPointRandom:
+                StartCoroutine(IShotSkill(
+                    skillData: skill,
+                    spawnAction: () => { SpawnSkillRandomInPoint(skill); }));
                 break;
         }
     }
@@ -375,10 +385,34 @@ public class SkillController : MonoBehaviour
     #region 技能發射
 
     /// <summary>
-    /// 產生技能在角色前方
+    /// 發射技能
+    /// </summary>
+    /// <param name="skillData">技能資料</param>
+    /// <param name="spawnAction">產生方法</param>
+    /// <returns></returns>
+    private IEnumerator IShotSkill(SkillItemData skillData, Action spawnAction)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        int shotCount = skillData.SkillShotCount + characterConfig.AddProjectileCount.Value;
+
+        for (int i = 0; i < shotCount; i++)
+        {
+            spawnAction?.Invoke();
+
+            // 如果發射數量大於 1 且還沒發射完，則等待間隔時間
+            if (shotCount > 1 && i < shotCount - 1)
+            {
+                yield return new WaitForSeconds(skillData.SkillShotInterval);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 產生技能在角色發射點
     /// </summary>
     /// <param name="data"></param>
-    private void SpawnSkillInFrontOfCharacter(SkillItemData data)
+    private void SpawnSkillInPoint(SkillItemData data)
     {
         PlayerView playerView = GameStateData.ControlCharacter.Value;
 
@@ -389,7 +423,7 @@ public class SkillController : MonoBehaviour
             rotation: playerView.SkillShotPoint.rotation,
             callback: (obj) =>
             {
-                if (obj.TryGetComponent(out Skill_TrackingView skill))
+                if (obj.TryGetComponent(out BaseSkill skill))
                 {
                     skill.Setup(data);
                 }
@@ -397,24 +431,37 @@ public class SkillController : MonoBehaviour
     }
 
     /// <summary>
-    /// 發射技能_追蹤
+    /// 產生技能隨機在角色發射點周圍
     /// </summary>
-    private IEnumerator IShotSkillTracking(SkillItemData skill)
+    /// <param name="data"></param>
+    private void SpawnSkillRandomInPoint(SkillItemData data)
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        Transform shotPoint = playerView.SkillShotPoint;
 
-        int shotCount = skill.SkillShotCount + characterConfig.AddProjectileCount.Value;
+        // 左右隨機正負
+        float maxHorizontalOffset = 1.1f;
+        // 上下隨機正負
+        float maxVerticalOffset = 0.4f;
 
-        for (int i = 0; i < shotCount; i++)
-        {
-            SpawnSkillInFrontOfCharacter(skill);
+        // 計算隨機偏移值
+        float randomX = UnityEngine.Random.Range(-maxHorizontalOffset, maxHorizontalOffset);
+        float randomY = UnityEngine.Random.Range(-maxVerticalOffset, maxVerticalOffset);
+        Vector3 randomOffset = (shotPoint.right * randomX) + (shotPoint.up * randomY);
+        Vector3 finalPosition = shotPoint.position + randomOffset;
 
-            // 如果發射數量大於 1 且還沒發射完，則等待間隔時間
-            if (shotCount > 1 && i < shotCount - 1)
+        GameStateData.CurrentObjectPool.Value.SpawnObject(
+            parentName: data.SkillName,
+            assetRef: data.PrefabReference,
+            position: finalPosition,
+            rotation: shotPoint.rotation,
+            callback: (obj) =>
             {
-                yield return new WaitForSeconds(skill.SkillShotInterval);
-            }
-        }
+                if (obj.TryGetComponent(out BaseSkill skill))
+                {
+                    skill.Setup(data);
+                }
+            });
     }
 
     #endregion

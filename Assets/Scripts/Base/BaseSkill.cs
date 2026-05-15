@@ -9,6 +9,13 @@ public class BaseSkill : BaseGameObject
 
     protected CompositeDisposable _disposables = new();
 
+    protected int _targetLayer;
+
+    protected virtual void Awake()
+    {
+        _targetLayer = LayerMask.NameToLayer("Enemy");
+    }
+
     public virtual void Setup(SkillItemData data)
     {
         _data = data;

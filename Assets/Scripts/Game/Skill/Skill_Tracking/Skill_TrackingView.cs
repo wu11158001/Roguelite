@@ -3,17 +3,13 @@ using UniRx;
 using UniRx.Triggers;
 using System.Collections.Generic;
 
+/// <summary>
+/// 技能_追蹤彈
+/// </summary>
 public class Skill_TrackingView : BaseSkill
 {
-    private int _targetLayer;
-
     private Skill_TrackingViewModel _viewModel;
 
-    private void Awake()
-    {
-        _targetLayer = LayerMask.NameToLayer("Enemy");
-    }
-    
     public override void Setup(SkillItemData data)
     {
         base.Setup(data);
@@ -27,7 +23,7 @@ public class Skill_TrackingView : BaseSkill
         _viewModel.Position.Subscribe(pos => transform.position = pos).AddTo(_disposables);
         _viewModel.Rotation.Subscribe(rot => transform.rotation = rot).AddTo(_disposables);
 
-        // 使用 UniRx 的 Update 觸發器執行追蹤移動
+        // 使用 UniRx 的 Update 觸發器
         this.UpdateAsObservable()
             .Subscribe(_ => _viewModel.ExecuteTick(Time.deltaTime))
             .AddTo(_disposables);

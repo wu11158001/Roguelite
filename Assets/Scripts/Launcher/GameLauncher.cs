@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UniRx;
@@ -11,7 +11,7 @@ public class GameLauncher : MonoBehaviour
     [Label("遊戲配置")]
     [SerializeField] private GameConfigData _gameConfig;
     [Label("技能項目配置")]
-    [SerializeField] private List<SkillItemConfig> _skillItemConfigs;
+    [SerializeField] private AllSkillConfigData _allSkillItemConfig;
 
     private Transform _controllParent;
 
@@ -20,7 +20,7 @@ public class GameLauncher : MonoBehaviour
         try
         {
             GameStateData.GameConfig.Value = _gameConfig;
-            foreach (var skillConfig in _skillItemConfigs)
+            foreach (var skillConfig in _allSkillItemConfig.AllSkillItemConfigs)
             {
                 GameStateData.SkillItemConfigs.Add(skillConfig);
             }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -17,12 +17,14 @@ public enum SKILL_TYPE
 }
 
 /// <summary>
-/// 技能攻擊模式
+/// 技能產生模式
 /// </summary>
-public enum SKILL_ATTACK_MODE_TYPE
+public enum SKILL_SPAWN_MODEL_TYPE
 {
-    /// <summary> 追蹤 </summary>
-    Tracking,
+    /// <summary> 產生在角色發射點 </summary>
+    InPoint,
+    /// <summary> 產生在角色發射點周圍隨機位置 </summary>
+    InPointRandom,
 }
 
 /// <summary>
@@ -97,7 +99,7 @@ public class SkillItemData
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能攻擊模式")]
     [ShowIf("_isShowSkill")]
-    public SKILL_ATTACK_MODE_TYPE SkillAttackModeType;
+    public SKILL_SPAWN_MODEL_TYPE SkillAttackModeType;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能對應模型")]
