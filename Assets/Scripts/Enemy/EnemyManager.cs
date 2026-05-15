@@ -18,14 +18,13 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private bool IsCreaterEnemy;
     [SerializeField]
-    private int craterEnemyCount = 10; 
+    private int _craterEnemyCount = 10;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        createrEnemy(ENEMY_TYPE.ZOMBIES, craterEnemyCount);
-        if(Player == null) { Player = GameObject.FindWithTag("Player"); }
+    public List<GameObject> LivingEnemyPool;
+    public void SetUp(List<EnemyConfigData>conifgList) {
+        enemyConfigList = conifgList;
+        LivingEnemyPool = new List<GameObject>();
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -37,7 +36,7 @@ public class EnemyManager : MonoBehaviour
     }
     void unitTest()
     {
-        createrEnemy(ENEMY_TYPE.ZOMBIES, craterEnemyCount);
+        createrEnemy(ENEMY_TYPE.ZOMBIES, _craterEnemyCount);
 
     }
     async void createrEnemy(ENEMY_TYPE type, int count)
@@ -65,7 +64,7 @@ public class EnemyManager : MonoBehaviour
        
             // 在這裡可以針對生成的 enemy 做初始化
             // enemy.transform.position = ...
-            Debug.Log($"第 {i + 1} 隻怪物已就位");
+            // Debug.Log($"第 {i + 1} 隻怪物已就位");
         }
     }
     async Task <GameObject> GetEnemy(EnemyConfigData data,Vector3 enemyPosition,int count)
@@ -80,6 +79,7 @@ public class EnemyManager : MonoBehaviour
             var enemy = enemyPool[data.enemyType].Pop();
             enemy.SetActive(true);
             enemy.transform.position = enemyPosition;
+            LivingEnemyPool.Add(enemy);
             return enemy;
         }
 
@@ -95,14 +95,17 @@ public class EnemyManager : MonoBehaviour
             enemyInstance.name = "enemy_" + count;
             //添加敵人代碼
             enemyInstance.AddComponent<EnemyView>();
-            enemyInstance.GetComponent<EnemyView>().SetUp(data,ReturnEnemy);
+            enemyInstance.GetComponent<EnemyView>().SetUp(data, RecycleEnemy);
+            LivingEnemyPool.Add(enemyInstance);
         }
         return enemyInstance;
     }
-    void ReturnEnemy(ENEMY_TYPE type, GameObject enemy)
+    void RecycleEnemy(ENEMY_TYPE type, GameObject enemy)
     {
-        enemy.SetActive(false); // 關閉物件
-        enemy.transform.SetParent(this.transform); // 移回父物件下收納
+
+        var recycleEnemy = LivingEnemyPool.FirstOrDefault(e => e.GetInstanceID() == enemy.GetInstanceID());
+        recycleEnemy.SetActive(false); // 關閉物件
+        recycleEnemy.transform.SetParent(this.transform); // 移回父物件下收納
 
         // 確保存放的池子存在
         if (!enemyPool.ContainsKey(type))
@@ -110,6 +113,6 @@ public class EnemyManager : MonoBehaviour
             enemyPool[type] = new Stack<GameObject>();
         }
 
-        enemyPool[type].Push(enemy);
+        enemyPool[type].Push(recycleEnemy);
     }
 }

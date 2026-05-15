@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using UniRx;
 
 /// <summary>
@@ -21,7 +21,9 @@ public static class GameStateData
     /// <summary> 當前使用的角色控制器 </summary>
     public static ReactiveProperty<CharacterController> CurrentCharacterController = new();
     /// <summary> 當前使用的遊戲場景物件池 </summary>
-    public static ReactiveProperty<GameScenePool> CurrentObjectPool = new();
+    public static ReactiveProperty<GameScenePool> CurrentObjectPool = new();/// <summary> 當前使用的遊戲場景物件池 </summary>
+    /// <summary> 當前使用的敵人管理器 </summary>
+    public static ReactiveProperty<EnemyManager> EnemyManager = new();
 
     /// <summary>
     /// 獲取技能資料

@@ -15,11 +15,23 @@ MonoBehaviour:
   m_GroupName: View_Prefab
   m_GUID: 417685f51a9fe1a40bf0055d792f89a7
   m_SerializeEntries:
+  - m_GUID: 5606d8ff9d6cb254daed7c1f7aba73a0
+    m_Address: Assets/SO/Enemy/Zombies.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnmeyConfigs
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6ce6444b39d111040b231a2d7358843b
     m_Address: View
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af41d637c8f841c40b79352177c273a9
+    m_Address: Assets/SO/Enemy/Slime.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnmeyConfigs
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 50febc42c81c83148ac201765ed0d7a1, type: 2}

@@ -3,13 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyView : BaseGameObject
 {
     List<int> _actionList;
     EnemyModel _enemyModel;
     float _attackedTimes;
+
+    MaterialPropertyBlock _propBlock;
+    Renderer _renderer;
+
     public Action<ENEMY_TYPE, GameObject> _callBack;
+    /// </summary>
+    /// <param name="data">怪物設定值</param>
+    /// <param name="cb">死亡時通知回收物件池</param>
+    /// <returns>回傳扣血後是否死亡</returns>
     public void SetUp(BasicAttributeData data,Action<ENEMY_TYPE , GameObject > cb = null)
     {
         _enemyModel = new(data);
@@ -19,10 +28,12 @@ public class EnemyView : BaseGameObject
     private void Start()
     {
         _enemyModel.ConfigData._OnDieNotify += OnDieNotify;
+        _renderer = GetComponent<Renderer>();
+        _propBlock = new MaterialPropertyBlock();
     }
     private void OnEnable()
     {
-        _enemyModel.ConfigData._OnDieNotify += OnDieNotify;
+        if(_enemyModel != null) _enemyModel.ConfigData._OnDieNotify += OnDieNotify;
     }
     private void OnDisable()
     {
@@ -37,9 +48,9 @@ public class EnemyView : BaseGameObject
         _attackedTimes += Time.deltaTime;
         Move();
     }
-    public void OnAttacked(BasicAttributeData attackerPlayer, BasicAttributeData victimPlayer)
+    public void OnAttacked(SkillItemData data ,BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
     {
-        _enemyModel.OnAttacked(attackerPlayer, victimPlayer);
+        _enemyModel.OnAttacked(data ,attackerPlayer, victimPlayer);
     }
     public void SetupMoveTarget(Vector3 targetV3,GameObject target = null)
     {
@@ -59,10 +70,28 @@ public class EnemyView : BaseGameObject
             _attackedTimes = 0;
             Debug.Log("[" + gameObject.name + "]"+"碰到玩家了 HP ["+ _enemyModel.ConfigData.currentHp + "]");
             _enemyModel.ConfigData.currentHp -= 1;
+            Attacked_Ani();
         }
     }
     public void OnDieNotify() {
         Debug.Log("觸發死亡");
         _callBack?.Invoke(_enemyModel.ConfigData.enemyType,gameObject);
+    }
+    private void Attacked_Ani()
+    {
+        
+        _renderer.GetPropertyBlock(_propBlock);
+        // 修改顏色屬性
+        _propBlock.SetColor("_BaseColor", Color.red);
+        // 套用回 Renderer（這不會產生新的材質實體）
+        _renderer.SetPropertyBlock(_propBlock);
+
+        Invoke(nameof(ResetColor), 0.1f);
+    }
+    void ResetColor()
+    {
+        _renderer.GetPropertyBlock(_propBlock);
+        _propBlock.SetColor("_BaseColor", Color.white); // 假設原本是白色
+        _renderer.SetPropertyBlock(_propBlock);
     }
 }

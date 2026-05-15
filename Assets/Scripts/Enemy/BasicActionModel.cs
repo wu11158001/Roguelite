@@ -15,7 +15,7 @@ public abstract class BasicActionModel
     public BasicAttributeData ConfigData { get { return _basicAttributeData; } }
 
     //受到攻擊
-    public void OnAttacked(BasicAttributeData attackerPlayer, BasicAttributeData victimPlayer)
+    public void OnAttacked(SkillItemData data, BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
     {
         float harm = victimPlayer.currentDEF() - attackerPlayer.currentATK();
         if (harm <= 0)
@@ -26,4 +26,3 @@ public abstract class BasicActionModel
         victimPlayer.currentHp -= harm;
     }
 }
-   
