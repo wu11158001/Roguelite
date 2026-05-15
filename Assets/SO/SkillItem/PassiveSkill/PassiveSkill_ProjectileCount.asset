@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdcbea22e895b54db0ea1c1cb76cd35, type: 3}
-  m_Name: PassiveSkill_CdReduce
+  m_Name: PassiveSkill_ProjectileCount
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
   - SkillType: 6
     SkillLevel: 1
-    SkillName: "\u88AB\u52D5\u6280\u80FD-CD\u6E1B\u5C11"
+    SkillName: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u589E\u52A0"
     SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u6578\u91CF+1"
     SkillAttackModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -35,16 +35,16 @@ MonoBehaviour:
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     IsPassive: 1
-    PassiveType: 5
-    PassiveAddValue: 0.1
+    PassiveType: 9
+    PassiveAddValue: 1
     IsProps: 0
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 6
     SkillLevel: 2
-    SkillName: "\u88AB\u52D5\u6280\u80FD-CD\u6E1B\u5C11"
+    SkillName: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u589E\u52A0"
     SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u6578\u91CF+1"
     SkillAttackModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -62,35 +62,8 @@ MonoBehaviour:
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     IsPassive: 1
-    PassiveType: 5
-    PassiveAddValue: 0.1
-    IsProps: 0
-    PropsSkillType: 0
-    PropsAddValue: 0
-  - SkillType: 6
-    SkillLevel: 2
-    SkillName: "\u88AB\u52D5\u6280\u80FD-CD\u6E1B\u5C11"
-    SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
-    SkillAttackModeType: 0
-    PrefabReference:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-    SkillCd: 0
-    SkillAttack: 0
-    SkillShotCount: 0
-    SkillShotInterval: 0
-    SkillPenetrate: 0
-    SkillFlightSpeed: 0
-    SkillKnockback: 0
-    SkillCriticalChance: 0
-    SkillCriticalMultiplier: 0
-    IsPassive: 1
-    PassiveType: 5
-    PassiveAddValue: 0.1
+    PassiveType: 9
+    PassiveAddValue: 1
     IsProps: 0
     PropsSkillType: 0
     PropsAddValue: 0

@@ -32,6 +32,7 @@ public static class GameStateData
     {
         var targetSkill = SkillItemConfigs
             .SelectMany(config => config.SkillItems)
+            .Where(data => !data.IsPassive && !data.IsProps)
             .FirstOrDefault(data => data.SkillType == skillType);
 
         return targetSkill;

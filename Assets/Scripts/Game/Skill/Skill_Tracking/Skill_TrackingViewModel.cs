@@ -94,7 +94,10 @@ public class Skill_TrackingViewModel: IDisposable
         _isTracking = false;
         _target = null;
 
-        int attack = GameStateData.CurrentSkillController.Value.CalculateAttack(_data.SkillAttack);
+        // 計算技能傷害
+        int attack = GameStateData.CurrentSkillController.Value.CalculateAttack(_data);
+
+        //Debug.LogError($"擊中敵人:{enemyObj.name} || 傷害:{attack}");
  
         _hitTargets.Add(enemyObj);
 

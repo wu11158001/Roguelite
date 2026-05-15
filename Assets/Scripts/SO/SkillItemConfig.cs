@@ -44,10 +44,16 @@ public enum PASSIVE_SKILL_TYPE
     Defense,
     /// <summary> 每秒生命回復 </summary>
     LifeRecovery,
-    /// <summary> 技能CD時間減少(%) </summary>
+    /// <summary> 技能CD時間減少(秒) </summary>
     CdReduce,
     /// <summary> 拾取範圍 </summary>
     PickupRange,
+    /// <summary> 爆擊機率 </summary>
+    CriticalChance,
+    /// <summary> 爆擊傷害加乘 </summary>
+    CriticalMultiplier,
+    /// <summary> 投射物數量 </summary>
+    ProjectileCount,
 }
 
 /// <summary>
@@ -103,7 +109,7 @@ public class SkillItemData
     public AssetReferenceGameObject PrefabReference;
 
     [AllowNesting]
-    [BoxGroup("主動技能數值")][Label("技能CD")]
+    [BoxGroup("主動技能數值")][Label("技能CD(秒)")]
     [ShowIf("_isShowSkill")]
     public float SkillCd;
 
@@ -136,6 +142,16 @@ public class SkillItemData
     [BoxGroup("主動技能數值")][Label("擊退效果")]
     [ShowIf("_isShowSkill")]
     public float SkillKnockback;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("爆擊機率(0~100%)")]
+    [ShowIf("_isShowSkill")]
+    public int SkillCriticalChance;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("爆擊攻擊力加乘(倍數)")]
+    [ShowIf("_isShowSkill")]
+    public int SkillCriticalMultiplier;
 
     // --------被動技能--------
     [AllowNesting][Label("是否為被動技能")]

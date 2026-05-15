@@ -35,6 +35,8 @@ public class SkillController : MonoBehaviour
 
     private void OnDestroy()
     {
+        StopAllCoroutines();
+
         foreach (var timer in _skillTimers.Values)
         {
             timer.Dispose();
@@ -42,7 +44,7 @@ public class SkillController : MonoBehaviour
         _skillTimers.Clear();
     }
 
-    private void Start()
+    private void Awake()
     {
         _ownSkills ??= new();
 
@@ -51,14 +53,35 @@ public class SkillController : MonoBehaviour
     }
 
     /// <summary>
-    /// 計算技能傷害(技能攻擊力+被動攻擊力)
+    /// 計算技能傷害
     /// </summary>
-    /// <param name="skillAttack"></param>
+    /// <param name="data"></param>
     /// <returns></returns>
-    public int CalculateAttack(int skillAttack)
+    public int CalculateAttack(SkillItemData data)
     {
+        if(data == null)
+        {
+            Debug.LogError("計算技能傷害錯誤! 資料null");
+            return 0;
+        }
+
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
-        return skillAttack + characterConfig.AddAttack.Value;
+
+        // 攻擊力:技能攻擊力+被動攻擊力
+        int totalAttack = data.SkillAttack + characterConfig.AddAttack.Value;
+
+        // 爆擊機率:技能爆擊機率+被動爆擊機率
+        int totalCritical = data.SkillCriticalChance + characterConfig.AddCriticalChance.Value;
+
+        int chance = UnityEngine.Random.Range(0, 101);
+        if (chance <= totalCritical)
+        {
+            float totalCriticalMultiplier = data.SkillCriticalMultiplier + characterConfig.CriticalMultiplier.Value;
+
+            totalAttack = (int)(totalAttack * totalCriticalMultiplier);
+        }
+
+        return totalAttack;
     }
 
     #region 獲取或升級技能
@@ -80,7 +103,7 @@ public class SkillController : MonoBehaviour
                     characterConfig.MoveSpeed.Value += data.PassiveAddValue;
                     break;
 
-                // 增加攻擊力
+                // 增加的攻擊力
                 case PASSIVE_SKILL_TYPE.Attack:
                     characterConfig.AddAttack.Value = (int)(characterConfig.AddAttack.Value + data.PassiveAddValue);
                     break;
@@ -100,7 +123,7 @@ public class SkillController : MonoBehaviour
                     characterConfig.LifeRecovery.Value += (int)data.PassiveAddValue;
                     break;
 
-                // 技能CD時間減少(%)
+                // 技能CD時間減少(秒)
                 case PASSIVE_SKILL_TYPE.CdReduce:
                     characterConfig.CdReduce.Value += data.PassiveAddValue;
                     break;
@@ -108,6 +131,21 @@ public class SkillController : MonoBehaviour
                 // 拾取範圍
                 case PASSIVE_SKILL_TYPE.PickupRange:
                     characterConfig.PickupRange.Value += data.PassiveAddValue;
+                    break;
+
+                // 增加的爆擊機率
+                case PASSIVE_SKILL_TYPE.CriticalChance:
+                    characterConfig.AddCriticalChance.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 爆擊傷害加乘
+                case PASSIVE_SKILL_TYPE.CriticalMultiplier:
+                    characterConfig.CriticalMultiplier.Value += data.PassiveAddValue;
+                    break;
+
+                // 投射物數量
+                case PASSIVE_SKILL_TYPE.ProjectileCount:
+                    characterConfig.AddProjectileCount.Value += (int)data.PassiveAddValue;
                     break;
             }
         }
@@ -342,8 +380,6 @@ public class SkillController : MonoBehaviour
     /// <param name="skill"></param>
     private void ExecuteSkill(SkillItemData skill)
     {
-        //Debug.LogError($"[發射] {skill.SkillName} | 實際 CD: {GetActualCd(skill):F2}s");
-
         switch (skill.SkillAttackModeType)
         {
             // 發射技能_追蹤
@@ -384,12 +420,16 @@ public class SkillController : MonoBehaviour
     /// </summary>
     private IEnumerator IShotSkillTracking(SkillItemData skill)
     {
-        for (int i = 0; i < skill.SkillShotCount; i++)
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        int shotCount = skill.SkillShotCount + characterConfig.AddProjectileCount.Value;
+
+        for (int i = 0; i < shotCount; i++)
         {
             SpawnSkillInFrontOfCharacter(skill);
 
             // 如果發射數量大於 1 且還沒發射完，則等待間隔時間
-            if (skill.SkillShotCount > 1 && i < skill.SkillShotCount - 1)
+            if (shotCount > 1 && i < shotCount - 1)
             {
                 yield return new WaitForSeconds(skill.SkillShotInterval);
             }

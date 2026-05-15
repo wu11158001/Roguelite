@@ -15,12 +15,6 @@ MonoBehaviour:
   m_GroupName: SOData
   m_GUID: 64d82d11a684d854cb522f9dfb5a6396
   m_SerializeEntries:
-  - m_GUID: 551903141090e644abacae02ec8ba046
-    m_Address: Character/CharacterMaterial_2.mat
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cfa723b760815ed4e829ee8644a50ed3
     m_Address: Assets/SO
     m_ReadOnly: 0

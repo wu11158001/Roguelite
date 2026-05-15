@@ -17,7 +17,26 @@ MonoBehaviour:
     SkillLevel: 1
     SkillName: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D"
     SkillIcon: {fileID: 21300000, guid: 24a785ede1231d84885e56f84e51691e, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D1"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D+2"
+    SkillAttackModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
     IsPassive: 1
     PassiveType: 6
     PassiveAddValue: 2
+    IsProps: 0
+    PropsSkillType: 0
+    PropsAddValue: 0

@@ -26,12 +26,12 @@ public class CharacterConfigData : ScriptableObject
 
     [BoxGroup("角色可動態變更數值")]
     [Label("移動速度")]
-    [SerializeField] private float _baseMoveSpeed = 3.0f;
+    [SerializeField] private float _baseMoveSpeed = 10.0f;
     [HideInInspector] public ReactiveProperty<float> MoveSpeed;
 
     [BoxGroup("角色可動態變更數值")]
-    [Label("增加攻擊力")]
-    [SerializeField] private int _baseAddAttack = 2;
+    [Label("增加的攻擊力")]
+    [SerializeField] private int _baseAddAttack = 0;
     [HideInInspector] public ReactiveProperty<int> AddAttack;
 
     [BoxGroup("角色可動態變更數值")]
@@ -50,14 +50,29 @@ public class CharacterConfigData : ScriptableObject
     [HideInInspector] public ReactiveProperty<int> LifeRecovery;
 
     [BoxGroup("角色可動態變更數值")]
-    [Label("技能CD時間減少(%)")]
-    [SerializeField] private int _baseCdReduce = 0;
+    [Label("技能CD時間減少(秒)")]
+    [SerializeField] private float _baseCdReduce = 0f;
     [HideInInspector] public ReactiveProperty<float> CdReduce;
 
     [BoxGroup("角色可動態變更數值")]
     [Label("拾取範圍")]
-    [SerializeField] private int _basePickupRange = 0;
+    [SerializeField] private float _basePickupRange = 0f;
     [HideInInspector] public ReactiveProperty<float> PickupRange;
+
+    [BoxGroup("角色可動態變更數值")]
+    [Label("增加的爆擊機率(0~100)")]
+    [SerializeField] private int _baseAddCriticalChance = 0;
+    [HideInInspector] public ReactiveProperty<int> AddCriticalChance;
+
+    [BoxGroup("角色可動態變更數值")]
+    [Label("爆擊攻擊力加乘(倍數)")]
+    [SerializeField] private float _baseCriticalMultiplier = 2.0f;
+    [HideInInspector] public ReactiveProperty<float> CriticalMultiplier;
+
+    [BoxGroup("角色可動態變更數值")]
+    [Label("增加的投射物數量")]
+    [SerializeField] private int _baseAddProjectileCount = 0;
+    [HideInInspector] public ReactiveProperty<int> AddProjectileCount;
 
     /// <summary> 當前HP </summary>
     public ReactiveProperty<int> Hp;
@@ -71,6 +86,9 @@ public class CharacterConfigData : ScriptableObject
         LifeRecovery = new ReactiveProperty<int>(_baseLifeRecovery);
         CdReduce = new ReactiveProperty<float>(_baseCdReduce);
         PickupRange = new ReactiveProperty<float>(_basePickupRange);
+        AddCriticalChance = new ReactiveProperty<int>(_baseAddCriticalChance);
+        CriticalMultiplier = new ReactiveProperty<float>(_baseCriticalMultiplier);
+        AddProjectileCount = new ReactiveProperty<int>(_baseAddProjectileCount);
 
         Hp = MaxHp;
     }

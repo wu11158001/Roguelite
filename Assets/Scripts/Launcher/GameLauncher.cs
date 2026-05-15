@@ -16,30 +16,38 @@ public class GameLauncher : MonoBehaviour
 
     private async void Start()
     {
-        GameStateData.GameConfig.Value = _gameConfig;
-        foreach (var skillConfig in _skillItemConfigs)
+        try
         {
-            GameStateData.SkillItemConfigs.Add(skillConfig);
+            GameStateData.GameConfig.Value = _gameConfig;
+            foreach (var skillConfig in _skillItemConfigs)
+            {
+                GameStateData.SkillItemConfigs.Add(skillConfig);
+            }
+
+            // 產生Controller資料夾
+            _controllParent = new GameObject("ControllerGroup").transform;
+
+            SpawnPool();
+            SpawnGameContorller();
+            SpawnCharacterContorller();
+            SpawnSkillContorller();
+            await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.GameView);
+            await SpawnPlayer();
+
+            SceneLoader.Instance.CloseLoading();
         }
-
-        _controllParent = new GameObject(name = "ControllerGroup").transform;
-
-        SpawnPool();
-        SpawnGameContorller();
-        SpawnCharacterContorller();
-        SpawnSkillContorller();
-        await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.GameView);
-        await SpawnPlayer();
-
-        SceneLoader.Instance.CloseLoading();
-    }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"遊戲初始化錯誤: {e}");
+        }
+    } 
 
     /// <summary>
     /// 產生遊戲場景物件池
     /// </summary>
     private void SpawnPool()
     {
-        GameObject obj = new(name = "ObjectPool");
+        GameObject obj = new("ObjectPool");
         GameStateData.CurrentObjectPool.Value = obj.AddComponent<GameScenePool>();
     }
 
@@ -48,7 +56,7 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     private void SpawnGameContorller()
     {
-        GameObject obj = new(name = "GameController");
+        GameObject obj = new("GameController");
         GameStateData.CurrentGameController.Value = obj.AddComponent<GameController>();
         obj.transform.parent = _controllParent;
     }
@@ -58,7 +66,7 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     private void SpawnCharacterContorller()
     {
-        GameObject obj = new(name = "CharacterController");
+        GameObject obj = new("CharacterController");
         GameStateData.CurrentCharacterController.Value = obj.AddComponent<CharacterController>();
         obj.transform.parent = _controllParent;
     }
@@ -68,7 +76,7 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     private void SpawnSkillContorller()
     {
-        GameObject obj = new(name = "SkillController");
+        GameObject obj = new("SkillController");
         GameStateData.CurrentSkillController.Value = obj.AddComponent<SkillController>();
         obj.transform.parent = _controllParent;
     }

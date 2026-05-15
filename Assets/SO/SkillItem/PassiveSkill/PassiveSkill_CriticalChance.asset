@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdcbea22e895b54db0ea1c1cb76cd35, type: 3}
-  m_Name: PassiveSkill_CdReduce
+  m_Name: PassiveSkill_CriticalChance
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
   - SkillType: 6
     SkillLevel: 1
-    SkillName: "\u88AB\u52D5\u6280\u80FD-CD\u6E1B\u5C11"
-    SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
+    SkillName: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387"
+    SkillIcon: {fileID: 21300000, guid: 24a785ede1231d84885e56f84e51691e, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387+5%"
     SkillAttackModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -35,16 +35,16 @@ MonoBehaviour:
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     IsPassive: 1
-    PassiveType: 5
-    PassiveAddValue: 0.1
+    PassiveType: 7
+    PassiveAddValue: 50
     IsProps: 0
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 6
     SkillLevel: 2
-    SkillName: "\u88AB\u52D5\u6280\u80FD-CD\u6E1B\u5C11"
-    SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
+    SkillName: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387"
+    SkillIcon: {fileID: 21300000, guid: 24a785ede1231d84885e56f84e51691e, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387+5%"
     SkillAttackModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -62,16 +62,16 @@ MonoBehaviour:
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     IsPassive: 1
-    PassiveType: 5
-    PassiveAddValue: 0.1
+    PassiveType: 7
+    PassiveAddValue: 5
     IsProps: 0
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 6
-    SkillLevel: 2
-    SkillName: "\u88AB\u52D5\u6280\u80FD-CD\u6E1B\u5C11"
-    SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
+    SkillLevel: 3
+    SkillName: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387"
+    SkillIcon: {fileID: 21300000, guid: 24a785ede1231d84885e56f84e51691e, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387+5%"
     SkillAttackModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -89,8 +89,8 @@ MonoBehaviour:
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     IsPassive: 1
-    PassiveType: 5
-    PassiveAddValue: 0.1
+    PassiveType: 7
+    PassiveAddValue: 5
     IsProps: 0
     PropsSkillType: 0
     PropsAddValue: 0
