@@ -1,7 +1,9 @@
 ﻿using NaughtyAttributes;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
@@ -9,6 +11,7 @@ public class EnemyManager : MonoBehaviour
     [Label("怪物屬性配置表")]
     [SerializeField]
     private List<EnemyConfigData> enemyConfigList;
+    //回收後的敵人池
     private Dictionary<ENEMY_TYPE, Stack<GameObject>> enemyPool = new Dictionary<ENEMY_TYPE, Stack<GameObject>>();
     //單一怪物種類池大小
     private int PoolMaxCount = 60;
@@ -17,13 +20,21 @@ public class EnemyManager : MonoBehaviour
     private GameObject Player = null;
     [SerializeField]
     private bool IsCreaterEnemy;
-    [SerializeField]
-    private int _craterEnemyCount = 10;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    //[SerializeField]
+    //private int _craterEnemyCount = 10;
+    //存活的敵人池
     public List<GameObject> LivingEnemyPool;
+
+    [Foldout("設定")][SerializeField]
+    private float _spawnInterval = 30f;     // 生成間隔 (秒)
+    [Foldout("設定")][SerializeField]
+    private bool _isSpawning = true;        // 是否持續生成
+    [Foldout("設定")][SerializeField]
+    private int _createEnemyCount = 5;      //每次生成數量最大值
     public void SetUp(List<EnemyConfigData>conifgList) {
         enemyConfigList = conifgList;
         LivingEnemyPool = new List<GameObject>();
+        StartCoroutine(SpawnRoutine());
     }
     // Update is called once per frame
     void Update()
@@ -36,7 +47,7 @@ public class EnemyManager : MonoBehaviour
     }
     void unitTest()
     {
-        createrEnemy(ENEMY_TYPE.ZOMBIES, _craterEnemyCount);
+        createrEnemy(ENEMY_TYPE.ZOMBIES, _createEnemyCount);
 
     }
     async void createrEnemy(ENEMY_TYPE type, int count)
@@ -114,5 +125,17 @@ public class EnemyManager : MonoBehaviour
         }
 
         enemyPool[type].Push(recycleEnemy);
+    }
+    IEnumerator SpawnRoutine()
+    {
+        while (_isSpawning)
+        {
+            int createrCount = Random.Range(1, _createEnemyCount);
+            // 1. 執行生成
+            createrEnemy(ENEMY_TYPE.ZOMBIES, _createEnemyCount);
+
+            // 2. 等待設定的時間
+            yield return new WaitForSeconds(_spawnInterval);
+        }
     }
 }

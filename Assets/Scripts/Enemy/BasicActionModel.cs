@@ -1,10 +1,18 @@
+﻿using System;
 using UnityEngine;
+
+interface IActionCB
+{
+    //cb回傳 bool  true代表有傷害  false代表沒傷害
+    void OnAttacked(HitData data,Action<bool>cb);
+}
 
 public abstract class BasicActionModel
 {
     // 移動向量
     public Vector3 currentPos { get; private set; }
     protected BasicAttributeData _basicAttributeData;
+    
     public float _attackedInterval;
     public BasicActionModel(BasicAttributeData data)
     {
@@ -15,14 +23,17 @@ public abstract class BasicActionModel
     public BasicAttributeData ConfigData { get { return _basicAttributeData; } }
 
     //受到攻擊
-    public void OnAttacked(HitData data, BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
+    public bool OnAttacked(HitData data)
     {
-        float harm = victimPlayer.currentDEF() - attackerPlayer.currentATK();
+        Debug.Log("子彈傷害 : "+ data.Attack);
+        float harm = data.Attack-_basicAttributeData.currentDEF() ;
         if (harm <= 0)
         {
             Debug.Log($"此次攻擊傷害為 : [{harm}]");
-            return;
+            return false;
         }
-        victimPlayer.currentHp -= harm;
+        _basicAttributeData.currentHp -= harm;
+        Debug.Log($"怪物 當前血量 : [{_basicAttributeData.currentHp}]");
+        return true;
     }
 }

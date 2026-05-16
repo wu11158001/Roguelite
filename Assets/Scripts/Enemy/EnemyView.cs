@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -48,9 +48,13 @@ public class EnemyView : BaseGameObject
         _attackedTimes += Time.deltaTime;
         Move();
     }
-    public void OnAttacked(HitData data, BasicAttributeData attackerPlayer = null, BasicAttributeData victimPlayer = null)
+    public void OnAttacked(HitData data)
     {
-        _enemyModel.OnAttacked(data ,attackerPlayer, victimPlayer);
+        bool isAni = _enemyModel.OnAttacked(data);
+        //有傷害 撥動畫
+        if(isAni)Attacked_Ani();
+
+
     }
     public void SetupMoveTarget(Vector3 targetV3,GameObject target = null)
     {
