@@ -79,6 +79,11 @@ public class CharacterConfigData : ScriptableObject
     [SerializeField] private float _baseAddAttackRange = 0;
     [HideInInspector] public ReactiveProperty<float> AddAttackRange;
 
+    [BoxGroup("角色可動態變更數值")]
+    [Label("增加的持續時間(秒)")]
+    [SerializeField] private float _baseAddKeepTime = 0;
+    [HideInInspector] public ReactiveProperty<float> AddKeepTime;
+
     /// <summary> 當前HP </summary>
     public ReactiveProperty<int> Hp;
 
@@ -95,6 +100,7 @@ public class CharacterConfigData : ScriptableObject
         CriticalMultiplier = new ReactiveProperty<float>(_baseCriticalMultiplier);
         AddProjectileCount = new ReactiveProperty<int>(_baseAddProjectileCount);
         AddAttackRange = new ReactiveProperty<float>(_baseAddAttackRange);
+        AddKeepTime = new ReactiveProperty<float>(_baseAddKeepTime);
 
         Hp = new ReactiveProperty<int>(MaxHp.Value);
     }

@@ -31,6 +31,9 @@ public class Skill_TrackingView : BaseSkill
             .Where(x => x == true)
             .Subscribe(_ => Recycle())
             .AddTo(_disposables);
+
+        // 設置距離監控
+        SetDistanceMonitoring();
     }
 
     private void OnTriggerEnter(Collider other)

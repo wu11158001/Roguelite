@@ -11,6 +11,12 @@ public class BaseSkill : BaseGameObject
 
     protected int _targetLayer;
 
+    public override void OnDestroy()
+    {
+        _disposables.Dispose();
+        base.OnDestroy();
+    }
+
     protected virtual void Awake()
     {
         _targetLayer = LayerMask.NameToLayer("Enemy");
@@ -24,8 +30,24 @@ public class BaseSkill : BaseGameObject
         _disposables.Clear();
 
         _playerObject = GameStateData.ControlCharacter.Value.gameObject;
+    }
 
-        // 距離回收監控(遠離玩家回收)
+    /// <summary>
+    /// 回收
+    /// </summary>
+    public virtual void Recycle()
+    {
+        // 停止所有 Rx 監聽
+        _disposables.Clear();
+        GameStateData.CurrentObjectPool.Value.ReturnToPool(gameObject);
+    }
+
+    /// <summary>
+    /// 設置距離監控
+    /// </summary>
+    public void SetDistanceMonitoring()
+    {
+        // 遠離玩家回收
         this.UpdateAsObservable()
             .Select(_ => Vector3.Distance(transform.position, _playerObject.transform.position))
             .Where(dist => dist >= GameStateData.CurrentSkillController.Value.SkillRemoveDistance)
@@ -69,15 +91,5 @@ public class BaseSkill : BaseGameObject
         };
 
         return hitData;
-    }
-
-    /// <summary>
-    /// 回收
-    /// </summary>
-    public virtual void Recycle()
-    {
-        // 停止所有 Rx 監聽
-        _disposables.Clear();
-        GameStateData.CurrentObjectPool.Value.ReturnToPool(gameObject);
     }
 }

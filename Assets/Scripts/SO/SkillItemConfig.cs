@@ -16,6 +16,8 @@ public enum SKILL_TYPE
     Skill_Projectile,
     /// <summary> 靈氣光環 </summary>
     Skill_Aura,
+    /// <summary> 圍繞 </summary>
+    Skill_Around,
 }
 
 /// <summary>
@@ -27,8 +29,8 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InPoint,
     /// <summary> 產生在角色發射點周圍隨機位置 </summary>
     InPointRandom,
-    /// <summary> 產生在角色物件內(只產生一次) </summary>
-    InCharacter,
+
+    None,
 }
 
 /// <summary>
@@ -58,6 +60,8 @@ public enum PASSIVE_SKILL_TYPE
     ProjectileCount,
     /// <summary> 攻擊範圍增加(%) </summary>
     AttackRange,
+    /// <summary> 持續時間增加(秒) </summary>
+    KeepTime,
 }
 
 /// <summary>
@@ -103,7 +107,7 @@ public class SkillItemData
     [TextArea] public string SkillDescribe;
 
     [AllowNesting]
-    [BoxGroup("主動技能數值")][Label("技能攻擊模式")]
+    [BoxGroup("主動技能數值")][Label("技能產生模式")]
     [ShowIf("_isShowSkill")]
     public SKILL_SPAWN_MODEL_TYPE SkillAttackModeType;
 
@@ -140,7 +144,7 @@ public class SkillItemData
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("飛行速度")]
     [ShowIf("_isShowSkill")]
-    public int SkillFlightSpeed;
+    public float SkillFlightSpeed;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("擊退效果")]
@@ -158,9 +162,14 @@ public class SkillItemData
     public int SkillCriticalMultiplier;
 
     [AllowNesting]
-    [BoxGroup("主動技能數值")][Label("攻擊範圍")]
+    [BoxGroup("主動技能數值")][Label("攻擊範圍(體積)")]
     [ShowIf("_isShowSkill")]
-    public int SkillAttackRange;
+    public float SkillAttackRange;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("持續時間(秒)")]
+    [ShowIf("_isShowSkill")]
+    public float SkillKeepTime;
 
     // --------被動技能--------
     [AllowNesting][Label("是否為被動技能")]

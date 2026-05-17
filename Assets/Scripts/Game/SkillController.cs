@@ -29,9 +29,9 @@ public class HitData
 }
 
 /// <summary>
-/// 靈氣類技能資料
+/// 單一技能(場上不會存在多個)技能資料
 /// </summary>
-public struct AuraData
+public struct OnlySkillData
 {
     /// <summary> 技能等級 </summary>
     public int Level;
@@ -58,8 +58,8 @@ public class SkillController : MonoBehaviour
     // 用來存放每個技能的計時訂閱
     private Dictionary<SKILL_TYPE, IDisposable> _skillTimers = new();
 
-    // 用來存放靈氣類技能物件
-    private Dictionary<string, AuraData> _auraSkills = new();
+    // 用來存放單一技能(場上不會存在多個)
+    private Dictionary<string, OnlySkillData> _onlySkills = new();
 
     private void OnDestroy()
     {
@@ -147,6 +147,11 @@ public class SkillController : MonoBehaviour
                 // 增加的攻擊範圍(%)
                 case PASSIVE_SKILL_TYPE.AttackRange:
                     characterConfig.AddAttackRange.Value += data.PassiveAddValue;
+                    break;
+
+                // 增加的持續時間(秒)
+                case PASSIVE_SKILL_TYPE.KeepTime:
+                    characterConfig.AddKeepTime.Value += data.PassiveAddValue;
                     break;
             }
         }
@@ -322,18 +327,18 @@ public class SkillController : MonoBehaviour
             if(skill.SkillType == SKILL_TYPE.Skill_Aura)
             {
                 // 已學習，移除舊的產生新的
-                if(_auraSkills.ContainsKey(skill.SkillName) && _auraSkills[skill.SkillName].Level != skill.SkillLevel)
+                if(_onlySkills.ContainsKey(skill.SkillName) && _onlySkills[skill.SkillName].Level != skill.SkillLevel)
                 {
-                    if(_auraSkills[skill.SkillName].Obj.TryGetComponent(out BaseGameObject baseGameObject))
+                    if(_onlySkills[skill.SkillName].Obj.TryGetComponent(out BaseGameObject baseGameObject))
                     {
                         baseGameObject.Remove();
                     }
                     else
                     {
-                        Destroy(_auraSkills[skill.SkillName].Obj);
+                        Destroy(_onlySkills[skill.SkillName].Obj);
                     }
 
-                    _auraSkills.Remove(skill.SkillName);
+                    _onlySkills.Remove(skill.SkillName);
                 }
 
                 SpawnInCharacterAuraPoint(skill);
@@ -379,7 +384,7 @@ public class SkillController : MonoBehaviour
         StopSkillTimer(skill);
 
         float cd = GetActualCd(skill);
-        _skillTimers[skill.SkillType] = Observable.Timer(TimeSpan.FromSeconds(cd), TimeSpan.FromSeconds(cd), Scheduler.MainThread)
+        _skillTimers[skill.SkillType] = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(cd), Scheduler.MainThread)
             .Subscribe(_ => ExecuteSkill(skill))
             .AddTo(this);
     }
@@ -419,6 +424,35 @@ public class SkillController : MonoBehaviour
                     skillData: skill,
                     spawnAction: () => { SpawnSkillRandomInPoint(skill); }));
                 break;
+
+            // 產生在物件持
+            case SKILL_SPAWN_MODEL_TYPE.None:
+                // 回收舊技能
+                if (_onlySkills.ContainsKey(skill.SkillName) && _onlySkills[skill.SkillName].Level != skill.SkillLevel)
+                {
+                    switch (skill.SkillType)
+                    {
+                        // 技能_圍繞
+                        case SKILL_TYPE.Skill_Around:
+                            if (_onlySkills[skill.SkillName].Obj.TryGetComponent(out Skill_AroundView skill_AroundView))
+                            {
+                                skill_AroundView.Recycle();
+                            }
+                            else
+                            {
+                                Destroy(_onlySkills[skill.SkillName].Obj);
+                            }
+                            break;
+                    }
+
+                    _onlySkills.Remove(skill.SkillName);
+                }
+
+                StartCoroutine(IShotSkill(
+                    skillData: skill,
+                    spawnAction: () => { SpawnInPool(skill); },
+                    onlySelf: true));                
+                break;
         }
     }
 
@@ -431,12 +465,13 @@ public class SkillController : MonoBehaviour
     /// </summary>
     /// <param name="skillData">技能資料</param>
     /// <param name="spawnAction">產生方法</param>
+    /// <param name="onlySelf">不計算數量只產生自己</param>
     /// <returns></returns>
-    private IEnumerator IShotSkill(SkillItemData skillData, Action spawnAction)
+    private IEnumerator IShotSkill(SkillItemData skillData, Action spawnAction, bool onlySelf = false)
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
 
-        int shotCount = skillData.SkillShotCount + characterConfig.AddProjectileCount.Value;
+        int shotCount = onlySelf ? 1 : skillData.SkillShotCount + characterConfig.AddProjectileCount.Value;
 
         for (int i = 0; i < shotCount; i++)
         {
@@ -534,19 +569,74 @@ public class SkillController : MonoBehaviour
                 Skill_AuraView skill_AuraView = obj.AddComponent<Skill_AuraView>();
                 skill_AuraView.Setup(data);
 
-                AuraData auraData = new()
+                OnlySkillData auraData = new()
                 {
                     Level = data.SkillLevel,
                     Obj = obj
                 };
 
-                _auraSkills.Add(data.SkillName, auraData);
+                _onlySkills.Add(data.SkillName, auraData);
             }
         }
         catch (Exception e)
         {
             Debug.LogError($"產生技能_角色靈氣點 錯誤! : {e}");
         }
+    }
+
+    /// <summary>
+    /// 產生技能_物件持
+    /// </summary>
+    /// <param name="data"></param>
+    private void SpawnInPool(SkillItemData data)
+    {
+        // 防呆：如果因為非同步時間差，字典裡已經有相同 Key，直接先回收它，避免重複
+        if (_onlySkills.ContainsKey(data.SkillName))
+        {
+            if (_onlySkills[data.SkillName].Obj != null &&
+                _onlySkills[data.SkillName].Obj.TryGetComponent(out BaseSkill oldSkill))
+            {
+                oldSkill.Recycle();
+            }
+            _onlySkills.Remove(data.SkillName);
+        }
+
+        // 佔位子：先放一個 Null Obj 進去，防止下一個非同步請求重複執行 Add
+        OnlySkillData placeholderData = new()
+        {
+            Level = data.SkillLevel,
+            Obj = null
+        };
+        _onlySkills.Add(data.SkillName, placeholderData);
+
+        PlayerView playerView = GameStateData.ControlCharacter.Value;
+
+        GameStateData.CurrentObjectPool.Value.SpawnObject(
+            parentName: data.SkillName,
+            assetRef: data.PrefabReference,
+            position: playerView.transform.position,
+            rotation: playerView.transform.rotation,
+            callback: (obj) =>
+            {
+            // 防呆：如果在 await 期間，這個技能又被移除了或改變了，就直接回收此物件
+            if (!_onlySkills.ContainsKey(data.SkillName))
+                {
+                    GameStateData.CurrentObjectPool.Value.ReturnToPool(obj);
+                    return;
+                }
+
+                if (obj.TryGetComponent(out BaseSkill skill))
+                {
+                    skill.Setup(data);
+
+                    OnlySkillData onlySkillData = new()
+                    {
+                        Level = data.SkillLevel,
+                        Obj = obj
+                    };
+                    _onlySkills[data.SkillName] = onlySkillData;
+                }
+            });
     }
 
     #endregion
