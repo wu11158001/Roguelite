@@ -1,11 +1,17 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerView : BaseGameObject
 {
     private PlayerInput _playerInput;
     private Vector2 _inputVector;
+
+    // 受到攻擊顏色變化
+    private Renderer[] _renderers;
+    MaterialPropertyBlock _propBlock;
+    private Coroutine _hitCoroutine;
 
     /// <summary> 技能發射點 </summary>
     public Transform SkillShotPoint { get; private set; }
@@ -20,6 +26,9 @@ public class PlayerView : BaseGameObject
     {
         SkillShotPoint = transform.Find("SkillShotPoint");
         AuraPoint = transform.Find("AuraPoint");
+
+        _renderers = GetComponentsInChildren<Renderer>();
+        _propBlock = new();
 
         GameConfigData gameConfigData = GameStateData.GameConfig.Value;
 
@@ -44,6 +53,8 @@ public class PlayerView : BaseGameObject
 
     public override void OnDestroy()
     {
+        StopAllCoroutines();
+
         if (_playerInput != null)
         {
             var moveAction = _playerInput.actions["Move"];
@@ -136,6 +147,36 @@ public class PlayerView : BaseGameObject
         }
 
         _characterConfig.Hp.Value = Mathf.Max(0, _characterConfig.Hp.Value - hitData.Attack);
+
+        if (_hitCoroutine != null) StopCoroutine(_hitCoroutine);
+        _hitCoroutine = StartCoroutine(IGetHitAnim());
+    }
+
+    /// <summary>
+    /// 受到攻擊動畫
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator IGetHitAnim()
+    {
+        foreach (var renderer in _renderers)
+        {
+            if (renderer == null) continue;
+
+            renderer.GetPropertyBlock(_propBlock);
+            _propBlock.SetColor("_BaseColor", Color.red);
+            renderer.SetPropertyBlock(_propBlock);
+        }
+
+        yield return new WaitForSeconds(0.1f);
+
+        foreach (var renderer in _renderers)
+        {
+            if (renderer == null) continue;
+
+            renderer.GetPropertyBlock(_propBlock);
+            _propBlock.Clear();
+            renderer.SetPropertyBlock(_propBlock);
+        }
     }
 
     /// <summary>
