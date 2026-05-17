@@ -110,6 +110,7 @@ public class Skill_AroundView : BaseSkill
                     obj.transform.localScale = new Vector3(_size, _size, _size);
 
                     attackObj.Setup(_data);
+                    attackObj.SetData(_viewModel.Rotation);
                     _attackObjs.Add(attackObj);
                 }
             });

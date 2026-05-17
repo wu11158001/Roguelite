@@ -89,6 +89,11 @@ public class Skill_TrackingViewModel: IDisposable
             return;
         }
 
+        if (enemyObj == null || !enemyObj.activeInHierarchy)
+        {
+            return;
+        }
+
         // 穿透
         _penetrate--;
 

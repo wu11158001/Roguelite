@@ -61,6 +61,11 @@ public class Skill_StraightProjectileViewModel: IDisposable
             return;
         }
 
+        if (enemyObj == null || !enemyObj.activeInHierarchy)
+        {
+            return;
+        }
+
         // 穿透
         _penetrate--;
 

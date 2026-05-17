@@ -42,6 +42,11 @@ public class Skill_AuraViewModel
     /// <param name="calculateAttackFunc"></param>
     public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
     {
+        if (enemyObj == null || !enemyObj.activeInHierarchy)
+        {
+            return;
+        }
+
         HitData hitData = calculateAttackFunc.Invoke();
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
