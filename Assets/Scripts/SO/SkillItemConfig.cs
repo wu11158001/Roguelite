@@ -93,6 +93,10 @@ public class SkillItemData
     [ShowIf("_isShowSkill")]
     public SKILL_TYPE SkillType;
 
+    [AllowNesting] [Label("升級是否立即更新")]
+    [HideIf("IsProps")]
+    public bool IsUpdateNow;
+
     [AllowNesting][Label("技能等級")]
     [HideIf("IsProps")]
     public int SkillLevel;

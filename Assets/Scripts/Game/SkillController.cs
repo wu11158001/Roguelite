@@ -384,7 +384,8 @@ public class SkillController : MonoBehaviour
         StopSkillTimer(skill);
 
         float cd = GetActualCd(skill);
-        _skillTimers[skill.SkillType] = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(cd), Scheduler.MainThread)
+        TimeSpan startTime = skill.IsUpdateNow ? TimeSpan.Zero : TimeSpan.FromSeconds(cd);
+        _skillTimers[skill.SkillType] = Observable.Timer(startTime, TimeSpan.FromSeconds(cd), Scheduler.MainThread)
             .Subscribe(_ => ExecuteSkill(skill))
             .AddTo(this);
     }

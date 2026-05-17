@@ -30,10 +30,12 @@ MonoBehaviour:
     SkillShotCount: 1
     SkillShotInterval: 0.07
     SkillPenetrate: 0
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -57,10 +59,12 @@ MonoBehaviour:
     SkillShotCount: 2
     SkillShotInterval: 0.07
     SkillPenetrate: 0
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -84,10 +88,12 @@ MonoBehaviour:
     SkillShotCount: 3
     SkillShotInterval: 0.07
     SkillPenetrate: 0
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -111,10 +117,12 @@ MonoBehaviour:
     SkillShotCount: 4
     SkillShotInterval: 0.07
     SkillPenetrate: 0
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -138,10 +146,12 @@ MonoBehaviour:
     SkillShotCount: 4
     SkillShotInterval: 0.07
     SkillPenetrate: 1
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -165,10 +175,12 @@ MonoBehaviour:
     SkillShotCount: 5
     SkillShotInterval: 0.07
     SkillPenetrate: 1
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -192,10 +204,12 @@ MonoBehaviour:
     SkillShotCount: 6
     SkillShotInterval: 0.07
     SkillPenetrate: 1
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -219,10 +233,12 @@ MonoBehaviour:
     SkillShotCount: 6
     SkillShotInterval: 0.07
     SkillPenetrate: 2
-    SkillFlightSpeed: 30
+    SkillFlightSpeed: 40
     SkillKnockback: 1
     SkillCriticalChance: 10
     SkillCriticalMultiplier: 0
+    SkillAttackRange: 0
+    SkillKeepTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0

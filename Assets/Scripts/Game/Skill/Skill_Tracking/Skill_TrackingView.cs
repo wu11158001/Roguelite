@@ -14,7 +14,7 @@ public class Skill_TrackingView : BaseSkill
     {
         base.Setup(data);
 
-        // 尋找目標 (邏輯保持在 View 層因為涉及物理掃描)
+        // 尋找目標
         Transform target = GetNearestEnemy(_playerObject.transform.position, 50f, 1 << _targetLayer);
 
         _viewModel = new Skill_TrackingViewModel(data, transform.position, transform.rotation, target);
@@ -51,9 +51,15 @@ public class Skill_TrackingView : BaseSkill
     /// <param name="radius"></param>
     /// <param name="layer"></param>
     /// <returns></returns>
-    public Transform GetNearestEnemy(Vector3 origin, float radius, LayerMask layer)
+    private Transform GetNearestEnemy(Vector3 origin, float radius, LayerMask layer)
     {
         EnemyManager enemyManager = GameStateData.EnemyManager.Value;
+
+        if(enemyManager == null || enemyManager.LivingEnemyPool == null)
+        {
+            return null;
+        }
+
         List<GameObject> enemyObjs = new(enemyManager.LivingEnemyPool);
 
         Transform nearestTarget = null;
@@ -61,6 +67,11 @@ public class Skill_TrackingView : BaseSkill
 
         foreach (GameObject obj in enemyObjs)
         {
+            if(!obj.activeInHierarchy)
+            {
+                continue;
+            }    
+
             Vector3 directionToTarget = obj.transform.position - origin;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr)

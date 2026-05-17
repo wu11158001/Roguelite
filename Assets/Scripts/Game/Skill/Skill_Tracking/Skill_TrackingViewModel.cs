@@ -39,6 +39,7 @@ public class Skill_TrackingViewModel: IDisposable
 
         _target = target;
         _isTracking = target != null;
+        _isExpired.Value = false;
 
         _hitTargets.Clear();
     }

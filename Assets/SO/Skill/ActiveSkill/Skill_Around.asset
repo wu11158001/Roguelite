@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 1
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -31,7 +32,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 120
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 1
@@ -43,6 +44,7 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 2
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -60,7 +62,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 120
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 1
@@ -72,6 +74,7 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 3
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -89,7 +92,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 120
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 1
@@ -101,6 +104,7 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 4
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -118,7 +122,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 240
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 1
@@ -130,6 +134,7 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 5
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -147,7 +152,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 240
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 1.5
@@ -159,6 +164,7 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 6
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -176,7 +182,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 320
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 1.5
@@ -188,6 +194,7 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 7
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -205,7 +212,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 320
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 2
@@ -217,6 +224,7 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 3
+    IsUpdateNow: 1
     SkillLevel: 8
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
@@ -234,7 +242,7 @@ MonoBehaviour:
     SkillShotInterval: 0
     SkillPenetrate: 0
     SkillFlightSpeed: 320
-    SkillKnockback: 0.5
+    SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillAttackRange: 2
