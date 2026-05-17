@@ -58,15 +58,16 @@ public class Skill_TrackingViewModel: IDisposable
             if (targetDir != Vector3.zero)
             {
                 float angle = Vector3.Angle(_rotation.Value * Vector3.forward, targetDir);
+
+                // 角度在範圍內停止追蹤
                 if (angle <= 10f)
                 {
-                    // 角度在範圍內停止追蹤
                     _isTracking = false;
                     _rotation.Value = Quaternion.LookRotation(targetDir);
                 }
+                // 追蹤目標
                 else
                 {
-                    // 追蹤目標
                     Quaternion targetRot = Quaternion.LookRotation(targetDir);
                     _rotation.Value = Quaternion.Slerp(_rotation.Value, targetRot, (1.0f / 0.07f) * deltaTime);
                 }

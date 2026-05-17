@@ -17,9 +17,7 @@ public class Skill_TrackingView : BaseSkill
         // 尋找目標 (邏輯保持在 View 層因為涉及物理掃描)
         Transform target = GetNearestEnemy(_playerObject.transform.position, 50f, 1 << _targetLayer);
 
-        // 初始化 ViewModel
         _viewModel = new Skill_TrackingViewModel(data, transform.position, transform.rotation, target);
-
         _viewModel.Position.Subscribe(pos => transform.position = pos).AddTo(_disposables);
         _viewModel.Rotation.Subscribe(rot => transform.rotation = rot).AddTo(_disposables);
 

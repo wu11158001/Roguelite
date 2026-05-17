@@ -33,46 +33,52 @@ public class GameScenePool : MonoBehaviour
     /// <param name="callback"></param>
     public async void SpawnObject(string parentName, AssetReferenceGameObject assetRef, Vector3 position, Quaternion rotation, Action<GameObject> callback)
     {
-        string key = assetRef.AssetGUID;
-
-        // 確保該類別的池子與父物件已初始化
-        if (!_poolDictionary.ContainsKey(key))
+        try
         {
-            _poolDictionary.Add(key, new Queue<GameObject>());
+            string key = assetRef.AssetGUID;
 
-            GameObject container = new GameObject($"Pool_{parentName}");
-            container.transform.SetParent(this.transform);
-            _poolParents.Add(key, container.transform);
-        }
-
-        if (_poolDictionary[key].Count > 0)
-        {
-            // 從池子提取
-            GameObject obj = _poolDictionary[key].Dequeue();
-            obj.transform.position = position;
-            obj.transform.rotation = rotation;
-            callback?.Invoke(obj);
-            obj.SetActive(true);
-        }
-        else
-        {
-            // 產生新的物件
-            AsyncOperationHandle<GameObject> handle = assetRef.InstantiateAsync(position, rotation, _poolParents[key]);
-            await handle.Task;
-
-            if (handle.Status == AsyncOperationStatus.Succeeded)
+            // 確保該類別的池子與父物件已初始化
+            if (!_poolDictionary.ContainsKey(key))
             {
-                GameObject obj = handle.Result;
-                obj.transform.SetParent(_poolParents[key]);
+                _poolDictionary.Add(key, new Queue<GameObject>());
 
-                // 設定標記
-                PoolObjectMark mark = obj.GetComponent<PoolObjectMark>();
-                if (mark == null) mark = obj.AddComponent<PoolObjectMark>();
-                mark.PoolKey = key;
+                GameObject container = new GameObject($"Pool_{parentName}");
+                container.transform.SetParent(this.transform);
+                _poolParents.Add(key, container.transform);
+            }
 
+            if (_poolDictionary[key].Count > 0)
+            {
+                // 從池子提取
+                GameObject obj = _poolDictionary[key].Dequeue();
+                obj.transform.position = position;
+                obj.transform.rotation = rotation;
                 callback?.Invoke(obj);
+                obj.SetActive(true);
+            }
+            else
+            {
+                // 產生新的物件
+                AsyncOperationHandle<GameObject> handle = assetRef.InstantiateAsync(position, rotation, _poolParents[key]);
+                await handle.Task;
+
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    GameObject obj = handle.Result;
+
+                    // 設定標記
+                    PoolObjectMark mark = obj.GetComponent<PoolObjectMark>();
+                    if (mark == null) mark = obj.AddComponent<PoolObjectMark>();
+                    mark.PoolKey = key;
+
+                    callback?.Invoke(obj);
+                }
             }
         }
+        catch (Exception e)
+        {
+            Debug.LogError($"物件池生成物件錯誤! : {e}");
+        }        
     }
 
     /// <summary>

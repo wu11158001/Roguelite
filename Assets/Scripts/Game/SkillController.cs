@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// 獲取或提升技能事件
@@ -28,12 +29,23 @@ public class HitData
 }
 
 /// <summary>
+/// 靈氣類技能資料
+/// </summary>
+public struct AuraData
+{
+    /// <summary> 技能等級 </summary>
+    public int Level;
+    /// <summary> 技能物件 </summary>
+    public GameObject Obj;
+}
+
+/// <summary>
 /// 技能控制器
 /// </summary>
 public class SkillController : MonoBehaviour
 {
     /// <summary> 技能物件距離玩家多遠移除 </summary>
-    public float SkillRemoveDistance = 50;
+    public readonly float SkillRemoveDistance = 50;
 
     // 已學習技能
     private ReactiveCollection<SkillItemData> _ownSkills;
@@ -45,6 +57,9 @@ public class SkillController : MonoBehaviour
 
     // 用來存放每個技能的計時訂閱
     private Dictionary<SKILL_TYPE, IDisposable> _skillTimers = new();
+
+    // 用來存放靈氣類技能物件
+    private Dictionary<string, AuraData> _auraSkills = new();
 
     private void OnDestroy()
     {
@@ -127,6 +142,11 @@ public class SkillController : MonoBehaviour
                 // 投射物數量
                 case PASSIVE_SKILL_TYPE.ProjectileCount:
                     characterConfig.AddProjectileCount.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 增加的攻擊範圍(%)
+                case PASSIVE_SKILL_TYPE.AttackRange:
+                    characterConfig.AddAttackRange.Value += data.PassiveAddValue;
                     break;
             }
         }
@@ -298,6 +318,28 @@ public class SkillController : MonoBehaviour
         // 只要是主動技能更新，就重啟該計時器
         if (!skill.IsPassive && !skill.IsProps)
         {
+            // 靈氣技能不餐與計時，只產生在角色身上
+            if(skill.SkillType == SKILL_TYPE.Skill_Aura)
+            {
+                // 已學習，移除舊的產生新的
+                if(_auraSkills.ContainsKey(skill.SkillName) && _auraSkills[skill.SkillName].Level != skill.SkillLevel)
+                {
+                    if(_auraSkills[skill.SkillName].Obj.TryGetComponent(out BaseGameObject baseGameObject))
+                    {
+                        baseGameObject.Remove();
+                    }
+                    else
+                    {
+                        Destroy(_auraSkills[skill.SkillName].Obj);
+                    }
+
+                    _auraSkills.Remove(skill.SkillName);
+                }
+
+                SpawnInCharacterAuraPoint(skill);
+                return;
+            }
+
             StartSkillTimer(skill);
         }
         // 如果是被動技能且是 CD 類型，強制所有主動技能重啟
@@ -315,7 +357,7 @@ public class SkillController : MonoBehaviour
     /// </summary>
     /// <param name="skill"></param>
     /// <returns></returns>
-    private float GetActualCd(SkillItemData skill)
+    public float GetActualCd(SkillItemData skill)
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
 
@@ -409,7 +451,7 @@ public class SkillController : MonoBehaviour
     }
 
     /// <summary>
-    /// 產生技能在角色發射點
+    /// 產生技能_角色發射點
     /// </summary>
     /// <param name="data"></param>
     private void SpawnSkillInPoint(SkillItemData data)
@@ -431,7 +473,7 @@ public class SkillController : MonoBehaviour
     }
 
     /// <summary>
-    /// 產生技能隨機在角色發射點周圍
+    /// 產生技能_隨機在角色發射點周圍
     /// </summary>
     /// <param name="data"></param>
     private void SpawnSkillRandomInPoint(SkillItemData data)
@@ -462,6 +504,49 @@ public class SkillController : MonoBehaviour
                     skill.Setup(data);
                 }
             });
+    }
+
+    /// <summary>
+    /// 產生技能_角色靈氣點
+    /// </summary>
+    /// <param name="data"></param>
+    private async void SpawnInCharacterAuraPoint(SkillItemData data)
+    {
+        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        Transform auraPoint = playerView.AuraPoint;
+
+        try
+        {
+            AsyncOperationHandle<GameObject> handle = data.PrefabReference.InstantiateAsync(
+                position: auraPoint.position,
+                rotation: Quaternion.identity,
+                parent: auraPoint);
+
+            await handle.Task;
+
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                GameObject obj = handle.Result;
+
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.rotation = Quaternion.identity;
+
+                Skill_AuraView skill_AuraView = obj.AddComponent<Skill_AuraView>();
+                skill_AuraView.Setup(data);
+
+                AuraData auraData = new()
+                {
+                    Level = data.SkillLevel,
+                    Obj = obj
+                };
+
+                _auraSkills.Add(data.SkillName, auraData);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"產生技能_角色靈氣點 錯誤! : {e}");
+        }
     }
 
     #endregion

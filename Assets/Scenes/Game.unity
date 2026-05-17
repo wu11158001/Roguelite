@@ -689,7 +689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667743e6c38bb2344aa199d961d3596f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameCameraView
-  offset: {x: 0, y: 10, z: -5}
+  offset: {x: 0, y: 15, z: -3}
 --- !u!1001 &483995609744156101
 PrefabInstance:
   m_ObjectHideFlags: 0

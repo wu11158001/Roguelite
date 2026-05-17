@@ -14,9 +14,7 @@ public class Skill_StraightProjectileView : BaseSkill
     {
         base.Setup(data);
 
-        // 初始化 ViewModel
         _viewModel = new Skill_StraightProjectileViewModel(data, transform.position, transform.rotation);
-
         _viewModel.Position.Subscribe(pos => transform.position = pos).AddTo(_disposables);
         _viewModel.Rotation.Subscribe(rot => transform.rotation = rot).AddTo(_disposables);
 

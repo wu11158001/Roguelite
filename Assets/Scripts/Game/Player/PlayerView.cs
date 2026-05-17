@@ -9,6 +9,8 @@ public class PlayerView : BaseGameObject
 
     /// <summary> 技能發射點 </summary>
     public Transform SkillShotPoint { get; private set; }
+    /// <summary> 靈氣光環父物件 </summary>
+    public Transform AuraPoint { get; private set; }
 
     private CharacterConfigData _characterConfig;
 
@@ -17,6 +19,7 @@ public class PlayerView : BaseGameObject
     private void Awake()
     {
         SkillShotPoint = transform.Find("SkillShotPoint");
+        AuraPoint = transform.Find("AuraPoint");
 
         GameConfigData gameConfigData = GameStateData.GameConfig.Value;
 
@@ -63,6 +66,7 @@ public class PlayerView : BaseGameObject
 
         _viewModel.Setup();
 
+        GameStateData.ControlCharacter.Value = this;
         _characterConfig = GameStateData.SelectedCharacter.Value;
 
         GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
@@ -70,6 +74,11 @@ public class PlayerView : BaseGameObject
         {
             gameCameraView.Setup(transform);
         }
+
+        // 初始技能添加
+        CharacterConfigData character = GameStateData.SelectedCharacter.Value;
+        SkillItemData skillItemData = GameStateData.GetSkillItemData(character.InitSkill);
+        GameStateData.CurrentSkillController.Value.OnGainSkill(newSkill: skillItemData);
     }
 
     private void Update()

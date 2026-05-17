@@ -107,8 +107,6 @@ public class GameLauncher : MonoBehaviour
         }
 
         playerView.Setup(myRef: selectedCharacter.PrefabReference);
-
-        GameStateData.ControlCharacter.Value = playerView;
     }
 
     /// <summary>

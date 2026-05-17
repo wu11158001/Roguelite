@@ -14,6 +14,8 @@ public enum SKILL_TYPE
     Skill_Tracking,
     /// <summary> 面向方向投射物 </summary>
     Skill_Projectile,
+    /// <summary> 靈氣光環 </summary>
+    Skill_Aura,
 }
 
 /// <summary>
@@ -25,6 +27,8 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InPoint,
     /// <summary> 產生在角色發射點周圍隨機位置 </summary>
     InPointRandom,
+    /// <summary> 產生在角色物件內(只產生一次) </summary>
+    InCharacter,
 }
 
 /// <summary>
@@ -52,6 +56,8 @@ public enum PASSIVE_SKILL_TYPE
     CriticalMultiplier,
     /// <summary> 投射物數量 </summary>
     ProjectileCount,
+    /// <summary> 攻擊範圍增加(%) </summary>
+    AttackRange,
 }
 
 /// <summary>
@@ -79,7 +85,7 @@ public class SkillItemConfig : ScriptableObject
 public class SkillItemData
 {
     // --------主動技能--------
-    [AllowNesting][Label("種動技能類型")]
+    [AllowNesting][Label("主動技能類型")]
     [ShowIf("_isShowSkill")]
     public SKILL_TYPE SkillType;
 
@@ -150,6 +156,11 @@ public class SkillItemData
     [BoxGroup("主動技能數值")][Label("爆擊攻擊力加乘(倍數)")]
     [ShowIf("_isShowSkill")]
     public int SkillCriticalMultiplier;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("攻擊範圍")]
+    [ShowIf("_isShowSkill")]
+    public int SkillAttackRange;
 
     // --------被動技能--------
     [AllowNesting][Label("是否為被動技能")]

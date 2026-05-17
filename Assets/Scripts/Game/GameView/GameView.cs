@@ -62,11 +62,6 @@ public class GameView : BaseView
         GameStateData.CurrentCharacterController.Value.CurrentLevel.Subscribe(value => UpdateLevel(value));
         GameStateData.CurrentCharacterController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value));
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
-
-        // 初始技能添加
-        CharacterConfigData character = GameStateData.SelectedCharacter.Value;
-        SkillItemData skillItemData = GameStateData.GetSkillItemData(character.InitSkill);
-        GameStateData.CurrentSkillController.Value.OnGainSkill(newSkill: skillItemData);
     }
 
     /// <summary>
