@@ -12,8 +12,8 @@ public enum SKILL_TYPE
 {
     /// <summary> 追蹤 </summary>
     Skill_Tracking,
-    /// <summary> 面向方向投射物 </summary>
-    Skill_Projectile,
+    /// <summary> 直線投射物 </summary>
+    Skill_StraightProjectile,
     /// <summary> 靈氣光環 </summary>
     Skill_Aura,
     /// <summary> 圍繞 </summary>

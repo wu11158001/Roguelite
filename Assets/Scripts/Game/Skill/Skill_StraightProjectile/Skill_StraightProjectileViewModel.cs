@@ -48,6 +48,11 @@ public class Skill_StraightProjectileViewModel: IDisposable
 
         // 計算位移
         _position.Value += (_rotation.Value * Vector3.forward) * _data.SkillFlightSpeed * deltaTime;
+
+        // 鑽頭式旋轉
+        float rotationSpeedZ = 360f;
+        Quaternion deltaRotation = Quaternion.Euler(0f, 0f, rotationSpeedZ * deltaTime);
+        _rotation.Value = _rotation.Value * deltaRotation;
     }
 
     /// <summary>
