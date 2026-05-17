@@ -104,13 +104,11 @@ public class EnemyView : BaseGameObject
             }
         }
     }
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionStay(Collision collision)
     {
-        
-        if (other.CompareTag("Player") && _attackedTimes > _enemyModel.ConfigData.atkSpeed)
+        if (collision.gameObject.CompareTag("Player") && _attackedTimes > _enemyModel.ConfigData.atkSpeed)
         {
             _attackedTimes = 0;
-            Debug.Log("[" + gameObject.name + "]"+"碰到玩家了 HP ["+ _enemyModel.ConfigData.currentHp + "]");
 
             HitData hitData = new()
             {
@@ -119,11 +117,8 @@ public class EnemyView : BaseGameObject
                 Knockback = 0
             };
 
-            PlayerView playerView = other.GetComponent<PlayerView>();
+            PlayerView playerView = collision.gameObject.GetComponent<PlayerView>();
             playerView?.OnGetHit(hitData);
-
-            _enemyModel.ConfigData.currentHp -= 1;
-           // Attacked_Ani();
         }
     }
     public void OnDieNotify() {
