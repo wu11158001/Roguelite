@@ -14,23 +14,21 @@ public class EnemyManager : MonoBehaviour
     //回收後的敵人池
     private Dictionary<ENEMY_TYPE, Stack<GameObject>> enemyPool = new Dictionary<ENEMY_TYPE, Stack<GameObject>>();
     //單一怪物種類池大小
-    private int PoolMaxCount = 60;
+    //private int PoolMaxCount = 60;
 
     [SerializeField]
-    private GameObject Player = null;
-    [SerializeField]
-    private bool IsCreaterEnemy;
+    public bool IsCreaterEnemy;
     //[SerializeField]
     //private int _craterEnemyCount = 10;
     //存活的敵人池
     public List<GameObject> LivingEnemyPool;
 
-    [Foldout("設定")][SerializeField]
+    [Foldout("設定")][Header("生成間隔")][SerializeField]
     private float _spawnInterval = 30f;     // 生成間隔 (秒)
-    [Foldout("設定")][SerializeField]
-    private bool _isSpawning = true;        // 是否持續生成
-    [Foldout("設定")][SerializeField]
-    private int _createEnemyCount = 5;      //每次生成數量最大值
+    [Foldout("設定")][Header("是否持續生成")][SerializeField]
+    private bool _isSpawning = false;        // 是否持續生成
+    [Foldout("設定")][Header("生成最大值")][SerializeField]
+    private int _createEnemyCount = 1;      //每次生成數量最大值
     public void SetUp(List<EnemyConfigData>conifgList) {
         enemyConfigList = conifgList;
         LivingEnemyPool = new List<GameObject>();

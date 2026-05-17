@@ -3,8 +3,9 @@ using UnityEngine;
 
 interface IActionCB
 {
-    //cb回傳 bool  true代表有傷害  false代表沒傷害
+    //受到攻擊回調 bool true代表有傷害  false代表沒傷害
     void OnAttacked(HitData data,Action<bool>cb);
+    
 }
 
 public abstract class BasicActionModel

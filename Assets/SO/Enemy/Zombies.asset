@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyType: 1
   _basicMoveSpeed: 3
   _basicATK: 3
-  _basicDEF: 8
+  _basicDEF: 5
   _basicHp: 20
   _basicMp: 0
   _atkSpeed: 1
