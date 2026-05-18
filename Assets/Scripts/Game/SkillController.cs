@@ -145,8 +145,8 @@ public class SkillController : MonoBehaviour
                     break;
 
                 // 增加的攻擊範圍(%)
-                case PASSIVE_SKILL_TYPE.AttackRange:
-                    characterConfig.AddAttackRange.Value += data.PassiveAddValue;
+                case PASSIVE_SKILL_TYPE.EffectRange:
+                    characterConfig.AddEffectRange.Value += data.PassiveAddValue;
                     break;
 
                 // 增加的持續時間(秒)
@@ -497,8 +497,8 @@ public class SkillController : MonoBehaviour
         GameStateData.CurrentObjectPool.Value.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
-            position: playerView.SkillShotPoint.position,
-            rotation: playerView.SkillShotPoint.rotation,
+            position: playerView.ShotPoint.position,
+            rotation: playerView.ShotPoint.rotation,
             callback: (obj) =>
             {
                 if (obj.TryGetComponent(out BaseSkill skill))
@@ -515,7 +515,7 @@ public class SkillController : MonoBehaviour
     private void SpawnSkillRandomInPoint(SkillItemData data)
     {
         PlayerView playerView = GameStateData.ControlCharacter.Value;
-        Transform shotPoint = playerView.SkillShotPoint;
+        Transform shotPoint = playerView.ShotPoint;
 
         // 左右隨機正負
         float maxHorizontalOffset = 1.1f;
@@ -543,13 +543,13 @@ public class SkillController : MonoBehaviour
     }
 
     /// <summary>
-    /// 產生技能_角色靈氣點
+    /// 產生技能_角色底部位置點
     /// </summary>
     /// <param name="data"></param>
     private async void SpawnInCharacterAuraPoint(SkillItemData data)
     {
         PlayerView playerView = GameStateData.ControlCharacter.Value;
-        Transform auraPoint = playerView.AuraPoint;
+        Transform auraPoint = playerView.BottomPoint;
 
         try
         {

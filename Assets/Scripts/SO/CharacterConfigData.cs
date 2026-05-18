@@ -75,9 +75,9 @@ public class CharacterConfigData : ScriptableObject
     [HideInInspector] public ReactiveProperty<int> AddProjectileCount;
 
     [BoxGroup("角色可動態變更數值")]
-    [Label("增加的攻擊範圍")]
-    [SerializeField] private float _baseAddAttackRange = 0;
-    [HideInInspector] public ReactiveProperty<float> AddAttackRange;
+    [Label("增加的效果範圍")]
+    [SerializeField] private float _baseAddEffectRange = 0;
+    [HideInInspector] public ReactiveProperty<float> AddEffectRange;
 
     [BoxGroup("角色可動態變更數值")]
     [Label("增加的持續時間(秒)")]
@@ -99,7 +99,7 @@ public class CharacterConfigData : ScriptableObject
         AddCriticalChance = new ReactiveProperty<int>(_baseAddCriticalChance);
         CriticalMultiplier = new ReactiveProperty<float>(_baseCriticalMultiplier);
         AddProjectileCount = new ReactiveProperty<int>(_baseAddProjectileCount);
-        AddAttackRange = new ReactiveProperty<float>(_baseAddAttackRange);
+        AddEffectRange = new ReactiveProperty<float>(_baseAddEffectRange);
         AddKeepTime = new ReactiveProperty<float>(_baseAddKeepTime);
 
         Hp = new ReactiveProperty<int>(MaxHp.Value);

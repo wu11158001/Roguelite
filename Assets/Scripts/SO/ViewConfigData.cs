@@ -8,7 +8,8 @@ public enum VIEW_TYPE
     BackgroundView = 0,
 
     LobbyView = 100,
-    
+    SelectCharacterView,
+
     GameView = 200,
     SelectSkillView,
 }

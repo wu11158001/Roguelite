@@ -19,7 +19,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
   RotationSpeed: 10
   InitSkill: 0
   _baseMoveSpeed: 10

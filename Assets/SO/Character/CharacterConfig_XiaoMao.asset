@@ -12,23 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
   m_Name: CharacterConfig_XiaoMao
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  CharacterName: "\u89D2\u82722\u865F"
+  CharacterName: XiaoMao
   PrefabReference:
-    m_AssetGUID: 115fef553a842514d89c738aec9dd4ee
+    m_AssetGUID: 3d0ccadcf3c7d5a4b893f45ecc5dd193
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
   RotationSpeed: 10
   InitSkill: 3
   _baseMoveSpeed: 10
   MoveSpeed:
     value: 0
-  _baseAddAttack: 0
+  _baseAddAttack: 1
   AddAttack:
     value: 0
-  _baseMaxHp: 100
+  _baseMaxHp: 140
   MaxHp:
     value: 0
   _baseDefense: 0
@@ -46,14 +46,14 @@ MonoBehaviour:
   _baseAddCriticalChance: 0
   AddCriticalChance:
     value: 0
-  _baseCriticalMultiplier: 2
+  _baseCriticalMultiplier: 0
   CriticalMultiplier:
     value: 0
   _baseAddProjectileCount: 0
   AddProjectileCount:
     value: 0
-  _baseAddAttackRange: 0
-  AddAttackRange:
+  _baseAddEffectRange: 0
+  AddEffectRange:
     value: 0
   _baseAddKeepTime: 0
   AddKeepTime:

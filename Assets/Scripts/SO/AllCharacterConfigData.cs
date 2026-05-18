@@ -6,7 +6,7 @@ using UnityEngine;
 /// 所有角色資料
 /// </summary>
 [CreateAssetMenu(fileName = "AllCharacterConfigData", menuName = "SO Config/All Character Config")]
-public class AllCharacterConfigData : MonoBehaviour
+public class AllCharacterConfigData : ScriptableObject
 {
     [Label("可選角色配置")]
     [SerializeField] public List<CharacterConfigData> AllCharacterConfigs;

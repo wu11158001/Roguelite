@@ -58,8 +58,8 @@ public enum PASSIVE_SKILL_TYPE
     CriticalMultiplier,
     /// <summary> 投射物數量 </summary>
     ProjectileCount,
-    /// <summary> 攻擊範圍增加(%) </summary>
-    AttackRange,
+    /// <summary> 效果範圍增加(%) </summary>
+    EffectRange,
     /// <summary> 持續時間增加(秒) </summary>
     KeepTime,
 }
@@ -166,9 +166,9 @@ public class SkillItemData
     public int SkillCriticalMultiplier;
 
     [AllowNesting]
-    [BoxGroup("主動技能數值")][Label("攻擊範圍(體積)")]
+    [BoxGroup("主動技能數值")][Label("效果範圍(體積)")]
     [ShowIf("_isShowSkill")]
-    public float SkillAttackRange;
+    public float SkillEffectRange;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("持續時間(秒)")]

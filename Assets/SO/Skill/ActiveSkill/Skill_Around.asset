@@ -35,7 +35,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 1
+    SkillEffectRange: 1
     SkillKeepTime: 8
     IsPassive: 0
     PassiveType: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 1
+    SkillEffectRange: 1
     SkillKeepTime: 8
     IsPassive: 0
     PassiveType: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 1
+    SkillEffectRange: 1
     SkillKeepTime: 9
     IsPassive: 0
     PassiveType: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 1
+    SkillEffectRange: 1
     SkillKeepTime: 9
     IsPassive: 0
     PassiveType: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 1.5
+    SkillEffectRange: 1.5
     SkillKeepTime: 9
     IsPassive: 0
     PassiveType: 0
@@ -185,7 +185,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 1.5
+    SkillEffectRange: 1.5
     SkillKeepTime: 9.6
     IsPassive: 0
     PassiveType: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 2
+    SkillEffectRange: 2
     SkillKeepTime: 9.6
     IsPassive: 0
     PassiveType: 0
@@ -245,7 +245,7 @@ MonoBehaviour:
     SkillKnockback: 1
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 2
+    SkillEffectRange: 2
     SkillKeepTime: 9.6
     IsPassive: 0
     PassiveType: 0

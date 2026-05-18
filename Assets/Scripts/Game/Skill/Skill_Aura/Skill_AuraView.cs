@@ -23,7 +23,7 @@ public class Skill_AuraView : BaseSkill
 
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
         characterConfig.CdReduce.Subscribe(_ => _viewModel.UpdateCooldown()).AddTo(this);
-        characterConfig.AddAttackRange.Subscribe(r => UpdataScale(r)).AddTo(this);
+        characterConfig.AddEffectRange.Subscribe(r => UpdataScale(r)).AddTo(this);
 
         _viewModel.OnAttackTriggered
             .Subscribe(_ => ExecuteAreaAttack())
@@ -74,7 +74,7 @@ public class Skill_AuraView : BaseSkill
     /// <param name="addRange">增加的攻擊範圍(%)</param>
     private void UpdataScale(float addRange)
     {
-        float scale = _viewModel.Data.SkillAttackRange + (_viewModel.Data.SkillAttackRange * addRange);
+        float scale = _viewModel.Data.SkillEffectRange + (_viewModel.Data.SkillEffectRange * addRange);
         transform.localScale = new(scale, scale, scale);
     }
 }

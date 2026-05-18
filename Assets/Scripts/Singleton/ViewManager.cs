@@ -48,6 +48,7 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     {
         if (_activeViews.Contains(view))
         {
+            view.Close();
             _activeViews.Remove(view);
         }
     }

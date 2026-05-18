@@ -29,14 +29,14 @@ public class Skill_AroundView : BaseSkill
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
 
         // 圍繞目標
-        Transform target = GameStateData.ControlCharacter.Value.gameObject.transform;
+        Transform target = GameStateData.ControlCharacter.Value.MiddlePoint;
         // 選轉速度
         float rotateSpeed = data.SkillFlightSpeed;
         // 持續時間
         float keepTime = characterConfig.AddKeepTime.Value + data.SkillKeepTime;
         Invoke(nameof(Recycle), keepTime);
         // 體積
-        _size = data.SkillAttackRange;
+        _size = data.SkillEffectRange;
         // 距離角色水平距離
         _distance = _baseDistance + (_size / 2);
 

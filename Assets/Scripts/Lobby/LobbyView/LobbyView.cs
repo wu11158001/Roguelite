@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UniRx;
 using NaughtyAttributes;
 using UnityEngine.AddressableAssets;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 選擇角色
@@ -31,40 +32,14 @@ public class LobbyView : BaseView
     [Header("LobbyView")]
     [SerializeField] private Button _btn_Start;
 
-    [HorizontalLine(color: EColor.Gray)]
-    [Label("角色選擇資料列表")] [ReorderableList]
-    [SerializeField] private List<SelectCharcterEntry> _selectCharcters;
-
-    private LobbyViewModel _viewModel = new();
-
     private void Start()
     {
-        // 角色選擇Toggle
-        foreach (var entry in _selectCharcters)
-        {
-            var currentEntry = entry;
-
-            entry.CharacterConfigDataRef.LoadAssetAsync().Completed += handle =>
-            {
-                CharacterConfigData loadedData = handle.Result;
-
-                // 綁定 Toggle
-                currentEntry.Tog.OnValueChangedAsObservable()
-                    .Where(isOn => isOn)
-                    .Subscribe(_ => _viewModel.OnSelectChacter(loadedData))
-                    .AddTo(this);
-            };
-        }
-
         // 開始按鈕
-        _btn_Start.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnStartGame()).AddTo(this);
+        _btn_Start.OnClickAsObservable().Subscribe(_ => ViewManager.Instance.OpenView(viewType: VIEW_TYPE.SelectCharacterView).Forget()).AddTo(this);
     }
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
         base.Setup(myRef);
-
-        // 預設選擇角色
-        _selectCharcters[0].Tog.isOn = true;
     }
 }

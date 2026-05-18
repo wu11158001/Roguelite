@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c47abd77b17d929468e346f561b9ae24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameLauncher
-  _gameState: {fileID: 11400000, guid: c6c7ed92f3f4be244a6188b4ee6fb4bc, type: 2}
-  _spawnPoint: {fileID: 0}
+  _gameConfig: {fileID: 11400000, guid: ade2e5e99dc80e4489aaa90419167376, type: 2}
+  _allSkillItemConfig: {fileID: 11400000, guid: cf41673e3c8119a4a806be1c7b8a5731, type: 2}

@@ -14,9 +14,11 @@ public class PlayerView : BaseGameObject
     private Coroutine _hitCoroutine;
 
     /// <summary> 技能發射點 </summary>
-    public Transform SkillShotPoint { get; private set; }
-    /// <summary> 靈氣光環父物件 </summary>
-    public Transform AuraPoint { get; private set; }
+    public Transform ShotPoint { get; private set; }
+    /// <summary> 中見位置點 </summary>
+    public Transform MiddlePoint { get; private set; }
+    /// <summary> 底部位置點 </summary>
+    public Transform BottomPoint { get; private set; }
 
     // 動畫Trigger
     private Animator _anim;
@@ -27,8 +29,9 @@ public class PlayerView : BaseGameObject
 
     private void Awake()
     {
-        SkillShotPoint = transform.Find("SkillShotPoint");
-        AuraPoint = transform.Find("AuraPoint");
+        ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
+        MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
+        BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();

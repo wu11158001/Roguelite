@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
   m_Name: CharacterConfig_Dashi
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  CharacterName: "\u89D2\u82722\u865F"
+  CharacterName: Dashi
   PrefabReference:
     m_AssetGUID: 40938137305588940bef0cdaa1d78815
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: d46e633be2a2b5d44a75ad10f561fba3, type: 3}
   RotationSpeed: 10
   InitSkill: 1
   _baseMoveSpeed: 10
@@ -28,7 +28,7 @@ MonoBehaviour:
   _baseAddAttack: 0
   AddAttack:
     value: 0
-  _baseMaxHp: 100
+  _baseMaxHp: 110
   MaxHp:
     value: 0
   _baseDefense: 0
@@ -52,8 +52,8 @@ MonoBehaviour:
   _baseAddProjectileCount: 0
   AddProjectileCount:
     value: 0
-  _baseAddAttackRange: 0
-  AddAttackRange:
+  _baseAddEffectRange: 0
+  AddEffectRange:
     value: 0
   _baseAddKeepTime: 0
   AddKeepTime:
