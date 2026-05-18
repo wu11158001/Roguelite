@@ -9,6 +9,7 @@ public class SkillItemView : MonoBehaviour
 
     public void Setup()
     {
+        Img_Icon.enabled = false;
         Img_Icon.sprite = null;
         Text_Level.text = "";
     }
@@ -19,6 +20,7 @@ public class SkillItemView : MonoBehaviour
     /// <param name="data"></param>
     public void SetSkillIte(SkillItemData data)
     {
+        Img_Icon.enabled = true;
         Img_Icon.sprite = data.SkillIcon;
         Text_Level.text = $"{data.SkillLevel}";
     }

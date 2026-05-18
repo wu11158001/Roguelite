@@ -12,6 +12,7 @@ public class GameView : BaseView
     [Header("GameView")]
     [SerializeField] private Button _btn_Exit;
     [SerializeField] private TextMeshProUGUI Text_Level;
+    [SerializeField] private TextMeshProUGUI Text_Time;
     [SerializeField] private Slider Sli_ExpBar;
 
     [Header("技能欄")]
@@ -26,6 +27,8 @@ public class GameView : BaseView
     [SerializeField] private TextMeshProUGUI Text_MoveSpeed;
     [SerializeField] private TextMeshProUGUI Text_Hp;
 
+    private float _elapsedTime;
+
     private GameViewModel _viewModel = new();
 
     private void Start()
@@ -38,6 +41,8 @@ public class GameView : BaseView
         characterConfig.Hp.Subscribe(x => Text_Hp.text = $"當前Hp:{x}");
 
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnExit());
+
+        InvokeRepeating(nameof(UpdateTime), 1.0f, 1.0f);
     }
 
     private void Init()
@@ -62,6 +67,24 @@ public class GameView : BaseView
         GameStateData.CurrentCharacterController.Value.CurrentLevel.Subscribe(value => UpdateLevel(value));
         GameStateData.CurrentCharacterController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value));
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
+    }
+
+    /// <summary>
+    /// 更新時間
+    /// </summary>
+    private void UpdateTime()
+    {
+        if(GameStateData.CurrentGameController.Value.IsGamePause)
+        {
+            return;
+        }
+
+        _elapsedTime += 1;
+
+        int minutes = Mathf.FloorToInt(_elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(_elapsedTime % 60f);
+
+        Text_Time.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
     }
 
     /// <summary>
