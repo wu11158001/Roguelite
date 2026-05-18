@@ -18,8 +18,11 @@ public class PlayerView : BaseGameObject
     /// <summary> 靈氣光環父物件 </summary>
     public Transform AuraPoint { get; private set; }
 
-    private CharacterConfigData _characterConfig;
+    // 動畫Trigger
+    private Animator _anim;
+    private readonly int _isMovingParamId = Animator.StringToHash("IsMove");
 
+    private CharacterConfigData _characterConfig;
     private PlayerViewModel _viewModel = new();
 
     private void Awake()
@@ -29,6 +32,8 @@ public class PlayerView : BaseGameObject
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();
+
+        _anim = GetComponentInChildren<Animator>();
 
         GameConfigData gameConfigData = GameStateData.GameConfig.Value;
 
@@ -102,7 +107,8 @@ public class PlayerView : BaseGameObject
         _viewModel.ProcessInput(_inputVector);
 
         // 執行移動
-        if (_viewModel.MoveDirection != Vector3.zero)
+        bool isMove = _viewModel.MoveDirection != Vector3.zero;
+        if (isMove)
         {
             // 位置移動
             transform.Translate(_viewModel.MoveDirection * _viewModel.MoveSpeed * Time.deltaTime, Space.World);
@@ -115,6 +121,7 @@ public class PlayerView : BaseGameObject
             );
         }
 
+        _anim.SetBool(_isMovingParamId, isMove);
         TextExp();
     }
 

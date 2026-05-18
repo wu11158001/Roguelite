@@ -17,7 +17,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 1
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u767C\u5C041\u679A\u8FFD\u8E64\u5F48"
     SkillAttackModeType: 0
     PrefabReference:
@@ -47,7 +47,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 2
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u8FFD\u8E64\u5F48\u6578\u91CF+1"
     SkillAttackModeType: 0
     PrefabReference:
@@ -77,7 +77,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 3
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u51B7\u537B\u6642\u9593\u6E1B\u5C110.2\u79D2"
     SkillAttackModeType: 0
     PrefabReference:
@@ -107,7 +107,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 4
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u8FFD\u8E64\u5F48\u6578\u91CF+1"
     SkillAttackModeType: 0
     PrefabReference:
@@ -137,7 +137,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 5
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u50B7\u5BB3\u63D0\u534710"
     SkillAttackModeType: 0
     PrefabReference:
@@ -167,7 +167,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 6
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u8FFD\u8E64\u5F48\u6578\u91CF+1"
     SkillAttackModeType: 0
     PrefabReference:
@@ -197,7 +197,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 7
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u7A7F\u900F\u6578\u91CF+1"
     SkillAttackModeType: 0
     PrefabReference:
@@ -227,7 +227,7 @@ MonoBehaviour:
     IsUpdateNow: 0
     SkillLevel: 8
     SkillName: "\u8FFD\u8E64\u5F48"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u50B7\u5BB3\u63D0\u534710"
     SkillAttackModeType: 0
     PrefabReference:
