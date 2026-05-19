@@ -1,5 +1,6 @@
 using System.Linq;
 using UniRx;
+using UnityEngine;
 
 /// <summary>
 /// 全域遊戲資料
@@ -24,6 +25,8 @@ public static class GameStateData
     public static ReactiveProperty<GameScenePool> CurrentObjectPool = new();
     /// <summary> 當前使用的敵人管理器 </summary>
     public static ReactiveProperty<EnemyManager> EnemyManager = new();
+    /// <summary> 搖桿輸入位置 </summary>
+    public static readonly ReactiveProperty<Vector2> JoystickInput = new(Vector2.zero);
 
     /// <summary>
     /// 獲取技能資料

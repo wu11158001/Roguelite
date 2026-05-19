@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UniRx;
 
 public class PlayerView : BaseGameObject
 {
@@ -85,6 +86,8 @@ public class PlayerView : BaseGameObject
 
         _viewModel.Setup();
 
+        BindViewModel();
+
         GameStateData.ControlCharacter.Value = this;
         _characterConfig = GameStateData.SelectedCharacter.Value;
 
@@ -98,6 +101,25 @@ public class PlayerView : BaseGameObject
         CharacterConfigData character = GameStateData.SelectedCharacter.Value;
         SkillItemData skillItemData = GameStateData.GetSkillItemData(character.InitSkill);
         GameStateData.CurrentSkillController.Value.OnGainSkill(newSkill: skillItemData);
+    }
+
+    private void BindViewModel()
+    {
+        // 搖桿輸入
+        GameStateData.JoystickInput
+            .Subscribe(joystickValue =>
+            {
+                // 如果搖桿有輸出，採用搖桿數值
+                if (joystickValue != Vector2.zero)
+                {
+                    _inputVector = joystickValue;
+                }
+                else
+                {
+                    _inputVector = Vector2.zero;
+                }
+            })
+            .AddTo(this);
     }
 
     private void Update()

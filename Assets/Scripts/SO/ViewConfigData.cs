@@ -11,6 +11,7 @@ public enum VIEW_TYPE
     SelectCharacterView,
 
     GameView = 200,
+    JoystickView,
     SelectSkillView,
 }
 
