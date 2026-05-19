@@ -18,6 +18,8 @@ public enum SKILL_TYPE
     Skill_Aura,
     /// <summary> 圍繞 </summary>
     Skill_Around,
+
+    None,
 }
 
 /// <summary>
