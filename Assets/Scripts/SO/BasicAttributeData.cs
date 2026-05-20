@@ -13,6 +13,17 @@ public enum ENEMY_TYPE
     SLIME,
 }
 
+public enum MOVE_ACTION
+{
+    FOLLOW,     //跟隨追蹤
+    DIRECTION,  //指向
+}
+//出界處理
+public enum OUTBOUNDS_ACTION { 
+    DIE_RECYCLE, //死亡回收
+    RE_ENTER,   //重新進場
+}
+
 public abstract class BasicAttributeData : ScriptableObject
 {
     [Label("敵人代號")]
@@ -35,7 +46,13 @@ public abstract class BasicAttributeData : ScriptableObject
     private float _basicMp;             //基礎魔力
     [Label("攻擊頻率")]
     [SerializeField]
-    private float _atkSpeed;            //攻擊頻率
+    private float _atkSpeed;
+    [Label("移動模式")]
+    [SerializeField]
+    public MOVE_ACTION moveAction;
+    [Label("出界處理")]
+    [SerializeField]
+    public OUTBOUNDS_ACTION outboundsAction;
 
     public Action _OnDieNotify;
     private float _teampHp;

@@ -1,10 +1,13 @@
 ﻿using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -12,27 +15,30 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private List<EnemyConfigData> enemyConfigList;
     //回收後的敵人池
-    private Dictionary<ENEMY_TYPE, Stack<GameObject>> enemyPool = new Dictionary<ENEMY_TYPE, Stack<GameObject>>();
-    //單一怪物種類池大小
-    //private int PoolMaxCount = 60;
-
+    [SerializeField]
+    public Dictionary<ENEMY_TYPE, Stack<GameObject>> enemyPool = new Dictionary<ENEMY_TYPE, Stack<GameObject>>();
+    private List<int> _enemyCount;
+    //private int _enemyCount = 0;
     [SerializeField]
     public bool IsCreaterEnemy;
-    //[SerializeField]
-    //private int _craterEnemyCount = 10;
     //存活的敵人池
     public List<GameObject> LivingEnemyPool;
+    //
+    public List<GameObject> TeampEnemyPool;
 
     [Foldout("設定")][Header("生成間隔")][SerializeField]
     private float _spawnInterval = 30f;     // 生成間隔 (秒)
     [Foldout("設定")][Header("是否持續生成")][SerializeField]
-    private bool _isSpawning = false;        // 是否持續生成
+    private bool _isSpawning = true;        // 是否持續生成
     [Foldout("設定")][Header("生成最大值")][SerializeField]
-    private int _createEnemyCount = 1;      //每次生成數量最大值
+    private int _createEnemyCount = 5;      //每次生成數量最大值
+    [Foldout("設定")][Header("生成最大值")][SerializeField]
+    private ENEMY_TYPE enemyType = ENEMY_TYPE.ZOMBIES;      //每次生成數量最大值
     public void SetUp(List<EnemyConfigData>conifgList) {
         enemyConfigList = conifgList;
         LivingEnemyPool = new List<GameObject>();
         StartCoroutine(SpawnRoutine());
+        _enemyCount = new List<int>(new int[enemyConfigList.Count]);
     }
     // Update is called once per frame
     void Update()
@@ -45,7 +51,11 @@ public class EnemyManager : MonoBehaviour
     }
     void unitTest()
     {
-        createrEnemy(ENEMY_TYPE.ZOMBIES, _createEnemyCount);
+        int configCountMax = Random.Range(1, (int)ENEMY_TYPE.SLIME+1);
+        //ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
+        ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
+        type = enemyType;
+        createrEnemy(type, _createEnemyCount);
 
     }
     async void createrEnemy(ENEMY_TYPE type, int count)
@@ -56,24 +66,14 @@ public class EnemyManager : MonoBehaviour
             Debug.Log("找不到怪物配置");
             return;
         }
-
-        // 設定偏差範圍，例如：半徑 2 米
-        float randomRadius = 20.0f;
+       
         for (int i = 0; i < count; i++)
         {
-            // 1. 在 XZ 平面上生成一個隨機圓形偏移（適用於 3D 遊戲，Y 為高度）
-            // 如果是 2D，用 Vector2.insideUnitCircle，然後對應到 XY 平面
-            Vector2 randomCircle = Random.insideUnitCircle * randomRadius;
+            //將偏移量加到基底位置（這裡是 this.transform.position）
+            Vector3 finalSpawnPosition = GetStartPosition();
 
-            // 2. 將偏移量加到基底位置（這裡是 this.transform.position）
-            Vector3 finalSpawnPosition = this.transform.position + new Vector3(randomCircle.x, 1, randomCircle.y);
-
-            // 3. 加上 await，這會讓迴圈「等待」這一隻生完後才跑下一次迴圈
+            //加上 await，這會讓迴圈「等待」這一隻生完後才跑下一次迴圈
             GameObject enemy = await GetEnemy(Instantiate(config), finalSpawnPosition, i);
-       
-            // 在這裡可以針對生成的 enemy 做初始化
-            // enemy.transform.position = ...
-            // Debug.Log($"第 {i + 1} 隻怪物已就位");
         }
     }
     async Task <GameObject> GetEnemy(EnemyConfigData data,Vector3 enemyPosition,int count)
@@ -86,8 +86,8 @@ public class EnemyManager : MonoBehaviour
         if (enemyPool[data.enemyType].Count > 0)
         {
             var enemy = enemyPool[data.enemyType].Pop();
+            enemy.GetComponent<EnemyView>().SetUpStartPosition(enemyPosition);
             enemy.SetActive(true);
-            enemy.transform.position = enemyPosition;
             LivingEnemyPool.Add(enemy);
             return enemy;
         }
@@ -101,10 +101,11 @@ public class EnemyManager : MonoBehaviour
         // 3. 檢查組件
         if (!enemyInstance.TryGetComponent(out EnemyView view))
         {
-            enemyInstance.name = "enemy_" + count;
+            _enemyCount[((int)data.enemyType-1)]++;
+            enemyInstance.name = data.enemyType.ToString() + "_"+ _enemyCount[((int)data.enemyType - 1)];
             //添加敵人代碼
-            enemyInstance.AddComponent<EnemyView>();
-            enemyInstance.GetComponent<EnemyView>().SetUp(data, RecycleEnemy);
+            enemyInstance.AddComponent<EnemyView>().SetUp(data, RecycleEnemy);
+            enemyInstance.GetComponent<EnemyView>().SetUpStartPosition(enemyPosition);
             LivingEnemyPool.Add(enemyInstance);
         }
         return enemyInstance;
@@ -112,25 +113,54 @@ public class EnemyManager : MonoBehaviour
     void RecycleEnemy(ENEMY_TYPE type, GameObject enemy)
     {
 
-        var recycleEnemy = LivingEnemyPool.FirstOrDefault(e => e.GetInstanceID() == enemy.GetInstanceID());
-        recycleEnemy.SetActive(false); // 關閉物件
-        recycleEnemy.transform.SetParent(this.transform); // 移回父物件下收納
-
-        // 確保存放的池子存在
-        if (!enemyPool.ContainsKey(type))
+        int recycleEnemyIndex = LivingEnemyPool.FindIndex(e => e.GetInstanceID() == enemy.GetInstanceID());
+        
+        if (recycleEnemyIndex != -1)
         {
-            enemyPool[type] = new Stack<GameObject>();
-        }
+            var recycleEnemy = LivingEnemyPool[recycleEnemyIndex];
+            LivingEnemyPool.RemoveAt(recycleEnemyIndex);
+            recycleEnemy.SetActive(false); // 關閉物件
+            recycleEnemy.transform.SetParent(this.transform); // 移回父物件下收納
 
-        enemyPool[type].Push(recycleEnemy);
+            // 確保存放的池子存在
+            if (!enemyPool.ContainsKey(type))
+            {
+                enemyPool[type] = new Stack<GameObject>();
+            }
+            enemyPool[type].Push(recycleEnemy);
+        }
+    }
+    public static Vector3 GetStartPosition()
+    {
+        GameObject target = GameObject.FindGameObjectWithTag("Player");
+        var startPos = new Vector3(target.transform.position.x, 0, target.transform.position.z);
+        
+
+        float minRadius = 40f;
+        float maxRadius = 80f;
+
+        // 1. 隨機角度 (0 到 360 度)
+        float angle = Random.Range(0f, Mathf.PI * 2);
+
+        // 2. 隨機距離 (從基準值 min 開始往外)
+        float distance = Random.Range(minRadius, maxRadius);
+
+        // 3. 計算偏移量
+        float offsetX = Mathf.Cos(angle) * distance;
+        float offsetZ = Mathf.Sin(angle) * distance;
+
+        Vector3 spawnPos = new Vector3(startPos.x + offsetX, startPos.y, startPos.z + offsetZ);
+
+        return spawnPos;
     }
     IEnumerator SpawnRoutine()
     {
         while (_isSpawning)
         {
+            int configCountMax = Random.Range(1,(int)ENEMY_TYPE.SLIME+1);
             int createrCount = Random.Range(1, _createEnemyCount);
-            // 1. 執行生成
-            createrEnemy(ENEMY_TYPE.ZOMBIES, _createEnemyCount);
+            ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
+            createrEnemy(type, createrCount);
 
             // 2. 等待設定的時間
             yield return new WaitForSeconds(_spawnInterval);

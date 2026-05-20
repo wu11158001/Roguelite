@@ -19,6 +19,8 @@ MonoBehaviour:
   _basicHp: 20
   _basicMp: 0
   _atkSpeed: 1
+  moveAction: 0
+  outboundsAction: 1
   currentMp: 0
   PrefabReference:
     m_AssetGUID: 992cdd76d69b7864d99b90fcabfabe1d
