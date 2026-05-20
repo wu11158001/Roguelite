@@ -48,3 +48,4 @@ MonoBehaviour:
   _gameConfig: {fileID: 11400000, guid: ade2e5e99dc80e4489aaa90419167376, type: 2}
   _allSkillItemConfig: {fileID: 11400000, guid: cf41673e3c8119a4a806be1c7b8a5731, type: 2}
   _allCharacterConfig: {fileID: 11400000, guid: 94f314b68ce9867409f8a80d081407df, type: 2}
+  _allEffectPrefabData: {fileID: 11400000, guid: 5be141ab6f15cb143992786db9861e73, type: 2}

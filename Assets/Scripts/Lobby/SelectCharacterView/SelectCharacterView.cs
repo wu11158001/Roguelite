@@ -54,7 +54,7 @@ public class SelectCharacterView : BaseView
     {
         // 返回按鈕
         _btn_Back.OnClickAsObservable()
-            .Subscribe(_ => ViewManager.Instance.OnViewClosed(this))
+            .Subscribe(_ => Close())
             .AddTo(this);
 
         // 開始按鈕

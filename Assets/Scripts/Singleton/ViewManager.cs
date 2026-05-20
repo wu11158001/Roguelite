@@ -1,11 +1,9 @@
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class ViewManager : SingletonMonoBehaviour<ViewManager>
 {
-    private List<BaseView> _activeViews = new();
-
     /// <summary>
     /// 開啟介面
     /// </summary>
@@ -31,21 +29,8 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
         view.Setup(prefabRef);
 
         obj.transform.SetAsLastSibling();
-        _activeViews.Add(view);
 
         return view;
     }
 
-    /// <summary>
-    /// 關閉介面
-    /// </summary>
-    /// <param name="view"></param>
-    public void OnViewClosed(BaseView view)
-    {
-        if (_activeViews.Contains(view))
-        {
-            view.Close();
-            _activeViews.Remove(view);
-        }
-    }
 }

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eac1b22110ab6d448b383ee94c6010a, type: 3}
   m_Name: CameraConfigData
   m_EditorClassIdentifier: Assembly-CSharp::CameraConfigData
-  Offset: {x: 0, y: 6.5, z: -8}
+  Offset: {x: 0, y: 15.45, z: -6.5}

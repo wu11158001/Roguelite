@@ -52,8 +52,6 @@ public abstract class BaseView : MonoBehaviour
         if (_isClosed) return;
         _isClosed = true;
 
-        ViewManager.Instance?.OnViewClosed(this);
-
         if (_myRef != null)
         {
             Addressables.ReleaseInstance(gameObject);

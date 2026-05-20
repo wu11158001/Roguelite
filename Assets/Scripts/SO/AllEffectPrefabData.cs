@@ -10,8 +10,11 @@ using UnityEngine.AddressableAssets;
 /// </summary>
 public enum EFFET_TYPE
 {
+    /// <summary> 生命條 </summary>
+    HpBar = 0,
+
     /// <summary> 生命回復效果 </summary>
-    HpRecover,
+    HpRecover = 100,
 }
 
 /// <summary>

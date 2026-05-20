@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c78febb03a2a8047ba170047c5bf8be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
-  _canvasGroup: {fileID: 0}
+  _canvasGroup: {fileID: 9158971612039120797}
 --- !u!225 &9158971612039120797
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -274,7 +274,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7368212331822118379}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -299,7 +299,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 200
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!114 &6206471072499426232
 MonoBehaviour:

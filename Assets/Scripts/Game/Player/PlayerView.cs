@@ -13,8 +13,9 @@ public class PlayerView : BaseGameObject
     private Renderer[] _renderers;
     MaterialPropertyBlock _propBlock;
     private Coroutine _hitCoroutine;
-    private HpBarView _hpBarView;
 
+    /// <summary> 頭部位置 </summary>
+    public Transform HeadPoint { get; private set; }
     /// <summary> 技能發射點 </summary>
     public Transform ShotPoint { get; private set; }
     /// <summary> 中見位置點 </summary>
@@ -26,6 +27,7 @@ public class PlayerView : BaseGameObject
     private Animator _anim;
     private readonly int _isMovingParamId = Animator.StringToHash("IsMove");
 
+    private HpBarView _hpBarView;
     private CharacterConfigData _characterConfig;
     private PlayerViewModel _viewModel = new();
 
@@ -34,12 +36,35 @@ public class PlayerView : BaseGameObject
         ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
         MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
         BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
-        _hpBarView = transform.Find("CharacterNecessary/HpBarView").GetComponent<HpBarView>();
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();
 
         _anim = GetComponentInChildren<Animator>();
+
+        // 獲取頭部點
+        if (_anim != null)
+        {
+            // 檢查是否為人型骨骼模型
+            if (_anim.isHuman)
+            {
+                // 獲取頭部骨骼的 Transform
+                HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
+
+                if (HeadPoint != null)
+                {
+                    Debug.Log($"成功抓到頭部，實際骨骼名稱為: {HeadPoint.name}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("該模型的 Animation Type 不是設定為 Humanoid！");
+            }
+        }
+        else
+        {
+            Debug.LogError("找不到 Animator 組件！");
+        }
 
         GameConfigData gameConfigData = GameStateData.GameConfig.Value;
 
@@ -88,14 +113,19 @@ public class PlayerView : BaseGameObject
 
         _viewModel.Setup();
 
+        Init();
+        BindViewModel();
+    }
+
+    private void Init()
+    {
+        // 設置當前控制角色
         GameStateData.ControlCharacter.Value = this;
         _characterConfig = GameStateData.SelectedCharacter.Value;
 
-        BindViewModel();
-
         // 攝影機設定
         GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
-        if(gameCameraView != null)
+        if (gameCameraView != null)
         {
             gameCameraView.Setup(transform);
         }
@@ -103,6 +133,19 @@ public class PlayerView : BaseGameObject
         // 初始技能添加
         SkillItemData skillItemData = GameStateData.AllSkillConfigData.Value.GetActiveSkill(_characterConfig.InitSkill, 1);
         GameStateData.SkillController.Value.OnGainSkill(newSkill: skillItemData);
+
+        // 產生生命條
+        GameInfoUIManager gameInfoUIManager = FindFirstObjectByType<GameInfoUIManager>();
+        if (gameInfoUIManager != null)
+        {
+            gameInfoUIManager.SpawnHpBar(
+                target: HeadPoint,
+                offset: new Vector3(0, 3.5f, 0),
+                callback: (hpBar) =>
+                {
+                    _hpBarView = hpBar;
+                });
+        }
     }
 
     private void BindViewModel()

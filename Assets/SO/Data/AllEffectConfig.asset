@@ -15,6 +15,13 @@ MonoBehaviour:
   Effects:
   - EffectType: 0
     PrefabReference:
+      m_AssetGUID: 32aeba7cfbc10ef4cab5044843f949ad
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - EffectType: 100
+    PrefabReference:
       m_AssetGUID: 34a6bf5b5fe73174dbe177c93a4d8296
       m_SubObjectName: 
       m_SubObjectType: 
