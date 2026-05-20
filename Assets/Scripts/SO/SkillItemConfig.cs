@@ -18,6 +18,8 @@ public enum SKILL_TYPE
     Skill_Aura,
     /// <summary> 圍繞 </summary>
     Skill_Around,
+    /// <summary> 範圍減速 </summary>
+    Skill_RangeSlow,
 
     None,
 }
@@ -31,7 +33,10 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InPoint,
     /// <summary> 產生在角色發射點周圍隨機位置 </summary>
     InPointRandom,
+    /// <summary> 在攝影機視野內隨機敵人, 在角色底部 </summary>
+    RandomEnemyInBottom,
 
+    // 產生在物件池內
     None,
 }
 
@@ -115,7 +120,7 @@ public class SkillItemData
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能產生模式")]
     [ShowIf("_isShowSkill")]
-    public SKILL_SPAWN_MODEL_TYPE SkillAttackModeType;
+    public SKILL_SPAWN_MODEL_TYPE SkillSpawnModeType;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能對應模型")]
@@ -176,6 +181,15 @@ public class SkillItemData
     [BoxGroup("主動技能數值")][Label("持續時間(秒)")]
     [ShowIf("_isShowSkill")]
     public float SkillKeepTime;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("敵人移動速度變更(1=正常速度, 小於1減速, 大於1加速)")]
+    [ShowIf("_isShowSkill")]
+    public float SpeedModifier;
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("敵人移動速度變更持續時間")]
+    [ShowIf("_isShowSkill")]
+    public float SpeedModifierTime;
 
     // --------被動技能--------
     [AllowNesting][Label("是否為被動技能")]

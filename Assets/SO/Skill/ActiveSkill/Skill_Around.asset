@@ -19,7 +19,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7522\u751F3\u500B\u570D\u7E5E\u5728\u5468\u570D\u7684\u7403\u9AD4"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -37,6 +37,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 1
     SkillKeepTime: 8
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -49,7 +51,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u6578\u91CF+1"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -67,6 +69,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 1
     SkillKeepTime: 8
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -79,7 +83,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u6301\u7E8C\u6642\u9593\u589E\u52A01\u79D2, \u50B7\u5BB3\u63D0\u53472"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -97,6 +101,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 1
     SkillKeepTime: 9
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -109,7 +115,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u65CB\u8F49\u901F\u5EA6\u589E\u52A0120, \u50B7\u5BB3\u63D0\u53472"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -127,6 +133,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 1
     SkillKeepTime: 9
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -139,7 +147,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u9AD4\u7A4D\u589E\u592750%"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -157,6 +165,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 1.5
     SkillKeepTime: 9
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -169,7 +179,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u65CB\u8F49\u901F\u5EA6\u589E\u52A080, \u6301\u7E8C\u6642\u9593+0.6\u79D2"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -187,6 +197,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 1.5
     SkillKeepTime: 9.6
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -199,7 +211,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u9AD4\u7A4D\u589E\u592750%"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -217,6 +229,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 2
     SkillKeepTime: 9.6
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0
@@ -229,7 +243,7 @@ MonoBehaviour:
     SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u6578\u91CF+1"
-    SkillAttackModeType: 2
+    SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
       m_SubObjectName: 
@@ -247,6 +261,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 2
     SkillKeepTime: 9.6
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 0
     PassiveType: 0
     PassiveAddValue: 0

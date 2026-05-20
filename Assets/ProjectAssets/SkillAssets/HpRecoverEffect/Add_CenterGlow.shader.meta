@@ -17,5 +17,5 @@ AssetOrigin:
   productId: 107068
   packageName: Fantasy effects pack
   packageVersion: 3.0
-  assetPath: Assets/ErbGameArt/Fantasy effects pack/Shaders/Add_CenterGlow.shader
+  assetPath: Assets/ProjectAssets/SkillAssets/HpRecoverEffect/Add_CenterGlow.shader
   uploadId: 863550

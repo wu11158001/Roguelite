@@ -1,0 +1,235 @@
+using UnityEngine;
+using UniRx;
+using System.Linq;
+using System;
+using System.Collections.Generic;
+
+/// <summary>
+/// 獲取或提升技能事件
+/// </summary>
+public class GainSkillMessage
+{
+    /// <summary> 當前擁有技能 </summary>
+    public ReactiveCollection<SkillItemData> OwnSkills;
+}
+
+/// <summary>
+/// 擊中資料
+/// </summary>
+public class HitData
+{
+    /// <summary> 造成傷害 </summary>
+    public int Attack;
+    /// <summary> 是否爆擊 </summary>
+    public bool IsCritical;
+    /// <summary> 擊退值 </summary>
+    public float Knockback;
+
+    /// <summary> 移動速度變更 </summary>
+    public float SpeedModifier;
+    /// <summary> 移動速度變更時間 </summary>
+    public float SpeedModifierTime;
+}
+
+/// <summary>
+/// 單一技能(場上不會存在多個)技能資料
+/// </summary>
+public struct OnlySkillData
+{
+    /// <summary> 技能等級 </summary>
+    public int Level;
+    /// <summary> 技能物件 </summary>
+    public GameObject Obj;
+}
+
+/// <summary>
+/// 技能控制器
+/// </summary>
+public class SkillController : MonoBehaviour
+{
+    /// <summary> 距離玩家多遠移除技能 </summary>
+    public readonly float SkillRemoveDistance = 30;
+
+    private SkillInventory _inventory;
+    private SkillTimerManager _timerManager;
+    private SkillSpawner _spawner;
+
+    public IReactiveCollection<SkillItemData> OwnSkills => _inventory.OwnSkills;
+
+    private readonly Subject<GainSkillMessage> _onSkillChanged = new();
+    public IObservable<GainSkillMessage> OnSkillChanged => _onSkillChanged;
+
+    private void Awake()
+    {
+        _inventory = new SkillInventory();
+        _spawner = new SkillSpawner(this);
+        _timerManager = new SkillTimerManager(this, executeSkill => _spawner.ExecuteSkillAttackMode(executeSkill));
+
+        _inventory.Setup(OnSkillListChanged);
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+        _timerManager.ClearAllTimers();
+    }
+
+    /// <summary>
+    /// 獲取技能CD時間
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public float GetActualCd(SkillItemData data) => _timerManager.GetActualCd(data);
+
+    /// <summary>
+    /// 獲取隨機技能
+    /// </summary>
+    /// <param name="count"></param>
+    /// <returns></returns>
+    public List<SkillItemData> GetRandomSkillDatas(int count = 3) => _inventory.GetRandomSkillDatas(count);
+
+    /// <summary>
+    /// 獲取技能
+    /// </summary>
+    /// <param name="newSkill"></param>
+    public void OnGainSkill(SkillItemData newSkill) => _inventory.AddOrUpgradeSkill(newSkill);
+
+    /// <summary>
+    /// 獲取隨機敵人在攝影機視野內
+    /// </summary>
+    /// <returns></returns>
+    public EnemyView GetRandomEnemyInCamera() => _spawner.GetRandomEnemyInCamera();
+
+    /// <summary>
+    /// 獲取最近的敵人位置
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <returns></returns>
+    public EnemyView GetNearestEnemy(Vector3 origin) => _spawner.GetNearestEnemy(origin);
+
+    /// <summary>
+    /// 獲取新技能
+    /// </summary>
+    /// <param name="skill"></param>
+    private void OnSkillListChanged(SkillItemData skill)
+    {
+        if (!skill.IsPassive && !skill.IsProps)
+        {
+            // 靈氣光環特殊，不啟動Timer
+            if (skill.SkillType == SKILL_TYPE.Skill_Aura)
+            {
+                _spawner.SpawnInCharacterBottomPoint(skill); 
+                return;
+            }
+            _timerManager.StartSkillTimer(skill);
+        }
+        else if (skill.IsPassive && skill.PassiveType == PASSIVE_SKILL_TYPE.CdReduce)
+        {
+            // 被動技能屬於CD類型重啟Timer
+            foreach (var active in _inventory.OwnSkills.Where(s => !s.IsPassive && !s.IsProps))
+            {
+                _timerManager.StartSkillTimer(active);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 獲取被動技能處理
+    /// </summary>
+    /// <param name="data"></param>
+    public void OnGainPassiveHandle(SkillItemData data)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        if (data.IsPassive)
+        {
+            switch (data.PassiveType)
+            {
+                // 移動速度
+                case PASSIVE_SKILL_TYPE.MoveSpeed:
+                    characterConfig.MoveSpeed.Value += data.PassiveAddValue;
+                    break;
+
+                // 增加的攻擊力
+                case PASSIVE_SKILL_TYPE.Attack:
+                    characterConfig.AddAttack.Value = (int)(characterConfig.AddAttack.Value + data.PassiveAddValue);
+                    break;
+
+                // 最大生命(%)
+                case PASSIVE_SKILL_TYPE.MaxHp:
+                    characterConfig.MaxHp.Value = (int)(characterConfig.MaxHp.Value * data.PassiveAddValue);
+                    break;
+
+                // 傷害減少
+                case PASSIVE_SKILL_TYPE.Defense:
+                    characterConfig.Defense.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 每秒生命回復
+                case PASSIVE_SKILL_TYPE.LifeRecovery:
+                    characterConfig.LifeRecovery.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 技能CD時間減少(秒)
+                case PASSIVE_SKILL_TYPE.CdReduce:
+                    characterConfig.CdReduce.Value += data.PassiveAddValue;
+                    break;
+
+                // 拾取範圍
+                case PASSIVE_SKILL_TYPE.PickupRange:
+                    characterConfig.PickupRange.Value += data.PassiveAddValue;
+                    break;
+
+                // 增加的爆擊機率
+                case PASSIVE_SKILL_TYPE.CriticalChance:
+                    characterConfig.AddCriticalChance.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 爆擊傷害加乘
+                case PASSIVE_SKILL_TYPE.CriticalMultiplier:
+                    characterConfig.CriticalMultiplier.Value += data.PassiveAddValue;
+                    break;
+
+                // 投射物數量
+                case PASSIVE_SKILL_TYPE.ProjectileCount:
+                    characterConfig.AddProjectileCount.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 增加的攻擊範圍(%)
+                case PASSIVE_SKILL_TYPE.EffectRange:
+                    characterConfig.AddEffectRange.Value += data.PassiveAddValue;
+                    break;
+
+                // 增加的持續時間(秒)
+                case PASSIVE_SKILL_TYPE.KeepTime:
+                    characterConfig.AddKeepTime.Value += data.PassiveAddValue;
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 獲取道具技能處理
+    /// </summary>
+    /// <param name="data"></param>
+    public void OnGainPropsHandle(SkillItemData data)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        if (data.IsProps)
+        {
+            switch (data.PropsSkillType)
+            {
+                // 生命回復(%)
+                case PROPS_SKILL_TYPE.HpRecovery:
+                    int addValue = (int)(characterConfig.MaxHp.Value * data.PropsAddValue);
+                    characterConfig.Hp.Value = Mathf.Min(characterConfig.MaxHp.Value, characterConfig.Hp.Value + addValue);
+                    break;
+            }
+
+            // 道具技能不觸發學習技能
+            return;
+        }
+    }
+}

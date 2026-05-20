@@ -140,7 +140,7 @@ public class PlayerView : BaseGameObject
         {
             gameInfoUIManager.SpawnHpBar(
                 target: HeadPoint,
-                offset: new Vector3(0, 3.5f, 0),
+                offset: new Vector3(0, _characterConfig.HpBarHight, 0),
                 callback: (hpBar) =>
                 {
                     _hpBarView = hpBar;
@@ -301,5 +301,12 @@ public class PlayerView : BaseGameObject
         {
             _characterConfig.Hp.Value += 10;
         }
+    }
+
+    [SerializeField] private float distanceRadius = 25;
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, distanceRadius);
     }
 }

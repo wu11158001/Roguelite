@@ -18,6 +18,9 @@ public class CharacterConfigData : ScriptableObject
     [Label("角色Icon")]
     public Sprite Icon;
 
+    [Label("生命條高度")]
+    public float HpBarHight = 4.0f;
+
     [Label("轉向速度")]
     public float RotationSpeed = 10.0f;
 

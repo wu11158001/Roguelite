@@ -14,6 +14,4 @@ public class GameController : MonoBehaviour
         IsGamePause = isPause;
         Time.timeScale = isPause ? 0 : 1;
     }
-
-    
 }

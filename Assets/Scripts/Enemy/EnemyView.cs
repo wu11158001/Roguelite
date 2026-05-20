@@ -14,7 +14,7 @@ public class EnemyView : BaseGameObject
     MaterialPropertyBlock _propBlock;
     Renderer _renderer;
     Rigidbody _rigidbody;
-    Collider _collider;
+    public Collider Collider { get; private set; }
     float _colliderHeight;
     bool isKnockedBack; // 是否處於被擊退狀態
     bool isExtendedBounds; //
@@ -45,11 +45,11 @@ public class EnemyView : BaseGameObject
         _propBlock = new MaterialPropertyBlock();
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.freezeRotation = true;
-        _collider = GetComponent<Collider>();
-        _colliderHeight = _collider.bounds.size.y;
+        Collider = GetComponent<Collider>();
+        _colliderHeight = Collider.bounds.size.y;
         
         anchorPoint = gameObject.GetComponentInChildren<AnchorPoint>();
-        anchorPoint.SetUp(_collider,gameObject);
+        anchorPoint.SetUp(Collider,gameObject);
         SetUpPlayerPosition();
     }
     private void OnEnable()
@@ -89,6 +89,7 @@ public class EnemyView : BaseGameObject
     }
     public void OnAttacked(HitData data)
     {
+        _enemyModel.OnSpeedModifier(data.SpeedModifier, data.SpeedModifierTime).Forget();
         bool isAni = _enemyModel.OnAttacked(data);
         //有傷害 撥動畫
         if (isAni && gameObject.activeInHierarchy) { 
@@ -99,18 +100,19 @@ public class EnemyView : BaseGameObject
 
             knockbackHandler = StartCoroutine(KnockbackRoutine(data.Knockback));
         }
-
-
     }
     private void Move()
     {
+        // 基本移動速度 * 速度調節器
+        float moveSpeed = _enemyModel.ConfigData.moveSpeed * _enemyModel.SpeedModifier;
+
         switch (_enemyModel.ConfigData.moveAction)  
         {
             case MOVE_ACTION.FOLLOW:
-                PhysicsMovementUtils.ApplyLinearFollow(_rigidbody, _enemyModel._trackingTarget.transform.position, _enemyModel.ConfigData.moveSpeed, 10f);
+                PhysicsMovementUtils.ApplyLinearFollow(_rigidbody, _enemyModel._trackingTarget.transform.position, moveSpeed, 10f);
                 break;
             case MOVE_ACTION.DIRECTION:
-                PhysicsMovementUtils.ApplyProjectileMotion(_rigidbody, _enemyModel._trackingTargetV3, _enemyModel.ConfigData.moveSpeed);
+                PhysicsMovementUtils.ApplyProjectileMotion(_rigidbody, _enemyModel._trackingTargetV3, moveSpeed);
                 break;
             default:
                 break;
@@ -185,23 +187,25 @@ public class EnemyView : BaseGameObject
     }
     private IEnumerator KnockbackRoutine(float strength, float duration = 0.2f)
     {
+        if (strength <= 0f) yield break;
+
         Debug.Log("進入擊退流程");
         isKnockedBack = true;
 
+        // 計算方向
         Vector3 direction = (transform.position - _enemyModel._trackingTarget.transform.position);
         direction.y = 0;
 
-        Vector3 force = direction.normalized * strength;
+        // 先將原本往玩家衝的速度歸零，避免物理疊加
+        _rigidbody.linearVelocity = Vector3.zero;
 
-        _rigidbody.linearVelocity = direction;
-        // 1. 瞬間施加衝力
-        // 使用 VelocityChange 可以無視質量的差異，確保擊退感一致
+        // 計算並施加衝力
+        Vector3 force = direction.normalized * strength;
         _rigidbody.AddForce(force, ForceMode.VelocityChange);
 
-        // 2. 等待擊退持續時間
         yield return new WaitForSeconds(duration);
 
-        // 3. 恢復前稍微緩衝速度，避免怪物瞬間彈回玩家身邊
+        // 擊退結束，速度歸零
         _rigidbody.linearVelocity = Vector3.zero;
         isKnockedBack = false;
     }

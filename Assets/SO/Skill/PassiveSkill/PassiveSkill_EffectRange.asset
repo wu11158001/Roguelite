@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
   - SkillType: 6
+    IsUpdateNow: 0
     SkillLevel: 1
     SkillName: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA\u7BC4\u570D\u589E\u52A0"
     SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA\u7BC4\u570D\u589E\u52A015%"
-    SkillAttackModeType: 0
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6548\u679C\u7BC4\u570D\u589E\u52A015%"
+    SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
@@ -34,7 +35,10 @@ MonoBehaviour:
     SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 1
     PassiveType: 10
     PassiveAddValue: 0.15
@@ -42,11 +46,12 @@ MonoBehaviour:
     PropsSkillType: 0
     PropsAddValue: 0
   - SkillType: 6
+    IsUpdateNow: 0
     SkillLevel: 2
     SkillName: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA\u7BC4\u570D\u589E\u52A0"
     SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA\u7BC4\u570D\u589E\u52A015%"
-    SkillAttackModeType: 0
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6548\u679C\u7BC4\u570D\u589E\u52A015%"
+    SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
@@ -62,7 +67,10 @@ MonoBehaviour:
     SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
-    SkillAttackRange: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 1
     PassiveType: 10
     PassiveAddValue: 0.15

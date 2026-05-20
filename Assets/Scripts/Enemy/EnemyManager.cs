@@ -1,4 +1,4 @@
-﻿using NaughtyAttributes;
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     public bool IsCreaterEnemy;
     //存活的敵人池
-    public List<GameObject> LivingEnemyPool;
+    public List<EnemyView> LivingEnemyPool;
     //
     public List<GameObject> TeampEnemyPool;
 
@@ -36,7 +36,7 @@ public class EnemyManager : MonoBehaviour
     private ENEMY_TYPE enemyType = ENEMY_TYPE.ZOMBIES;      //每次生成數量最大值
     public void SetUp(List<EnemyConfigData>conifgList) {
         enemyConfigList = conifgList;
-        LivingEnemyPool = new List<GameObject>();
+        LivingEnemyPool = new();
         StartCoroutine(SpawnRoutine());
         _enemyCount = new List<int>(new int[enemyConfigList.Count]);
     }
@@ -86,9 +86,10 @@ public class EnemyManager : MonoBehaviour
         if (enemyPool[data.enemyType].Count > 0)
         {
             var enemy = enemyPool[data.enemyType].Pop();
-            enemy.GetComponent<EnemyView>().SetUpStartPosition(enemyPosition);
+            EnemyView enemyView = enemy.GetComponent<EnemyView>();
+            enemyView.SetUpStartPosition(enemyPosition);
             enemy.SetActive(true);
-            LivingEnemyPool.Add(enemy);
+            LivingEnemyPool.Add(enemyView);
             return enemy;
         }
 
@@ -104,20 +105,20 @@ public class EnemyManager : MonoBehaviour
             _enemyCount[((int)data.enemyType-1)]++;
             enemyInstance.name = data.enemyType.ToString() + "_"+ _enemyCount[((int)data.enemyType - 1)];
             //添加敵人代碼
-            enemyInstance.AddComponent<EnemyView>().SetUp(data, RecycleEnemy);
-            enemyInstance.GetComponent<EnemyView>().SetUpStartPosition(enemyPosition);
-            LivingEnemyPool.Add(enemyInstance);
+            EnemyView enemyView = enemyInstance.AddComponent<EnemyView>();
+            enemyView.SetUp(data, RecycleEnemy);
+            enemyView.SetUpStartPosition(enemyPosition);
+            LivingEnemyPool.Add(enemyView);
         }
         return enemyInstance;
     }
     void RecycleEnemy(ENEMY_TYPE type, GameObject enemy)
     {
-
-        int recycleEnemyIndex = LivingEnemyPool.FindIndex(e => e.GetInstanceID() == enemy.GetInstanceID());
+        int recycleEnemyIndex = LivingEnemyPool.FindIndex(e => e.gameObject.GetInstanceID() == enemy.GetInstanceID());
         
         if (recycleEnemyIndex != -1)
         {
-            var recycleEnemy = LivingEnemyPool[recycleEnemyIndex];
+            var recycleEnemy = LivingEnemyPool[recycleEnemyIndex].gameObject;
             LivingEnemyPool.RemoveAt(recycleEnemyIndex);
             recycleEnemy.SetActive(false); // 關閉物件
             recycleEnemy.transform.SetParent(this.transform); // 移回父物件下收納

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Skill_AuraViewModel
 {
-    public SkillItemData Data;
+    private SkillItemData _data;
+    public SkillItemData Data { get; }
 
     private readonly Subject<Unit> _onAttackTriggered = new();
     public IObservable<Unit> OnAttackTriggered => _onAttackTriggered;
@@ -14,7 +15,8 @@ public class Skill_AuraViewModel
 
     public Skill_AuraViewModel(SkillItemData data)
     {
-        Data = data;
+        _data = data;
+        Data = _data;
     }
 
     /// <summary>
@@ -24,7 +26,7 @@ public class Skill_AuraViewModel
     {
         _timerDisposable?.Dispose();
 
-        float cd = GameStateData.SkillController.Value.GetActualCd(Data);
+        float cd = GameStateData.SkillController.Value.GetActualCd(_data);
 
         // TimeSpan.Zero「立刻發射一次」，隨後每隔 cd 秒發射
         _timerDisposable = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(cd), Scheduler.MainThread)
