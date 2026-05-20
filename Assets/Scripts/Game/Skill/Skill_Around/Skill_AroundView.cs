@@ -89,7 +89,7 @@ public class Skill_AroundView : BaseSkill
 
             Vector3 localPos = GetInitialLocalPosition(index, _data.SkillShotCount);
 
-            GameStateData.CurrentObjectPool.Value.SpawnObject(
+            GameStateData.GameScenePool.Value.SpawnObject(
             parentName: "Skill_Around_AttackObj",
             assetRef: _attackObj,
             position: transform.position,
@@ -98,7 +98,7 @@ public class Skill_AroundView : BaseSkill
             {
                 if (this == null || transform == null)
                 {
-                    GameStateData.CurrentObjectPool.Value.ReturnToPool(obj);
+                    GameStateData.GameScenePool.Value.ReturnToPool(obj);
                     return;
                 }
 

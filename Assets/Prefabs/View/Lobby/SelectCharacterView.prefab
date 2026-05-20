@@ -2800,8 +2800,6 @@ MonoBehaviour:
   ViewType: 101
   _isUsingMask: 0
   _isCanClickMask: 0
-  _allCharacterConfig: {fileID: 11400000, guid: 94f314b68ce9867409f8a80d081407df, type: 2}
-  _allSkillConfigData: {fileID: 11400000, guid: cf41673e3c8119a4a806be1c7b8a5731, type: 2}
   _btn_Back: {fileID: 2419457218217151022}
   _abilityView: {fileID: 7891211681451659494}
   Img_InitSkillIcon: {fileID: 7590729499577338155}
@@ -3538,8 +3536,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ScrollRect
   m_Content: {fileID: 5313327190399299095}
-  m_Horizontal: 1
-  m_Vertical: 0
+  m_Horizontal: 0
+  m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1

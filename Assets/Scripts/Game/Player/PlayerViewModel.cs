@@ -53,6 +53,32 @@ public class PlayerViewModel
     /// <param name="expType"></param>
     public void GainExp(EXP_TYPE expType)
     {
-        GameStateData.CurrentCharacterController.Value.OnGainExp(expType: expType);
+        GameStateData.CharacterController.Value.OnGainExp(expType: expType);
+    }
+
+    /// <summary>
+    /// 生命回復產生效果物件
+    /// </summary>
+    /// <param name="point">產生位置點</param>
+    public void OnHpRecover(Transform point)
+    {
+        EffectData data = GameStateData.AllEffectPrefabData.Value.GetEffect(EFFET_TYPE.HpRecover);
+        if (data != null)
+        {
+            GameStateData.GameScenePool.Value.SpawnObject(
+                parentName: "生命回復效果",
+                assetRef: data.PrefabReference,
+                position: point.position,
+                rotation: point.rotation,
+                callback: (obj) =>
+                {
+                    obj.transform.SetParent(point);
+
+                    if (obj.TryGetComponent(out BaseGameObject baseGameObject))
+                    {
+                        baseGameObject.Setup(data.PrefabReference);
+                    }
+                });
+        }
     }
 }

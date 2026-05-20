@@ -13,6 +13,7 @@ public class PlayerView : BaseGameObject
     private Renderer[] _renderers;
     MaterialPropertyBlock _propBlock;
     private Coroutine _hitCoroutine;
+    private HpBarView _hpBarView;
 
     /// <summary> 技能發射點 </summary>
     public Transform ShotPoint { get; private set; }
@@ -33,6 +34,7 @@ public class PlayerView : BaseGameObject
         ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
         MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
         BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
+        _hpBarView = transform.Find("CharacterNecessary/HpBarView").GetComponent<HpBarView>();
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();
@@ -86,11 +88,12 @@ public class PlayerView : BaseGameObject
 
         _viewModel.Setup();
 
-        BindViewModel();
-
         GameStateData.ControlCharacter.Value = this;
         _characterConfig = GameStateData.SelectedCharacter.Value;
 
+        BindViewModel();
+
+        // 攝影機設定
         GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
         if(gameCameraView != null)
         {
@@ -98,9 +101,8 @@ public class PlayerView : BaseGameObject
         }
 
         // 初始技能添加
-        CharacterConfigData character = GameStateData.SelectedCharacter.Value;
-        SkillItemData skillItemData = GameStateData.GetSkillItemData(character.InitSkill);
-        GameStateData.CurrentSkillController.Value.OnGainSkill(newSkill: skillItemData);
+        SkillItemData skillItemData = GameStateData.AllSkillConfigData.Value.GetActiveSkill(_characterConfig.InitSkill, 1);
+        GameStateData.SkillController.Value.OnGainSkill(newSkill: skillItemData);
     }
 
     private void BindViewModel()
@@ -120,6 +122,43 @@ public class PlayerView : BaseGameObject
                 }
             })
             .AddTo(this);
+
+        // 角色生命
+        _characterConfig.Hp.Pairwise()
+          .Subscribe(pair =>
+          {
+              int previousHp = pair.Previous;
+              int currentHp = pair.Current;
+
+              // 最大生命限制
+              if (currentHp >= _characterConfig.MaxHp.Value)
+              {
+                  _characterConfig.Hp.Value = _characterConfig.MaxHp.Value;
+                  currentHp = _characterConfig.Hp.Value;
+              }
+              else if(currentHp <= 0)
+              {
+                  _characterConfig.Hp.Value = 0;
+                  currentHp = 0;
+              }
+
+              // 回復生命
+              if (currentHp > previousHp)
+              {
+                  _viewModel.OnHpRecover(BottomPoint);                  
+              }
+              // 減少生命
+              else if(previousHp > currentHp)
+              {
+                  if (_hitCoroutine != null) StopCoroutine(_hitCoroutine);
+                  _hitCoroutine = StartCoroutine(IGetHitAnim());
+              }
+
+              // 設置生命條
+              float hpRatio = (float)currentHp / _characterConfig.MaxHp.Value;
+              _hpBarView.SetHpBar(hpRatio);
+          })
+          .AddTo(this);
     }
 
     private void Update()
@@ -169,22 +208,6 @@ public class PlayerView : BaseGameObject
     }
 
     /// <summary>
-    /// 角色受到攻擊
-    /// </summary>
-    public void OnGetHit(HitData hitData)
-    {
-        if (_characterConfig.Hp.Value <= 0)
-        {
-            return;
-        }
-
-        _characterConfig.Hp.Value = Mathf.Max(0, _characterConfig.Hp.Value - hitData.Attack);
-
-        if (_hitCoroutine != null) StopCoroutine(_hitCoroutine);
-        _hitCoroutine = StartCoroutine(IGetHitAnim());
-    }
-
-    /// <summary>
     /// 受到攻擊動畫
     /// </summary>
     /// <returns></returns>
@@ -224,6 +247,16 @@ public class PlayerView : BaseGameObject
         if (Keyboard.current.kKey.wasPressedThisFrame)
         {
             _viewModel.GainExp(expType: EXP_TYPE.Exp_2);
+        }
+
+        if(Keyboard.current.uKey.wasPressedThisFrame)
+        {
+            _characterConfig.Hp.Value -= 10;
+        }
+
+        if (Keyboard.current.iKey.wasPressedThisFrame)
+        {
+            _characterConfig.Hp.Value += 10;
         }
     }
 }

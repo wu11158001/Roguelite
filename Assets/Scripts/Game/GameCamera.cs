@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameCamera : MonoBehaviour
 {
-    [SerializeField] private Vector3 offset = new(0, 6.5f, -8.0f);
+    [SerializeField] private CameraConfigData _CameraConfigData;
 
     private Transform _target;
 
@@ -15,7 +15,7 @@ public class GameCamera : MonoBehaviour
     {
         if (_target != null)
         {
-            transform.position = _target.position + offset;
+            transform.position = _target.position + _CameraConfigData.Offset;
             transform.LookAt(_target);
         }
     }

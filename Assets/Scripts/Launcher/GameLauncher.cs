@@ -8,23 +8,12 @@ using UnityEngine.AddressableAssets;
 
 public class GameLauncher : MonoBehaviour
 {
-    [Label("遊戲配置")]
-    [SerializeField] private GameConfigData _gameConfig;
-    [Label("技能項目配置")]
-    [SerializeField] private AllSkillConfigData _allSkillItemConfig;
-
     private Transform _controllParent;
 
     private async void Start()
     {
         try
         {
-            GameStateData.GameConfig.Value = _gameConfig;
-            foreach (var skillConfig in _allSkillItemConfig.AllSkillItemConfigs)
-            {
-                GameStateData.SkillItemConfigs.Add(skillConfig);
-            }
-
             // 產生Controller資料夾
             _controllParent = new GameObject("ControllerGroup").transform;
 
@@ -51,7 +40,7 @@ public class GameLauncher : MonoBehaviour
     private void SpawnPool()
     {
         GameObject obj = new("ObjectPool");
-        GameStateData.CurrentObjectPool.Value = obj.AddComponent<GameScenePool>();
+        GameStateData.GameScenePool.Value = obj.AddComponent<GameScenePool>();
     }
 
     /// <summary>
@@ -70,7 +59,7 @@ public class GameLauncher : MonoBehaviour
     private void SpawnCharacterContorller()
     {
         GameObject obj = new("CharacterController");
-        GameStateData.CurrentCharacterController.Value = obj.AddComponent<CharacterController>();
+        GameStateData.CharacterController.Value = obj.AddComponent<CharacterController>();
         obj.transform.parent = _controllParent;
     }
 
@@ -80,7 +69,7 @@ public class GameLauncher : MonoBehaviour
     private void SpawnSkillContorller()
     {
         GameObject obj = new("SkillController");
-        GameStateData.CurrentSkillController.Value = obj.AddComponent<SkillController>();
+        GameStateData.SkillController.Value = obj.AddComponent<SkillController>();
         obj.transform.parent = _controllParent;
     }
 

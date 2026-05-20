@@ -189,7 +189,7 @@ public class SkillController : MonoBehaviour
     public List<SkillItemData> GetRandomSkillDatas(int count = 3)
     {
         // 取得所有配置
-        var allConfigs = GameStateData.SkillItemConfigs.SelectMany(c => c.SkillItems).ToList();
+        var allConfigs = GameStateData.AllSkillConfigData.Value.AllSkillItemConfigs.SelectMany(c => c.SkillItems).ToList();
 
         // 分類目前擁有的技能
         var ownedSkills = OwnSkills.ToList();
@@ -407,7 +407,7 @@ public class SkillController : MonoBehaviour
     /// 執行技能
     /// </summary>
     /// <param name="skill"></param>
-    private void ExecuteSkill(SkillItemData skill)
+    public void ExecuteSkill(SkillItemData skill)
     {
         // 技能產生類型
         switch (skill.SkillAttackModeType)
@@ -494,7 +494,7 @@ public class SkillController : MonoBehaviour
     {
         PlayerView playerView = GameStateData.ControlCharacter.Value;
 
-        GameStateData.CurrentObjectPool.Value.SpawnObject(
+        GameStateData.GameScenePool.Value.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: playerView.ShotPoint.position,
@@ -528,7 +528,7 @@ public class SkillController : MonoBehaviour
         Vector3 randomOffset = (shotPoint.right * randomX) + (shotPoint.up * randomY);
         Vector3 finalPosition = shotPoint.position + randomOffset;
 
-        GameStateData.CurrentObjectPool.Value.SpawnObject(
+        GameStateData.GameScenePool.Value.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: finalPosition,
@@ -612,7 +612,7 @@ public class SkillController : MonoBehaviour
 
         PlayerView playerView = GameStateData.ControlCharacter.Value;
 
-        GameStateData.CurrentObjectPool.Value.SpawnObject(
+        GameStateData.GameScenePool.Value.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: playerView.transform.position,
@@ -622,7 +622,7 @@ public class SkillController : MonoBehaviour
             // 防呆：如果在 await 期間，這個技能又被移除了或改變了，就直接回收此物件
             if (!_onlySkills.ContainsKey(data.SkillName))
                 {
-                    GameStateData.CurrentObjectPool.Value.ReturnToPool(obj);
+                    GameStateData.GameScenePool.Value.ReturnToPool(obj);
                     return;
                 }
 

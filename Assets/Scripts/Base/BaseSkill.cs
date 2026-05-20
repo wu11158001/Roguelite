@@ -39,7 +39,7 @@ public class BaseSkill : BaseGameObject
     {
         // 停止所有 Rx 監聽
         _disposables.Clear();
-        GameStateData.CurrentObjectPool.Value.ReturnToPool(gameObject);
+        GameStateData.GameScenePool.Value.ReturnToPool(gameObject);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class BaseSkill : BaseGameObject
         // 遠離玩家回收
         this.UpdateAsObservable()
             .Select(_ => Vector3.Distance(transform.position, _playerObject.transform.position))
-            .Where(dist => dist >= GameStateData.CurrentSkillController.Value.SkillRemoveDistance)
+            .Where(dist => dist >= GameStateData.SkillController.Value.SkillRemoveDistance)
             .Subscribe(_ => Recycle())
             .AddTo(_disposables);
     }

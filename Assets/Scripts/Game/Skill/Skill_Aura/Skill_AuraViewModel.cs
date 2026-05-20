@@ -24,7 +24,7 @@ public class Skill_AuraViewModel
     {
         _timerDisposable?.Dispose();
 
-        float cd = GameStateData.CurrentSkillController.Value.GetActualCd(Data);
+        float cd = GameStateData.SkillController.Value.GetActualCd(Data);
 
         // TimeSpan.Zero「立刻發射一次」，隨後每隔 cd 秒發射
         _timerDisposable = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(cd), Scheduler.MainThread)

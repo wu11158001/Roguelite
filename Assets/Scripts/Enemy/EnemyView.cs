@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -129,8 +129,8 @@ public class EnemyView : BaseGameObject
                 Knockback = 0
             };
 
-            PlayerView playerView = collision.gameObject.GetComponent<PlayerView>();
-            playerView?.OnGetHit(hitData);
+            CharacterConfigData characterConfigData = GameStateData.SelectedCharacter.Value;
+            characterConfigData.Hp.Value = Mathf.Max(0, characterConfigData.Hp.Value - hitData.Attack);
         }
     }
     //死亡通知

@@ -30,4 +30,41 @@ public class AllSkillConfigData : ScriptableObject
             .Select(x => x.SkillItems[index])
             .FirstOrDefault();
     }
+
+    /// <summary>
+    /// 獲取被動技能
+    /// </summary>
+    /// <param name="skillType">技能類型</param>
+    /// <param name="level">技能等級</param>
+    /// <returns></returns>
+    public SkillItemData GetPassiveSkill(SKILL_TYPE skillType, int level)
+    {
+        int index = Mathf.Max(0, level - 1);
+
+        return AllSkillItemConfigs
+            .Where(x => index < x.SkillItems.Count &&
+                   x.SkillItems[index].IsPassive &&
+                   !x.SkillItems[index].IsProps &&
+                   x.SkillItems[index].SkillType == skillType)
+            .Select(x => x.SkillItems[index])
+            .FirstOrDefault();
+    }
+
+    /// <summary>
+    /// 獲取道具技能
+    /// </summary>
+    /// <param name="skillType">技能類型</param>
+    /// <returns></returns>
+    public SkillItemData GetPropsSkill(SKILL_TYPE skillType)
+    {
+        int index = 0;
+
+        return AllSkillItemConfigs
+            .Where(x => index < x.SkillItems.Count &&
+                   !x.SkillItems[index].IsPassive &&
+                   x.SkillItems[index].IsProps &&
+                   x.SkillItems[index].SkillType == skillType)
+            .Select(x => x.SkillItems[index])
+            .FirstOrDefault();
+    }
 }

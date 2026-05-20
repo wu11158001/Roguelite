@@ -8,6 +8,8 @@ public class SelectCharacterTogView : MonoBehaviour
     [SerializeField] private Toggle _mainTog;
     [SerializeField] private Image Icon;
 
+    public Toggle MainTog => _mainTog;
+
     private Action _selectCallback;
 
     private void Start()

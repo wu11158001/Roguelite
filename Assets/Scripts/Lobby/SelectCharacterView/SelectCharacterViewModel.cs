@@ -23,11 +23,13 @@ public class SelectCharacterViewModel
     /// <summary>
     /// 選擇角色
     /// </summary>
-    /// <param name="data"></param>
+    /// <param name="data">角色資料</param>
+    /// <param name="index">角色index</param>
     /// <returns></returns>
-    public async UniTaskVoid SelectCharacterAsync(CharacterConfigData data)
+    public async UniTaskVoid SelectCharacterAsync(CharacterConfigData data, int index)
     {
         GameStateData.SelectedCharacter.Value = data.Clone();
+        GameStateData.PreSelectCharacter.Value = index;
         _loadingCharacterName = data.CharacterName;
 
         // 隱藏當前正在顯示的模型

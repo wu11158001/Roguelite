@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using System.Collections.Generic;
 
 /// <summary>
 /// 選擇角色介面
@@ -13,12 +14,6 @@ public class SelectCharacterView : BaseView
 {
     [HorizontalLine(color: EColor.Gray)]
     [Header("SelectCharacterView")]
-    [Label("所有角色配置檔")]
-    [SerializeField] AllCharacterConfigData _allCharacterConfig;
-    [Label("所有技能配置檔")]
-    [SerializeField] AllSkillConfigData _allSkillConfigData;
-
-    [HorizontalLine(color: EColor.Gray)]
     [Header("Top")]
     [SerializeField] private Button _btn_Back;
 
@@ -78,7 +73,7 @@ public class SelectCharacterView : BaseView
                 // 各項能力值
                 _abilityView.Setup(data);
                 // 初始主動技能
-                SkillItemData initSkill = _allSkillConfigData.GetActiveSkill(data.InitSkill, 1);
+                SkillItemData initSkill = GameStateData.AllSkillConfigData.Value.GetActiveSkill(data.InitSkill, 1);
                 if(initSkill != null)
                 {
                     Img_InitSkillIcon.sprite = initSkill.SkillIcon;
@@ -103,9 +98,14 @@ public class SelectCharacterView : BaseView
     /// </summary>
     private void CreateSelectTogs()
     {
+        int index = 0;
+        List<Toggle> togs = new();
+
         _sampleSelectCharacterTog.gameObject.SetActive(false);
-        foreach (var config in _allCharacterConfig.AllCharacterConfigs)
+        foreach (var config in GameStateData.AllCharacterConfig.Value.AllCharacterConfigs)
         {
+            int currentIndex = index;
+
             GameObject obj = Instantiate(_sampleSelectCharacterTog.gameObject, _characterTogParent);
             obj.SetActive(true);
 
@@ -114,8 +114,24 @@ public class SelectCharacterView : BaseView
                 data: config, 
                 selectCallback: () =>
                 {
-                    _viewModel.SelectCharacterAsync(config.Clone()).Forget();
+                    _viewModel.SelectCharacterAsync(
+                        data: config.Clone(), 
+                        index: currentIndex).Forget();
                 });
+
+            togs.Add(selectCharacterTogView.MainTog);
+            index++;
+        }
+
+        // 預選上次所選的
+        int preSelectIndex = GameStateData.PreSelectCharacter.Value;
+        if (preSelectIndex >= 0 && preSelectIndex < togs.Count)
+        {
+            togs[preSelectIndex].isOn = true;
+        }
+        else if (togs.Count > 0)
+        {
+            togs[0].isOn = true;
         }
     }
 }

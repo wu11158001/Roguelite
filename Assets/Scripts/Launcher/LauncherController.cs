@@ -55,7 +55,7 @@ public class LauncherController : MonoBehaviour
     /// <returns></returns>
     private async UniTask PreloadLobbyView()
     {
-        var prefabRef = ViewManager.Instance.ViewConfig.GetPrefabRef(VIEW_TYPE.LobbyView);
+        var prefabRef = GameStateData.ViewConfig.Value.GetPrefabRef(VIEW_TYPE.LobbyView);
         // 預載入記憶體
         var handle = prefabRef.LoadAssetAsync<GameObject>();
         await handle.Task;

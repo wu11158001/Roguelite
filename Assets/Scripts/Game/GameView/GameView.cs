@@ -31,20 +31,6 @@ public class GameView : BaseView
 
     private GameViewModel _viewModel = new();
 
-    private void Start()
-    {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
-
-        characterConfig.AddAttack.Subscribe(x => Text_Attack.text = $"增加攻擊力:{x}");
-        characterConfig.MaxHp.Subscribe(x => Text_MaxHp.text = $"最大生命:{x}");
-        characterConfig.MoveSpeed.Subscribe(x => Text_MoveSpeed.text = $"移動速度:{x}");
-        characterConfig.Hp.Subscribe(x => Text_Hp.text = $"當前Hp:{x}");
-
-        _btn_Exit.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnExit());
-
-        InvokeRepeating(nameof(UpdateTime), 1.0f, 1.0f);
-    }
-
     private void Init()
     {
         foreach (var skillItemView in _skillItemViews)
@@ -63,10 +49,25 @@ public class GameView : BaseView
         base.Setup(myRef);
 
         Init();
+        BindViewModel();
+    }
 
-        GameStateData.CurrentCharacterController.Value.CurrentLevel.Subscribe(value => UpdateLevel(value));
-        GameStateData.CurrentCharacterController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value));
+    private void BindViewModel()
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+
+        characterConfig.AddAttack.Subscribe(x => Text_Attack.text = $"增加攻擊力:{x}").AddTo(this);
+        characterConfig.MaxHp.Subscribe(x => Text_MaxHp.text = $"最大生命:{x}").AddTo(this);
+        characterConfig.MoveSpeed.Subscribe(x => Text_MoveSpeed.text = $"移動速度:{x}").AddTo(this);
+        characterConfig.Hp.Subscribe(x => Text_Hp.text = $"當前Hp:{x}").AddTo(this);
+
+        GameStateData.CharacterController.Value.CurrentLevel.Subscribe(value => UpdateLevel(value)).AddTo(this);
+        GameStateData.CharacterController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value)).AddTo(this);
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
+
+        _btn_Exit.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnExit()).AddTo(this);
+
+        InvokeRepeating(nameof(UpdateTime), 1.0f, 1.0f);
     }
 
     /// <summary>
@@ -104,7 +105,7 @@ public class GameView : BaseView
             var view = await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.SelectSkillView);             
             if (view.TryGetComponent(out SelectSkillView selectSkillView))
             {
-                List<SkillItemData> items = GameStateData.CurrentSkillController.Value.GetRandomSkillDatas();
+                List<SkillItemData> items = GameStateData.SkillController.Value.GetRandomSkillDatas();
                 selectSkillView.SetSkillItemData(items);
             }
         }
