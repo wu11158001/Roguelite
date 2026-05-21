@@ -65,17 +65,35 @@ public class SkillInventory
                 (owned.IsPassive ? s.PassiveType == owned.PassiveType : s.SkillType == owned.SkillType) &&
                 s.SkillLevel == owned.SkillLevel + 1);
 
-            if (nextLevel != null) skillCandidates.Add(nextLevel);
+            if (nextLevel != null && IsSkillUnlocked(nextLevel, ownedSkills))
+            {
+                skillCandidates.Add(nextLevel);
+            }
         }
 
         // 新主動與被動上限限制
         if (activeOwned.Count < 6)
         {
-            skillCandidates.AddRange(allConfigs.Where(s => !s.IsPassive && !s.IsProps && s.SkillLevel == 1 && !activeOwned.Any(o => o.SkillType == s.SkillType)));
+            var newActives = allConfigs.Where(s =>
+                !s.IsPassive &&
+                !s.IsProps &&
+                s.SkillLevel == 1 &&
+                !activeOwned.Any(o => o.SkillType == s.SkillType) &&
+                IsSkillUnlocked(s, ownedSkills)); // 檢查前置條件
+
+            skillCandidates.AddRange(newActives);
         }
+
         if (passiveOwned.Count < 6)
         {
-            skillCandidates.AddRange(allConfigs.Where(s => s.IsPassive && !s.IsProps && s.SkillLevel == 1 && !passiveOwned.Any(o => o.PassiveType == s.PassiveType)));
+            var newPassives = allConfigs.Where(s =>
+                s.IsPassive &&
+                !s.IsProps &&
+                s.SkillLevel == 1 &&
+                !passiveOwned.Any(o => o.PassiveType == s.PassiveType) &&
+                IsSkillUnlocked(s, ownedSkills)); // 檢查前置條件
+
+            skillCandidates.AddRange(newPassives);
         }
 
         var allProps = allConfigs.Where(s => s.IsProps).ToList();
@@ -98,5 +116,52 @@ public class SkillInventory
         }
 
         return finalSelection;
+    }
+
+    /// <summary>
+    /// 檢查該技能的前置解鎖條件是否滿足
+    /// </summary>
+    /// <param name="targetSkill"></param>
+    /// <param name="ownedSkills"></param>
+    /// <returns></returns>
+    private bool IsSkillUnlocked(SkillItemData targetSkill, List<SkillItemData> ownedSkills)
+    {
+        // 道具不需要判斷前置
+        if (targetSkill.IsProps) return true;
+
+        // 檢查前置主動技能條件
+        if (targetSkill.NeedActiveSkills != null && targetSkill.NeedActiveSkills.Count > 0)
+        {
+            foreach (var needActive in targetSkill.NeedActiveSkills)
+            {
+                // 尋找玩家當前是否擁有該類型的主動技能，且等級大於或等於需求等級
+                bool hasRequiredActive = ownedSkills.Any(s =>
+                    !s.IsPassive &&
+                    !s.IsProps &&
+                    s.SkillType == needActive.Type &&
+                    s.SkillLevel >= needActive.Level);
+
+                if (!hasRequiredActive) return false;
+            }
+        }
+
+        // 檢查前置被動技能條件
+        if (targetSkill.NeedPassiveSkills != null && targetSkill.NeedPassiveSkills.Count > 0)
+        {
+            foreach (var needPassive in targetSkill.NeedPassiveSkills)
+            {
+                // 尋找玩家當前是否擁有該類型的被動技能，且等級大於或等於需求等級
+                bool hasRequiredPassive = ownedSkills.Any(s =>
+                    s.IsPassive &&
+                    !s.IsProps &&
+                    s.PassiveType == needPassive.Type &&
+                    s.SkillLevel >= needPassive.Level);
+
+                if (!hasRequiredPassive) return false;
+            }
+        }
+
+        // 所有條件都通過，或是根本沒有條件限制
+        return true; 
     }
 }

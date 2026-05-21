@@ -16,7 +16,7 @@ public class Skill_AuraView : BaseSkill
         base.OnDestroy();
     }
     
-    public override void Setup(SkillItemData data)
+    public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         _data = data;
         _viewModel = new Skill_AuraViewModel(data);

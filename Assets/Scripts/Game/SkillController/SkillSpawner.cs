@@ -269,7 +269,7 @@ public class SkillSpawner
             {
                 if (obj.TryGetComponent(out BaseSkill skill))
                 {
-                    skill.Setup(data);
+                    skill.Setup(data: data, targetEnemy: enemyView);
                 }
             });
     }
@@ -336,10 +336,12 @@ public class SkillSpawner
     /// <returns></returns>
     public Transform GetFallbackTransform()
     {
+        float radius = 10;
+
         PlayerView playerView = GameStateData.ControlCharacter.Value;
         if (playerView == null) return null;
 
-        Vector2 randomCircle = UnityEngine.Random.insideUnitCircle.normalized * 15;
+        Vector2 randomCircle = UnityEngine.Random.insideUnitCircle.normalized * radius;
         Vector3 spawnPosition = playerView.transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
 
         // 生成一個虛擬的 Transform 物件

@@ -10,6 +10,7 @@ public class BaseSkill : BaseGameObject
     protected CompositeDisposable _disposables = new();
 
     protected int _targetLayer;
+    protected EnemyView _targetEnemy;
 
     public override void OnDestroy()
     {
@@ -22,9 +23,10 @@ public class BaseSkill : BaseGameObject
         _targetLayer = LayerMask.NameToLayer("Enemy");
     }
 
-    public virtual void Setup(SkillItemData data)
+    public virtual void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         _data = data;
+        _targetEnemy = targetEnemy;
 
         // 清理舊的訂閱
         _disposables.Clear();

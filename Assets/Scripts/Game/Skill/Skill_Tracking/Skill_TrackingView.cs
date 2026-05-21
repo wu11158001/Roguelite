@@ -10,7 +10,7 @@ public class Skill_TrackingView : BaseSkill
 {
     private Skill_TrackingViewModel _viewModel;
 
-    public override void Setup(SkillItemData data)
+    public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
 

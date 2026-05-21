@@ -12,7 +12,7 @@ public class Skill_RangeSlowView : BaseSkill
         _collider = GetComponent<Collider>();
     }
 
-    public override void Setup(SkillItemData data)
+    public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
 

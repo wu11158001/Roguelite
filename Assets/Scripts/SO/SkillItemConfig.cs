@@ -20,6 +20,8 @@ public enum SKILL_TYPE
     Skill_Around,
     /// <summary> 範圍減速 </summary>
     Skill_RangeSlow,
+    /// <summary> 精準單一攻擊 </summary>
+    Skill_SingleHit,
 
     None,
 }
@@ -80,6 +82,37 @@ public enum PROPS_SKILL_TYPE
     HpRecovery,
 }
 
+#region 技能組合
+
+/// <summary>
+/// 需求前置主動技能技能資料
+/// </summary>
+[Serializable]
+public class NeedActiveSkillData
+{
+    [Label("主動技能類型")]
+    public SKILL_TYPE Type;
+    [Label("需求等級")]
+    public int Level;
+}
+
+/// <summary>
+/// 需求前置被動技能技能資料
+/// </summary>
+[Serializable]
+public class NeedPassiveSkillData
+{
+    [AllowNesting]
+    [Label("被動技能類型")]
+    public PASSIVE_SKILL_TYPE Type;
+
+    [AllowNesting]
+    [Label("需求等級")]
+    public int Level;
+}
+
+#endregion
+
 /// <summary>
 /// 技能項目配置資料
 /// </summary>
@@ -95,19 +128,6 @@ public class SkillItemConfig : ScriptableObject
 [Serializable]
 public class SkillItemData
 {
-    // --------主動技能--------
-    [AllowNesting][Label("主動技能類型")]
-    [ShowIf("_isShowSkill")]
-    public SKILL_TYPE SkillType;
-
-    [AllowNesting] [Label("升級是否立即更新")]
-    [HideIf("IsProps")]
-    public bool IsUpdateNow;
-
-    [AllowNesting][Label("技能等級")]
-    [HideIf("IsProps")]
-    public int SkillLevel;
-
     [AllowNesting][Label("技能名稱")]
     public string SkillName;
 
@@ -117,102 +137,123 @@ public class SkillItemData
     [AllowNesting][Label("技能描述")]
     [TextArea] public string SkillDescribe;
 
+    [AllowNesting][BoxGroup("前置解鎖：需求主動技能")]
+    [HideIf(nameof(IsProps))]
+    public List<NeedActiveSkillData> NeedActiveSkills = new();
+
+    [AllowNesting][BoxGroup("前置解鎖：需求被動技能")]
+    [HideIf(nameof(IsProps))]
+    public List<NeedPassiveSkillData> NeedPassiveSkills = new();
+
+    // --------主動技能--------
+    [AllowNesting][Label("主動技能類型")]
+    [ShowIf(nameof(_isShowSkill))]
+    public SKILL_TYPE SkillType;
+
+    [AllowNesting] [Label("升級是否立即更新")]
+    [HideIf(nameof(IsProps))]
+    public bool IsUpdateNow;
+
+    [AllowNesting][Label("技能等級")]
+    [HideIf(nameof(IsProps))]
+    public int SkillLevel;
+
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能產生模式")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public SKILL_SPAWN_MODEL_TYPE SkillSpawnModeType;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能對應模型")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public AssetReferenceGameObject PrefabReference;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能CD(秒)")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SkillCd;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("技能攻擊力")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public int SkillAttack;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("發射數量")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public int SkillShotCount;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("發射間隔")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SkillShotInterval;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("穿透數量")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public int SkillPenetrate;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("飛行速度")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SkillFlightSpeed;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("擊退效果")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SkillKnockback;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("爆擊機率(0~100%)")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public int SkillCriticalChance;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("爆擊攻擊力加乘(倍數)")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public int SkillCriticalMultiplier;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("效果範圍(體積)")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SkillEffectRange;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("持續時間(秒)")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SkillKeepTime;
 
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("敵人移動速度變更(1=正常速度, 小於1減速, 大於1加速)")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SpeedModifier;
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("敵人移動速度變更持續時間")]
-    [ShowIf("_isShowSkill")]
+    [ShowIf(nameof(_isShowSkill))]
     public float SpeedModifierTime;
 
     // --------被動技能--------
     [AllowNesting][Label("是否為被動技能")]
-    [HideIf("IsProps")]
+    [HideIf(nameof(IsProps))]
     public bool IsPassive;
 
     [AllowNesting][Label("被動技能類型")]
-    [ShowIf("_isShowPassive")]
+    [ShowIf(nameof(_isShowPassive))]
     public PASSIVE_SKILL_TYPE PassiveType;
 
     [AllowNesting][Label("被動技能增加值")]
-    [ShowIf("_isShowPassive")]
+    [ShowIf(nameof(_isShowPassive))]
     public float PassiveAddValue;
 
     // --------道具技能--------
     [AllowNesting][Label("是否為道具技能")]
-    [HideIf("IsPassive")]
+    [HideIf(nameof(IsPassive))]
     public bool IsProps;
     [AllowNesting][Label("道具技能類型")]
-    [ShowIf("_isShowProps")]
+    [ShowIf(nameof(_isShowProps))]
     public PROPS_SKILL_TYPE PropsSkillType;
     [AllowNesting][Label("道具技能增加值")]
-    [ShowIf("_isShowProps")]
+    [ShowIf(nameof(_isShowProps))]
     public float PropsAddValue;
 
     // 是否顯示主動技能欄位

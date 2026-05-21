@@ -10,7 +10,7 @@ public class Skill_StraightProjectileView : BaseSkill
 {
     private Skill_StraightProjectileViewModel _viewModel;
 
-    public override void Setup(SkillItemData data)
+    public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
 

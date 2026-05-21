@@ -108,7 +108,7 @@ public class SkillController : MonoBehaviour
     public EnemyView GetNearestEnemy(Vector3 origin) => _spawner.GetNearestEnemy(origin);
 
     /// <summary>
-    /// 獲取新技能
+    /// 角色獲取新技能
     /// </summary>
     /// <param name="skill"></param>
     private void OnSkillListChanged(SkillItemData skill)

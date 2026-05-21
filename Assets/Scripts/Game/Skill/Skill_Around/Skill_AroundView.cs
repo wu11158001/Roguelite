@@ -22,7 +22,7 @@ public class Skill_AroundView : BaseSkill
 
     private Skill_AroundViewModel _viewModel;
 
-    public override void Setup(SkillItemData data)
+    public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
 
