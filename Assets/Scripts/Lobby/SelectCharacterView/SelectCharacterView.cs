@@ -38,7 +38,6 @@ public class SelectCharacterView : BaseView
     [Header("3DModel")]
     [SerializeField] private Transform CharacterPoint;
 
-
     private SelectCharacterViewModel _viewModel = new();
 
     public override void Setup(AssetReferenceGameObject myRef)

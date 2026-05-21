@@ -15,6 +15,8 @@ public enum EFFET_TYPE
 
     /// <summary> 生命回復效果 </summary>
     HpRecover = 100,
+    /// <summary> 減速效果 </summary>
+    SlowDown,
 }
 
 /// <summary>

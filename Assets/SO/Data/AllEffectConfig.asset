@@ -27,3 +27,10 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - EffectType: 101
+    PrefabReference:
+      m_AssetGUID: ba558d112342f4643acb88040aaa5a04
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

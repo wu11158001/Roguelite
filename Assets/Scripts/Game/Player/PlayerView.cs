@@ -282,22 +282,22 @@ public class PlayerView : BaseGameObject
     /// </summary>
     private void TextExp()
     {
-        if(Keyboard.current.jKey.wasPressedThisFrame)
+        if(Keyboard.current.numpad1Key.wasPressedThisFrame)
         {
             _viewModel.GainExp(expType: EXP_TYPE.Exp_1);
         }
 
-        if (Keyboard.current.kKey.wasPressedThisFrame)
+        if (Keyboard.current.numpad2Key.wasPressedThisFrame)
         {
             _viewModel.GainExp(expType: EXP_TYPE.Exp_2);
         }
 
-        if(Keyboard.current.uKey.wasPressedThisFrame)
+        if(Keyboard.current.numpad4Key.wasPressedThisFrame)
         {
             _characterConfig.Hp.Value -= 10;
         }
 
-        if (Keyboard.current.iKey.wasPressedThisFrame)
+        if (Keyboard.current.numpad5Key.wasPressedThisFrame)
         {
             _characterConfig.Hp.Value += 10;
         }

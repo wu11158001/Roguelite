@@ -30,5 +30,35 @@ public class Skill_RangeSlowViewModel
 
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
+
+        SpawnSlowEffect(
+            target: enemyView.anchorPoint.bottom.transform,
+            recycleTime: hitData.SpeedModifierTime);
+    }
+
+    /// <summary>
+    /// 產生減速效果
+    /// </summary>
+    /// <param name="target"></param>
+    private void SpawnSlowEffect(Transform target, float recycleTime)
+    {
+        EffectData data = GameStateData.AllEffectPrefabData.Value.GetEffect(EFFET_TYPE.SlowDown);
+        if (data != null)
+        {
+            GameStateData.GameScenePool.Value.SpawnObject(
+                parentName: "減速效果",
+                assetRef: data.PrefabReference,
+                position: target.position,
+                rotation: target.rotation,
+                callback: (obj) =>
+                {
+                    obj.transform.SetParent(target);
+
+                    if (obj.TryGetComponent(out SlowDownEffectView slowDownEffectView))
+                    {
+                        slowDownEffectView.Setup(data.PrefabReference, recycleTime);
+                    }
+                });
+        }
     }
 }
