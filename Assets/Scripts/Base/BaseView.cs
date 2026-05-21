@@ -45,12 +45,22 @@ public abstract class BaseView : MonoBehaviour
     }
 
     /// <summary>
+    /// 關閉面需要開啟前個介面複寫這裡
+    /// </summary>
+    public virtual void CloseViewHandle()
+    {
+        ViewManager.Instance?.CloseView();
+    }
+
+    /// <summary>
     /// 關閉並釋放資源
     /// </summary>
     public virtual void Close()
     {
         if (_isClosed) return;
         _isClosed = true;
+
+        CloseViewHandle();
 
         if (_myRef != null)
         {

@@ -35,7 +35,15 @@ public class LobbyView : BaseView
     private void Start()
     {
         // 開始按鈕
-        _btn_Start.OnClickAsObservable().Subscribe(_ => ViewManager.Instance.OpenView(viewType: VIEW_TYPE.SelectCharacterView).Forget()).AddTo(this);
+        _btn_Start.OnClickAsObservable().Subscribe(_ =>
+        { 
+            ViewManager.Instance.OpenView<SelectCharacterView>(
+                viewType: VIEW_TYPE.SelectCharacterView,
+                callback: (view) =>
+                {
+                    gameObject.SetActive(false);
+                }).Forget();
+        }).AddTo(this);
     }
 
     public override void Setup(AssetReferenceGameObject myRef)

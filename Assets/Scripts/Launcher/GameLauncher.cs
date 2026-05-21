@@ -21,8 +21,8 @@ public class GameLauncher : MonoBehaviour
             SpawnGameContorller();
             SpawnCharacterContorller();
             SpawnSkillContorller();
-            ViewManager.Instance.OpenView(viewType: VIEW_TYPE.JoystickView).Forget();
-            await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.GameView);
+            ViewManager.Instance.OpenView<JoystickView>(viewType: VIEW_TYPE.JoystickView).Forget();
+            ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView).Forget();
             await SpawnPlayer();
             await SpawnEnemyManager();
 

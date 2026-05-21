@@ -92,6 +92,11 @@ public class SelectCharacterView : BaseView
             .AddTo(this);
     }
 
+    public override void CloseViewHandle()
+    {
+        ViewManager.Instance?.CloseView(true);
+    }
+
     /// <summary>
     /// 產生角色選擇Tog
     /// </summary>

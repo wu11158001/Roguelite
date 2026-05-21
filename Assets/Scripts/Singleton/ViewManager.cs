@@ -1,15 +1,22 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using NaughtyAttributes;
+using System;
+using System.Collections.Generic;
 
 public class ViewManager : SingletonMonoBehaviour<ViewManager>
 {
+    private Stack<BaseView> _viewStack = new();
+
     /// <summary>
     /// 開啟介面
     /// </summary>
+    /// <typeparam name="T"></typeparam>
     /// <param name="viewType"></param>
+    /// <param name="isClosePreView">是否關閉前個介面</param>
+    /// <param name="callback"></param>
+    /// <param name=""></param>
     /// <returns></returns>
-    public async UniTask<BaseView> OpenView(VIEW_TYPE viewType)
+    public async UniTaskVoid OpenView<T>(VIEW_TYPE viewType, bool isClosePreView = false, Action<T> callback = null) where T : BaseView
     {
         // 從 SO 獲取引用
         var prefabRef = GameStateData.ViewConfig.Value.GetPrefabRef(viewType);
@@ -17,7 +24,7 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
         if (prefabRef == null)
         {
             Debug.LogError($"找不到 ViewType: {viewType} 的配置");
-            return null;
+            return;
         }
 
         Transform canvusRoot = GameObject.Find("Canvas").transform;
@@ -25,12 +32,44 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
         var handle = prefabRef.InstantiateAsync(canvusRoot);
         GameObject obj = await handle.Task;
 
-        BaseView view = obj.GetComponent<BaseView>();
+        T view = obj.GetComponent<T>();
         view.Setup(prefabRef);
 
         obj.transform.SetAsLastSibling();
 
-        return view;
+        if(isClosePreView)
+        {
+            BaseView preView = _viewStack.Peek();
+            if(preView != null)
+            {
+                preView.gameObject.SetActive(false);
+            }
+        }
+
+        _viewStack.Push(view);
+
+        callback?.Invoke(view);
     }
 
+    /// <summary>
+    /// 關閉介面
+    /// </summary>
+    /// <param name="isOpenPreView">是否開啟前個介面</param>
+    public void CloseView(bool isOpenPreView = false)
+    {
+        if (_viewStack == null || _viewStack.Count == 0) return;
+
+        BaseView baseView = _viewStack.Pop();
+
+        // 開啟前個介面
+        if (_viewStack == null || _viewStack.Count == 0) return;
+        if (isOpenPreView)
+        {
+            BaseView preView = _viewStack.Peek();
+            if(preView != null)
+            {
+                preView.gameObject.SetActive(true);
+            }
+        }
+    }
 }

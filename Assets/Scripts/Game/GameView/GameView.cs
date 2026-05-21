@@ -92,7 +92,7 @@ public class GameView : BaseView
     /// 更新等級
     /// </summary>
     /// <param name="level"></param>
-    private async void UpdateLevel(int level)
+    private void UpdateLevel(int level)
     {
         Text_Level.text = $"等級:{level + 1}";
 
@@ -102,12 +102,13 @@ public class GameView : BaseView
             // 遊戲暫停
             GameStateData.CurrentGameController.Value.GanePause(true);
             // 開啟選擇技能介面
-            var view = await ViewManager.Instance.OpenView(viewType: VIEW_TYPE.SelectSkillView);             
-            if (view.TryGetComponent(out SelectSkillView selectSkillView))
-            {
-                List<SkillItemData> items = GameStateData.SkillController.Value.GetRandomSkillDatas();
-                selectSkillView.SetSkillItemData(items);
-            }
+            ViewManager.Instance.OpenView<SelectSkillView>(
+                viewType: VIEW_TYPE.SelectSkillView,
+                callback: (view) =>
+                {
+                    List<SkillItemData> items = GameStateData.SkillController.Value.GetRandomSkillDatas();
+                    view.SetSkillItemData(items);
+                }).Forget();
         }
     }
 

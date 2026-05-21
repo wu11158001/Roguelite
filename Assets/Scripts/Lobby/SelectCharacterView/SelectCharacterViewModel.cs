@@ -31,6 +31,7 @@ public class SelectCharacterViewModel
         GameStateData.SelectedCharacter.Value = data.Clone();
         GameStateData.PreSelectCharacter.Value = index;
         _loadingCharacterName = data.CharacterName;
+        _currentCharacterData.Value = data;
 
         // 隱藏當前正在顯示的模型
         if (_currentModel.Value != null)
@@ -59,7 +60,6 @@ public class SelectCharacterViewModel
             targetModel.SetActive(true);
             targetModel.transform.rotation = Quaternion.identity;
 
-            _currentCharacterData.Value = data;
             _currentModel.Value = targetModel;
         }
         else

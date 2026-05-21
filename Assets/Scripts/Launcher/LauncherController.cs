@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UniRx;
 using TMPro;
 using Cysharp.Threading.Tasks;
+using System;
 
 public class LauncherController : MonoBehaviour
 {
@@ -17,10 +18,14 @@ public class LauncherController : MonoBehaviour
 
     void Start()
     {
-        PreloadAssets().Forget(); // 開始預載
+        DownloadAssets().Forget();
     }
 
-    private async UniTask PreloadAssets()
+    /// <summary>
+    /// 下載資源
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask DownloadAssets()
     {
         _text_Loading.text = "正在初始化資源系統...";
         await Addressables.InitializeAsync().Task;
@@ -44,20 +49,38 @@ public class LauncherController : MonoBehaviour
 
         _text_Loading.text = "完成！進入大廳...";
 
-        await PreloadLobbyView();
+        await PreLoadAssets();
 
         SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
     }
 
     /// <summary>
-    /// 預載大廳
+    /// 預載入記憶體資源
     /// </summary>
     /// <returns></returns>
-    private async UniTask PreloadLobbyView()
+    private async UniTask PreLoadAssets()
     {
-        var prefabRef = GameStateData.ViewConfig.Value.GetPrefabRef(VIEW_TYPE.LobbyView);
-        // 預載入記憶體
-        var handle = prefabRef.LoadAssetAsync<GameObject>();
-        await handle.Task;
+        try
+        {
+            // 所有介面
+            foreach (VIEW_TYPE viewType in Enum.GetValues(typeof(VIEW_TYPE)))
+            {
+                var prefabRef = GameStateData.ViewConfig.Value.GetPrefabRef(viewType);
+                var handle = prefabRef.LoadAssetAsync<GameObject>();
+                await handle.Task;
+            }
+
+            // 所有腳色
+            foreach (var config in GameStateData.AllCharacterConfig.Value.AllCharacterConfigs)
+            {
+                var prefabRef = config.PrefabReference;
+                var handle = prefabRef.LoadAssetAsync<GameObject>();
+                await handle.Task;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"預載入記憶體資源 錯誤: {e}");
+        } 
     }
 }
