@@ -1,0 +1,44 @@
+using Cysharp.Threading.Tasks;
+using NaughtyAttributes;
+using UniRx;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
+
+public class GamePauseView : BaseView
+{
+    [HorizontalLine(color: EColor.Gray)]
+    [Header("GamePauseView")]
+    [SerializeField] private Button _btn_Exit;
+    [SerializeField] private Button _btn_Makeup;
+    [SerializeField] private Button _btn_Continue;
+
+    public override void Setup(AssetReferenceGameObject myRef)
+    {
+        base.Setup(myRef);
+
+        BindViewModel();
+    }
+
+    private void BindViewModel()
+    {
+        // 離開按鈕
+        _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
+        {
+            SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
+        }).AddTo(this);
+
+        // 合成表按鈕
+        _btn_Makeup.OnClickAsObservable().Subscribe(_ =>
+        {
+            ViewManager.Instance.OpenView<MakeupListView>(viewType: VIEW_TYPE.MakeupListView).Forget();
+        }).AddTo(this);
+
+        // 繼續按鈕
+        _btn_Continue.OnClickAsObservable().First().Subscribe(_ =>
+        {
+            GameStateData.CurrentGameController.Value.GanePause(false);
+            Close();
+        }).AddTo(this);
+    }
+}

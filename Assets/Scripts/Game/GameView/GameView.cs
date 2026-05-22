@@ -5,12 +5,13 @@ using TMPro;
 using UnityEngine.AddressableAssets;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 public class GameView : BaseView
 {
     [HorizontalLine(color: EColor.Gray)]
     [Header("GameView")]
-    [SerializeField] private Button _btn_Exit;
+    [SerializeField] private Button _btn_Pause;
     [SerializeField] private TextMeshProUGUI Text_Level;
     [SerializeField] private TextMeshProUGUI Text_Time;
     [SerializeField] private Slider Sli_ExpBar;
@@ -28,8 +29,6 @@ public class GameView : BaseView
     [SerializeField] private TextMeshProUGUI Text_Hp;
 
     private float _elapsedTime;
-
-    private GameViewModel _viewModel = new();
 
     private void Init()
     {
@@ -50,6 +49,7 @@ public class GameView : BaseView
 
         Init();
         BindViewModel();
+        InvokeRepeating(nameof(UpdateTime), 1.0f, 1.0f);
     }
 
     private void BindViewModel()
@@ -65,9 +65,12 @@ public class GameView : BaseView
         GameStateData.CharacterController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value)).AddTo(this);
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
 
-        _btn_Exit.OnClickAsObservable().First().Subscribe(_ => _viewModel.OnExit()).AddTo(this);
-
-        InvokeRepeating(nameof(UpdateTime), 1.0f, 1.0f);
+        // 暫停按鈕
+        _btn_Pause.OnClickAsObservable().Subscribe(_ =>
+        {
+            GameStateData.CurrentGameController.Value.GanePause(true);
+            ViewManager.Instance.OpenView<GamePauseView>(VIEW_TYPE.GamePauseView).Forget();
+        }).AddTo(this);
     }
 
     /// <summary>
