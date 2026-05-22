@@ -18,7 +18,7 @@ MonoBehaviour:
     SkillDescribe: "\u56DE\u5FA9\u751F\u547D30%"
     NeedActiveSkills: []
     NeedPassiveSkills: []
-    SkillType: 0
+    _skillType: 0
     IsUpdateNow: 0
     SkillLevel: 0
     SkillSpawnModeType: 0
@@ -42,8 +42,8 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 1
-    PropsSkillType: 0
+    _propsSkillType: 1
     PropsAddValue: 0.3

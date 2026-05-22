@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: PassiveSkill_Defense
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillType: 6
-    SkillLevel: 1
-    SkillName: "\u88AB\u52D5\u6280\u80FD-\u50B7\u5BB3\u6E1B\u5C11"
+  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u50B7\u5BB3\u6E1B\u5C11"
     SkillIcon: {fileID: 21300000, guid: d46e633be2a2b5d44a75ad10f561fba3, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u53D7\u5230\u50B7\u5BB3-1"
-    SkillAttackModeType: 0
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 1
+    SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
@@ -34,9 +37,13 @@ MonoBehaviour:
     SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 1
-    PassiveType: 3
+    _passiveType: 4
     PassiveAddValue: 1
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0

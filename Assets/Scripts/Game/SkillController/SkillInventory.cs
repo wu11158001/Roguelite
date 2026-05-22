@@ -39,6 +39,7 @@ public class SkillInventory
         }
 
         MessageBroker.Default.Publish(new GainSkillMessage { OwnSkills = _ownSkills });
+        PlayerPrefsManager.Instance.SaveAcquiredSkill(newSkill.SkillName);
     }
 
     /// <summary>

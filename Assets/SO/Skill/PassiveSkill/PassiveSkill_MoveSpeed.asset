@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: PassiveSkill_MoveSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillType: 6
-    SkillLevel: 1
-    SkillName: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6"
+  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6"
     SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6+3"
-    SkillAttackModeType: 0
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 1
+    SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
@@ -34,9 +37,13 @@ MonoBehaviour:
     SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 1
-    PassiveType: 2
+    _passiveType: 3
     PassiveAddValue: 3
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0

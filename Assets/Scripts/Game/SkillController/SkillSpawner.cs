@@ -47,7 +47,7 @@ public class SkillSpawner
                 break;
 
             // 產生在物件池內
-            case SKILL_SPAWN_MODEL_TYPE.None:
+            case SKILL_SPAWN_MODEL_TYPE.InPool:
                 HandleOnlySkillRecycle(skill);
                 _coroutineRunner.StartCoroutine(IShotSkill(
                     skillData: skill, 

@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: PassiveSkill_ProjectileCount
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillType: 6
-    IsUpdateNow: 0
-    SkillLevel: 1
-    SkillName: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u589E\u52A0"
+  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u589E\u52A0"
     SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FD\u6578\u91CF+1"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 1
     SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -40,17 +42,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 1
-    PassiveType: 9
+    _passiveType: 10
     PassiveAddValue: 1
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 6
-    IsUpdateNow: 0
-    SkillLevel: 2
-    SkillName: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u589E\u52A0"
+  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u6295\u5C04\u7269\u589E\u52A0"
     SkillIcon: {fileID: 21300000, guid: a973492c95f15be4dab0722907ac04de, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FD\u7269\u6578\u91CF+1"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 2
     SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -72,8 +76,8 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 1
-    PassiveType: 9
+    _passiveType: 10
     PassiveAddValue: 1
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0

@@ -32,6 +32,7 @@ public class LobbyView : BaseView
     [Header("LobbyView")]
     [SerializeField] private Button _btn_Start;
     [SerializeField] private Button _btn_Makeup;
+    [SerializeField] private Button _btn_DeleteData;
 
     private void Start()
     {
@@ -50,6 +51,12 @@ public class LobbyView : BaseView
         _btn_Makeup.OnClickAsObservable().Subscribe(_ =>
         {
             ViewManager.Instance.OpenView<MakeupListView>(viewType: VIEW_TYPE.MakeupListView).Forget();
+        }).AddTo(this);
+
+        // 刪除資料按鈕
+        _btn_DeleteData.OnClickAsObservable().Subscribe(_ =>
+        {
+            PlayerPrefsManager.Instance.DeleteAllData();
         }).AddTo(this);
     }
 }

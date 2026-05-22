@@ -25,6 +25,7 @@ public class GamePauseView : BaseView
         // 離開按鈕
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
         {
+            GameStateData.CurrentGameController.Value.GanePause(false);
             SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
         }).AddTo(this);
 

@@ -16,7 +16,7 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     /// <param name="callback"></param>
     /// <param name=""></param>
     /// <returns></returns>
-    public async UniTaskVoid OpenView<T>(VIEW_TYPE viewType, bool isClosePreView = false, Action<T> callback = null) where T : BaseView
+    public async UniTask OpenView<T>(VIEW_TYPE viewType, bool isClosePreView = false, Action<T> callback = null) where T : BaseView
     {
         // 從 SO 獲取引用
         var prefabRef = GameStateData.ViewConfig.Value.GetPrefabRef(viewType);

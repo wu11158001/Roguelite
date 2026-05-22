@@ -10,6 +10,8 @@ using UnityEngine.AddressableAssets;
 /// </summary>
 public enum SKILL_TYPE
 {
+    None,
+
     /// <summary> 追蹤 </summary>
     Skill_Tracking,
     /// <summary> 直線投射物 </summary>
@@ -22,8 +24,6 @@ public enum SKILL_TYPE
     Skill_RangeSlow,
     /// <summary> 精準單一攻擊 </summary>
     Skill_SingleHit,
-
-    None,
 }
 
 /// <summary>
@@ -37,9 +37,8 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InPointRandom,
     /// <summary> 在攝影機視野內隨機敵人, 在角色底部 </summary>
     RandomEnemyInBottom,
-
-    // 產生在物件池內
-    None,
+    /// <summary> 產生在物件池內 </summary>
+    InPool,
 }
 
 /// <summary>
@@ -47,6 +46,8 @@ public enum SKILL_SPAWN_MODEL_TYPE
 /// </summary>
 public enum PASSIVE_SKILL_TYPE
 {
+    None,
+
     /// <summary> 攻擊增加 </summary>
     Attack,
     /// <summary> 最大生命增加(%) </summary>
@@ -78,6 +79,8 @@ public enum PASSIVE_SKILL_TYPE
 /// </summary>
 public enum PROPS_SKILL_TYPE
 {
+    None,
+
     /// <summary> 生命回復(%) </summary>
     HpRecovery,
 }
@@ -148,7 +151,23 @@ public class SkillItemData
     // --------主動技能--------
     [AllowNesting][Label("主動技能類型")]
     [ShowIf(nameof(_isShowSkill))]
-    public SKILL_TYPE SkillType;
+    [SerializeField]
+    private SKILL_TYPE _skillType;
+    public SKILL_TYPE SkillType
+    {
+        get
+        {
+            if (IsPassive || IsProps)
+            {
+                return SKILL_TYPE.None;
+            }
+            return _skillType;
+        }
+        set
+        {
+            _skillType = value;
+        }
+    }
 
     [AllowNesting] [Label("升級是否立即更新")]
     [HideIf(nameof(IsProps))]
@@ -239,7 +258,23 @@ public class SkillItemData
 
     [AllowNesting][Label("被動技能類型")]
     [ShowIf(nameof(_isShowPassive))]
-    public PASSIVE_SKILL_TYPE PassiveType;
+    [SerializeField]
+    private PASSIVE_SKILL_TYPE _passiveType;
+    public PASSIVE_SKILL_TYPE PassiveType
+    {
+        get
+        {
+            if (!IsPassive)
+            {
+                return PASSIVE_SKILL_TYPE.None;
+            }
+            return _passiveType;
+        }
+        set
+        {
+            _passiveType = value;
+        }
+    }
 
     [AllowNesting][Label("被動技能增加值")]
     [ShowIf(nameof(_isShowPassive))]
@@ -251,7 +286,24 @@ public class SkillItemData
     public bool IsProps;
     [AllowNesting][Label("道具技能類型")]
     [ShowIf(nameof(_isShowProps))]
-    public PROPS_SKILL_TYPE PropsSkillType;
+    [SerializeField]
+    private PROPS_SKILL_TYPE _propsSkillType;
+    public PROPS_SKILL_TYPE PropsSkillType
+    {
+        get
+        {
+            if (!IsProps)
+            {
+                return PROPS_SKILL_TYPE.None;
+            }
+            return _propsSkillType;
+        }
+        set
+        {
+            _propsSkillType = value;
+        }
+    }
+
     [AllowNesting][Label("道具技能增加值")]
     [ShowIf(nameof(_isShowProps))]
     public float PropsAddValue;

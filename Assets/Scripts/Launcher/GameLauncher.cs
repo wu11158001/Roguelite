@@ -22,7 +22,7 @@ public class GameLauncher : MonoBehaviour
             SpawnCharacterContorller();
             SpawnSkillContorller();
             ViewManager.Instance.OpenView<JoystickView>(viewType: VIEW_TYPE.JoystickView).Forget();
-            ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView).Forget();
+            await ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
             await SpawnPlayer();
             await SpawnEnemyManager();
 

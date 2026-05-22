@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: Skill_Around
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 1
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7522\u751F3\u500B\u570D\u7E5E\u5728\u5468\u570D\u7684\u7403\u9AD4"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 1
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -40,17 +42,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 2
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u6578\u91CF+1"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 2
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -72,17 +76,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 3
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u6301\u7E8C\u6642\u9593\u589E\u52A01\u79D2, \u50B7\u5BB3\u63D0\u53472"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 3
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -104,17 +110,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 4
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u65CB\u8F49\u901F\u5EA6\u589E\u52A0120, \u50B7\u5BB3\u63D0\u53472"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 4
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -136,17 +144,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 5
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u9AD4\u7A4D\u589E\u592750%"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 5
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -168,17 +178,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 6
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u65CB\u8F49\u901F\u5EA6\u589E\u52A080, \u6301\u7E8C\u6642\u9593+0.6\u79D2"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 6
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -200,17 +212,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 7
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u9AD4\u7A4D\u589E\u592750%"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 7
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -232,17 +246,19 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 3
-    IsUpdateNow: 1
-    SkillLevel: 8
-    SkillName: "\u570D\u7E5E"
+  - SkillName: "\u570D\u7E5E"
     SkillIcon: {fileID: 21300000, guid: e066055707e67eb43ae91cc476e864ac, type: 3}
     SkillDescribe: "\u7403\u9AD4\u6578\u91CF+1"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 4
+    IsUpdateNow: 1
+    SkillLevel: 8
     SkillSpawnModeType: 3
     PrefabReference:
       m_AssetGUID: 1de93133c72ca7b4cb205a1cf7747bc0
@@ -264,8 +280,8 @@ MonoBehaviour:
     SpeedModifier: 0
     SpeedModifierTime: 0
     IsPassive: 0
-    PassiveType: 0
+    _passiveType: 0
     PassiveAddValue: 0
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0

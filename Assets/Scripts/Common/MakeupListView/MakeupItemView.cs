@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MakeupItemView : MonoBehaviour
 {
@@ -7,13 +8,16 @@ public class MakeupItemView : MonoBehaviour
     [SerializeField] private GameObject _addIcon;
     [SerializeField] private GameObject _equalIcon;
 
-    public void Setup(SkillItemData mainItem)
+    public void Setup(SkillItemData mainItem, List<SkillItemData> usingSkills)
     {
         List<SkillItemData> allItems = new();
 
         _makeupItemSample.gameObject.SetActive(false);
         _addIcon.SetActive(false);
         _equalIcon.SetActive(false);
+
+        // 讀取已獲取的技能清單
+        List<AcquiredSkillData> acquiredSkillData = PlayerPrefsManager.Instance.LoadAcquiredSkills();
 
         // 主動技能需求裝備
         foreach (var active in mainItem.NeedActiveSkills)
@@ -34,14 +38,17 @@ public class MakeupItemView : MonoBehaviour
         {
             int index = i;
 
+            bool isUsing = usingSkills.Any(x => x.SkillType == allItems[i].SkillType);
+
             GameObject obj = Instantiate(_makeupItemSample.gameObject, transform);
             obj.SetActive(true);
             if (obj.TryGetComponent(out MakeupItemSampleView makeItem))
             {
                 makeItem.Setup(
-                    icon: allItems[index].SkillIcon,
+                    icon: IsAcquired(allItems[index].SkillName) ? allItems[index].SkillIcon : null,
                     name: allItems[index].SkillName,
-                    level: allItems[index].SkillLevel);
+                    level: allItems[index].SkillLevel,
+                    isUsing: isUsing);
             }
 
             // 還有項目產生+, 最後一個產生=
@@ -60,10 +67,20 @@ public class MakeupItemView : MonoBehaviour
         mainObj.SetActive(true);
         if (mainObj.TryGetComponent(out MakeupItemSampleView mainMakeItem))
         {
+            bool isUsing = usingSkills.Any(x => x.SkillType == mainItem.SkillType);
+
             mainMakeItem.Setup(
-                icon: mainItem.SkillIcon,
+                icon: IsAcquired(mainItem.SkillName) ? mainItem.SkillIcon : null,
                 name: mainItem.SkillName,
-                level: mainItem.SkillLevel);
+                level: mainItem.SkillLevel,
+                isUsing: isUsing);
+        }
+
+
+        // 檢查獲取過狀態
+        bool IsAcquired(string skillName)
+        {
+            return acquiredSkillData.Any(x => x.SkillName == skillName);
         }
     }
 }

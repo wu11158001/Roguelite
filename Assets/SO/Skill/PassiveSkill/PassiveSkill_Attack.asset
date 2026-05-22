@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: PassiveSkill_Attack
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillType: 6
+  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA"
+    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+10"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
     SkillLevel: 1
-    SkillName: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA"
-    SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+10"
-    SkillAttackModeType: 0
+    SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
@@ -32,18 +35,27 @@ MonoBehaviour:
     SkillPenetrate: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 1
-    PassiveType: 0
+    _passiveType: 1
     PassiveAddValue: 10
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
-  - SkillType: 6
-    SkillLevel: 2
-    SkillName: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA"
+  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u653B\u64CA"
     SkillIcon: {fileID: 21300000, guid: 0c28b95a4fda31f42b5fe445bddb6ca2, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+10"
-    SkillAttackModeType: 0
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 2
+    SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
       m_SubObjectName: 
@@ -57,9 +69,15 @@ MonoBehaviour:
     SkillPenetrate: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
     IsPassive: 1
-    PassiveType: 0
+    _passiveType: 1
     PassiveAddValue: 10
     IsProps: 0
-    PropsSkillType: 0
+    _propsSkillType: 0
     PropsAddValue: 0
