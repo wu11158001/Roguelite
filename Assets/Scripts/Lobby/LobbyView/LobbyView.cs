@@ -31,6 +31,7 @@ public class LobbyView : BaseView
     [HorizontalLine(color: EColor.Gray)]
     [Header("LobbyView")]
     [SerializeField] private Button _btn_Start;
+    [SerializeField] private Button _btn_Makeup;
 
     private void Start()
     {
@@ -44,10 +45,11 @@ public class LobbyView : BaseView
                     gameObject.SetActive(false);
                 }).Forget();
         }).AddTo(this);
-    }
 
-    public override void Setup(AssetReferenceGameObject myRef)
-    {
-        base.Setup(myRef);
+        // 合成表按鈕
+        _btn_Makeup.OnClickAsObservable().Subscribe(_ =>
+        {
+            ViewManager.Instance.OpenView<MakeupListView>(viewType: VIEW_TYPE.MakeupListView).Forget();
+        }).AddTo(this);
     }
 }

@@ -14,10 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AllSkillConfigData
   AllSkillItemConfigs:
   - {fileID: 11400000, guid: 11805c78abecd3f4aa5d4233a89a7cca, type: 2}
-  - {fileID: 11400000, guid: f0f6fb051b2eeb0428b682bef5e86876, type: 2}
-  - {fileID: 11400000, guid: b8ae2d84b47c3d94d8d324d2221aae37, type: 2}
-  - {fileID: 11400000, guid: f3bf6372c64443d4289c5cfa25bd885c, type: 2}
   - {fileID: 11400000, guid: a0f40b5b18cbcca41b0b11ae80e95ef8, type: 2}
-  - {fileID: 11400000, guid: f27bb701bb4ed7b42b25c8172f7c5b1c, type: 2}
   - {fileID: 11400000, guid: 067a85895cd07d64f892366fe3dd9704, type: 2}
   - {fileID: 11400000, guid: 71600d8c5070b9240b339f4a76f63969, type: 2}

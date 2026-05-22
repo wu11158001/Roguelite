@@ -55,12 +55,8 @@ MonoBehaviour:
   - SkillName: "\u55AE\u9AD4\u653B\u64CA"
     SkillIcon: {fileID: 21300000, guid: 1970dc68a2da10245b2052ec5da46ac9, type: 3}
     SkillDescribe: "\u6280\u80FD\u6578\u91CF+1, \u50B7\u5BB3\u589E\u52A03"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 2
-    NeedPassiveSkills:
-    - Type: 7
-      Level: 2
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
     SkillType: 5
     IsUpdateNow: 0
     SkillLevel: 2

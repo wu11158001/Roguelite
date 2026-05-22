@@ -9,6 +9,7 @@ public enum VIEW_TYPE
 
     LobbyView = 100,
     SelectCharacterView,
+    MakeupListView,
 
     GameView = 200,
     JoystickView,

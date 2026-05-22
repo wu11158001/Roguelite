@@ -12,6 +12,13 @@ public class AllSkillConfigData : ScriptableObject
     [Label("技能項目配置")]
     [SerializeField] public List<SkillItemConfig> AllSkillItemConfigs;
 
+    private List<SkillItemData> _makeupItems;
+
+    private void OnEnable()
+    {
+        _makeupItems = new();
+    }
+
     /// <summary>
     /// 獲取主動技能
     /// </summary>
@@ -37,7 +44,7 @@ public class AllSkillConfigData : ScriptableObject
     /// <param name="skillType">技能類型</param>
     /// <param name="level">技能等級</param>
     /// <returns></returns>
-    public SkillItemData GetPassiveSkill(SKILL_TYPE skillType, int level)
+    public SkillItemData GetPassiveSkill(PASSIVE_SKILL_TYPE skillType, int level)
     {
         int index = Mathf.Max(0, level - 1);
 
@@ -45,7 +52,7 @@ public class AllSkillConfigData : ScriptableObject
             .Where(x => index < x.SkillItems.Count &&
                    x.SkillItems[index].IsPassive &&
                    !x.SkillItems[index].IsProps &&
-                   x.SkillItems[index].SkillType == skillType)
+                   x.SkillItems[index].PassiveType == skillType)
             .Select(x => x.SkillItems[index])
             .FirstOrDefault();
     }
@@ -55,7 +62,7 @@ public class AllSkillConfigData : ScriptableObject
     /// </summary>
     /// <param name="skillType">技能類型</param>
     /// <returns></returns>
-    public SkillItemData GetPropsSkill(SKILL_TYPE skillType)
+    public SkillItemData GetPropsSkill(PROPS_SKILL_TYPE skillType)
     {
         int index = 0;
 
@@ -63,8 +70,25 @@ public class AllSkillConfigData : ScriptableObject
             .Where(x => index < x.SkillItems.Count &&
                    !x.SkillItems[index].IsPassive &&
                    x.SkillItems[index].IsProps &&
-                   x.SkillItems[index].SkillType == skillType)
+                   x.SkillItems[index].PropsSkillType == skillType)
             .Select(x => x.SkillItems[index])
             .FirstOrDefault();
+    }
+
+    /// <summary>
+    /// 獲取可合成技能列表
+    /// </summary>
+    /// <returns></returns>
+    public List<SkillItemData> GetMakeupItems()
+    {
+        if (_makeupItems != null && _makeupItems.Count > 0) return _makeupItems;
+
+        _makeupItems = AllSkillItemConfigs
+             .SelectMany(config => config.SkillItems)
+             .Where(skill => !skill.IsProps &&
+                   (skill.NeedActiveSkills.Count > 0 || skill.NeedPassiveSkills.Count > 0))
+             .ToList();
+
+        return _makeupItems;
     }
 }
