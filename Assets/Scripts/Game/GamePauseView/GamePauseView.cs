@@ -13,11 +13,15 @@ public class GamePauseView : BaseView
     [SerializeField] private Button _btn_Makeup;
     [SerializeField] private Button _btn_Continue;
 
+    [SerializeField] AbilityView _abilityView;
+
     public override void Setup(AssetReferenceGameObject myRef)
     {
         base.Setup(myRef);
 
         BindViewModel();
+
+        _abilityView.Setup(GameStateData.SelectedCharacter.Value);
     }
 
     private void BindViewModel()

@@ -43,7 +43,7 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 9
-    PassiveAddValue: 0.5
+    PassiveAddValue: 50
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 9
-    PassiveAddValue: 0.5
+    PassiveAddValue: 50
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 9
-    PassiveAddValue: 0.5
+    PassiveAddValue: 50
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0

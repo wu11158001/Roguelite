@@ -22,8 +22,8 @@ public class AbilityItemView : MonoBehaviour
     /// 更新數值
     /// </summary>
     /// <param name="newValue"></param>
-    public void UpdateValue(float newValue)
+    public void UpdateValue(string newValue)
     {
-        Text_Value.text = newValue == 0 ? "-" : $"{newValue}";
+        Text_Value.text = newValue;
     }
 }

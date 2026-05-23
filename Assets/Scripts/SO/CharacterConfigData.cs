@@ -68,7 +68,7 @@ public class CharacterConfigData : ScriptableObject
     [HideInInspector] public ReactiveProperty<int> AddCriticalChance;
 
     [BoxGroup("角色可動態變更數值")]
-    [Label("爆擊攻擊力加乘(倍數)")]
+    [Label("爆擊攻擊力加乘((100 = 1倍))")]
     [SerializeField] private float _baseCriticalMultiplier = 2.0f;
     [HideInInspector] public ReactiveProperty<float> CriticalMultiplier;
 

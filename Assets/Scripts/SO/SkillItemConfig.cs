@@ -62,9 +62,9 @@ public enum PASSIVE_SKILL_TYPE
     CdReduce,
     /// <summary> 拾取範圍 </summary>
     PickupRange,
-    /// <summary> 爆擊機率 </summary>
+    /// <summary> 爆擊機率(%) </summary>
     CriticalChance,
-    /// <summary> 爆擊傷害加乘 </summary>
+    /// <summary> 爆擊傷害加乘(%) </summary>
     CriticalMultiplier,
     /// <summary> 投射物數量 </summary>
     ProjectileCount,
@@ -228,7 +228,7 @@ public class SkillItemData
     public int SkillCriticalChance;
 
     [AllowNesting]
-    [BoxGroup("主動技能數值")][Label("爆擊攻擊力加乘(倍數)")]
+    [BoxGroup("主動技能數值")][Label("爆擊攻擊力加乘(100 = 1倍)")]
     [ShowIf(nameof(_isShowSkill))]
     public int SkillCriticalMultiplier;
 

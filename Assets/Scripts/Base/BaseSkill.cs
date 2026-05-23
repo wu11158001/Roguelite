@@ -82,7 +82,7 @@ public class BaseSkill : BaseGameObject
         {
             float totalCriticalMultiplier = _data.SkillCriticalMultiplier + characterConfig.CriticalMultiplier.Value;
 
-            totalAttack = (int)(totalAttack * totalCriticalMultiplier);
+            totalAttack = (int)(totalAttack * (totalCriticalMultiplier / 100));
         }
 
         HitData hitData = new()

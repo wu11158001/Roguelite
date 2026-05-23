@@ -14,8 +14,8 @@ public struct AbilityConfigData
     public PASSIVE_SKILL_TYPE AbilityType;
     /// <summary> 能力值名稱 </summary>
     public string AbilityName;
-    /// <summary> 能力值名稱 </summary>
-    public float AbilityValue;
+    /// <summary> 能力值 </summary>
+    public string AbilityValue;
 }
 
 /// <summary>
@@ -68,7 +68,7 @@ public class AbilityView : MonoBehaviour
             GameObject obj = Instantiate(_itemSample.gameObject, _itemParent);
             obj.SetActive(true);
 
-            float abilityValue = GetAbilityValue(abilityConfig.AbilityType);
+            string abilityValue = GetAbilityValue(abilityConfig.AbilityType);
             AbilityConfigData abilityConfigData = new()
             {
                 AbilityIcon = abilityConfig.AbilityIcon,
@@ -91,7 +91,7 @@ public class AbilityView : MonoBehaviour
     {
         for (int i = 0; i < _abilityItems.Count; i++)
         {
-            float abilityValue = GetAbilityValue(_abilityItems[i].AbilityType);
+            string abilityValue = GetAbilityValue(_abilityItems[i].AbilityType);
             _abilityItems[i].UpdateValue(abilityValue);
         }
     }
@@ -101,58 +101,58 @@ public class AbilityView : MonoBehaviour
     /// </summary>
     /// <param name="abilityType"></param>
     /// <returns></returns>
-    private float GetAbilityValue(PASSIVE_SKILL_TYPE abilityType)
+    private string GetAbilityValue(PASSIVE_SKILL_TYPE abilityType)
     {
-        float abilityValue = 0;
+        string abilityValue = "";
 
         switch (abilityType)
         {
             case PASSIVE_SKILL_TYPE.Attack:
-                abilityValue = _characterConfigData.AddAttack.Value;
+                abilityValue = _characterConfigData.AddAttack.Value == 0 ? "-" : $"{_characterConfigData.AddAttack.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.MaxHp:
-                abilityValue = _characterConfigData.MaxHp.Value;
+                abilityValue = _characterConfigData.MaxHp.Value == 0 ? "-" : $"{_characterConfigData.MaxHp.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.MoveSpeed:
-                abilityValue = _characterConfigData.MoveSpeed.Value;
+                abilityValue = _characterConfigData.MoveSpeed.Value == 0 ? "-" : $"{_characterConfigData.MoveSpeed.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.Defense:
-                abilityValue = _characterConfigData.Defense.Value;
+                abilityValue = _characterConfigData.Defense.Value == 0 ? "-" : $"{_characterConfigData.Defense.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.LifeRecovery:
-                abilityValue = _characterConfigData.LifeRecovery.Value;
+                abilityValue = _characterConfigData.LifeRecovery.Value == 0 ? "-" : $"{_characterConfigData.LifeRecovery.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.CdReduce:
-                abilityValue = _characterConfigData.CdReduce.Value;
+                abilityValue = _characterConfigData.CdReduce.Value == 0 ? "-" : $"{_characterConfigData.CdReduce.Value}秒";
                 break;
 
             case PASSIVE_SKILL_TYPE.PickupRange:
-                abilityValue = _characterConfigData.PickupRange.Value;
+                abilityValue = _characterConfigData.PickupRange.Value == 0 ? "-" : $"{_characterConfigData.PickupRange.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.CriticalChance:
-                abilityValue = _characterConfigData.AddCriticalChance.Value;
+                abilityValue = _characterConfigData.AddCriticalChance.Value == 0 ? "-" : $"{_characterConfigData.AddCriticalChance.Value}%";
                 break;
 
             case PASSIVE_SKILL_TYPE.CriticalMultiplier:
-                abilityValue = _characterConfigData.CriticalMultiplier.Value;
+                abilityValue = _characterConfigData.CriticalMultiplier.Value == 0 ? "-" : $"{_characterConfigData.CriticalMultiplier.Value}%";
                 break;
 
             case PASSIVE_SKILL_TYPE.ProjectileCount:
-                abilityValue = _characterConfigData.AddProjectileCount.Value;
+                abilityValue = _characterConfigData.AddProjectileCount.Value == 0 ? "-" : $"{_characterConfigData.AddProjectileCount.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.EffectRange:
-                abilityValue = _characterConfigData.AddEffectRange.Value;
+                abilityValue = _characterConfigData.AddEffectRange.Value == 0 ? "-" : $"{_characterConfigData.AddEffectRange.Value}%";
                 break;
 
             case PASSIVE_SKILL_TYPE.KeepTime:
-                abilityValue = _characterConfigData.AddKeepTime.Value;
+                abilityValue = _characterConfigData.AddKeepTime.Value == 0 ? "-" : $"{_characterConfigData.AddKeepTime.Value}秒";
                 break;
         }
 

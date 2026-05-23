@@ -43,7 +43,7 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 8
-    PassiveAddValue: 50
+    PassiveAddValue: 5
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
