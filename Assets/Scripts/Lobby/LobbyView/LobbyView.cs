@@ -56,7 +56,17 @@ public class LobbyView : BaseView
         // 刪除資料按鈕
         _btn_DeleteData.OnClickAsObservable().Subscribe(_ =>
         {
-            PlayerPrefsManager.Instance.DeleteAllData();
+            ViewManager.Instance.OpenView<AskPopupView>(
+                viewType: VIEW_TYPE.AskPopupView,
+                callback: (view) =>
+                {
+                    view.SetContent(
+                        contentText: "是否移除所有資料!?",
+                        confirmAction: () =>
+                        {
+                            PlayerPrefsManager.Instance.DeleteAllData();
+                        });
+                }).Forget();
         }).AddTo(this);
     }
 }

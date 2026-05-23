@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using NaughtyAttributes;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 
 /// <summary>
 /// 介面物件
@@ -10,11 +11,21 @@ public abstract class BaseView : MonoBehaviour
 {
     [Header("BaseView")]
     public VIEW_TYPE ViewType;
+
     [HorizontalLine(color: EColor.Gray)]
     [Label("是否開啟遮罩")]
     [SerializeField] private bool _isUsingMask;
     [Label("遮罩是否可以點擊")]
-    [SerializeField] [ShowIf("_isUsingMask")] private bool _isCanClickMask;
+    [SerializeField] [ShowIf(nameof(_isUsingMask))] private bool _isCanClickMask;
+
+    [HorizontalLine(color: EColor.Gray)]
+    [Label("是否使用彈出效果")]
+    [SerializeField] private bool _isPopupEffect;
+    [Label("彈出效果物件")]
+    [SerializeField] [ShowIf(nameof(_isPopupEffect))] private RectTransform _popupObj;
+
+    /// <summary> 是否使用SetupAsync </summary>
+    public bool IsAsync => _isPopupEffect;
 
     protected CanvasGroup _canvasGroup;
 
@@ -42,6 +53,11 @@ public abstract class BaseView : MonoBehaviour
         _myRef = myRef;
 
         SetBackgroundMask().Forget();
+
+        if (_isPopupEffect)
+        {
+            DoPopupEffect();
+        }
     }
 
     /// <summary>
@@ -115,6 +131,23 @@ public abstract class BaseView : MonoBehaviour
     public virtual void OnClickMask()
     {
         Close();
+    }
+
+    #endregion
+
+    #region 彈出效果
+
+    /// <summary>
+    /// 執行彈出效果
+    /// </summary>
+    private void DoPopupEffect()
+    {
+        if (_isPopupEffect && _popupObj != null)
+        {
+            _popupObj.DOKill();
+            _popupObj.anchoredPosition = new(0, -1280);
+            _popupObj.DOAnchorPos(Vector2.zero, 0.5f).SetEase(Ease.OutBack).SetLink(gameObject);
+        }
     }
 
     #endregion

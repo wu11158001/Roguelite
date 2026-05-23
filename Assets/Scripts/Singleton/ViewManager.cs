@@ -14,7 +14,6 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     /// <param name="viewType"></param>
     /// <param name="isClosePreView">是否關閉前個介面</param>
     /// <param name="callback"></param>
-    /// <param name=""></param>
     /// <returns></returns>
     public async UniTask OpenView<T>(VIEW_TYPE viewType, bool isClosePreView = false, Action<T> callback = null) where T : BaseView
     {
@@ -37,7 +36,7 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
 
         obj.transform.SetAsLastSibling();
 
-        if(isClosePreView)
+        if(isClosePreView && _viewStack.Count > 0)
         {
             BaseView preView = _viewStack.Peek();
             if(preView != null)

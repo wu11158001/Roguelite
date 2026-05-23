@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 public enum VIEW_TYPE
 {
     BackgroundView = 0,
+    AskPopupView,
 
     LobbyView = 100,
     SelectCharacterView,
