@@ -7,7 +7,9 @@
     <title>Unity Web Player | {{{ PRODUCT_NAME }}}</title>
     <link rel="shortcut icon" href="TemplateData/Roguelite.png">
     <link rel="icon" type="image/png" href="TemplateData/Roguelite.png">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    
+    <link rel="stylesheet" href="TemplateData/style.css"> 
+
     <style>
       /* 強制讓網頁滿版且不出現捲軸 */
       html, body { 
@@ -21,23 +23,39 @@
         height: 100vh;
         width: 100vw;
       }
+      
       /* 容器與畫布填滿視窗 */
       #unity-container {
+        position: fixed;
         width: 100vw;
         height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
+        left: 0;
+        top: 0;
       }
 
+      /* 核心修正：加強權重，並確保寬高不會同時被硬塞 100% */
       #unity-canvas {
-          /* 自動根據比例縮放，且不超過視窗寬高 */
-          max-width: 100%;
-          max-height: 100%;
-          aspect-ratio: 16 / 9; 
-          object-fit: contain; /* 確保內容在容器內保持比例 */
+          width: 100% !important;
+          height: auto !important; /* 讓高度由 aspect-ratio 自動計算，不可設為 100% */
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          aspect-ratio: 16 / 9 !important; 
+          object-fit: contain !important; /* 確保內容在容器內保持比例 */
           background: #000;
       }
+
+      /* 行動端的 Canvas 也要套用一模一樣的比例邏輯 */
+      #unity-container.unity-mobile #unity-canvas {
+          width: 100% !important;
+          height: auto !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          aspect-ratio: 16 / 9 !important;
+      }
+
       /* 隱藏底部的工具欄 (包含按鈕與標題) */
       #unity-footer { display: none !important; }
       
@@ -48,6 +66,7 @@
         top: 50%; 
         transform: translate(-50%, -50%); 
         display: none;
+        z-index: 10;
       }
     </style>
   </head>
@@ -116,9 +135,10 @@
         document.querySelector("#unity-container").className = "unity-mobile";
         canvas.className = "unity-mobile";
       } else {
-        // 桌面端同樣保持滿版，不設固定寬高
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
+        // 核心修正：移除會破壞 aspect-ratio 的 style.height = "100%"
+        // 清空內聯樣式，改由上面 CSS 的 !important 規則全權接管
+        canvas.style.width = "";
+        canvas.style.height = "";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
@@ -131,7 +151,6 @@
         }).then((unityInstance) => {
           window.unityInstance = unityInstance;
           document.querySelector("#unity-loading-bar").style.display = "none";
-          // 全螢幕按鈕相關邏輯已移除，避免報錯
         }).catch((message) => {
           alert(message);
         });
