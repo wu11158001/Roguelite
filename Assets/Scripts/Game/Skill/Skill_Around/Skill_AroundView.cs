@@ -90,7 +90,7 @@ public class Skill_AroundView : BaseSkill
             Vector3 localPos = GetInitialLocalPosition(index, _data.SkillShotCount);
 
             GameStateData.GameScenePool.Value.SpawnObject(
-            parentName: "Skill_Around_AttackObj",
+            parentName: "圍繞球體",
             assetRef: _attackObj,
             position: transform.position,
             rotation: Quaternion.identity,

@@ -38,7 +38,9 @@ public enum SKILL_SPAWN_MODEL_TYPE
     /// <summary> 在攝影機視野內隨機敵人, 在角色底部 </summary>
     RandomEnemyInBottom,
     /// <summary> 產生在物件池內 </summary>
-    InPool,
+    InPoolAndOnly,
+    /// <summary> 產生在角色底部 </summary>
+    InCharacterBottom,
 }
 
 /// <summary>

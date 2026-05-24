@@ -46,12 +46,12 @@ public class SkillSpawner
                    spawnAction: () => SpawnSkillRandomInPoint(skill)));
                 break;
 
-            // 產生在物件池內
-            case SKILL_SPAWN_MODEL_TYPE.InPool:
+            // 產生在物件池內與場上唯一
+            case SKILL_SPAWN_MODEL_TYPE.InPoolAndOnly:
                 HandleOnlySkillRecycle(skill);
                 _coroutineRunner.StartCoroutine(IShotSkill(
                     skillData: skill, 
-                    spawnAction: () => SpawnInPool(skill),
+                    spawnAction: () => SpawnInPoolAndOnly(skill),
                     onlySelf: true));
                 break;
 
@@ -148,6 +148,25 @@ public class SkillSpawner
     /// <param name="data"></param>
     public async void SpawnInCharacterBottomPoint(SkillItemData data)
     {
+        // 防呆：如果因為非同步時間差，字典裡已經有相同 Key，直接先回收它，避免重複
+        if (_onlySkills.ContainsKey(data.SkillName))
+        {
+            if (_onlySkills[data.SkillName].Obj != null &&
+                _onlySkills[data.SkillName].Obj.TryGetComponent(out BaseSkill oldSkill))
+            {
+                oldSkill.Recycle();
+            }
+            _onlySkills.Remove(data.SkillName);
+        }
+
+        // 佔位子：先放一個 Null Obj 進去，防止下一個非同步請求重複執行 Add
+        OnlySkillData placeholderData = new()
+        {
+            Level = data.SkillLevel,
+            Obj = null
+        };
+        _onlySkills.Add(data.SkillName, placeholderData);
+
         PlayerView playerView = GameStateData.ControlCharacter.Value;
         Transform auraPoint = playerView.BottomPoint;
 
@@ -186,10 +205,10 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 產生技能_物件持
+    /// 產生技能_物件持與唯一
     /// </summary>
     /// <param name="data"></param>
-    private void SpawnInPool(SkillItemData data)
+    private void SpawnInPoolAndOnly(SkillItemData data)
     {
         // 防呆：如果因為非同步時間差，字典裡已經有相同 Key，直接先回收它，避免重複
         if (_onlySkills.ContainsKey(data.SkillName))
