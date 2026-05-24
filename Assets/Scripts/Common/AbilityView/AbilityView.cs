@@ -128,8 +128,8 @@ public class AbilityView : MonoBehaviour
                 abilityValue = _characterConfigData.Defense.Value == 0 ? "-" : $"{_characterConfigData.Defense.Value}";
                 break;
 
-            case PASSIVE_SKILL_TYPE.LifeRecovery:
-                abilityValue = _characterConfigData.LifeRecovery.Value == 0 ? "-" : $"{_characterConfigData.LifeRecovery.Value}";
+            case PASSIVE_SKILL_TYPE.HpRecover:
+                abilityValue = _characterConfigData.HpRecover.Value == 0 ? "-" : $"{_characterConfigData.HpRecover.Value}";
                 break;
 
             case PASSIVE_SKILL_TYPE.CdReduce:

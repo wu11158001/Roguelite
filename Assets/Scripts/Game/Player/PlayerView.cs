@@ -115,6 +115,7 @@ public class PlayerView : BaseGameObject
 
         Init();
         BindViewModel();
+        StartCoroutine(IHpRecoverRoutine());
     }
 
     private void Init()
@@ -274,6 +275,19 @@ public class PlayerView : BaseGameObject
             renderer.GetPropertyBlock(_propBlock);
             _propBlock.Clear();
             renderer.SetPropertyBlock(_propBlock);
+        }
+    }
+
+    /// <summary>
+    /// 每秒生命回復
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator IHpRecoverRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1.0f);
+            _viewModel.HpRecoverPreSecond();
         }
     }
 

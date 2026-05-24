@@ -167,8 +167,8 @@ public class SkillController : MonoBehaviour
                     break;
 
                 // 每秒生命回復
-                case PASSIVE_SKILL_TYPE.LifeRecovery:
-                    characterConfig.LifeRecovery.Value += (int)data.PassiveAddValue;
+                case PASSIVE_SKILL_TYPE.HpRecover:
+                    characterConfig.HpRecover.Value += data.PassiveAddValue;
                     break;
 
                 // 技能CD時間減少(秒)

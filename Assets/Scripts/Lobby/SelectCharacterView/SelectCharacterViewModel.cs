@@ -102,8 +102,8 @@ public class SelectCharacterViewModel
                     character.Defense.Value += (int)upgradeValue;
                     break;
 
-                case PASSIVE_SKILL_TYPE.LifeRecovery:
-                    character.LifeRecovery.Value += (int)upgradeValue;
+                case PASSIVE_SKILL_TYPE.HpRecover:
+                    character.HpRecover.Value += upgradeValue;
                     break;
 
                 case PASSIVE_SKILL_TYPE.CdReduce:

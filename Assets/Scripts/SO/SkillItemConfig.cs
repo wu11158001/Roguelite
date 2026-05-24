@@ -63,7 +63,7 @@ public enum PASSIVE_SKILL_TYPE
     /// <summary> 傷害減少 </summary>
     Defense,
     /// <summary> 每秒生命回復 </summary>
-    LifeRecovery,
+    HpRecover,
     /// <summary> 技能CD時間減少(秒) </summary>
     CdReduce,
     /// <summary> 拾取範圍 </summary>

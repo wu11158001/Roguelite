@@ -12,6 +12,9 @@ public class PlayerViewModel
     // 轉向靈敏度
     public float RotationSpeed { get; private set; }
 
+    // 累積的生命回復
+    private float _accumulatedHp;
+
     protected CharacterConfigData _selectedCharacter;
 
     // 用來收集所有訂閱的容器
@@ -54,6 +57,29 @@ public class PlayerViewModel
     public void GainExp(EXP_TYPE expType)
     {
         GameStateData.CharacterController.Value.OnGainExp(expType: expType);
+    }
+
+    /// <summary>
+    /// 每秒生命回復
+    /// </summary>
+    public void HpRecoverPreSecond()
+    {
+        if(GameStateData.SelectedCharacter.Value.HpRecover.Value > 0)
+        {
+            _accumulatedHp += GameStateData.SelectedCharacter.Value.HpRecover.Value;
+
+            if(_accumulatedHp >= 1)
+            {
+                int maxHp = GameStateData.SelectedCharacter.Value.MaxHp.Value;
+                int currentHp = GameStateData.SelectedCharacter.Value.Hp.Value;
+
+                int hpToAdd = Mathf.FloorToInt(_accumulatedHp);
+                currentHp = Mathf.Min(currentHp + hpToAdd, maxHp);
+                _accumulatedHp -= hpToAdd;
+
+                GameStateData.SelectedCharacter.Value.Hp.Value = currentHp;
+            }
+        }
     }
 
     /// <summary>

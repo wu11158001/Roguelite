@@ -49,8 +49,8 @@ public class CharacterConfigData : ScriptableObject
 
     [BoxGroup("角色可動態變更數值")]
     [Label("每秒生命回復")]
-    [SerializeField] private int _baseLifeRecovery = 0;
-    [HideInInspector] public ReactiveProperty<int> LifeRecovery;
+    [SerializeField] private float _baseLifeRecover = 0;
+    [HideInInspector] public ReactiveProperty<float> HpRecover;
 
     [BoxGroup("角色可動態變更數值")]
     [Label("技能CD時間減少(秒)")]
@@ -96,7 +96,7 @@ public class CharacterConfigData : ScriptableObject
         AddAttack = new ReactiveProperty<int>(_baseAddAttack);
         MaxHp = new ReactiveProperty<int>(_baseMaxHp);
         Defense = new ReactiveProperty<int>(_baseDefense);
-        LifeRecovery = new ReactiveProperty<int>(_baseLifeRecovery);
+        HpRecover = new ReactiveProperty<float>(_baseLifeRecover);
         CdReduce = new ReactiveProperty<float>(_baseCdReduce);
         PickupRange = new ReactiveProperty<float>(_basePickupRange);
         AddCriticalChance = new ReactiveProperty<int>(_baseAddCriticalChance);
