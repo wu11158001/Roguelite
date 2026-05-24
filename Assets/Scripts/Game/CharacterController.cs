@@ -32,6 +32,21 @@ public class CharacterController : MonoBehaviour
             .ToReadOnlyReactiveProperty();
     }
 
+    /// <summary>
+    /// 角色受到傷害
+    /// </summary>
+    public void OnPlayerGetHit(int attack)
+    {
+        CharacterConfigData characterConfigData = GameStateData.SelectedCharacter.Value;
+
+        // 計算減少傷害
+        int defance = characterConfigData.Defense.Value;
+        int lostHp = Mathf.Max(0, attack - defance);
+        int currentHp = characterConfigData.Hp.Value;
+
+        characterConfigData.Hp.Value = Mathf.Max(0, currentHp - lostHp);
+    }
+
     #region 經驗值 / 等級
 
     /// <summary>

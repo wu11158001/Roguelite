@@ -308,7 +308,7 @@ public class PlayerView : BaseGameObject
 
         if(Keyboard.current.numpad4Key.wasPressedThisFrame)
         {
-            _characterConfig.Hp.Value -= 10;
+            GameStateData.CharacterController.Value.OnPlayerGetHit(10);
         }
 
         if (Keyboard.current.numpad5Key.wasPressedThisFrame)
