@@ -174,18 +174,6 @@ public class PlayerView : BaseGameObject
               int previousHp = pair.Previous;
               int currentHp = pair.Current;
 
-              // 最大生命限制
-              if (currentHp >= _characterConfig.MaxHp.Value)
-              {
-                  _characterConfig.Hp.Value = _characterConfig.MaxHp.Value;
-                  currentHp = _characterConfig.Hp.Value;
-              }
-              else if(currentHp <= 0)
-              {
-                  _characterConfig.Hp.Value = 0;
-                  currentHp = 0;
-              }
-
               // 回復生命
               if (currentHp > previousHp)
               {
@@ -313,7 +301,7 @@ public class PlayerView : BaseGameObject
 
         if (Keyboard.current.numpad5Key.wasPressedThisFrame)
         {
-            _characterConfig.Hp.Value += 10;
+            GameStateData.CharacterController.Value.OnPlayerHpRecover(10);
         }
     }
 

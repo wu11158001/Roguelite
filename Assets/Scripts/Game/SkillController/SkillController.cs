@@ -222,9 +222,9 @@ public class SkillController : MonoBehaviour
             switch (data.PropsSkillType)
             {
                 // 生命回復(%)
-                case PROPS_SKILL_TYPE.HpRecovery:
+                case PROPS_SKILL_TYPE.HpRecover:
                     int addValue = (int)(characterConfig.MaxHp.Value * data.PropsAddValue);
-                    characterConfig.Hp.Value = Mathf.Min(characterConfig.MaxHp.Value, characterConfig.Hp.Value + addValue);
+                    GameStateData.CharacterController.Value.OnPlayerHpRecover(addValue);
                     break;
             }
 

@@ -70,14 +70,10 @@ public class PlayerViewModel
 
             if(_accumulatedHp >= 1)
             {
-                int maxHp = GameStateData.SelectedCharacter.Value.MaxHp.Value;
-                int currentHp = GameStateData.SelectedCharacter.Value.Hp.Value;
-
                 int hpToAdd = Mathf.FloorToInt(_accumulatedHp);
-                currentHp = Mathf.Min(currentHp + hpToAdd, maxHp);
                 _accumulatedHp -= hpToAdd;
 
-                GameStateData.SelectedCharacter.Value.Hp.Value = currentHp;
+                GameStateData.CharacterController.Value.OnPlayerHpRecover(hpToAdd);
             }
         }
     }

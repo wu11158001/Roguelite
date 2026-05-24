@@ -32,9 +32,27 @@ public class CharacterController : MonoBehaviour
             .ToReadOnlyReactiveProperty();
     }
 
+    #region HP
+
+    /// <summary>
+    /// 角色回復HP
+    /// </summary>
+    /// <param name="recover"></param>
+    public void OnPlayerHpRecover(float recover)
+    {
+        int maxHp = GameStateData.SelectedCharacter.Value.MaxHp.Value;
+        int currentHp = GameStateData.SelectedCharacter.Value.Hp.Value;
+
+        int hpToAdd = Mathf.FloorToInt(recover);
+        currentHp = Mathf.Min(currentHp + hpToAdd, maxHp);
+
+        GameStateData.SelectedCharacter.Value.Hp.Value = currentHp;
+    }
+
     /// <summary>
     /// 角色受到傷害
     /// </summary>
+    /// <param name="attack">攻擊值</param>
     public void OnPlayerGetHit(int attack)
     {
         CharacterConfigData characterConfigData = GameStateData.SelectedCharacter.Value;
@@ -46,6 +64,8 @@ public class CharacterController : MonoBehaviour
 
         characterConfigData.Hp.Value = Mathf.Max(0, currentHp - lostHp);
     }
+
+    #endregion
 
     #region 經驗值 / 等級
 

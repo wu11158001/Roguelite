@@ -88,7 +88,7 @@ public enum PROPS_SKILL_TYPE
     None,
 
     /// <summary> 生命回復(%) </summary>
-    HpRecovery,
+    HpRecover,
 }
 
 #region 技能組合
