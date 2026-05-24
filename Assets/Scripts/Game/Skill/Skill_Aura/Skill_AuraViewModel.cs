@@ -41,15 +41,14 @@ public class Skill_AuraViewModel
     /// 攻擊敵人
     /// </summary>
     /// <param name="enemyObj"></param>
-    /// <param name="calculateAttackFunc"></param>
-    public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
+    /// <param name="hitData"></param>
+    public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if (enemyObj == null || !enemyObj.activeInHierarchy)
         {
             return;
         }
 
-        HitData hitData = calculateAttackFunc.Invoke();
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
     }

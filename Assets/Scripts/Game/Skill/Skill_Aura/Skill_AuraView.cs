@@ -1,6 +1,5 @@
 using UnityEngine;
 using UniRx;
-using System;
 using System.Collections.Generic;
 
 public class Skill_AuraView : BaseSkill
@@ -64,7 +63,7 @@ public class Skill_AuraView : BaseSkill
             GameObject enemy = CurrentInAreaEnemies[i];
             if (enemy != null && enemy.activeInHierarchy)
             {
-                _viewModel.HitEnemy(enemy, CalculateAttack);
+                _viewModel.HitEnemy(enemy, CalculateAttack());
             }
             else
             {

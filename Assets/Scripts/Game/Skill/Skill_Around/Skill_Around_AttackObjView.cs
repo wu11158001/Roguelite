@@ -3,15 +3,13 @@ using UnityEngine;
 
 public class Skill_Around_AttackObjView : BaseSkill
 {
-    private Quaternion _initRotate;
-    
     private Skill_Around_AttackObjViewModel _viewModel;
 
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
 
-        _viewModel = new Skill_Around_AttackObjViewModel(data);
+        _viewModel = new();
     }
 
     public void SetData(IReadOnlyReactiveProperty<Quaternion> parentRotate)
@@ -28,7 +26,7 @@ public class Skill_Around_AttackObjView : BaseSkill
     {
         if (other.gameObject.layer == _targetLayer)
         {
-            _viewModel.HitEnemy(other.gameObject, CalculateAttack);
+            _viewModel.HitEnemy(other.gameObject, CalculateAttack());
         }
     }
 }

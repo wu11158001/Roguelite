@@ -118,7 +118,7 @@ public class SkillController : MonoBehaviour
             // 靈氣光環特殊，不啟動Timer
             if (skill.SkillType == SKILL_TYPE.Skill_Aura)
             {
-                _spawner.SpawnInCharacterBottomPoint(skill); 
+                _spawner.InCharacterBottomAndOnly(skill); 
                 return;
             }
             _timerManager.StartSkillTimer(skill);

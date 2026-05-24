@@ -14,12 +14,8 @@ public class Skill_Around_AttackObjViewModel : IDisposable
     private float _lastAngle = -1f;
     private bool _isFirstFrame = true;
 
-    private SkillItemData _data;
-
-    public Skill_Around_AttackObjViewModel(SkillItemData data)
+    public Skill_Around_AttackObjViewModel()
     {
-        _data = data;
-
         ClearHitEnemy();
     }
 
@@ -83,8 +79,9 @@ public class Skill_Around_AttackObjViewModel : IDisposable
     /// <summary>
     /// 擊中敵人
     /// </summary>
-    /// <param name="enemyObj">敵人物件</param>
-    public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
+    /// <param name="enemyObj"></param>
+    /// <param name="hitData"></param>
+    public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if(enemyObj == null || !enemyObj.activeInHierarchy)
         {
@@ -98,7 +95,6 @@ public class Skill_Around_AttackObjViewModel : IDisposable
         }
 
         // 攻擊敵人
-        HitData hitData = calculateAttackFunc.Invoke();
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
 

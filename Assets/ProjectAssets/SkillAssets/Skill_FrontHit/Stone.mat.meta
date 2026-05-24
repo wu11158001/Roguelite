@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 616a777eb757ff14c82a79feeb35d9b1
+guid: 5e01cbbef75a454468e5eb490ac64181
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000
@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 247933
   packageName: Magic Effects FREE
   packageVersion: 1.6
-  assetPath: Assets/ProjectAssets/SkillAssets/Skill_SingleHit/Smoke26.mat
+  assetPath: Assets/ProjectAssets/SkillAssets/Skill_FrontHit/Stone.mat
   uploadId: 762116

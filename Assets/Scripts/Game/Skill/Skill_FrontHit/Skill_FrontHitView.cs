@@ -1,40 +1,37 @@
 using UnityEngine;
 using UniRx;
 
-public class Skill_RangeSlowView : BaseSkill
+/// <summary>
+/// 技能_前方打擊
+/// </summary>
+public class Skill_FrontHitView : BaseSkill
 {
-    private Collider _collider;
+    private bool _isCanHit;
 
-    private Skill_RangeSlowViewModel _viewModel;
-
-    private void Start()
-    {
-        _collider = GetComponent<Collider>();
-    }
+    private Skill_FrontHitViewModel _viewModel;
 
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
-        base.Setup(data);
+        base.Setup(data, targetEnemy);
 
         _viewModel = new(data);
 
-        _collider.enabled = true;
         BindViewModel();
+        _isCanHit = true;
 
-        Invoke(nameof(CloseColliderEnable), 0.1f);
-        Invoke(nameof(Recycle), 2);
+        Invoke(nameof(HitOver), 0.3f);
+        Invoke(nameof(Recycle), 1.0f);
     }
 
     private void BindViewModel()
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
-
         characterConfig.AddEffectRange.Subscribe(r => UpdataEffecrRange(r)).AddTo(this);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_viewModel == null) return;
+        if (!_isCanHit) return;
 
         if (other.gameObject.layer == _targetLayer)
         {
@@ -43,12 +40,11 @@ public class Skill_RangeSlowView : BaseSkill
     }
 
     /// <summary>
-    /// 關閉碰撞框激活狀態
+    /// 結束打擊
     /// </summary>
-    /// <param name="isEnable"></param>
-    private void CloseColliderEnable()
+    private void HitOver()
     {
-        _collider.enabled = false;
+        _isCanHit = false;
     }
 
     /// <summary>

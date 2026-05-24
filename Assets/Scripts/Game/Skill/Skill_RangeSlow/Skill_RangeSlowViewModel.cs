@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Skill_RangeSlowViewModel
@@ -16,15 +15,14 @@ public class Skill_RangeSlowViewModel
     /// 攻擊敵人
     /// </summary>
     /// <param name="enemyObj"></param>
-    /// <param name="calculateAttackFunc"></param>
-    public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
+    /// <param name="hitData"></param>
+    public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if (enemyObj == null || !enemyObj.activeInHierarchy)
         {
             return;
         }
 
-        HitData hitData = calculateAttackFunc.Invoke();
         hitData.SpeedModifier = 1 - (1 * _data.SpeedModifier);
         hitData.SpeedModifierTime = _data.SpeedModifierTime;
 

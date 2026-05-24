@@ -36,14 +36,14 @@ public class SkillSpawner
             case SKILL_SPAWN_MODEL_TYPE.InPoint:
                 _coroutineRunner.StartCoroutine(IShotSkill(
                     skillData: skill,
-                    spawnAction: () => SpawnSkillInPoint(skill)));
+                    spawnAction: (index) => SpawnSkillInPoint(skill)));
                 break;
 
             // 產生在角色發射點周圍隨機位置
             case SKILL_SPAWN_MODEL_TYPE.InPointRandom:
                 _coroutineRunner.StartCoroutine(IShotSkill(
                    skillData: skill, 
-                   spawnAction: () => SpawnSkillRandomInPoint(skill)));
+                   spawnAction: (index) => SpawnSkillRandomInPoint(skill)));
                 break;
 
             // 產生在物件池內與場上唯一
@@ -51,7 +51,7 @@ public class SkillSpawner
                 HandleOnlySkillRecycle(skill);
                 _coroutineRunner.StartCoroutine(IShotSkill(
                     skillData: skill, 
-                    spawnAction: () => SpawnInPoolAndOnly(skill),
+                    spawnAction: (index) => SpawnInPoolAndOnly(skill),
                     onlySelf: true));
                 break;
 
@@ -59,7 +59,14 @@ public class SkillSpawner
             case SKILL_SPAWN_MODEL_TYPE.RandomEnemyInBottom:
                 _coroutineRunner.StartCoroutine(IShotSkill(
                     skillData: skill,
-                    spawnAction: () => SpawnInRandomEnemy(skill, true)));
+                    spawnAction: (index) => SpawnInRandomEnemy(skill, true)));
+                break;
+
+            // 產生在角色中間與八方向輪替
+            case SKILL_SPAWN_MODEL_TYPE.InCharacterMiddle8Way:
+                _coroutineRunner.StartCoroutine(IShotSkill(
+                    skillData: skill,
+                    spawnAction: (index) => SpawnInCharacterMiddle8Way(skill, index)));
                 break;
         }
     }
@@ -71,14 +78,15 @@ public class SkillSpawner
     /// <param name="spawnAction"></param>
     /// <param name="onlySelf"></param>
     /// <returns></returns>
-    private IEnumerator IShotSkill(SkillItemData skillData, Action spawnAction, bool onlySelf = false)
+    private IEnumerator IShotSkill(SkillItemData skillData, Action<int> spawnAction, bool onlySelf = false)
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
         int shotCount = onlySelf ? 1 : skillData.SkillShotCount + characterConfig.AddProjectileCount.Value;
 
         for (int i = 0; i < shotCount; i++)
         {
-            spawnAction?.Invoke();
+            int index = i;
+            spawnAction?.Invoke(index);
             if (shotCount > 1 && i < shotCount - 1)
             {
                 yield return new WaitForSeconds(skillData.SkillShotInterval);
@@ -143,10 +151,10 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 產生技能_角色底部位置點
+    /// 產生技能_角色底部且唯一
     /// </summary>
     /// <param name="data"></param>
-    public async void SpawnInCharacterBottomPoint(SkillItemData data)
+    public async void InCharacterBottomAndOnly(SkillItemData data)
     {
         // 防呆：如果因為非同步時間差，字典裡已經有相同 Key，直接先回收它，避免重複
         if (_onlySkills.ContainsKey(data.SkillName))
@@ -168,14 +176,14 @@ public class SkillSpawner
         _onlySkills.Add(data.SkillName, placeholderData);
 
         PlayerView playerView = GameStateData.ControlCharacter.Value;
-        Transform auraPoint = playerView.BottomPoint;
+        Transform bottomPoint = playerView.BottomPoint;
 
         try
         {
             AsyncOperationHandle<GameObject> handle = data.PrefabReference.InstantiateAsync(
-                position: auraPoint.position,
+                position: bottomPoint.position,
                 rotation: Quaternion.identity,
-                parent: auraPoint);
+                parent: bottomPoint);
 
             await handle.Task;
 
@@ -200,12 +208,12 @@ public class SkillSpawner
         }
         catch (Exception e)
         {
-            Debug.LogError($"產生技能_角色靈氣點 錯誤! : {e}");
+            Debug.LogError($"產生技能_角色底部且唯一 錯誤! : {e}");
         }
     }
 
     /// <summary>
-    /// 產生技能_物件持與唯一
+    /// 產生技能_物件持且唯一
     /// </summary>
     /// <param name="data"></param>
     private void SpawnInPoolAndOnly(SkillItemData data)
@@ -292,6 +300,48 @@ public class SkillSpawner
                 }
             });
     }
+
+    /// <summary>
+    /// 產生在角色中間與八方向輪替
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="index"></param>
+    private void SpawnInCharacterMiddle8Way(SkillItemData data, int index)
+    {
+        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        Transform middlePoint = playerView.MiddlePoint;
+
+        // 技能方向
+        Vector3[] relativeAngles = new Vector3[]
+        {
+            Vector3.zero,
+            new Vector3(0, 180, 0),
+            new Vector3(0, -90, 0),
+            new Vector3(0, 90, 0),
+            new Vector3(0, 45, 0),
+            new Vector3(0, -45, 0),
+            new Vector3(0, -225, 0),
+            new Vector3(0, 225, 0),
+        };
+        Quaternion quaternion = middlePoint.rotation * Quaternion.Euler(relativeAngles[index % 8]);
+
+        // 產生技能
+        GameStateData.GameScenePool.Value.SpawnObject(
+            parentName: data.SkillName,
+            assetRef: data.PrefabReference,
+            position: middlePoint.position,
+            rotation: quaternion,
+            callback: (obj) =>
+            {
+                obj.transform.SetParent(middlePoint);
+                if (obj.TryGetComponent(out BaseSkill skill))
+                {
+                    skill.Setup(data: data);
+                }
+            });
+    }
+
+    #region 功能類
 
     /// <summary>
     /// 處理單一技能回收(場上只會存在一個)
@@ -408,4 +458,6 @@ public class SkillSpawner
         }
         return nearestTarget;
     }
+
+    #endregion
 }

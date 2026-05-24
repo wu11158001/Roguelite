@@ -93,8 +93,9 @@ public class Skill_TrackingViewModel: IDisposable
     /// <summary>
     /// 擊中敵人
     /// </summary>
-    /// <param name="enemyObj">敵人物件</param>
-    public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
+    /// <param name="enemyObj"></param>
+    /// <param name="hitData"></param>
+    public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if(_isExpired.Value || _hitTargets.Contains(enemyObj))
         {
@@ -114,7 +115,6 @@ public class Skill_TrackingViewModel: IDisposable
         _target = null;
 
         // 攻擊敵人
-        HitData hitData = calculateAttackFunc.Invoke();
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
 

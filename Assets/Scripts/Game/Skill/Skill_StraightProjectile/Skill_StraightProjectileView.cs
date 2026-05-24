@@ -1,7 +1,6 @@
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
-using System.Collections.Generic;
 
 /// <summary>
 /// 技能_直線投射物
@@ -37,7 +36,7 @@ public class Skill_StraightProjectileView : BaseSkill
     {
         if (other.gameObject.layer == _targetLayer)
         {
-            _viewModel.HitEnemy(other.gameObject, CalculateAttack);
+            _viewModel.HitEnemy(other.gameObject, CalculateAttack());
         }
     }
 }

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
-using System.Collections.Generic;
 
 /// <summary>
 /// 技能_追蹤彈
@@ -41,7 +40,7 @@ public class Skill_TrackingView : BaseSkill
     {
         if (other.gameObject.layer == _targetLayer)
         {
-            _viewModel.HitEnemy(other.gameObject, CalculateAttack);
+            _viewModel.HitEnemy(other.gameObject, CalculateAttack()); ;
         }
     }
 }

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Skill_SingleHitView : BaseSkill
 {
     private Skill_SingleHitViewModel _viewModel;
@@ -9,7 +7,7 @@ public class Skill_SingleHitView : BaseSkill
         base.Setup(data, targetEnemy);
 
         _viewModel = new();
-        _viewModel.HitEnemy(targetEnemy, CalculateAttack);
+        _viewModel.HitEnemy(targetEnemy, CalculateAttack());
 
         Invoke(nameof(Recycle), 1);
     }

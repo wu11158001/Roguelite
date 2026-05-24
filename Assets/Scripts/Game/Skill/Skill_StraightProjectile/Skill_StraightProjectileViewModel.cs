@@ -1,6 +1,5 @@
 using UnityEngine;
 using UniRx;
-using UniRx.Triggers;
 using System.Collections.Generic;
 using System;
 
@@ -58,8 +57,9 @@ public class Skill_StraightProjectileViewModel: IDisposable
     /// <summary>
     /// 擊中敵人
     /// </summary>
-    /// <param name="enemyObj">敵人物件</param>
-    public void HitEnemy(GameObject enemyObj, Func<HitData> calculateAttackFunc)
+    /// <param name="enemyObj"></param>
+    /// <param name="enemyObj"></param>
+    public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if (_isExpired.Value || _hitTargets.Contains(enemyObj))
         {
@@ -75,7 +75,6 @@ public class Skill_StraightProjectileViewModel: IDisposable
         _penetrate--;
 
         // 攻擊敵人
-        HitData hitData = calculateAttackFunc.Invoke();
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
 

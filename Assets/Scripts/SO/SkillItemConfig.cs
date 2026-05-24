@@ -24,6 +24,8 @@ public enum SKILL_TYPE
     Skill_RangeSlow,
     /// <summary> 精準單一攻擊 </summary>
     Skill_SingleHit,
+    /// <summary> 前方打擊 </summary>
+    Skill_FrontHit,
 }
 
 /// <summary>
@@ -37,10 +39,12 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InPointRandom,
     /// <summary> 在攝影機視野內隨機敵人, 在角色底部 </summary>
     RandomEnemyInBottom,
-    /// <summary> 產生在物件池內 </summary>
+    /// <summary> 產生在物件池內且唯一 </summary>
     InPoolAndOnly,
-    /// <summary> 產生在角色底部 </summary>
-    InCharacterBottom,
+    /// <summary> 產生在角色底部且唯一 </summary>
+    InCharacterBottomAndOnly,
+    /// <summary> 產生在角色中間與八方向輪替 </summary>
+    InCharacterMiddle8Way,
 }
 
 /// <summary>
