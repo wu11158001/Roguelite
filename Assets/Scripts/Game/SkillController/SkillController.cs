@@ -188,7 +188,7 @@ public class SkillController : MonoBehaviour
 
                 // 爆擊傷害加乘
                 case PASSIVE_SKILL_TYPE.CriticalMultiplier:
-                    characterConfig.CriticalMultiplier.Value += data.PassiveAddValue;
+                    characterConfig.CriticalMultiplier.Value += (int)data.PassiveAddValue;
                     break;
 
                 // 投射物數量

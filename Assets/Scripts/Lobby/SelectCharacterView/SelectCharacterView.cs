@@ -67,10 +67,13 @@ public class SelectCharacterView : BaseView
             .Where(data => data != null)
             .Subscribe(data =>
             {
+                CharacterConfigData characterConfigData = data.Clone();
+                GameStateData.SelectedCharacter.Value = _viewModel.SetCharacterAbility(characterConfigData);
+
                 // 角色名稱
                 Text_CharacterName.text = data.CharacterName;
                 // 各項能力值
-                _abilityView.Setup(data);
+                _abilityView.Setup(GameStateData.SelectedCharacter.Value);
                 // 初始主動技能
                 SkillItemData initSkill = GameStateData.AllSkillConfigData.Value.GetActiveSkill(data.InitSkill, 1);
                 if(initSkill != null)

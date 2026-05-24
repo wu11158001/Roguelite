@@ -17,7 +17,7 @@ public class MakeupItemView : MonoBehaviour
         _equalIcon.SetActive(false);
 
         // 讀取已獲取的技能清單
-        List<AcquiredSkillData> acquiredSkillData = PlayerPrefsManager.Instance.LoadAcquiredSkills();
+        List<AcquiredSkillData> acquiredSkillData = PlayerPrefsManager.LoadAcquiredSkillData();
 
         // 主動技能需求裝備
         foreach (var active in mainItem.NeedActiveSkills)

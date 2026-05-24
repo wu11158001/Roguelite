@@ -13,10 +13,12 @@ public static class GameStateData
     public static ReactiveProperty<AllCharacterConfigData> AllCharacterConfig = new();
     /// <summary> 遊戲配置資料 </summary>
     public static ReactiveProperty<GameConfigData> GameConfig = new();
-    /// <summary> 技能項目配置 </summary>
+    /// <summary> 技能項目配置檔 </summary>
     public static ReactiveProperty<AllSkillConfigData> AllSkillConfigData = new();
     /// <summary> 所有效果資料 </summary>
     public static ReactiveProperty<AllEffectPrefabData> AllEffectPrefabData = new();
+    /// <summary> 強化項目配置檔 </summary>
+    public static ReactiveProperty<AbilityUpgradeConfigData> AbilityUpgradeConfigData = new();
 
     /// <summary> 上次所選的角色 </summary>
     public static ReactiveProperty<int> PreSelectCharacter = new ReactiveProperty<int>(0);

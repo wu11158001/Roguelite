@@ -69,8 +69,8 @@ public class CharacterConfigData : ScriptableObject
 
     [BoxGroup("角色可動態變更數值")]
     [Label("爆擊攻擊力加乘((100 = 1倍))")]
-    [SerializeField] private float _baseCriticalMultiplier = 2.0f;
-    [HideInInspector] public ReactiveProperty<float> CriticalMultiplier;
+    [SerializeField] private int _baseCriticalMultiplier = 0;
+    [HideInInspector] public ReactiveProperty<int> CriticalMultiplier;
 
     [BoxGroup("角色可動態變更數值")]
     [Label("增加的投射物數量")]
@@ -100,7 +100,7 @@ public class CharacterConfigData : ScriptableObject
         CdReduce = new ReactiveProperty<float>(_baseCdReduce);
         PickupRange = new ReactiveProperty<float>(_basePickupRange);
         AddCriticalChance = new ReactiveProperty<int>(_baseAddCriticalChance);
-        CriticalMultiplier = new ReactiveProperty<float>(_baseCriticalMultiplier);
+        CriticalMultiplier = new ReactiveProperty<int>(_baseCriticalMultiplier);
         AddProjectileCount = new ReactiveProperty<int>(_baseAddProjectileCount);
         AddEffectRange = new ReactiveProperty<float>(_baseAddEffectRange);
         AddKeepTime = new ReactiveProperty<float>(_baseAddKeepTime);

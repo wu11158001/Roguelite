@@ -7,6 +7,7 @@ public enum VIEW_TYPE
 {
     BackgroundView = 0,
     AskPopupView,
+    AbilityUpgradeView,
 
     LobbyView = 100,
     SelectCharacterView,

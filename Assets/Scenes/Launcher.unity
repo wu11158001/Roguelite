@@ -696,10 +696,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3789386043141433074, guid: 385620a184219a34aa0a6c3eb7c399c8, type: 3}
-      propertyPath: _allEffectPrefabData
-      value: 
-      objectReference: {fileID: 11400000, guid: 5be141ab6f15cb143992786db9861e73, type: 2}
     - target: {fileID: 9045793369241414482, guid: 385620a184219a34aa0a6c3eb7c399c8, type: 3}
       propertyPath: m_Name
       value: ConfigManager

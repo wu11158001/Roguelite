@@ -32,6 +32,7 @@ public class LobbyView : BaseView
     [Header("LobbyView")]
     [SerializeField] private Button _btn_Start;
     [SerializeField] private Button _btn_Makeup;
+    [SerializeField] private Button _btn_AbilityUpgrade;
     [SerializeField] private Button _btn_DeleteData;
 
     private void Start()
@@ -53,6 +54,12 @@ public class LobbyView : BaseView
             ViewManager.Instance.OpenView<MakeupListView>(viewType: VIEW_TYPE.MakeupListView).Forget();
         }).AddTo(this);
 
+        // 能力強化按鈕
+        _btn_AbilityUpgrade.OnClickAsObservable().Subscribe(_ =>
+        {
+            ViewManager.Instance.OpenView<AbilityUpgradeView>(viewType: VIEW_TYPE.AbilityUpgradeView).Forget();
+        }).AddTo(this);
+
         // 刪除資料按鈕
         _btn_DeleteData.OnClickAsObservable().Subscribe(_ =>
         {
@@ -64,9 +71,20 @@ public class LobbyView : BaseView
                         contentText: "是否移除所有資料!?",
                         confirmAction: () =>
                         {
-                            PlayerPrefsManager.Instance.DeleteAllData();
+                            PlayerPrefsManager.DeleteAllData();
                         });
                 }).Forget();
         }).AddTo(this);
+    }
+
+    private void Update()
+    {
+        // 測試用
+        if (UnityEngine.InputSystem.Keyboard.current.numpad7Key.wasPressedThisFrame)
+        {
+            PlayerInfoData data = PlayerInfoStateData.PlayerInfo.Value;
+            data.Coin += 200;
+            PlayerInfoStateData.PlayerInfo.Value = data;
+        }
     }
 }

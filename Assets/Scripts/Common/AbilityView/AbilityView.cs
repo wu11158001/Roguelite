@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 /// <summary>
 /// 能力值設定檔
@@ -34,6 +35,8 @@ public class AbilityView : MonoBehaviour
     private List<AbilityItemView> _abilityItems = new();
 
     private CharacterConfigData _characterConfigData;
+    private List<AbilityUpgradeData> _abilityUpgrades = new();
+    private List<AbilityUpgradeItemData> _upgradeConfigs = new();
 
     public void Setup(CharacterConfigData data)
     {
@@ -44,7 +47,9 @@ public class AbilityView : MonoBehaviour
         }
 
         _characterConfigData = data;
-        
+        _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
+        _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.Value.AbilityUpgradeItemDatas.ToList();
+
         if (_abilityItems == null || _abilityItems.Count == 0)
         {
             _abilityItems = new();

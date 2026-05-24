@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -28,7 +29,6 @@ public class SelectCharacterViewModel
     /// <returns></returns>
     public async UniTaskVoid SelectCharacterAsync(CharacterConfigData data, int index)
     {
-        GameStateData.SelectedCharacter.Value = data.Clone();
         GameStateData.PreSelectCharacter.Value = index;
         _loadingCharacterName = data.CharacterName;
         _currentCharacterData.Value = data;
@@ -67,6 +67,76 @@ public class SelectCharacterViewModel
             // 載入期間又選了其他角色，直接關閉
             targetModel.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// 設置角色能力值
+    /// </summary>
+    public CharacterConfigData SetCharacterAbility(CharacterConfigData data)
+    {
+        CharacterConfigData character = data;
+
+        // 角色能力+強化能力
+        List<AbilityUpgradeData> abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
+        List<AbilityUpgradeItemData> _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.Value.AbilityUpgradeItemDatas.ToList();
+        foreach (var item in abilityUpgrades)
+        {
+            AbilityUpgradeItemData upgradeData = _upgradeConfigs.FirstOrDefault(x => x.UpgradeItemType == item.Type);
+            float upgradeValue = upgradeData == null ? 0 : upgradeData.UpgradeItemAddValue * item.UpgradedLevel;
+
+            switch (item.Type)
+            {
+                case PASSIVE_SKILL_TYPE.Attack:
+                    character.AddAttack.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.MaxHp:
+                    character.MaxHp.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.MoveSpeed:
+                    character.MoveSpeed.Value += upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.Defense:
+                    character.Defense.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.LifeRecovery:
+                    character.LifeRecovery.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.CdReduce:
+                    character.CdReduce.Value += upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.PickupRange:
+                    character.PickupRange.Value += upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.CriticalChance:
+                    character.AddCriticalChance.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.CriticalMultiplier:
+                    character.CriticalMultiplier.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.ProjectileCount:
+                    character.AddProjectileCount.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.EffectRange:
+                    character.AddEffectRange.Value += upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.KeepTime:
+                    character.AddKeepTime.Value += upgradeValue;
+                    break;
+            }
+        }
+
+        return character;
     }
 
     /// <summary>

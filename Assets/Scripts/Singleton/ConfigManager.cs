@@ -13,6 +13,8 @@ public class ConfigManager : MonoBehaviour
     [SerializeField] AllCharacterConfigData _allCharacterConfig;
     [Label("所有效果物件")]
     [SerializeField] AllEffectPrefabData _allEffectPrefabData;
+    [Label("強化項目配置檔")]
+    [SerializeField] AbilityUpgradeConfigData _abilityUpgradeConfigData;
 
     protected void Awake()
     {
@@ -30,5 +32,6 @@ public class ConfigManager : MonoBehaviour
         GameStateData.AllSkillConfigData.Value = _allSkillItemConfig;
         GameStateData.AllCharacterConfig.Value = _allCharacterConfig;
         GameStateData.AllEffectPrefabData.Value = _allEffectPrefabData;
+        GameStateData.AbilityUpgradeConfigData.Value = _abilityUpgradeConfigData;
     }
 }
