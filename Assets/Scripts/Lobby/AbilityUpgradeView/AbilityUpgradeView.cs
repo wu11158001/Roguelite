@@ -20,6 +20,8 @@ public class AbilityUpgradeView : BaseView
     [SerializeField] private Button _btn_Back;
 
     [Header("Middle")]
+    // 角色_卷軸移動至目標工具
+    [SerializeField] private ScrollViewToTarget _characterScrollViewToTarget;
     [SerializeField] private Transform _itemParent;
     [SerializeField] private AbilityUpgradeItemView _abilityUpgradeItemView;
 
@@ -149,7 +151,11 @@ public class AbilityUpgradeView : BaseView
                 abilityUpgradeItemView.Setup(
                     data: data,
                     level: currentLevel,
-                    selectCallback: () => { SwitchItem(data); });
+                    selectCallback: () => 
+                    {
+                        SwitchItem(data);
+                        _characterScrollViewToTarget.SnapTo(obj.GetComponent<RectTransform>());
+                    });
 
                 _items.Add(data.UpgradeItemType, abilityUpgradeItemView);
                 togs.Add(abilityUpgradeItemView.MainTog);

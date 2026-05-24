@@ -57,6 +57,7 @@ MonoBehaviour:
   _text_PlayerCoin: {fileID: 1110322202243898788}
   _btn_Reset: {fileID: 2707354210425706798}
   _btn_Back: {fileID: 4674675019425965892}
+  _characterScrollViewToTarget: {fileID: 8107375704173390155}
   _itemParent: {fileID: 5055532672644213177}
   _abilityUpgradeItemView: {fileID: 3863527252035755090}
   _img_CurrentIcon: {fileID: 596415919928872558}
@@ -884,6 +885,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7049262453940854942}
+  - component: {fileID: 8107375704173390155}
   - component: {fileID: 1116979318595291952}
   - component: {fileID: 8311267159070045142}
   - component: {fileID: 3802977910212392161}
@@ -914,6 +916,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -30}
   m_SizeDelta: {x: -60, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8107375704173390155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2591935420338076984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1943d84e4cfae574cb503a5db61d5eb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScrollViewToTarget
+  MainScrollRect: {fileID: 3802977910212392161}
+  ContentRect: {fileID: 5055532672644213177}
+  Direction: 1
+  Duration: 0.2
 --- !u!222 &1116979318595291952
 CanvasRenderer:
   m_ObjectHideFlags: 0

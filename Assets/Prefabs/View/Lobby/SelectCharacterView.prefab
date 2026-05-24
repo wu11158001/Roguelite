@@ -1183,11 +1183,11 @@ RectTransform:
   - {fileID: 1149303428430740444}
   m_Father: {fileID: 1816434199605996717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -0.021919644}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6660127770722324986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1880,6 +1880,7 @@ MonoBehaviour:
   Img_InitSkillIcon: {fileID: 7590729499577338155}
   Text_InitSkillName: {fileID: 4132236705778642563}
   Text_InitSkillDescribe: {fileID: 6044836729786551000}
+  _characterScrollViewToTarget: {fileID: 3407995540339911256}
   _characterTogParent: {fileID: 5313327190399299095}
   _sampleSelectCharacterTog: {fileID: 4271925804703941036}
   Text_CharacterName: {fileID: 3488233895512589864}
@@ -2320,7 +2321,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &8798626315572836487
 GameObject:
   m_ObjectHideFlags: 0
@@ -2330,6 +2331,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 241031815526040682}
+  - component: {fileID: 3407995540339911256}
   - component: {fileID: 2109488587928367326}
   - component: {fileID: 8369137543987126459}
   - component: {fileID: 2274605733632325105}
@@ -2360,6 +2362,22 @@ RectTransform:
   m_AnchoredPosition: {x: -10, y: -30}
   m_SizeDelta: {x: 100, y: 500}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &3407995540339911256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8798626315572836487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1943d84e4cfae574cb503a5db61d5eb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScrollViewToTarget
+  MainScrollRect: {fileID: 2274605733632325105}
+  ContentRect: {fileID: 5313327190399299095}
+  Direction: 1
+  Duration: 0.2
 --- !u!222 &2109488587928367326
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2509,7 +2527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1803099168033427944, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4530788947947039044, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_Pivot.x

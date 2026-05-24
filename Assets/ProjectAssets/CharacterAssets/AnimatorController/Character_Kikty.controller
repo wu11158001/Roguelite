@@ -56,7 +56,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Character
+  m_Name: Character_Kikty
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: IsMove
@@ -124,7 +124,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 476bffacf07380b44bcc55e5b41f8578, type: 2}
+  m_Motion: {fileID: 7400000, guid: 3b1df141f6875b6488000432c3c71c4f, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -151,7 +151,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7a0e1c8498a4c444a931da03cadd19c6, type: 2}
+  m_Motion: {fileID: 7400000, guid: af3444521ecfeff45a794daabdaa1bb0, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

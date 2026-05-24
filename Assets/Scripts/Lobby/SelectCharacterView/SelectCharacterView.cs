@@ -6,6 +6,7 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
 
 /// <summary>
 /// 選擇角色介面
@@ -26,6 +27,8 @@ public class SelectCharacterView : BaseView
     [SerializeField] TextMeshProUGUI Text_InitSkillDescribe;
 
     [Header("Middle_Right")]
+    // 角色_卷軸移動至目標工具
+    [SerializeField] private ScrollViewToTarget _characterScrollViewToTarget;
     // 切換角色
     [SerializeField] private Transform _characterTogParent;
     [SerializeField] private SelectCharacterTogView _sampleSelectCharacterTog;
@@ -124,21 +127,35 @@ public class SelectCharacterView : BaseView
                     _viewModel.SelectCharacterAsync(
                         data: config.Clone(), 
                         index: currentIndex).Forget();
+
+                SnapToTarget(selectCharacterTogView.MainTog.GetComponent<RectTransform>());
                 });
 
             togs.Add(selectCharacterTogView.MainTog);
             index++;
         }
 
-        // 預選上次所選的
         int preSelectIndex = GameStateData.PreSelectCharacter.Value;
+        int targetIndex = 0;
         if (preSelectIndex >= 0 && preSelectIndex < togs.Count)
         {
-            togs[preSelectIndex].isOn = true;
+            targetIndex = preSelectIndex;
         }
-        else if (togs.Count > 0)
+
+        togs[targetIndex].isOn = true;
+
+        if (togs.Count > 0)
         {
-            togs[0].isOn = true;
+            SnapToTarget(togs[targetIndex].GetComponent<RectTransform>());
         }
+    }
+
+    /// <summary>
+    /// 卷軸跳至所選物件位置
+    /// </summary>
+    /// <param name="target"></param>
+    private void SnapToTarget(RectTransform target)
+    {
+        _characterScrollViewToTarget.SnapTo(target);
     }
 }
