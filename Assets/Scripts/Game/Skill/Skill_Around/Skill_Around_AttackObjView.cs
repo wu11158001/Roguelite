@@ -15,12 +15,8 @@ public class Skill_Around_AttackObjView : BaseSkill
     {
         base.Setup(data, targetEnemy);
 
-        _controller ??= new Skill_Around_AttackObjController();
+        _controller ??= new Skill_Around_AttackObjController(this);
         _controller.ClearHitEnemy();
-
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
-
-        characterConfig.AddEffectRange.Subscribe((range) => UpdateEffectRange(range)).AddTo(_disposables);
 
         this.UpdateAsObservable()
             .Subscribe(_ =>
@@ -57,6 +53,7 @@ public class Skill_Around_AttackObjView : BaseSkill
 
     public override void Recycle()
     {
+        _controller.Dispose();
         _controller?.ClearHitEnemy();
         base.Recycle();
     }

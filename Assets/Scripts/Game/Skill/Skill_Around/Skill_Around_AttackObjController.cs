@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UniRx;
+using System;
 
 /// <summary>
 /// 技能_物件圍繞:攻擊物件
 /// </summary>
-public class Skill_Around_AttackObjController
+public class Skill_Around_AttackObjController : IDisposable
 {
     private readonly Dictionary<GameObject, float> _hitEnemiesTrackers = new();
 
@@ -14,9 +16,14 @@ public class Skill_Around_AttackObjController
     private float _lastAngle = -1f;
     private bool _isFirstFrame = true;
 
-    public Skill_Around_AttackObjController()
+    private readonly CompositeDisposable _disposables = new();
+
+    public Skill_Around_AttackObjController(Skill_Around_AttackObjView view)
     {
         ClearHitEnemy();
+
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
+        characterConfig.AddEffectRange.Subscribe((range) => view.UpdateEffectRange(range)).AddTo(_disposables);
     }
 
     public void ClearHitEnemy()
@@ -87,5 +94,10 @@ public class Skill_Around_AttackObjController
         enemyView?.OnAttacked(hitData);
 
         _hitEnemiesTrackers.Add(enemyObj, 0f);
+    }
+
+    public void Dispose()
+    {
+        _disposables.Dispose();
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UniRx;
 
 /// <summary>
 /// 技能_前方打擊
@@ -7,26 +6,15 @@ using UniRx;
 public class Skill_FrontHitView : BaseSkill
 {
     private bool _isCanHit;
-
-    private Skill_FrontHitViewModel _viewModel;
+    private Skill_FrontHitController _controller;
 
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data, targetEnemy);
 
-        _viewModel = new(data);
+        _controller ??= new Skill_FrontHitController(this, data);
 
-        BindViewModel();
         _isCanHit = true;
-
-        Invoke(nameof(HitOver), 0.3f);
-        Invoke(nameof(Recycle), 1.0f);
-    }
-
-    private void BindViewModel()
-    {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
-        characterConfig.AddEffectRange.Subscribe(r => UpdataEffecrRange(r)).AddTo(this);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -35,25 +23,37 @@ public class Skill_FrontHitView : BaseSkill
 
         if (other.gameObject.layer == _targetLayer)
         {
-            _viewModel.HitEnemy(other.gameObject, CalculateAttack());
+            _controller.HitEnemy(other.gameObject, CalculateAttack());
         }
     }
 
     /// <summary>
-    /// 結束打擊
+    /// 打擊判定
     /// </summary>
-    private void HitOver()
+    /// <param name="canHit"></param>
+    public void SetCanHit(bool canHit)
     {
-        _isCanHit = false;
+        _isCanHit = canHit;
     }
 
     /// <summary>
     /// 更新效果範圍
     /// </summary>
-    /// <param name="addRange">增加的效果範圍(%)</param>
-    private void UpdataEffecrRange(float addRange)
+    /// <param name="value"></param>
+    public void UpdataEffectRange(float value)
     {
-        float scale = _viewModel.Data.SkillEffectRange + (_viewModel.Data.SkillEffectRange * addRange);
-        transform.localScale = new(scale, scale, scale);
+        transform.localScale = new Vector3(value, value, value);
+    }
+
+    public override void Recycle()
+    {
+        _controller?.Deactivate();
+        base.Recycle();
+    }
+
+    public override void OnDestroy()
+    {
+        _controller?.Dispose();
+        base.OnDestroy();
     }
 }
