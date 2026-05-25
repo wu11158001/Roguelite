@@ -4,6 +4,9 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UniRx;
 
+/// <summary>
+/// 玩家角色
+/// </summary>
 public class PlayerView : BaseGameObject
 {
     private PlayerInput _playerInput;
@@ -11,25 +14,35 @@ public class PlayerView : BaseGameObject
 
     // 受到攻擊顏色變化
     private Renderer[] _renderers;
-    MaterialPropertyBlock _propBlock;
+    private MaterialPropertyBlock _propBlock;
     private Coroutine _hitCoroutine;
 
-    /// <summary> 頭部位置 </summary>
     public Transform HeadPoint { get; private set; }
-    /// <summary> 技能發射點 </summary>
     public Transform ShotPoint { get; private set; }
-    /// <summary> 中見位置點 </summary>
     public Transform MiddlePoint { get; private set; }
-    /// <summary> 底部位置點 </summary>
     public Transform BottomPoint { get; private set; }
 
-    // 動畫Trigger
+    // 動畫
     private Animator _anim;
     private readonly int _isMovingParamId = Animator.StringToHash("IsMove");
 
     private HpBarView _hpBarView;
     private CharacterConfigData _characterConfig;
-    private PlayerViewModel _viewModel = new();
+
+    private PlayerController _controller;
+
+    public override void OnDestroy()
+    {
+        StopAllCoroutines();
+        if (_playerInput != null)
+        {
+            var moveAction = _playerInput.actions["Move"];
+            moveAction.performed -= OnMoveInternal;
+            moveAction.canceled -= OnMoveInternal;
+        }
+        _controller?.Dispose();
+        base.OnDestroy();
+    }
 
     private void Awake()
     {
@@ -39,31 +52,28 @@ public class PlayerView : BaseGameObject
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();
-
         _anim = GetComponentInChildren<Animator>();
 
-        // 獲取頭部點
-        if (_anim != null)
+        if (_anim != null && _anim.isHuman)
         {
-            // 檢查是否為人型骨骼模型
-            if (_anim.isHuman)
-            {
-                // 獲取頭部骨骼的 Transform
-                HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
-            }
-            else
-            {
-                Debug.LogWarning("該模型的 Animation Type 不是設定為 Humanoid！");
-            }
+            HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
         }
         else
         {
-            Debug.LogError("找不到 Animator 組件！");
+            Debug.LogWarning("找不到 Animator 或模型的 Animation Type 不是 Humanoid！");
         }
 
+        // 初始化輸入控制
+        InitInputSystem();
+    }
+
+    /// <summary>
+    /// 初始化輸入控制
+    /// </summary>
+    private void InitInputSystem()
+    {
         GameConfigData gameConfigData = GameStateData.GameConfig;
 
-        // 輸入控制腳本
         if (!gameObject.TryGetComponent(out PlayerInput playerInput))
         {
             playerInput = gameObject.AddComponent<PlayerInput>();
@@ -72,65 +82,66 @@ public class PlayerView : BaseGameObject
         playerInput.actions = gameConfigData.InputAction;
         playerInput.defaultActionMap = "Player";
         playerInput.defaultControlScheme = "Keyboard&Mouse";
-        var moveAction = playerInput.actions["Move"];
 
-        // 訂閱：當按鍵按下或移動時
+        var moveAction = playerInput.actions["Move"];
         moveAction.performed += OnMoveInternal;
-        // 訂閱：當按鍵放開時
         moveAction.canceled += OnMoveInternal;
 
         _playerInput = playerInput;
-    }
-
-    public override void OnDestroy()
-    {
-        StopAllCoroutines();
-
-        if (_playerInput != null)
-        {
-            var moveAction = _playerInput.actions["Move"];
-            moveAction.performed -= OnMoveInternal;
-            moveAction.canceled -= OnMoveInternal;
-        }
-
-        base.OnDestroy();
-    }
-
-    public override void Remove()
-    {
-        _viewModel.Dispose();
-        base.Remove();
     }
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
         base.Setup(myRef);
 
-        _viewModel.Setup();
+        _controller ??= new PlayerController(this);
 
-        Init();
-        BindViewModel();
-        StartCoroutine(IHpRecoverRoutine());
-    }
-
-    private void Init()
-    {
-        // 設置當前控制角色
         GameplayManager.CurrentContext.ControlCharacter = this;
         _characterConfig = GameStateData.SelectedCharacter;
 
-        // 攝影機設定
-        GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
-        if (gameCameraView != null)
-        {
-            gameCameraView.Setup(transform);
-        }
+        // 攝影機與初始技能設定
+        SetupCameraAndInitSkill();
 
-        // 初始技能添加
-        SkillItemData skillItemData = GameStateData.AllSkillConfigData.GetActiveSkill(_characterConfig.InitSkill, 1);
-        GameplayManager.CurrentContext.SkillController.OnGainSkill(newSkill: skillItemData);
+        // 產生生命條與注入事件
+        SpawnHpBarAndBind();
 
-        // 產生生命條
+        _controller.Activate();
+    }
+
+    private void Update()
+    {
+        if (GameplayManager.CurrentContext.CurrentGameController.IsGamePause) return;
+
+        // 測試用鍵盤輸入監聽
+        TestDebugInput();
+        _controller.ExecuteTick(_inputVector, Time.deltaTime);
+    }
+
+    /// <summary>
+    /// 更新移動
+    /// </summary>
+    /// <param name="translation"></param>
+    /// <param name="rotation"></param>
+    public void UpdateMovement(Vector3 translation, Quaternion rotation)
+    {
+        transform.Translate(translation, Space.World);
+        transform.rotation = rotation;
+    }
+
+    /// <summary>
+    /// 更新動畫
+    /// </summary>
+    /// <param name="isMoving"></param>
+    public void UpdateAnimation(bool isMoving)
+    {
+        _anim.SetBool(_isMovingParamId, isMoving);
+    }
+
+    /// <summary>
+    /// 產生生命條與注入事件
+    /// </summary>
+    private void SpawnHpBarAndBind()
+    {
         GameInfoUIManager gameInfoUIManager = FindFirstObjectByType<GameInfoUIManager>();
         if (gameInfoUIManager != null)
         {
@@ -142,100 +153,65 @@ public class PlayerView : BaseGameObject
                     _hpBarView = hpBar;
                 });
         }
-    }
 
-    private void BindViewModel()
-    {
-        // 搖桿輸入
-        GameStateData.JoystickInput
-            .Subscribe(joystickValue =>
+        // 監聽角色生命變化
+        _characterConfig.Hp.Pairwise()
+            .Subscribe(pair =>
             {
-                // 如果搖桿有輸出，採用搖桿數值
-                if (joystickValue != Vector2.zero)
+                int previousHp = pair.Previous;
+                int currentHp = pair.Current;
+
+                if (currentHp > previousHp)
                 {
-                    _inputVector = joystickValue;
+                    // 回復生命
+                    _controller.TriggerHpRecoverEffect();
                 }
-                else
+                else if (previousHp > currentHp)
                 {
-                    _inputVector = Vector2.zero;
+                    // 減少生命
+                    if (_hitCoroutine != null) StopCoroutine(_hitCoroutine);
+                    _hitCoroutine = StartCoroutine(IGetHitAnim());
                 }
+
+                // 更新血條 UI
+                float hpRatio = (float)currentHp / _characterConfig.MaxHp.Value;
+                if (_hpBarView != null) _hpBarView.SetHpBar(hpRatio);
             })
             .AddTo(this);
 
-        // 角色生命
-        _characterConfig.Hp.Pairwise()
-          .Subscribe(pair =>
-          {
-              int previousHp = pair.Previous;
-              int currentHp = pair.Current;
-
-              // 回復生命
-              if (currentHp > previousHp)
-              {
-                  _viewModel.OnHpRecover(BottomPoint);                  
-              }
-              // 減少生命
-              else if(previousHp > currentHp)
-              {
-                  if (_hitCoroutine != null) StopCoroutine(_hitCoroutine);
-                  _hitCoroutine = StartCoroutine(IGetHitAnim());
-              }
-
-              // 設置生命條
-              float hpRatio = (float)currentHp / _characterConfig.MaxHp.Value;
-              _hpBarView.SetHpBar(hpRatio);
-          })
-          .AddTo(this);
-    }
-
-    private void Update()
-    {
-        // 遊戲暫停
-        if (GameplayManager.CurrentContext.CurrentGameController.IsGamePause)
-            return;
-
-        // 更新 ViewModel 狀態
-        _viewModel.ProcessInput(_inputVector);
-
-        // 執行移動
-        bool isMove = _viewModel.MoveDirection != Vector3.zero;
-        if (isMove)
-        {
-            // 位置移動
-            transform.Translate(_viewModel.MoveDirection * _viewModel.MoveSpeed * Time.deltaTime, Space.World);
-
-            // 平滑轉向
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                _viewModel.TargetRotation,
-                Time.deltaTime * _viewModel.RotationSpeed
-            );
-        }
-
-        _anim.SetBool(_isMovingParamId, isMove);
-        TextExp();
+        // 外部虛擬搖桿輸入監聽
+        GameStateData.JoystickInput
+            .Subscribe(joystickValue =>
+            {
+                _inputVector = joystickValue;
+            })
+            .AddTo(this);
     }
 
     /// <summary>
-    /// 移動處理
+    /// 攝影機與初始技能設定
     /// </summary>
-    /// <param name="context"></param>
+    private void SetupCameraAndInitSkill()
+    {
+        GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
+        if (gameCameraView != null) gameCameraView.Setup(transform);
+
+        SkillItemData skillItemData = GameStateData.AllSkillConfigData.GetActiveSkill(_characterConfig.InitSkill, 1);
+        GameplayManager.CurrentContext.SkillController.OnGainSkill(newSkill: skillItemData);
+    }
+
     private void OnMoveInternal(InputAction.CallbackContext context)
     {
         _inputVector = context.ReadValue<Vector2>();
     }
 
-    /// <summary>
-    /// 移動
-    /// </summary>
-    /// <param name="value"></param>
     public void OnMove(Vector2 value)
     {
         _inputVector = value;
     }
 
     /// <summary>
-    /// 受到攻擊動畫
+    /// 受擊動畫
     /// </summary>
     /// <returns></returns>
     private IEnumerator IGetHitAnim()
@@ -243,18 +219,14 @@ public class PlayerView : BaseGameObject
         foreach (var renderer in _renderers)
         {
             if (renderer == null) continue;
-
             renderer.GetPropertyBlock(_propBlock);
             _propBlock.SetColor("_BaseColor", Color.red);
             renderer.SetPropertyBlock(_propBlock);
         }
-
         yield return new WaitForSeconds(0.1f);
-
         foreach (var renderer in _renderers)
         {
             if (renderer == null) continue;
-
             renderer.GetPropertyBlock(_propBlock);
             _propBlock.Clear();
             renderer.SetPropertyBlock(_propBlock);
@@ -262,42 +234,20 @@ public class PlayerView : BaseGameObject
     }
 
     /// <summary>
-    /// 每秒生命回復
+    /// 測試用
     /// </summary>
-    /// <returns></returns>
-    private IEnumerator IHpRecoverRoutine()
+    private void TestDebugInput()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(1.0f);
-            _viewModel.HpRecoverPreSecond();
-        }
+        if (Keyboard.current.numpad1Key.wasPressedThisFrame) _controller.GainExp(5);
+        if (Keyboard.current.numpad2Key.wasPressedThisFrame) _controller.GainExp(3);
+        if (Keyboard.current.numpad4Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(10);
+        if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(10);
     }
 
-    /// <summary>
-    /// 測試用:經驗值增加
-    /// </summary>
-    private void TextExp()
+    public override void Remove()
     {
-        if(Keyboard.current.numpad1Key.wasPressedThisFrame)
-        {
-            _viewModel.GainExp(5);
-        }
-
-        if (Keyboard.current.numpad2Key.wasPressedThisFrame)
-        {
-            _viewModel.GainExp(3);
-        }
-
-        if(Keyboard.current.numpad4Key.wasPressedThisFrame)
-        {
-            GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(10);
-        }
-
-        if (Keyboard.current.numpad5Key.wasPressedThisFrame)
-        {
-            GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(10);
-        }
+        _controller?.Deactivate();
+        base.Remove();
     }
 
     [SerializeField] private float distanceRadius = 25;
