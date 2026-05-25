@@ -20,38 +20,25 @@ public class Skill_AroundView : BaseSkill
 
     private List<Skill_Around_AttackObjView> _attackObjs = new();
 
-    private Skill_AroundViewModel _viewModel;
+    private Skill_AroundModel _model;
+    private Skill_AroundController _controller;
 
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
 
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
-
-        // 圍繞目標
-        Transform target = GameplayManager.CurrentContext.ControlCharacter.MiddlePoint;
-        // 選轉速度
-        float rotateSpeed = data.SkillFlightSpeed;
-        // 持續時間
-        float keepTime = characterConfig.AddKeepTime.Value + data.SkillKeepTime;
-        Invoke(nameof(Recycle), keepTime);
-        // 體積
-        _size = data.SkillEffectRange;
-        // 距離角色水平距離
-        _distance = _baseDistance + (_size / 2);
-
-        _viewModel = new Skill_AroundViewModel(data, target, rotateSpeed);
-
-        _viewModel.Position.Subscribe(pos => transform.position = pos).AddTo(_disposables);
-        _viewModel.Rotation.Subscribe(rot => transform.rotation = rot).AddTo(_disposables);
+        _model = new(data, _baseDistance);
+        _controller = new Skill_AroundController(this, _model);
 
         // 使用 UniRx 的 Update 觸發器
         this.UpdateAsObservable()
-            .Subscribe(_ => _viewModel.ExecuteTick(Time.deltaTime))
+            .Subscribe(_ => _controller.ExecuteTick(Time.deltaTime))
             .AddTo(_disposables);
 
         // 產生攻擊物件
         SpawnAttackObjs();
+
+        Invoke(nameof(Recycle), _model.KeepTime);
     }
 
     /// <summary>
@@ -61,7 +48,6 @@ public class Skill_AroundView : BaseSkill
     {
         CancelInvoke(nameof(Recycle));
 
-        // 當主物件存在才回收子物件
         if(gameObject.activeInHierarchy)
         {
             foreach (var attackObj in _attackObjs)
@@ -69,8 +55,20 @@ public class Skill_AroundView : BaseSkill
                 attackObj.Recycle();
             }
         }
+        _attackObjs.Clear();
 
         base.Recycle();
+    }
+
+    /// <summary>
+    /// 設置位置與旋轉
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="rotation"></param>
+    public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+    {
+        transform.position = position;
+        transform.rotation = rotation;
     }
 
     /// <summary>
@@ -81,13 +79,12 @@ public class Skill_AroundView : BaseSkill
         _attackObjs.Clear();
 
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
-        int shotCount = _viewModel.Data.SkillShotCount + characterConfig.AddProjectileCount.Value;
+        int totalShotCount = _model.Data.SkillShotCount + characterConfig.AddProjectileCount.Value;
 
-        for (int i = 0; i < shotCount; i++)
+        for (int i = 0; i < totalShotCount; i++)
         {
             int index = i;
-
-            Vector3 localPos = GetInitialLocalPosition(index, _data.SkillShotCount);
+            Vector3 localPos = GetInitialLocalPosition(index, totalShotCount, _model.Distance);
 
             GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: "圍繞球體",
@@ -107,10 +104,9 @@ public class Skill_AroundView : BaseSkill
                     obj.transform.SetParent(transform);
                     obj.transform.localPosition = localPos;
                     obj.transform.localRotation = Quaternion.identity;
-                    obj.transform.localScale = new Vector3(_size, _size, _size);
 
+                    attackObj.SetParentView(this, _model);
                     attackObj.Setup(_data);
-                    attackObj.SetData(_viewModel.Rotation);
                     _attackObjs.Add(attackObj);
                 }
             });
@@ -122,20 +118,16 @@ public class Skill_AroundView : BaseSkill
     /// </summary>
     /// <param name="index">物件的索引</param>
     /// <param name="totalCount">總共有幾個物件</param>
-    public Vector3 GetInitialLocalPosition(int index, int totalCount)
+    public static Vector3 GetInitialLocalPosition(int index, int totalCount, float radius)
     {
         if (totalCount <= 0) return Vector3.zero;
 
-        // 將 360 度平均分配
         float angleStep = 360f / totalCount;
         float currentAngle = index * angleStep;
-
-        // 將角度轉換為弧度 (Rad) 以便使用三角函數
         float radians = currentAngle * Mathf.Deg2Rad;
 
-        // 計算在 XZ 水平面上的位置 (Y 軸為高度不變)
-        float x = Mathf.Sin(radians) * _distance;
-        float z = Mathf.Cos(radians) * _distance;
+        float x = Mathf.Sin(radians) * radius;
+        float z = Mathf.Cos(radians) * radius;
 
         return new Vector3(x, 0f, z);
     }

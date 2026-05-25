@@ -176,7 +176,7 @@ public class SkillItemData
     }
 
     [AllowNesting] [Label("升級是否立即更新")]
-    [HideIf(nameof(IsProps))]
+    [ShowIf(nameof(_isShowSkill))]
     public bool IsUpdateNow;
 
     [AllowNesting][Label("技能等級")]
