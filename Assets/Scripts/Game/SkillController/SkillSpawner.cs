@@ -334,6 +334,7 @@ public class SkillSpawner
             callback: (obj) =>
             {
                 obj.transform.SetParent(middlePoint);
+                obj.transform.localPosition = Vector3.zero;
                 if (obj.TryGetComponent(out BaseSkill skill))
                 {
                     skill.Setup(data: data);

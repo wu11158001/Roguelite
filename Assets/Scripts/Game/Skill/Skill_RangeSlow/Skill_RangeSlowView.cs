@@ -1,44 +1,40 @@
 using UnityEngine;
-using UniRx;
 
+/// <summary>
+/// 範圍減速
+/// </summary>
 public class Skill_RangeSlowView : BaseSkill
 {
     private Collider _collider;
 
-    private Skill_RangeSlowViewModel _viewModel;
+    private Skill_RangeSlowController _controller;
 
-    private void Start()
+    public override void OnDestroy()
     {
-        _collider = GetComponent<Collider>();
+        _controller?.Dispose();
+        base.OnDestroy();
     }
 
-    public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
+    public override void Setup(SkillItemData model, EnemyView targetEnemy = null)
     {
-        base.Setup(data);
+        base.Setup(model);
 
-        _viewModel = new(data);
+        _controller ??= new(this, model);
+        _controller.Activate();
 
+        _collider ??= GetComponent<Collider>();
         _collider.enabled = true;
-        BindViewModel();
 
-        Invoke(nameof(CloseColliderEnable), 0.1f);
-        Invoke(nameof(Recycle), 2);
-    }
-
-    private void BindViewModel()
-    {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
-
-        characterConfig.AddEffectRange.Subscribe(r => UpdataEffecrRange(r)).AddTo(this);
+        UpdataEffectRange(model);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_viewModel == null) return;
+        if (_controller == null) return;
 
         if (other.gameObject.layer == _targetLayer)
         {
-            _viewModel.HitEnemy(other.gameObject, CalculateAttack());
+            _controller.HitEnemy(other.gameObject, CalculateAttack());
         }
     }
 
@@ -46,7 +42,7 @@ public class Skill_RangeSlowView : BaseSkill
     /// 關閉碰撞框激活狀態
     /// </summary>
     /// <param name="isEnable"></param>
-    private void CloseColliderEnable()
+    public void CloseColliderEnable()
     {
         _collider.enabled = false;
     }
@@ -54,10 +50,18 @@ public class Skill_RangeSlowView : BaseSkill
     /// <summary>
     /// 更新效果範圍
     /// </summary>
-    /// <param name="addRange">增加的效果範圍(%)</param>
-    private void UpdataEffecrRange(float addRange)
+    /// <param name="value"></param>
+    public void UpdataEffectRange(SkillItemData model)
     {
-        float scale = _viewModel.Data.SkillEffectRange + (_viewModel.Data.SkillEffectRange * addRange);
-        transform.localScale = new(scale, scale, scale);
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
+        float currentRangeBonus = characterConfig.AddEffectRange.Value;
+        float finalScale = model.SkillEffectRange + (model.SkillEffectRange * currentRangeBonus);
+        transform.localScale = new Vector3(finalScale, finalScale, finalScale);
+    }
+
+    public override void Recycle()
+    {
+        _controller?.Deactivate();
+        base.Recycle();
     }
 }

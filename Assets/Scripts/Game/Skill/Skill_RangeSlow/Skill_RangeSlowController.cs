@@ -1,14 +1,46 @@
 using UnityEngine;
+using UniRx;
+using System;
 
-public class Skill_RangeSlowViewModel
+/// <summary>
+/// 範圍減速
+/// </summary>
+public class Skill_RangeSlowController :IDisposable
 {
-    private SkillItemData _data;
-    public SkillItemData Data { get; }
+    private Skill_RangeSlowView _view;
+    private SkillItemData _model;
 
-    public Skill_RangeSlowViewModel(SkillItemData data)
+    private readonly CompositeDisposable _disposables = new();
+    private readonly CompositeDisposable _runtimeDisposables = new();
+
+    public Skill_RangeSlowController(Skill_RangeSlowView view, SkillItemData model)
     {
-        _data = data;
-        Data = _data;
+        _view = view;
+        _model = model;
+    }
+
+    /// <summary>
+    /// 技能激活時呼叫
+    /// </summary>
+    public void Activate()
+    {
+        // 關閉碰撞框激活狀態計時
+        Observable.Timer(TimeSpan.FromSeconds(0.1f))
+           .Subscribe(_ => _view.CloseColliderEnable())
+           .AddTo(_runtimeDisposables);
+
+        // 回收計時
+        Observable.Timer(TimeSpan.FromSeconds(2.0f))
+           .Subscribe(_ => _view.Recycle())
+           .AddTo(_runtimeDisposables);
+    }
+
+    /// <summary>
+    /// 技能回收時呼叫
+    /// </summary>
+    public void Deactivate()
+    {
+        _runtimeDisposables.Clear();
     }
 
     /// <summary>
@@ -23,8 +55,8 @@ public class Skill_RangeSlowViewModel
             return;
         }
 
-        hitData.SpeedModifier = 1 - (1 * _data.SpeedModifier);
-        hitData.SpeedModifierTime = _data.SpeedModifierTime;
+        hitData.SpeedModifier = 1 - (1 * _model.SpeedModifier);
+        hitData.SpeedModifierTime = _model.SpeedModifierTime;
 
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
@@ -58,5 +90,11 @@ public class Skill_RangeSlowViewModel
                     }
                 });
         }
+    }
+
+    public void Dispose()
+    {
+        _runtimeDisposables.Dispose();
+        _disposables.Dispose();
     }
 }

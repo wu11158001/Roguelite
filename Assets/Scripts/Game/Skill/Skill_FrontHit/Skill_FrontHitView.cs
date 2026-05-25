@@ -8,11 +8,18 @@ public class Skill_FrontHitView : BaseSkill
     private bool _isCanHit;
     private Skill_FrontHitController _controller;
 
+    public override void OnDestroy()
+    {
+        _controller?.Dispose();
+        base.OnDestroy();
+    }
+
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data, targetEnemy);
 
-        _controller ??= new Skill_FrontHitController(this, data);
+        _controller ??= new();
+        _controller.Activate(this, data);
 
         _isCanHit = true;
     }
@@ -49,11 +56,5 @@ public class Skill_FrontHitView : BaseSkill
     {
         _controller?.Deactivate();
         base.Recycle();
-    }
-
-    public override void OnDestroy()
-    {
-        _controller?.Dispose();
-        base.OnDestroy();
     }
 }
