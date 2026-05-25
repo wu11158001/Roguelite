@@ -5,21 +5,24 @@ using UnityEngine;
 public class Skill_AuraController : IDisposable
 {
     private readonly Skill_AuraView _view;
-    private readonly SkillItemData _model;
+    private SkillItemData _model;
 
     private IDisposable _timerDisposable;
     private readonly CompositeDisposable _disposables = new();
 
-    public Skill_AuraController(Skill_AuraView view, SkillItemData model)
+    public Skill_AuraController(Skill_AuraView view)
     {
         _view = view;
-        _model = model;
-
-        InitSubscriptions();
     }
 
-    private void InitSubscriptions()
+    /// <summary>
+    /// 技能激活時呼叫
+    /// </summary>
+    /// <param name="model"></param>
+    public void Activate(SkillItemData model)
     {
+        _model = model;
+
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         // 監聽冷卻減少

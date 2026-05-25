@@ -13,8 +13,8 @@ public class Skill_StraightProjectileView : BaseSkill
     {
         base.Setup(data);
 
-        _controller ??= new Skill_StraightProjectileController(this, data);
-        _controller.Activate();
+        _controller ??= new Skill_StraightProjectileController(this);
+        _controller.Activate(data);
 
         // 使用 UniRx 的 Update 觸發器
         this.UpdateAsObservable()

@@ -18,7 +18,8 @@ public class Skill_AuraView : BaseSkill
     {
         base.Setup(data, targetEnemy);
 
-        _controller ??= new Skill_AuraController(this, data);
+        _controller ??= new Skill_AuraController(this);
+        _controller.Activate(data);
 
         SetDistanceMonitoring();
     }

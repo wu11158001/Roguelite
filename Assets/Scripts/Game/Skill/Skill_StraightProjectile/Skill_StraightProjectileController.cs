@@ -3,26 +3,30 @@ using System.Collections.Generic;
 
 public class Skill_StraightProjectileController
 {
+    // 是否攻擊已失效
+    private bool _isExpired;
     // 穿透值
     private float _penetrate;
-
-    private Skill_StraightProjectileView _view;
-    private SkillItemData _model;
 
     // 穿透使用，紀錄已擊中的目標
     private List<GameObject> _hitTargets = new();
 
-    public Skill_StraightProjectileController(Skill_StraightProjectileView view, SkillItemData model)
+    private readonly Skill_StraightProjectileView _view;
+    private SkillItemData _model;
+
+    public Skill_StraightProjectileController(Skill_StraightProjectileView view)
     {
         _view = view;
-        _model = model;
     }
 
     /// <summary>
     /// 技能激活時呼叫
     /// </summary>
-    public void Activate()
+    public void Activate(SkillItemData model)
     {
+        _isExpired = false;
+
+        _model = model;
         _penetrate = _model.SkillPenetrate;
         _hitTargets.Clear();
     }
@@ -53,7 +57,7 @@ public class Skill_StraightProjectileController
     /// <param name="enemyObj"></param>
     public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
-        if (_hitTargets.Contains(enemyObj))
+        if (_isExpired || _hitTargets.Contains(enemyObj))
         {
             return;
         }
@@ -74,6 +78,7 @@ public class Skill_StraightProjectileController
 
         if (_penetrate < 0)
         {
+            _isExpired = true;
             _view.Recycle();
         }
     }

@@ -16,7 +16,7 @@ public class Skill_Around_AttackObjView : BaseSkill
         base.Setup(data, targetEnemy);
 
         _controller ??= new Skill_Around_AttackObjController(this);
-        _controller.ClearHitEnemy();
+        _controller.Activate();
 
         this.UpdateAsObservable()
             .Subscribe(_ =>

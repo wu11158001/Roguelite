@@ -16,14 +16,24 @@ public class Skill_Around_AttackObjController : IDisposable
     private float _lastAngle = -1f;
     private bool _isFirstFrame = true;
 
+    private readonly Skill_Around_AttackObjView _view;
+
     private readonly CompositeDisposable _disposables = new();
 
     public Skill_Around_AttackObjController(Skill_Around_AttackObjView view)
     {
+        _view = view;
+    }
+
+    /// <summary>
+    /// 技能激活時呼叫
+    /// </summary>
+    public void Activate()
+    {
         ClearHitEnemy();
 
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
-        characterConfig.AddEffectRange.Subscribe((range) => view.UpdateEffectRange(range)).AddTo(_disposables);
+        characterConfig.AddEffectRange.Subscribe((range) => _view.UpdateEffectRange(range)).AddTo(_disposables);
     }
 
     public void ClearHitEnemy()

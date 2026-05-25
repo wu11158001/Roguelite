@@ -7,23 +7,24 @@ using System;
 /// </summary>
 public class Skill_RangeSlowController :IDisposable
 {
-    private Skill_RangeSlowView _view;
+    private readonly Skill_RangeSlowView _view;
     private SkillItemData _model;
 
     private readonly CompositeDisposable _disposables = new();
     private readonly CompositeDisposable _runtimeDisposables = new();
 
-    public Skill_RangeSlowController(Skill_RangeSlowView view, SkillItemData model)
+    public Skill_RangeSlowController(Skill_RangeSlowView view)
     {
         _view = view;
-        _model = model;
     }
 
     /// <summary>
     /// 技能激活時呼叫
     /// </summary>
-    public void Activate()
+    public void Activate(SkillItemData model)
     {
+        _model = model;
+
         // 關閉碰撞框激活狀態計時
         Observable.Timer(TimeSpan.FromSeconds(0.1f))
            .Subscribe(_ => _view.CloseColliderEnable())

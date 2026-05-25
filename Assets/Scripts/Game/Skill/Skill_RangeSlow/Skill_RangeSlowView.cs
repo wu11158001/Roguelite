@@ -15,17 +15,17 @@ public class Skill_RangeSlowView : BaseSkill
         base.OnDestroy();
     }
 
-    public override void Setup(SkillItemData model, EnemyView targetEnemy = null)
+    public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
-        base.Setup(model);
+        base.Setup(data);
 
-        _controller ??= new(this, model);
-        _controller.Activate();
+        _controller ??= new(this);
+        _controller.Activate(data);
 
         _collider ??= GetComponent<Collider>();
         _collider.enabled = true;
 
-        UpdataEffectRange(model);
+        UpdataEffectRange(data);
     }
 
     private void OnTriggerEnter(Collider other)

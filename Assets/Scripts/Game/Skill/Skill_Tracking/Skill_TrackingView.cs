@@ -7,7 +7,7 @@ using UniRx.Triggers;
 /// </summary>
 public class Skill_TrackingView : BaseSkill
 {
-    private Skill_TrackingViewModel _viewModel;
+    private Skill_TrackingController _controller;
 
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
@@ -17,19 +17,12 @@ public class Skill_TrackingView : BaseSkill
         EnemyView enemyView = GameplayManager.CurrentContext.SkillController.GetNearestEnemy(_playerObject.transform.position);
         Transform target = enemyView != null ? enemyView.gameObject.transform : null;
 
-        _viewModel = new Skill_TrackingViewModel(data, transform.position, transform.rotation, target);
-        _viewModel.Position.Subscribe(pos => transform.position = pos).AddTo(_disposables);
-        _viewModel.Rotation.Subscribe(rot => transform.rotation = rot).AddTo(_disposables);
+        _controller ??= new Skill_TrackingController(this);
+        _controller.Activate(data, _playerObject);
 
         // 使用 UniRx 的 Update 觸發器
         this.UpdateAsObservable()
-            .Subscribe(_ => _viewModel.ExecuteTick(Time.deltaTime))
-            .AddTo(_disposables);
-
-        // 監聽死亡狀態
-        _viewModel.IsExpired
-            .Where(x => x == true)
-            .Subscribe(_ => Recycle())
+            .Subscribe(_ => _controller.ExecuteTick(Time.deltaTime))
             .AddTo(_disposables);
 
         // 設置距離監控
@@ -40,7 +33,7 @@ public class Skill_TrackingView : BaseSkill
     {
         if (other.gameObject.layer == _targetLayer)
         {
-            _viewModel.HitEnemy(other.gameObject, CalculateAttack()); ;
+            _controller.HitEnemy(other.gameObject, CalculateAttack()); ;
         }
     }
 }
