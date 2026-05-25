@@ -42,7 +42,7 @@ public class SelectSkillView : BaseView
         _viewModel.OnSelectSkillHandle(data);
 
         // 遊戲暫停結束
-        GameStateData.CurrentGameController.Value.GanePause(false);
+        GameplayManager.CurrentContext.CurrentGameController.GanePause(false);
 
         Close();
     }

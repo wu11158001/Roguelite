@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 遊戲控制
+/// </summary>
 public class GameController : MonoBehaviour
 {
     /// <summary> 是否遊戲暫停 </summary>

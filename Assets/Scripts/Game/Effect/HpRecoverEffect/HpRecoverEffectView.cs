@@ -26,6 +26,6 @@ public class HpRecoverEffectView : BaseGameObject
     /// </summary>
     public void Recycle()
     {
-        GameStateData.GameScenePool.Value.ReturnToPool(gameObject);
+        GameplayManager.CurrentContext.GameScenePool.ReturnToPool(gameObject);
     }
 }

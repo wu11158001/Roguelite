@@ -1,4 +1,3 @@
-using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -7,37 +6,25 @@ using UnityEngine;
 /// </summary>
 public static class GameStateData
 {
-    /// <summary> 介面配置資料 </summary>
-    public static ReactiveProperty<ViewConfigData> ViewConfig = new();
-    /// <summary> 所有角色配置檔 </summary>
-    public static ReactiveProperty<AllCharacterConfigData> AllCharacterConfig = new();
-    /// <summary> 遊戲配置資料 </summary>
-    public static ReactiveProperty<GameConfigData> GameConfig = new();
+    [Header("唯獨配置檔")]
+    /// <summary> 遊戲配置檔 </summary>
+    public static GameConfigData GameConfig { get; set; }
+    /// <summary> 介面配置檔 </summary>
+    public static ViewConfigData ViewConfig { get; set; }
     /// <summary> 技能項目配置檔 </summary>
-    public static ReactiveProperty<AllSkillConfigData> AllSkillConfigData = new();
+    public static AllSkillConfigData AllSkillConfigData { get; set; }
+    /// <summary> 所有角色配置檔 </summary>
+    public static AllCharacterConfigData AllCharacterConfig { get; set; }
     /// <summary> 所有效果資料 </summary>
-    public static ReactiveProperty<AllEffectPrefabData> AllEffectPrefabData = new();
+    public static AllEffectPrefabData AllEffectPrefabData { get; set; }
     /// <summary> 強化項目配置檔 </summary>
-    public static ReactiveProperty<AbilityUpgradeConfigData> AbilityUpgradeConfigData = new();
+    public static AbilityUpgradeConfigData AbilityUpgradeConfigData { get; set; }
 
+    [Header("遊戲狀態資料")]
     /// <summary> 上次所選的角色 </summary>
-    public static ReactiveProperty<int> PreSelectCharacter = new ReactiveProperty<int>(0);
+    public static int PreSelectCharacter { get; set; }
     /// <summary> 選擇的角色資料 </summary>
-    public static ReactiveProperty<CharacterConfigData> SelectedCharacter = new();
-    /// <summary> 操作角色角色 </summary>
-    public static ReactiveProperty<PlayerView> ControlCharacter = new();
-
-    /// <summary> 當前使用的遊戲控制器 </summary>
-    public static ReactiveProperty<GameController> CurrentGameController = new();
-    /// <summary> 當前使用的技能控制器 </summary>
-    public static ReactiveProperty<SkillController> SkillController = new();
-    /// <summary> 當前使用的角色控制器 </summary>
-    public static ReactiveProperty<CharacterController> CharacterController = new();
-    /// <summary> 當前使用的遊戲場景物件池 </summary>
-    public static ReactiveProperty<GameScenePool> GameScenePool = new();
-    /// <summary> 當前使用的敵人管理器 </summary>
-    public static ReactiveProperty<EnemyManager> EnemyManager = new();
-
+    public static CharacterConfigData SelectedCharacter { get; set; }
     /// <summary> 搖桿輸入位置 </summary>
     public static readonly ReactiveProperty<Vector2> JoystickInput = new(Vector2.zero);
 }

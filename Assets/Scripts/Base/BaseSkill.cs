@@ -31,7 +31,7 @@ public class BaseSkill : BaseGameObject
         // 清理舊的訂閱
         _disposables.Clear();
 
-        _playerObject = GameStateData.ControlCharacter.Value.gameObject;
+        _playerObject = GameplayManager.CurrentContext.ControlCharacter.gameObject;
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public class BaseSkill : BaseGameObject
     {
         // 停止所有 Rx 監聽
         _disposables.Clear();
-        GameStateData.GameScenePool.Value.ReturnToPool(gameObject);
+        GameplayManager.CurrentContext.GameScenePool.ReturnToPool(gameObject);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public class BaseSkill : BaseGameObject
         // 遠離玩家回收
         this.UpdateAsObservable()
             .Select(_ => Vector3.Distance(transform.position, _playerObject.transform.position))
-            .Where(dist => dist >= GameStateData.SkillController.Value.SkillRemoveDistance)
+            .Where(dist => dist >= GameplayManager.CurrentContext.SkillController.SkillRemoveDistance)
             .Subscribe(_ => Recycle())
             .AddTo(_disposables);
     }
@@ -68,7 +68,7 @@ public class BaseSkill : BaseGameObject
             return null;
         }
 
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         // 攻擊力:技能攻擊力+被動攻擊力
         int totalAttack = _data.SkillAttack + characterConfig.AddAttack.Value;

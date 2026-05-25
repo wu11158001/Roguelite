@@ -103,7 +103,7 @@ public abstract class BaseView : MonoBehaviour
 
         if(_canvasGroup != null) _canvasGroup.alpha = 0;
 
-        var prefabRef = GameStateData.ViewConfig.Value.GetPrefabRef(VIEW_TYPE.BackgroundView);
+        var prefabRef = GameStateData.ViewConfig.GetPrefabRef(VIEW_TYPE.BackgroundView);
 
         if (prefabRef == null)
         {

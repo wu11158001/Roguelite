@@ -26,7 +26,7 @@ public class Skill_AuraView : BaseSkill
 
     private void BindViewModel()
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         characterConfig.CdReduce.Subscribe(_ => _viewModel.UpdateCooldown()).AddTo(this);
         characterConfig.AddEffectRange.Subscribe(r => UpdataEffecrRange(r)).AddTo(this);

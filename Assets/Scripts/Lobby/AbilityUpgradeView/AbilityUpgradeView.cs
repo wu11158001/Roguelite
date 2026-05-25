@@ -43,7 +43,7 @@ public class AbilityUpgradeView : BaseView
 
         BindViewModel();
 
-        _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.Value.AbilityUpgradeItemDatas.ToList();
+        _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.AbilityUpgradeItemDatas.ToList();
         _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
         CreateItem();
     }

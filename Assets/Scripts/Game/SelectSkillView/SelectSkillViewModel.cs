@@ -8,13 +8,13 @@ public class SelectSkillViewModel
     /// <param name="data"></param>
     public void OnSelectSkillHandle(SkillItemData data)
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         // 被動技能處理
-        GameStateData.SkillController.Value.OnGainPassiveHandle(data);
+        GameplayManager.CurrentContext.SkillController.OnGainPassiveHandle(data);
 
         // 道具技能處理
-        GameStateData.SkillController.Value.OnGainPropsHandle(data);
+        GameplayManager.CurrentContext.SkillController.OnGainPropsHandle(data);
 
         // 道具技能不觸發學習技能
         if (data.IsProps)
@@ -23,6 +23,6 @@ public class SelectSkillViewModel
         }
 
         // 學習技能
-        GameStateData.SkillController.Value.OnGainSkill(data);
+        GameplayManager.CurrentContext.SkillController.OnGainSkill(data);
     }
 }

@@ -80,7 +80,7 @@ public class SkillSpawner
     /// <returns></returns>
     private IEnumerator IShotSkill(SkillItemData skillData, Action<int> spawnAction, bool onlySelf = false)
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
         int shotCount = onlySelf ? 1 : skillData.SkillShotCount + characterConfig.AddProjectileCount.Value;
 
         for (int i = 0; i < shotCount; i++)
@@ -100,9 +100,9 @@ public class SkillSpawner
     /// <param name="data"></param>
     private void SpawnSkillInPoint(SkillItemData data)
     {
-        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
 
-        GameStateData.GameScenePool.Value.SpawnObject(
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: playerView.ShotPoint.position,
@@ -122,7 +122,7 @@ public class SkillSpawner
     /// <param name="data"></param>
     private void SpawnSkillRandomInPoint(SkillItemData data)
     {
-        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
         Transform shotPoint = playerView.ShotPoint;
 
         // 左右隨機正負
@@ -136,7 +136,7 @@ public class SkillSpawner
         Vector3 randomOffset = (shotPoint.right * randomX) + (shotPoint.up * randomY);
         Vector3 finalPosition = shotPoint.position + randomOffset;
 
-        GameStateData.GameScenePool.Value.SpawnObject(
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: finalPosition,
@@ -175,7 +175,7 @@ public class SkillSpawner
         };
         _onlySkills.Add(data.SkillName, placeholderData);
 
-        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
         Transform bottomPoint = playerView.BottomPoint;
 
         try
@@ -237,9 +237,9 @@ public class SkillSpawner
         };
         _onlySkills.Add(data.SkillName, placeholderData);
 
-        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
 
-        GameStateData.GameScenePool.Value.SpawnObject(
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: playerView.transform.position,
@@ -249,7 +249,7 @@ public class SkillSpawner
                 // 防呆：如果在 await 期間，這個技能又被移除了或改變了，就直接回收此物件
                 if (!_onlySkills.ContainsKey(data.SkillName))
                 {
-                    GameStateData.GameScenePool.Value.ReturnToPool(obj);
+                    GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
                     return;
                 }
 
@@ -287,7 +287,7 @@ public class SkillSpawner
         if (tr == null) tr = GetFallbackTransform();
 
         // 產生技能
-        GameStateData.GameScenePool.Value.SpawnObject(
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: tr.position,
@@ -308,7 +308,7 @@ public class SkillSpawner
     /// <param name="index"></param>
     private void SpawnInCharacterMiddle8Way(SkillItemData data, int index)
     {
-        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
         Transform middlePoint = playerView.MiddlePoint;
 
         // 技能方向
@@ -326,7 +326,7 @@ public class SkillSpawner
         Quaternion quaternion = middlePoint.rotation * Quaternion.Euler(relativeAngles[index % 8]);
 
         // 產生技能
-        GameStateData.GameScenePool.Value.SpawnObject(
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
             position: middlePoint.position,
@@ -366,7 +366,7 @@ public class SkillSpawner
     /// <returns></returns>
     public EnemyView GetRandomEnemyInCamera()
     {
-        EnemyManager enemyManager = GameStateData.EnemyManager.Value;
+        EnemyManager enemyManager = GameplayManager.CurrentContext.EnemyManager;
         if (_mainCamera == null) _mainCamera = Camera.main;
 
         List<EnemyView> visibleEnemies = new();
@@ -407,7 +407,7 @@ public class SkillSpawner
     {
         float radius = 10;
 
-        PlayerView playerView = GameStateData.ControlCharacter.Value;
+        PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
         if (playerView == null) return null;
 
         Vector2 randomCircle = UnityEngine.Random.insideUnitCircle.normalized * radius;
@@ -431,7 +431,7 @@ public class SkillSpawner
     /// <returns></returns>
     public EnemyView GetNearestEnemy(Vector3 origin)
     {
-        EnemyManager enemyManager = GameStateData.EnemyManager.Value;
+        EnemyManager enemyManager = GameplayManager.CurrentContext.EnemyManager;
 
         if (enemyManager == null || enemyManager.LivingEnemyPool == null)
         {

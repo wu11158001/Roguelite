@@ -140,7 +140,7 @@ public class SkillController : MonoBehaviour
     /// <param name="data"></param>
     public void OnGainPassiveHandle(SkillItemData data)
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         if (data.IsPassive)
         {
@@ -215,7 +215,7 @@ public class SkillController : MonoBehaviour
     /// <param name="data"></param>
     public void OnGainPropsHandle(SkillItemData data)
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         if (data.IsProps)
         {
@@ -224,7 +224,7 @@ public class SkillController : MonoBehaviour
                 // 生命回復(%)
                 case PROPS_SKILL_TYPE.HpRecover:
                     int addValue = (int)(characterConfig.MaxHp.Value * data.PropsAddValue);
-                    GameStateData.CharacterController.Value.OnPlayerHpRecover(addValue);
+                    GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(addValue);
                     break;
             }
 

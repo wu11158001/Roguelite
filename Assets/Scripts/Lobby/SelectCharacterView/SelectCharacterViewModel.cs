@@ -29,7 +29,7 @@ public class SelectCharacterViewModel
     /// <returns></returns>
     public async UniTaskVoid SelectCharacterAsync(CharacterConfigData data, int index)
     {
-        GameStateData.PreSelectCharacter.Value = index;
+        GameStateData.PreSelectCharacter = index;
         _loadingCharacterName = data.CharacterName;
         _currentCharacterData.Value = data;
 
@@ -78,7 +78,7 @@ public class SelectCharacterViewModel
 
         // 角色能力+強化能力
         List<AbilityUpgradeData> abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
-        List<AbilityUpgradeItemData> _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.Value.AbilityUpgradeItemDatas.ToList();
+        List<AbilityUpgradeItemData> _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.AbilityUpgradeItemDatas.ToList();
         foreach (var item in abilityUpgrades)
         {
             AbilityUpgradeItemData upgradeData = _upgradeConfigs.FirstOrDefault(x => x.UpgradeItemType == item.Type);

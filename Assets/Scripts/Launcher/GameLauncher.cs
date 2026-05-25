@@ -1,28 +1,31 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using NaughtyAttributes;
-using UniRx;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.AddressableAssets;
 
 public class GameLauncher : MonoBehaviour
 {
     private Transform _controllParent;
+    private GameplayContext _context;
 
     private async void Start()
     {
         try
         {
+            _context = new GameplayContext();
+
             // 產生Controller資料夾
             _controllParent = new GameObject("ControllerGroup").transform;
 
+            SpawnGameplayManager();
             SpawnPool();
             SpawnGameContorller();
             SpawnCharacterContorller();
             SpawnSkillContorller();
+
             ViewManager.Instance.OpenView<JoystickView>(viewType: VIEW_TYPE.JoystickView).Forget();
             await ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
+
             await SpawnPlayer();
             await SpawnEnemyManager();
 
@@ -32,7 +35,16 @@ public class GameLauncher : MonoBehaviour
         {
             Debug.LogError($"遊戲初始化錯誤: {e}");
         }
-    } 
+    }
+
+    /// <summary>
+    /// 產生遊戲管理中心
+    /// </summary>
+    private void SpawnGameplayManager()
+    {
+        var manager = gameObject.AddComponent<GameplayManager>();
+        manager.Setup(_context);
+    }
 
     /// <summary>
     /// 產生遊戲場景物件池
@@ -40,7 +52,7 @@ public class GameLauncher : MonoBehaviour
     private void SpawnPool()
     {
         GameObject obj = new("ObjectPool");
-        GameStateData.GameScenePool.Value = obj.AddComponent<GameScenePool>();
+        _context.GameScenePool = obj.AddComponent<GameScenePool>();
     }
 
     /// <summary>
@@ -49,7 +61,7 @@ public class GameLauncher : MonoBehaviour
     private void SpawnGameContorller()
     {
         GameObject obj = new("GameController");
-        GameStateData.CurrentGameController.Value = obj.AddComponent<GameController>();
+        _context.CurrentGameController = obj.AddComponent<GameController>();
         obj.transform.parent = _controllParent;
     }
 
@@ -59,7 +71,7 @@ public class GameLauncher : MonoBehaviour
     private void SpawnCharacterContorller()
     {
         GameObject obj = new("CharacterController");
-        GameStateData.CharacterController.Value = obj.AddComponent<CharacterController>();
+        _context.CharacterController = obj.AddComponent<CharacterController>();
         obj.transform.parent = _controllParent;
     }
 
@@ -69,7 +81,7 @@ public class GameLauncher : MonoBehaviour
     private void SpawnSkillContorller()
     {
         GameObject obj = new("SkillController");
-        GameStateData.SkillController.Value = obj.AddComponent<SkillController>();
+        _context.SkillController = obj.AddComponent<SkillController>();
         obj.transform.parent = _controllParent;
     }
 
@@ -78,7 +90,7 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     private async UniTask SpawnPlayer()
     {
-        CharacterConfigData selectedCharacter = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData selectedCharacter = GameStateData.SelectedCharacter;
 
         if (selectedCharacter == null)
         {
@@ -97,6 +109,8 @@ public class GameLauncher : MonoBehaviour
         }
 
         playerView.Setup(myRef: selectedCharacter.PrefabReference);
+
+        _context.ControlCharacter = playerView;
     }
 
     /// <summary>
@@ -105,7 +119,7 @@ public class GameLauncher : MonoBehaviour
     private async UniTask SpawnEnemyManager()
     {
         EnemyManager manager = gameObject.AddComponent<EnemyManager>();
-        GameStateData.EnemyManager.Value = manager;
+        _context.EnemyManager = manager;
 
         var handle = Addressables.LoadAssetsAsync<EnemyConfigData>("EnmeyConfigs", (config) => {
             // 每加載完成一個 SO 就會跑一次這裡
@@ -115,6 +129,6 @@ public class GameLauncher : MonoBehaviour
 
         List<EnemyConfigData> configs = new List<EnemyConfigData>(handle.Result);
         Debug.Log($"成功加載了 {configs.Count} 個敵人設定！");
-        GameStateData.EnemyManager.Value.SetUp(configs);
+        manager.SetUp(configs);
     }
 }

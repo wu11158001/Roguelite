@@ -25,7 +25,7 @@ public class SkillTimerManager
     /// <returns></returns>
     public float GetActualCd(SkillItemData skill)
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
         if (characterConfig.CdReduce.Value == 0) return skill.SkillCd;
 
         float actualCd = skill.SkillCd * (1 - characterConfig.CdReduce.Value);

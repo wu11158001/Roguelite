@@ -31,7 +31,7 @@ public class JoystickView : BaseView, IPointerDownHandler, IDragHandler, IPointe
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(GameStateData.CurrentGameController.Value.IsGamePause)
+        if(GameplayManager.CurrentContext.CurrentGameController.IsGamePause)
         {
             return;
         }
@@ -52,7 +52,7 @@ public class JoystickView : BaseView, IPointerDownHandler, IDragHandler, IPointe
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (GameStateData.CurrentGameController.Value.IsGamePause)
+        if (GameplayManager.CurrentContext.CurrentGameController.IsGamePause)
         {
             return;
         }

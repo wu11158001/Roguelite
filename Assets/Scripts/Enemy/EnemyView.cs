@@ -73,7 +73,7 @@ public class EnemyView : BaseGameObject
     private void Update()
     {
         // 遊戲暫停
-        if (GameStateData.CurrentGameController.Value.IsGamePause)
+        if (GameplayManager.CurrentContext.CurrentGameController.IsGamePause)
             return;
         _attackedTimes += Time.deltaTime;
         if (!IsWithinExtendedBounds())
@@ -131,7 +131,7 @@ public class EnemyView : BaseGameObject
                 Knockback = 0
             };
 
-            CharacterConfigData characterConfigData = GameStateData.SelectedCharacter.Value;
+            CharacterConfigData characterConfigData = GameStateData.SelectedCharacter;
             characterConfigData.Hp.Value = Mathf.Max(0, characterConfigData.Hp.Value - hitData.Attack);
         }
     }

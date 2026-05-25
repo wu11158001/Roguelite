@@ -25,14 +25,14 @@ public class MakeupItemView : MonoBehaviour
         // 主動技能需求裝備
         foreach (var active in mainItem.NeedActiveSkills)
         {
-            SkillItemData item = GameStateData.AllSkillConfigData.Value.GetActiveSkill(active.Type, active.Level);
+            SkillItemData item = GameStateData.AllSkillConfigData.GetActiveSkill(active.Type, active.Level);
             allItems.Add(item);
         }
 
         // 被動技能需求裝備
         foreach (var passive in mainItem.NeedPassiveSkills)
         {
-            SkillItemData item = GameStateData.AllSkillConfigData.Value.GetPassiveSkill(passive.Type, passive.Level);
+            SkillItemData item = GameStateData.AllSkillConfigData.GetPassiveSkill(passive.Type, passive.Level);
             allItems.Add(item);
         }
 

@@ -49,7 +49,7 @@ public class SkillInventory
     /// <returns></returns>
     public List<SkillItemData> GetRandomSkillDatas(int count = 3)
     {
-        var allConfigs = GameStateData.AllSkillConfigData.Value.AllSkillItemConfigs.SelectMany(c => c.SkillItems).ToList();
+        var allConfigs = GameStateData.AllSkillConfigData.AllSkillItemConfigs.SelectMany(c => c.SkillItems).ToList();
         var ownedSkills = _ownSkills.ToList();
         var activeOwned = ownedSkills.Where(s => !s.IsPassive && !s.IsProps).ToList();
         var passiveOwned = ownedSkills.Where(s => s.IsPassive && !s.IsProps).ToList();
@@ -101,7 +101,7 @@ public class SkillInventory
         var finalSelection = skillCandidates.Distinct().OrderBy(_ => Guid.NewGuid()).Take(count).ToList();
 
         // 血量與道具補位邏輯
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
         float hpPercent = (float)characterConfig.Hp.Value / characterConfig.MaxHp.Value;
 
         if (hpPercent < 0.7f && allProps.Count > 0)

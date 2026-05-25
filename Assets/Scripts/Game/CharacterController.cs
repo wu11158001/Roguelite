@@ -40,13 +40,13 @@ public class CharacterController : MonoBehaviour
     /// <param name="recover"></param>
     public void OnPlayerHpRecover(float recover)
     {
-        int maxHp = GameStateData.SelectedCharacter.Value.MaxHp.Value;
-        int currentHp = GameStateData.SelectedCharacter.Value.Hp.Value;
+        int maxHp = GameStateData.SelectedCharacter.MaxHp.Value;
+        int currentHp = GameStateData.SelectedCharacter.Hp.Value;
 
         int hpToAdd = Mathf.FloorToInt(recover);
         currentHp = Mathf.Min(currentHp + hpToAdd, maxHp);
 
-        GameStateData.SelectedCharacter.Value.Hp.Value = currentHp;
+        GameStateData.SelectedCharacter.Hp.Value = currentHp;
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class CharacterController : MonoBehaviour
     /// <param name="attack">攻擊值</param>
     public void OnPlayerGetHit(int attack)
     {
-        CharacterConfigData characterConfigData = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfigData = GameStateData.SelectedCharacter;
 
         // 計算減少傷害
         int defance = characterConfigData.Defense.Value;
@@ -72,11 +72,10 @@ public class CharacterController : MonoBehaviour
     /// <summary>
     /// 獲得經驗值
     /// </summary>
-    /// <param name="expType"></param>
-    public void OnGainExp(EXP_TYPE expType)
+    /// <param name="value"></param>
+    public void OnGainExp(int value)
     {
-        int addValue = GameStateData.GameConfig.Value.GetGainExp(expType);
-        _currentExp.Value += addValue;
+        _currentExp.Value += value;
     }
 
     /// <summary>
@@ -86,7 +85,7 @@ public class CharacterController : MonoBehaviour
     {
         _levelToTotalExpTable.Clear();
 
-        GameConfigData gameConfig = GameStateData.GameConfig.Value;
+        GameConfigData gameConfig = GameStateData.GameConfig;
         int maxLevel = gameConfig.MaxLevel;
         int baseExp = gameConfig.BaseUpgradeExp;
 

@@ -27,7 +27,7 @@ public class Skill_RangeSlowView : BaseSkill
 
     private void BindViewModel()
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         characterConfig.AddEffectRange.Subscribe(r => UpdataEffecrRange(r)).AddTo(this);
     }

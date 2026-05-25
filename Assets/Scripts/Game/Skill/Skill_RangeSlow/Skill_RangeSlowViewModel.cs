@@ -40,10 +40,10 @@ public class Skill_RangeSlowViewModel
     /// <param name="target"></param>
     private void SpawnSlowEffect(Transform target, float recycleTime)
     {
-        EffectData data = GameStateData.AllEffectPrefabData.Value.GetEffect(EFFET_TYPE.SlowDown);
+        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.SlowDown);
         if (data != null)
         {
-            GameStateData.GameScenePool.Value.SpawnObject(
+            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
                 parentName: "減速效果",
                 assetRef: data.PrefabReference,
                 position: target.position,

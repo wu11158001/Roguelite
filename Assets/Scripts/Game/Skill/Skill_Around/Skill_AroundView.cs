@@ -26,10 +26,10 @@ public class Skill_AroundView : BaseSkill
     {
         base.Setup(data);
 
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         // 圍繞目標
-        Transform target = GameStateData.ControlCharacter.Value.MiddlePoint;
+        Transform target = GameplayManager.CurrentContext.ControlCharacter.MiddlePoint;
         // 選轉速度
         float rotateSpeed = data.SkillFlightSpeed;
         // 持續時間
@@ -80,7 +80,7 @@ public class Skill_AroundView : BaseSkill
     {
         _attackObjs.Clear();
 
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
         int shotCount = _viewModel.Data.SkillShotCount + characterConfig.AddProjectileCount.Value;
 
         for (int i = 0; i < shotCount; i++)
@@ -89,7 +89,7 @@ public class Skill_AroundView : BaseSkill
 
             Vector3 localPos = GetInitialLocalPosition(index, _data.SkillShotCount);
 
-            GameStateData.GameScenePool.Value.SpawnObject(
+            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: "圍繞球體",
             assetRef: _attackObj,
             position: transform.position,
@@ -98,7 +98,7 @@ public class Skill_AroundView : BaseSkill
             {
                 if (this == null || transform == null)
                 {
-                    GameStateData.GameScenePool.Value.ReturnToPool(obj);
+                    GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
                     return;
                 }
 

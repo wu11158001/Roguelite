@@ -65,13 +65,13 @@ public class LauncherController : MonoBehaviour
             // 所有介面
             foreach (VIEW_TYPE viewType in Enum.GetValues(typeof(VIEW_TYPE)))
             {
-                var prefabRef = GameStateData.ViewConfig.Value.GetPrefabRef(viewType);
+                var prefabRef = GameStateData.ViewConfig.GetPrefabRef(viewType);
                 var handle = prefabRef.LoadAssetAsync<GameObject>();
                 await handle.Task;
             }
 
             // 所有腳色
-            foreach (var config in GameStateData.AllCharacterConfig.Value.AllCharacterConfigs)
+            foreach (var config in GameStateData.AllCharacterConfig.AllCharacterConfigs)
             {
                 var prefabRef = config.PrefabReference;
                 var handle = prefabRef.LoadAssetAsync<GameObject>();

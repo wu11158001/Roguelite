@@ -48,7 +48,7 @@ public class AbilityView : MonoBehaviour
 
         _characterConfigData = data;
         _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
-        _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.Value.AbilityUpgradeItemDatas.ToList();
+        _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.AbilityUpgradeItemDatas.ToList();
 
         if (_abilityItems == null || _abilityItems.Count == 0)
         {

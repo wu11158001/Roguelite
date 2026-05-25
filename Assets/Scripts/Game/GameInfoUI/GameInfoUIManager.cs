@@ -67,7 +67,7 @@ public class GameInfoUIManager : MonoBehaviour
     {
         try
         {
-            EffectData data = GameStateData.AllEffectPrefabData.Value.GetEffect(EFFET_TYPE.HpBar);
+            EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.HpBar);
             if (data != null)
             {
                 AsyncOperationHandle<GameObject> handle = data.PrefabReference.InstantiateAsync(Vector3.zero, Quaternion.identity, transform);

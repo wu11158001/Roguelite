@@ -71,14 +71,14 @@ public class SelectCharacterView : BaseView
             .Subscribe(data =>
             {
                 CharacterConfigData characterConfigData = data.Clone();
-                GameStateData.SelectedCharacter.Value = _viewModel.SetCharacterAbility(characterConfigData);
+                GameStateData.SelectedCharacter = _viewModel.SetCharacterAbility(characterConfigData);
 
                 // 角色名稱
                 Text_CharacterName.text = data.CharacterName;
                 // 各項能力值
-                _abilityView.Setup(GameStateData.SelectedCharacter.Value);
+                _abilityView.Setup(GameStateData.SelectedCharacter);
                 // 初始主動技能
-                SkillItemData initSkill = GameStateData.AllSkillConfigData.Value.GetActiveSkill(data.InitSkill, 1);
+                SkillItemData initSkill = GameStateData.AllSkillConfigData.GetActiveSkill(data.InitSkill, 1);
                 if(initSkill != null)
                 {
                     Img_InitSkillIcon.sprite = initSkill.SkillIcon;
@@ -112,7 +112,7 @@ public class SelectCharacterView : BaseView
         List<Toggle> togs = new();
 
         _sampleSelectCharacterTog.gameObject.SetActive(false);
-        foreach (var config in GameStateData.AllCharacterConfig.Value.AllCharacterConfigs)
+        foreach (var config in GameStateData.AllCharacterConfig.AllCharacterConfigs)
         {
             int currentIndex = index;
 
@@ -135,7 +135,7 @@ public class SelectCharacterView : BaseView
             index++;
         }
 
-        int preSelectIndex = GameStateData.PreSelectCharacter.Value;
+        int preSelectIndex = GameStateData.PreSelectCharacter;
         int targetIndex = 0;
         if (preSelectIndex >= 0 && preSelectIndex < togs.Count)
         {

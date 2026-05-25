@@ -50,11 +50,6 @@ public class PlayerView : BaseGameObject
             {
                 // 獲取頭部骨骼的 Transform
                 HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
-
-                if (HeadPoint != null)
-                {
-                    Debug.Log($"成功抓到頭部，實際骨骼名稱為: {HeadPoint.name}");
-                }
             }
             else
             {
@@ -66,7 +61,7 @@ public class PlayerView : BaseGameObject
             Debug.LogError("找不到 Animator 組件！");
         }
 
-        GameConfigData gameConfigData = GameStateData.GameConfig.Value;
+        GameConfigData gameConfigData = GameStateData.GameConfig;
 
         // 輸入控制腳本
         if (!gameObject.TryGetComponent(out PlayerInput playerInput))
@@ -121,8 +116,8 @@ public class PlayerView : BaseGameObject
     private void Init()
     {
         // 設置當前控制角色
-        GameStateData.ControlCharacter.Value = this;
-        _characterConfig = GameStateData.SelectedCharacter.Value;
+        GameplayManager.CurrentContext.ControlCharacter = this;
+        _characterConfig = GameStateData.SelectedCharacter;
 
         // 攝影機設定
         GameCamera gameCameraView = GameObject.FindFirstObjectByType<GameCamera>();
@@ -132,8 +127,8 @@ public class PlayerView : BaseGameObject
         }
 
         // 初始技能添加
-        SkillItemData skillItemData = GameStateData.AllSkillConfigData.Value.GetActiveSkill(_characterConfig.InitSkill, 1);
-        GameStateData.SkillController.Value.OnGainSkill(newSkill: skillItemData);
+        SkillItemData skillItemData = GameStateData.AllSkillConfigData.GetActiveSkill(_characterConfig.InitSkill, 1);
+        GameplayManager.CurrentContext.SkillController.OnGainSkill(newSkill: skillItemData);
 
         // 產生生命條
         GameInfoUIManager gameInfoUIManager = FindFirstObjectByType<GameInfoUIManager>();
@@ -196,7 +191,7 @@ public class PlayerView : BaseGameObject
     private void Update()
     {
         // 遊戲暫停
-        if (GameStateData.CurrentGameController.Value.IsGamePause)
+        if (GameplayManager.CurrentContext.CurrentGameController.IsGamePause)
             return;
 
         // 更新 ViewModel 狀態
@@ -286,22 +281,22 @@ public class PlayerView : BaseGameObject
     {
         if(Keyboard.current.numpad1Key.wasPressedThisFrame)
         {
-            _viewModel.GainExp(expType: EXP_TYPE.Exp_1);
+            _viewModel.GainExp(5);
         }
 
         if (Keyboard.current.numpad2Key.wasPressedThisFrame)
         {
-            _viewModel.GainExp(expType: EXP_TYPE.Exp_2);
+            _viewModel.GainExp(3);
         }
 
         if(Keyboard.current.numpad4Key.wasPressedThisFrame)
         {
-            GameStateData.CharacterController.Value.OnPlayerGetHit(10);
+            GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(10);
         }
 
         if (Keyboard.current.numpad5Key.wasPressedThisFrame)
         {
-            GameStateData.CharacterController.Value.OnPlayerHpRecover(10);
+            GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(10);
         }
     }
 

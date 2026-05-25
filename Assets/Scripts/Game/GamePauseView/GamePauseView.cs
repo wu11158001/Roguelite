@@ -21,7 +21,7 @@ public class GamePauseView : BaseView
 
         BindViewModel();
 
-        _abilityView.Setup(GameStateData.SelectedCharacter.Value);
+        _abilityView.Setup(GameStateData.SelectedCharacter);
     }
 
     private void BindViewModel()
@@ -29,7 +29,7 @@ public class GamePauseView : BaseView
         // 離開按鈕
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
         {
-            GameStateData.CurrentGameController.Value.GanePause(false);
+            GameplayManager.CurrentContext.CurrentGameController.GanePause(false);
             SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
         }).AddTo(this);
 
@@ -42,7 +42,7 @@ public class GamePauseView : BaseView
         // 繼續按鈕
         _btn_Continue.OnClickAsObservable().First().Subscribe(_ =>
         {
-            GameStateData.CurrentGameController.Value.GanePause(false);
+            GameplayManager.CurrentContext.CurrentGameController.GanePause(false);
             Close();
         }).AddTo(this);
     }

@@ -54,21 +54,21 @@ public class GameView : BaseView
 
     private void BindViewModel()
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter.Value;
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         characterConfig.AddAttack.Subscribe(x => Text_Attack.text = $"增加攻擊力:{x}").AddTo(this);
         characterConfig.MaxHp.Subscribe(x => Text_MaxHp.text = $"最大生命:{x}").AddTo(this);
         characterConfig.MoveSpeed.Subscribe(x => Text_MoveSpeed.text = $"移動速度:{x}").AddTo(this);
         characterConfig.Hp.Subscribe(x => Text_Hp.text = $"當前Hp:{x}").AddTo(this);
 
-        GameStateData.CharacterController.Value.CurrentLevel.Subscribe(value => UpdateLevel(value)).AddTo(this);
-        GameStateData.CharacterController.Value.CurrentExpprogress.Subscribe(value => UpdateExpBar(value)).AddTo(this);
+        GameplayManager.CurrentContext.CharacterController.CurrentLevel.Subscribe(value => UpdateLevel(value)).AddTo(this);
+        GameplayManager.CurrentContext.CharacterController.CurrentExpprogress.Subscribe(value => UpdateExpBar(value)).AddTo(this);
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
 
         // 暫停按鈕
         _btn_Pause.OnClickAsObservable().Subscribe(_ =>
         {
-            GameStateData.CurrentGameController.Value.GanePause(true);
+            GameplayManager.CurrentContext.CurrentGameController.GanePause(true);
             ViewManager.Instance.OpenView<GamePauseView>(VIEW_TYPE.GamePauseView).Forget();
         }).AddTo(this);
     }
@@ -78,7 +78,7 @@ public class GameView : BaseView
     /// </summary>
     private void UpdateTime()
     {
-        if(GameStateData.CurrentGameController.Value.IsGamePause)
+        if(GameplayManager.CurrentContext.CurrentGameController.IsGamePause)
         {
             return;
         }
@@ -103,13 +103,13 @@ public class GameView : BaseView
         if(level > 0)
         {
             // 遊戲暫停
-            GameStateData.CurrentGameController.Value.GanePause(true);
+            GameplayManager.CurrentContext.CurrentGameController.GanePause(true);
             // 開啟選擇技能介面
             ViewManager.Instance.OpenView<SelectSkillView>(
                 viewType: VIEW_TYPE.SelectSkillView,
                 callback: (view) =>
                 {
-                    List<SkillItemData> items = GameStateData.SkillController.Value.GetRandomSkillDatas();
+                    List<SkillItemData> items = GameplayManager.CurrentContext.SkillController.GetRandomSkillDatas();
                     view.SetSkillItemData(items);
                 }).Forget();
         }

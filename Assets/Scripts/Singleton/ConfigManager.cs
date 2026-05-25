@@ -27,11 +27,11 @@ public class ConfigManager : MonoBehaviour
     [ContextMenu(nameof(SetConfigData))]
     public void SetConfigData()
     {
-        GameStateData.GameConfig.Value = _gameConfig;
-        GameStateData.ViewConfig.Value = _viewConfig;
-        GameStateData.AllSkillConfigData.Value = _allSkillItemConfig;
-        GameStateData.AllCharacterConfig.Value = _allCharacterConfig;
-        GameStateData.AllEffectPrefabData.Value = _allEffectPrefabData;
-        GameStateData.AbilityUpgradeConfigData.Value = _abilityUpgradeConfigData;
+        GameStateData.GameConfig = _gameConfig;
+        GameStateData.ViewConfig = _viewConfig;
+        GameStateData.AllSkillConfigData = _allSkillItemConfig;
+        GameStateData.AllCharacterConfig = _allCharacterConfig;
+        GameStateData.AllEffectPrefabData = _allEffectPrefabData;
+        GameStateData.AbilityUpgradeConfigData = _abilityUpgradeConfigData;
     }
 }

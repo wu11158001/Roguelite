@@ -22,7 +22,7 @@ public class PlayerViewModel
 
     public void Setup()
     {
-        _selectedCharacter = GameStateData.SelectedCharacter.Value;
+        _selectedCharacter = GameStateData.SelectedCharacter;
         _selectedCharacter.MoveSpeed.Subscribe(s => MoveSpeed = s).AddTo(_disposables);
 
         MoveSpeed = _selectedCharacter.MoveSpeed.Value;
@@ -53,10 +53,10 @@ public class PlayerViewModel
     /// <summary>
     /// 獲取經驗值
     /// </summary>
-    /// <param name="expType"></param>
-    public void GainExp(EXP_TYPE expType)
+    /// <param name="value"></param>
+    public void GainExp(int value)
     {
-        GameStateData.CharacterController.Value.OnGainExp(expType: expType);
+        GameplayManager.CurrentContext.CharacterController.OnGainExp(value);
     }
 
     /// <summary>
@@ -64,16 +64,16 @@ public class PlayerViewModel
     /// </summary>
     public void HpRecoverPreSecond()
     {
-        if(GameStateData.SelectedCharacter.Value.HpRecover.Value > 0)
+        if(GameStateData.SelectedCharacter.HpRecover.Value > 0)
         {
-            _accumulatedHp += GameStateData.SelectedCharacter.Value.HpRecover.Value;
+            _accumulatedHp += GameStateData.SelectedCharacter.HpRecover.Value;
 
             if(_accumulatedHp >= 1)
             {
                 int hpToAdd = Mathf.FloorToInt(_accumulatedHp);
                 _accumulatedHp -= hpToAdd;
 
-                GameStateData.CharacterController.Value.OnPlayerHpRecover(hpToAdd);
+                GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(hpToAdd);
             }
         }
     }
@@ -84,10 +84,10 @@ public class PlayerViewModel
     /// <param name="point">產生位置點</param>
     public void OnHpRecover(Transform point)
     {
-        EffectData data = GameStateData.AllEffectPrefabData.Value.GetEffect(EFFET_TYPE.HpRecover);
+        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.HpRecover);
         if (data != null)
         {
-            GameStateData.GameScenePool.Value.SpawnObject(
+            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
                 parentName: "生命回復效果",
                 assetRef: data.PrefabReference,
                 position: point.position,

@@ -19,12 +19,12 @@ public class MakeupListView : BaseView
     {        
         base.Setup(myRef);
 
-        List<SkillItemData> makeupItemDatas = GameStateData.AllSkillConfigData.Value.GetMakeupItems();
+        List<SkillItemData> makeupItemDatas = GameStateData.AllSkillConfigData.GetMakeupItems();
 
         // 遊戲中拿取使用中技能
         if(SceneManager.GetActiveScene().name == $"{SCENE_TYPE.Game}")
         {
-            _usingSkills = GameStateData.SkillController.Value.OwnSkills.ToList();
+            _usingSkills = GameplayManager.CurrentContext.SkillController.OwnSkills.ToList();
         }        
 
         // 創建組合表
