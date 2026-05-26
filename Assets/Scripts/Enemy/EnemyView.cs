@@ -73,7 +73,7 @@ public class EnemyView : BaseGameObject
     private void Update()
     {
         // 遊戲暫停
-        if (GameplayManager.CurrentContext.CurrentGameController.IsGamePause)
+        if (GameplayManager.CurrentContext.GameController.IsGamePause)
             return;
         _attackedTimes += Time.deltaTime;
         if (!IsWithinExtendedBounds())

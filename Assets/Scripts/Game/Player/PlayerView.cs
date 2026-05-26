@@ -110,7 +110,7 @@ public class PlayerView : BaseGameObject
 
     private void Update()
     {
-        if (GameplayManager.CurrentContext.CurrentGameController.IsGamePause) return;
+        if (GameplayManager.CurrentContext.GameController.IsGamePause) return;
 
         // 測試用鍵盤輸入監聽
         TestDebugInput();

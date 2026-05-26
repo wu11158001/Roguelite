@@ -13,28 +13,19 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::GameConfigData
   InputAction: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  MaxMonsterCount: 5
-  SpawnMonsterTime: 0.5
-  SpawnMonsterDistance: 10
+  GroundPrefabReference:
+    m_AssetGUID: 2247196fc0c125a44957d2a50bef5032
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  GroundSize: 50
+  GridSize: 3
+  GroundTexture:
+  - {fileID: 2800000, guid: 9aa7ae7097384094cad98614398ebadb, type: 3}
+  - {fileID: 2800000, guid: ae12c09a25b216444af35e179444e655, type: 3}
   MaxLevel: 100
   BaseUpgradeExp: 3
-  ExpConfig:
-  - ExpType: 0
-    ExpAddValue: 1
-    PrefabReference:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-  - ExpType: 1
-    ExpAddValue: 2
-    PrefabReference:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
   UpgradeExpMultiplier:
   - LevelRange: 5
     AddNeedValue: 1
@@ -44,4 +35,3 @@ MonoBehaviour:
     AddNeedValue: 6
   - LevelRange: 20
     AddNeedValue: 10
-  MaxSkillCount: 0

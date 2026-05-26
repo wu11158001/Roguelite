@@ -19,10 +19,10 @@ MonoBehaviour:
       \u7206\u64CA\u738720%"
     NeedActiveSkills:
     - Type: 1
-      Level: 2
+      Level: 1
     NeedPassiveSkills:
     - Type: 8
-      Level: 2
+      Level: 1
     _skillType: 6
     IsUpdateNow: 0
     SkillLevel: 1

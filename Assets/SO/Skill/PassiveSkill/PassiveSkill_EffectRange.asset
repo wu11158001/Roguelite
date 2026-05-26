@@ -19,7 +19,7 @@ MonoBehaviour:
     NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 0
-    IsUpdateNow: 0
+    IsUpdateNow: 1
     SkillLevel: 1
     SkillSpawnModeType: 0
     PrefabReference:
@@ -53,7 +53,7 @@ MonoBehaviour:
     NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 0
-    IsUpdateNow: 0
+    IsUpdateNow: 1
     SkillLevel: 2
     SkillSpawnModeType: 0
     PrefabReference:

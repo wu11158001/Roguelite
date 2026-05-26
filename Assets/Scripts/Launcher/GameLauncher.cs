@@ -5,7 +5,6 @@ using UnityEngine.AddressableAssets;
 
 public class GameLauncher : MonoBehaviour
 {
-    private Transform _controllParent;
     private GameplayContext _context;
 
     private async void Start()
@@ -14,19 +13,12 @@ public class GameLauncher : MonoBehaviour
         {
             _context = new GameplayContext();
 
-            // 產生Controller資料夾
-            _controllParent = new GameObject("ControllerGroup").transform;
-
-            SpawnGameplayManager();
-            SpawnPool();
-            SpawnGameContorller();
-            SpawnCharacterContorller();
-            SpawnSkillContorller();
+            CreateMainItems();
 
             ViewManager.Instance.OpenView<JoystickView>(viewType: VIEW_TYPE.JoystickView).Forget();
             await ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
 
-            await SpawnPlayer();
+            await SpawnPlayerAndMap();
             await SpawnEnemyManager();
 
             SceneLoader.Instance.CloseLoading();
@@ -38,60 +30,44 @@ public class GameLauncher : MonoBehaviour
     }
 
     /// <summary>
-    /// 產生遊戲管理中心
+    /// 產生主項目
     /// </summary>
-    private void SpawnGameplayManager()
+    private void CreateMainItems()
     {
+        // 遊戲管理中心
         var manager = gameObject.AddComponent<GameplayManager>();
         manager.Setup(_context);
-    }
 
-    /// <summary>
-    /// 產生遊戲場景物件池
-    /// </summary>
-    private void SpawnPool()
-    {
-        GameObject obj = new("ObjectPool");
+        GameObject obj = null;
+        Transform parent = new GameObject("ControllerGroup").transform;
+
+        // 產生遊戲場景物件池
+        obj = new("ObjectPool");
         _context.GameScenePool = obj.AddComponent<GameScenePool>();
-    }
 
-    /// <summary>
-    /// 產生遊戲控制器
-    /// </summary>
-    private void SpawnGameContorller()
-    {
-        GameObject obj = new("GameController");
-        _context.CurrentGameController = obj.AddComponent<GameController>();
-        obj.transform.parent = _controllParent;
-    }
+        // 產生遊戲控制器
+        obj = new("GameController");
+        _context.GameController = obj.AddComponent<GameController>();
+        obj.transform.parent = parent;
 
-    /// <summary>
-    /// 產生角色控制器
-    /// </summary>
-    private void SpawnCharacterContorller()
-    {
-        GameObject obj = new("CharacterController");
+        // 產生角色控制器
+        obj = new("CharacterController");
         _context.CharacterController = obj.AddComponent<CharacterController>();
-        obj.transform.parent = _controllParent;
-    }
+        obj.transform.parent = parent;
 
-    /// <summary>
-    /// 產生技能控制器
-    /// </summary>
-    private void SpawnSkillContorller()
-    {
-        GameObject obj = new("SkillController");
+        // 產生技能控制器
+        obj = new("SkillController");
         _context.SkillController = obj.AddComponent<SkillController>();
-        obj.transform.parent = _controllParent;
+        obj.transform.parent = parent;
     }
 
     /// <summary>
-    /// 產生控制角色
+    /// 產生控制角色與地圖
     /// </summary>
-    private async UniTask SpawnPlayer()
+    private async UniTask SpawnPlayerAndMap()
     {
+        // 產生角色
         CharacterConfigData selectedCharacter = GameStateData.SelectedCharacter;
-
         if (selectedCharacter == null)
         {
             Debug.LogError("找不到選擇的角色資料！");
@@ -102,15 +78,18 @@ public class GameLauncher : MonoBehaviour
          .InstantiateAsync(Vector3.zero, Quaternion.identity)
          .ToUniTask();
 
-        // 檢查元件並 Setup
         if (!playerInstance.TryGetComponent(out PlayerView playerView))
         {
             playerView = playerInstance.AddComponent<PlayerView>();
         }
 
         playerView.Setup(myRef: selectedCharacter.PrefabReference);
-
         _context.ControlCharacter = playerView;
+
+        // 產生地圖
+        GameObject mapGroup = new("MapGroup");
+        InfiniteMap infiniteMap = mapGroup.AddComponent<InfiniteMap>();
+        await infiniteMap.Setup(playerView.transform);
     }
 
     /// <summary>

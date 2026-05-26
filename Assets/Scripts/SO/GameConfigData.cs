@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 
 /// <summary>
 /// 遊戲配置資料
@@ -14,6 +13,16 @@ public class GameConfigData : ScriptableObject
 {
     [Label("輸入控制Action Asset")]
     public InputActionAsset InputAction;
+
+    [HorizontalLine(color: EColor.Gray)]
+    [Label("地板模型")]
+    public AssetReferenceGameObject GroundPrefabReference;
+    [Label("地板大小")]
+    public float GroundSize = 50;
+    [Label("排列數量3 = (3*3)")]
+    public int GridSize = 3;
+    [Label("地形圖片")]
+    public List<Texture> GroundTexture;
 
     [HorizontalLine(color: EColor.Gray)]
     [Label("最大等級上限")]

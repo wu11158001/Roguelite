@@ -29,7 +29,7 @@ public class GamePauseView : BaseView
         // 離開按鈕
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
         {
-            GameplayManager.CurrentContext.CurrentGameController.GanePause(false);
+            GameplayManager.CurrentContext.GameController.GanePause(false);
             SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
         }).AddTo(this);
 
@@ -42,7 +42,7 @@ public class GamePauseView : BaseView
         // 繼續按鈕
         _btn_Continue.OnClickAsObservable().First().Subscribe(_ =>
         {
-            GameplayManager.CurrentContext.CurrentGameController.GanePause(false);
+            GameplayManager.CurrentContext.GameController.GanePause(false);
             Close();
         }).AddTo(this);
     }
