@@ -3171,7 +3171,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8419137535154361752}
-  - component: {fileID: 4855316187856521419}
+  - component: {fileID: 2682842614083952321}
   m_Layer: 8
   m_Name: Character_Pico
   m_TagString: Player
@@ -3196,8 +3196,8 @@ Transform:
   - {fileID: 3696025895952075953}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4855316187856521419
-BoxCollider:
+--- !u!136 &2682842614083952321
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3214,8 +3214,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 4, z: 1}
+  serializedVersion: 2
+  m_Radius: 0.75
+  m_Height: 4.1
+  m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &2998845888201817833
 GameObject:
@@ -9061,7 +9063,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 8e84b27a4c856994196345c260642389, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0

@@ -97,7 +97,7 @@ public class InfiniteMap : MonoBehaviour
         {
             if (GameStateData.GameConfig.GroundTexture != null && GameStateData.GameConfig.GroundTexture.Count > 0)
             {
-                Texture groundTexture = GameStateData.GameConfig.GroundTexture[0];
+                Texture groundTexture = GameStateData.GameConfig.GroundTexture[1];
 
                 if (_grounds[0].TryGetComponent<MeshRenderer>(out var firstRenderer))
                 {
