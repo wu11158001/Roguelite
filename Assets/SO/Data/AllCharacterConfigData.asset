@@ -13,10 +13,4 @@ MonoBehaviour:
   m_Name: AllCharacterConfigData
   m_EditorClassIdentifier: Assembly-CSharp::AllCharacterConfigData
   AllCharacterConfigs:
-  - {fileID: 11400000, guid: 39a04cdee94fba4488a4383781228b57, type: 2}
-  - {fileID: 11400000, guid: d602442f066e64f449392b845d119a6b, type: 2}
   - {fileID: 11400000, guid: 128a54e705dd84744998a4d231e0d29b, type: 2}
-  - {fileID: 11400000, guid: f34575c4d16b28942bb1b3e75a312812, type: 2}
-  - {fileID: 11400000, guid: 7872f7f62b38a6e46ab8b346401d72b2, type: 2}
-  - {fileID: 11400000, guid: ae5fbb2bad5ae78499120092a49e7a1b, type: 2}
-  - {fileID: 11400000, guid: 20a046ba6df71be49aea1e53fa6b7937, type: 2}
