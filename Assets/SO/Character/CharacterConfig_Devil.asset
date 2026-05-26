@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
+  m_Name: CharacterConfig_Devil
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  CharacterName: Devil
+  PrefabReference:
+    m_AssetGUID: c27c273f933ef3d47aff3bcb0be086c8
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Icon: {fileID: 21300000, guid: dd4b8f28595fcfb41a310f0c3688040e, type: 3}
+  HpBarHight: 3.5
+  RotationSpeed: 10
+  InitSkill: 3
+  _baseMoveSpeed: 10
+  MoveSpeed:
+    value: 0
+  _baseAddAttack: 0
+  AddAttack:
+    value: 0
+  _baseMaxHp: 100
+  MaxHp:
+    value: 0
+  _baseDefense: 0
+  Defense:
+    value: 0
+  _baseLifeRecover: 0
+  HpRecover:
+    value: 0
+  _baseCdReduce: 0
+  CdReduce:
+    value: 0
+  _basePickupRange: 0
+  PickupRange:
+    value: 0
+  _baseAddCriticalChance: 0
+  AddCriticalChance:
+    value: 0
+  _baseCriticalMultiplier: 0
+  CriticalMultiplier:
+    value: 0
+  _baseAddProjectileCount: 0
+  AddProjectileCount:
+    value: 0
+  _baseAddEffectRange: 0
+  AddEffectRange:
+    value: 0
+  _baseAddKeepTime: 0
+  AddKeepTime:
+    value: 0
+  Hp:
+    value: 0

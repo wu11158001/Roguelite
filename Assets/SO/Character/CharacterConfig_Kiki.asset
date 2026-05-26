@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
   m_Name: CharacterConfig_Kiki
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  CharacterName: "\u76AE\u53EF"
+  CharacterName: Kiki
   PrefabReference:
-    m_AssetGUID: 0dd4c433bac6fba4f800c6a7c6c7370a
+    m_AssetGUID: f92b32fbf7d4aef499170f1b497579ab
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Icon: {fileID: 21300000, guid: b5474e75dd24f0d46b06c8abd7c5ebc1, type: 3}
-  HpBarHight: 4
+  Icon: {fileID: 21300000, guid: 41b8a955028ed38418574768bae513a8, type: 3}
+  HpBarHight: 3.1
   RotationSpeed: 10
-  InitSkill: 1
+  InitSkill: 2
   _baseMoveSpeed: 10
   MoveSpeed:
     value: 0

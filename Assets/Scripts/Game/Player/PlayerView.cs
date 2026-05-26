@@ -47,6 +47,7 @@ public class PlayerView : BaseGameObject
     private void Awake()
     {
         ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
+        HeadPoint = transform.Find("CharacterNecessary/HeadPoint");
         MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
         BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
 
@@ -54,13 +55,10 @@ public class PlayerView : BaseGameObject
         _propBlock = new();
         _anim = GetComponentInChildren<Animator>();
 
+        // 模型是Humanoid就使用頭部物件
         if (_anim != null && _anim.isHuman)
         {
             HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
-        }
-        else
-        {
-            Debug.LogWarning("找不到 Animator 或模型的 Animation Type 不是 Humanoid！");
         }
 
         // 初始化輸入控制
