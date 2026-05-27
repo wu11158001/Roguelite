@@ -3,6 +3,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UniRx;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 玩家角色
@@ -25,6 +26,7 @@ public class PlayerView : BaseGameObject
     // 動畫
     private Animator _anim;
     private readonly int _isMovingParamId = Animator.StringToHash("IsMove");
+    private readonly int _isDieParamId = Animator.StringToHash("Die");
 
     private HpBarView _hpBarView;
     private CharacterConfigData _characterConfig;
@@ -108,7 +110,8 @@ public class PlayerView : BaseGameObject
 
     private void Update()
     {
-        if (GameplayManager.CurrentContext.GameController.IsGamePause) return;
+        if (GameplayManager.CurrentContext.GameController.IsGamePause ||
+            GameplayManager.CurrentContext.GameController.IsGameOver) return;
 
         // 測試用鍵盤輸入監聽
         TestDebugInput();
@@ -171,6 +174,12 @@ public class PlayerView : BaseGameObject
                     _hitCoroutine = StartCoroutine(IGetHitAnim());
                 }
 
+                // 死亡
+                if(currentHp <= 0)
+                {
+                    OnDie();
+                }
+
                 // 更新血條 UI
                 float hpRatio = (float)currentHp / _characterConfig.MaxHp.Value;
                 if (_hpBarView != null) _hpBarView.SetHpBar(hpRatio);
@@ -229,6 +238,40 @@ public class PlayerView : BaseGameObject
             _propBlock.Clear();
             renderer.SetPropertyBlock(_propBlock);
         }
+    }
+
+    /// <summary>
+    /// 死亡
+    /// </summary>
+    private void OnDie()
+    {
+        GameplayManager.CurrentContext.GameController.IsGameOver = true;
+        GameplayManager.CurrentContext.SkillController.Clear();
+
+        _anim.SetTrigger(_isDieParamId);
+        _hpBarView.gameObject.SetActive(false);
+
+        StartCoroutine(IHandleDieRoutine());
+    }
+
+    /// <summary>
+    /// 處理死亡流程
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator IHandleDieRoutine()
+    {
+        // 等待動畫切換
+        while (_anim.IsInTransition(0) || !_anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+        {
+            yield return null;
+        }
+
+        // 取得動畫的實際長度
+        AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
+        float animationLength = stateInfo.length;
+        yield return new WaitForSeconds(animationLength);
+
+        ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
     }
 
     /// <summary>

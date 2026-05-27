@@ -78,10 +78,8 @@ public class GameView : BaseView
     /// </summary>
     private void UpdateTime()
     {
-        if(GameplayManager.CurrentContext.GameController.IsGamePause)
-        {
-            return;
-        }
+        if(GameplayManager.CurrentContext.GameController.IsGamePause ||
+            GameplayManager.CurrentContext.GameController.IsGameOver) return;
 
         _elapsedTime += 1;
 

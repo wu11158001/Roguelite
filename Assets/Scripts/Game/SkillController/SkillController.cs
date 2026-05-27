@@ -70,6 +70,11 @@ public class SkillController : MonoBehaviour
 
     private void OnDestroy()
     {
+        Clear();
+    }
+
+    public void Clear()
+    {
         StopAllCoroutines();
         _timerManager.ClearAllTimers();
     }

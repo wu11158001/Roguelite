@@ -7,7 +7,10 @@ public class GameController : MonoBehaviour
 {
     /// <summary> 是否遊戲暫停 </summary>
     public bool IsGamePause { get; private set; }
-    
+
+    /// <summary> 是否遊戲結束 </summary>
+    public bool IsGameOver { get; set; }
+
     /// <summary>
     /// 遊戲暫停
     /// </summary>
