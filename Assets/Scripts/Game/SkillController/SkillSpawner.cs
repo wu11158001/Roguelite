@@ -309,7 +309,7 @@ public class SkillSpawner
     private void SpawnInCharacterMiddle8Way(SkillItemData data, int index)
     {
         PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
-        Transform middlePoint = playerView.MiddlePoint;
+        Transform middlePoint = playerView.ShotPoint;
 
         // 技能方向
         Vector3[] relativeAngles = new Vector3[]

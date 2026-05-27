@@ -22,7 +22,7 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: d3f7c96348eac5b4bab29993d187eb50, type: 3}
   HpBarHight: 3.7
   RotationSpeed: 10
-  InitSkill: 3
+  InitSkill: 7
   _baseMoveSpeed: 10
   MoveSpeed:
     value: 0
