@@ -59,8 +59,12 @@ public class Skill_RangeSlowController :IDisposable
         hitData.SpeedModifier = 1 - (1 * _model.SpeedModifier);
         hitData.SpeedModifierTime = _model.SpeedModifierTime;
 
+        // 攻擊敵人
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
+
+        // 技能追蹤傷害
+        GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
 
         SpawnSlowEffect(
             target: enemyView.anchorPoint.bottom.transform,

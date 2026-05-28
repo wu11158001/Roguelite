@@ -57,7 +57,11 @@ public class Skill_FrontHitController : IDisposable
 
         if (enemyObj.TryGetComponent(out EnemyView enemyView))
         {
+            // 攻擊敵人
             enemyView.OnAttacked(hitData);
+
+            // 技能追蹤傷害
+            GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
         }
     }
 

@@ -11,6 +11,9 @@ public class GameController : MonoBehaviour
     /// <summary> 是否遊戲結束 </summary>
     public bool IsGameOver { get; set; }
 
+    /// <summary> 遊戲時間 </summary>
+    public float ElapsedTime { get; set; }
+
     /// <summary>
     /// 遊戲暫停
     /// </summary>

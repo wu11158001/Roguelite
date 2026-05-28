@@ -87,6 +87,7 @@ public class BaseSkill : BaseGameObject
 
         HitData hitData = new()
         {
+            SkillType = _data.SkillType,
             Attack = totalAttack,
             IsCritical = isCritical,
             Knockback = _data.SkillKnockback

@@ -28,8 +28,6 @@ public class GameView : BaseView
     [SerializeField] private TextMeshProUGUI Text_MoveSpeed;
     [SerializeField] private TextMeshProUGUI Text_Hp;
 
-    private float _elapsedTime;
-
     private void Init()
     {
         foreach (var skillItemView in _skillItemViews)
@@ -81,10 +79,13 @@ public class GameView : BaseView
         if(GameplayManager.CurrentContext.GameController.IsGamePause ||
             GameplayManager.CurrentContext.GameController.IsGameOver) return;
 
-        _elapsedTime += 1;
+        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime;
+        elapsedTime += 1;
 
-        int minutes = Mathf.FloorToInt(_elapsedTime / 60f);
-        int seconds = Mathf.FloorToInt(_elapsedTime % 60f);
+        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+
+        GameplayManager.CurrentContext.GameController.ElapsedTime = elapsedTime;
 
         Text_Time.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
     }

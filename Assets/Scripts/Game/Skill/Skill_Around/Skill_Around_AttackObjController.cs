@@ -100,8 +100,12 @@ public class Skill_Around_AttackObjController : IDisposable
 
         if (_hitEnemiesTrackers.ContainsKey(enemyObj)) return;
 
+        // 攻擊敵人
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
+
+        // 技能追蹤傷害
+        GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
 
         _hitEnemiesTrackers.Add(enemyObj, 0f);
     }

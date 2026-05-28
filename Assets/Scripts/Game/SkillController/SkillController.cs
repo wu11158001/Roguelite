@@ -9,6 +9,8 @@ using System.Collections.Generic;
 /// </summary>
 public class GainSkillMessage
 {
+    /// <summary> 獲取或提升的技能 </summary>
+    public SkillItemData SkillItem;
     /// <summary> 當前擁有技能 </summary>
     public ReactiveCollection<SkillItemData> OwnSkills;
 }
@@ -18,6 +20,9 @@ public class GainSkillMessage
 /// </summary>
 public class HitData
 {
+    /// <summary> 技能類型 </summary>
+    public SKILL_TYPE SkillType;
+
     /// <summary> 造成傷害 </summary>
     public int Attack;
     /// <summary> 是否爆擊 </summary>
@@ -43,6 +48,76 @@ public struct OnlySkillData
 }
 
 /// <summary>
+/// 技能追蹤資料
+/// </summary>
+public class SkillTrackData
+{
+    /// <summary> 技能 </summary>
+    public SkillItemData Skill;
+    /// <summary> 技能獲取最高等級 </summary>
+    public int MaxLevel;
+    /// <summary> 累積傷害 </summary>
+    public int CumulativeDamage;
+    /// <summary> 獲取時間 </summary>
+    public DateTime GetTime;
+
+    public SkillTrackData(SkillItemData skill)
+    {
+        Skill = skill;
+        MaxLevel = 1;
+        CumulativeDamage = 0;
+        GetTime = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// 累積傷害
+    /// </summary>
+    /// <param name="damage"></param>
+    public void AddDamage(int damage)
+    {
+        CumulativeDamage += damage;
+    }
+
+    /// <summary>
+    /// 更新等級
+    /// </summary>
+    /// <param name="level"></param>
+    public void UpdateLevel(int level)
+    {
+        if (level > MaxLevel)
+        {
+            MaxLevel = level;
+        }
+    }
+
+    /// <summary>
+    /// 獲取累積時間
+    /// </summary>
+    public string GetHoldingTime()
+    {
+        TimeSpan timeSpan = DateTime.UtcNow - GetTime;
+
+        // 使用 TotalMinutes 可以確保超過 60 分鐘時，分鐘數會持續累加（例如 65:30）
+        int minutes = (int)Math.Floor(timeSpan.TotalMinutes);
+        int seconds = timeSpan.Seconds;
+
+        return $"{minutes:D2}:{seconds:D2}";
+    }
+
+    /// <summary>
+    /// 獲取平均傷害
+    /// </summary>
+    /// <returns></returns>
+    public int GetAverageDamage()
+    {
+        TimeSpan timeSpan = DateTime.UtcNow - GetTime;
+        int second = (int)Math.Floor(timeSpan.TotalSeconds);
+
+        return CumulativeDamage / second;
+    }
+}
+
+/// <summary>
 /// 技能控制器
 /// </summary>
 public class SkillController : MonoBehaviour
@@ -59,6 +134,8 @@ public class SkillController : MonoBehaviour
     private readonly Subject<GainSkillMessage> _onSkillChanged = new();
     public IObservable<GainSkillMessage> OnSkillChanged => _onSkillChanged;
 
+    public Dictionary<SKILL_TYPE, SkillTrackData> TrackDataMap { get; private set; } = new();
+
     private void Awake()
     {
         _inventory = new SkillInventory();
@@ -66,6 +143,8 @@ public class SkillController : MonoBehaviour
         _timerManager = new SkillTimerManager(this, executeSkill => _spawner.ExecuteSkillAttackMode(executeSkill));
 
         _inventory.Setup(OnSkillListChanged);
+
+        BindViewModel();
     }
 
     private void OnDestroy()
@@ -77,6 +156,52 @@ public class SkillController : MonoBehaviour
     {
         StopAllCoroutines();
         _timerManager.ClearAllTimers();
+    }
+
+    private void BindViewModel()
+    {
+        MessageBroker.Default.Receive<GainSkillMessage>()
+            .Subscribe(message =>
+            {
+                UpdateTrackData(message.SkillItem);
+            })
+            .AddTo(this);
+    }
+
+    /// <summary>
+    /// 更新追蹤技能資料
+    /// </summary>
+    /// <param name="skill"></param>
+    private void UpdateTrackData(SkillItemData skill)
+    {
+        // 只記錄主動技能
+        if (skill.IsPassive || skill.IsProps) return;
+
+        if (TrackDataMap.TryGetValue(skill.SkillType, out var trackData))
+        {
+            trackData.UpdateLevel(skill.SkillLevel);
+        }
+        else
+        {
+            TrackDataMap[skill.SkillType] = new(skill);
+        }
+    }
+
+    /// <summary>
+    /// 更新追蹤技能累積傷害
+    /// </summary>
+    /// <param name="skillType"></param>
+    /// <param name="damage"></param>
+    public void UpdateTrackDamageData(SKILL_TYPE skillType, int damage)
+    {
+        if (TrackDataMap.TryGetValue(skillType, out var trackData))
+        {
+            trackData.AddDamage(damage);
+        }
+        else
+        {
+            Debug.LogError($"更新追蹤技能累積傷害 技能不存在:{skillType}");
+        }
     }
 
     /// <summary>

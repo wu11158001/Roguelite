@@ -74,6 +74,9 @@ public class Skill_StraightProjectileController
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);
 
+        // 技能追蹤傷害
+        GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
+
         _hitTargets.Add(enemyObj);
 
         if (_penetrate < 0)

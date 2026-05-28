@@ -32,7 +32,11 @@ public class Skill_SingleHitController : IDisposable
             return;
         }
 
+        // 攻擊敵人
         enemyView?.OnAttacked(hitData);
+
+        // 技能追蹤傷害
+        GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
     }
 
     /// <summary>
