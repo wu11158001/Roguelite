@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -140,6 +140,7 @@ public class EnemyView : BaseGameObject
     //死亡通知
     public void OnDieNotify() {
         Debug.Log("觸發死亡");
+        GameplayManager.CurrentContext.GameController.OnEnemyDie(this);
         _enemyModel.actionCB.recycleCB?.Invoke(_enemyModel.ConfigData.enemyType,this);
         _enemyModel.actionCB.recycleLeaderCB?.Invoke(leader);
     }

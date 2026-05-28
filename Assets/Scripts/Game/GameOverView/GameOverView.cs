@@ -89,9 +89,11 @@ public class GameOverView : BaseView
 
         _text_GetCoin.text = $"{0}";
 
-        _text_MaxLevel.text = $"{GameplayManager.CurrentContext.CharacterController.CurrentLevel}";
+        int level = GameplayManager.CurrentContext.CharacterController.CurrentLevel.Value;
+        _text_MaxLevel.text = $"{level + 1}";
 
-        _text_EnemyCount.text = $"{0}";
+        int killEnemy = GameplayManager.CurrentContext.GameController.KillEnemyCount;
+        _text_EnemyCount.text = $"{killEnemy}";
     }
 
     /// <summary>

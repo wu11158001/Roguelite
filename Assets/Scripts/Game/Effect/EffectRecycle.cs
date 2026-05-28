@@ -2,10 +2,13 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class SlowDownEffectView : BaseGameObject
+/// <summary>
+/// 效果回收
+/// </summary>
+public class EffectRecycle : BaseGameObject
 {
     [Label("回收時間")]
-    [SerializeField] private float _recycleTime = 2;
+    [SerializeField] private float _recycleTime = 1;
 
     public override void OnDestroy()
     {
@@ -14,20 +17,20 @@ public class SlowDownEffectView : BaseGameObject
         base.OnDestroy();
     }
 
-    public void Setup(AssetReferenceGameObject myRef, float recycleTime)
+    public void Setup(AssetReferenceGameObject myRef, float recycleTime = 0)
     {
         base.Setup(myRef);
 
-        _recycleTime = recycleTime;
+        if(recycleTime > 0) _recycleTime = recycleTime;
 
         CancelInvoke(nameof(Recycle));
-        Invoke(nameof(Recycle), recycleTime);
+        Invoke(nameof(Recycle), _recycleTime);
     }
 
     /// <summary>
     /// 回收
     /// </summary>
-    public void Recycle()
+    private void Recycle()
     {
         GameplayManager.CurrentContext.GameScenePool.ReturnToPool(gameObject);
     }

@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: c1ab9a9a3ce73b94eae36057d57ba2f5
+guid: 2241da01e99ee7a49899c6d81633adf1
 AssetOrigin:
   serializedVersion: 1
-  productId: 107068
-  packageName: Fantasy effects pack
-  packageVersion: 3.0
-  assetPath: Assets/ProjectAssets/SkillAssets/HpRecoverEffect/Trail28.png
-  uploadId: 863550
+  productId: 318002
+  packageName: Casual_Hit
+  packageVersion: 1.0
+  assetPath: Assets/ProjectAssets/SkillAssets/EnemyDieEffect/Mist_1.png
+  uploadId: 750804
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -44,9 +44,9 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
-    wrapW: 1
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
   nPOTScale: 1
   lightmap: 0
   compressionQuality: 50
@@ -59,7 +59,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 0
   textureShape: 1
@@ -70,9 +70,9 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
@@ -89,7 +89,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1

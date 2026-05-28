@@ -89,9 +89,9 @@ public class Skill_RangeSlowController :IDisposable
                 {
                     obj.transform.SetParent(target);
 
-                    if (obj.TryGetComponent(out SlowDownEffectView slowDownEffectView))
+                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
                     {
-                        slowDownEffectView.Setup(data.PrefabReference, recycleTime);
+                        effectRecycle.Setup(data.PrefabReference, recycleTime);
                     }
                 });
         }

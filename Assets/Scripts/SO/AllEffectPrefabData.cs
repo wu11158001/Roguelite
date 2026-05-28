@@ -17,6 +17,8 @@ public enum EFFET_TYPE
     HpRecover = 100,
     /// <summary> 減速效果 </summary>
     SlowDown,
+    /// <summary> 擊殺怪物 </summary>
+    KillEnemy,
 }
 
 /// <summary>

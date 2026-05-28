@@ -122,9 +122,9 @@ public class PlayerController : IDisposable
 
                     obj.transform.SetParent(point);
 
-                    if (obj.TryGetComponent(out BaseGameObject baseGameObject))
+                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
                     {
-                        baseGameObject.Setup(data.PrefabReference);
+                        effectRecycle.Setup(data.PrefabReference);
                     }
                 });
         }
