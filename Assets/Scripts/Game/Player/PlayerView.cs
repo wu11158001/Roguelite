@@ -245,8 +245,7 @@ public class PlayerView : BaseGameObject
     /// </summary>
     private void OnDie()
     {
-        GameplayManager.CurrentContext.GameController.IsGameOver = true;
-        GameplayManager.CurrentContext.SkillController.Clear();
+        GameplayManager.CurrentContext.GameController.GameOver();
 
         _anim.SetTrigger(_isDieParamId);
         _hpBarView.gameObject.SetActive(false);

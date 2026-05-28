@@ -57,7 +57,7 @@ public class GameOverView : BaseView
         // 確認按鈕
         _btn_Confirm.OnClickAsObservable().First().Subscribe(_ =>
         {
-            GameplayManager.CurrentContext.GameController.GanePause(false);
+            GameplayManager.CurrentContext.GameController.GamePause(false);
             SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
         }).AddTo(this);
     }

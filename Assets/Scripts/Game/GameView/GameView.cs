@@ -66,7 +66,7 @@ public class GameView : BaseView
         // 暫停按鈕
         _btn_Pause.OnClickAsObservable().Subscribe(_ =>
         {
-            GameplayManager.CurrentContext.GameController.GanePause(true);
+            GameplayManager.CurrentContext.GameController.GamePause(true);
             ViewManager.Instance.OpenView<GamePauseView>(VIEW_TYPE.GamePauseView).Forget();
         }).AddTo(this);
     }
@@ -102,7 +102,7 @@ public class GameView : BaseView
         if(level > 0)
         {
             // 遊戲暫停
-            GameplayManager.CurrentContext.GameController.GanePause(true);
+            GameplayManager.CurrentContext.GameController.GamePause(true);
             // 開啟選擇技能介面
             ViewManager.Instance.OpenView<SelectSkillView>(
                 viewType: VIEW_TYPE.SelectSkillView,
