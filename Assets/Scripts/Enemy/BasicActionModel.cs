@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
@@ -15,13 +15,13 @@ public abstract class BasicActionModel
     // 移動向量
     public Vector3 currentPos { get; private set; }
     protected BasicAttributeData _basicAttributeData;
-
+    public Action _OnDieNotify;
     // 速度變更效果
     private CancellationTokenSource _SpeedModifierCancelTokenSource;
     /// <summary> 速度調節器結束時間 </summary>
     private float _currentSpeedModifierEndTime;
     /// <summary> 速度調節器(1=正常速度, 小於1減速, 大於1加速) </summary>
-    public float SpeedModifier { get; private set; }
+    public float SpeedModifier { get ; private set; }
 
     public float _attackedInterval;
     public BasicActionModel(BasicAttributeData data)
@@ -33,7 +33,7 @@ public abstract class BasicActionModel
         SpeedModifier = 1;
     }
     public BasicAttributeData ConfigData { get { return _basicAttributeData; } }
-
+    public float CurrentMoveSpeed { get { return ConfigData.moveSpeed * SpeedModifier; } }
     //受到攻擊
     public bool OnAttacked(HitData data)
     {
@@ -46,7 +46,16 @@ public abstract class BasicActionModel
         }
         _basicAttributeData.currentHp -= harm;
         Debug.Log($"怪物 當前血量 : [{_basicAttributeData.currentHp}]");
+        if (_basicAttributeData.currentHp <= 0)
+        {
+            Debug.Log("此怪物死亡");
+            OnDieNotify();
+        }
         return true;
+    }
+    public void OnDieNotify()
+    {
+         _OnDieNotify?.Invoke();
     }
 
     /// <summary>

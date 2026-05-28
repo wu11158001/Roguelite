@@ -1,135 +1,85 @@
-using NaughtyAttributes;
-using System;
-using System.Collections;
+﻿using NaughtyAttributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
+using UniRx;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 using Random = UnityEngine.Random;
+using Enemy.Generator;
 
 public class EnemyManager : MonoBehaviour
 {
     [Label("怪物屬性配置表")]
     [SerializeField]
-    private List<EnemyConfigData> enemyConfigList;
-    //回收後的敵人池
-    [SerializeField]
-    public Dictionary<ENEMY_TYPE, Stack<GameObject>> enemyPool = new Dictionary<ENEMY_TYPE, Stack<GameObject>>();
-    private List<int> _enemyCount;
-    //private int _enemyCount = 0;
-    [SerializeField]
-    public bool IsCreaterEnemy;
-    //存活的敵人池
-    public List<EnemyView> LivingEnemyPool;
-    //
-    public List<GameObject> TeampEnemyPool;
+    private List<EnemyConfigData> _enemyConfigList;
+    public IReactiveCollection<EnemyView> ReadLivingEnemyPool => _enemyGenerator.LivingEnemyPool;
+    //怪物網格地圖
+    EnemySpatialGrid enemySpatialGrid = new();
 
-    [Foldout("設定")][Header("生成間隔")][SerializeField]
-    private float _spawnInterval = 30f;     // 生成間隔 (秒)
-    [Foldout("設定")][Header("是否持續生成")][SerializeField]
-    private bool _isSpawning = true;        // 是否持續生成
-    [Foldout("設定")][Header("生成最大值")][SerializeField]
-    private int _createEnemyCount = 5;      //每次生成數量最大值
-    [Foldout("設定")][Header("生成最大值")][SerializeField]
-    private ENEMY_TYPE enemyType = ENEMY_TYPE.ZOMBIES;      //每次生成數量最大值
+    //怪物產生器
+    [SerializeField]
+    EnemyGenerator _enemyGenerator = new EnemyGenerator();
+    //存活的敵人池
+    public IReactiveCollection<EnemyView> LivingEnemyPool => _enemyGenerator._LivingEnemyPool;
     public void SetUp(List<EnemyConfigData>conifgList) {
-        enemyConfigList = conifgList;
-        LivingEnemyPool = new();
-        StartCoroutine(SpawnRoutine());
-        _enemyCount = new List<int>(new int[enemyConfigList.Count]);
+        _enemyConfigList = conifgList;
+        _enemyGenerator.SetUp(_enemyConfigList, transform);
+        enemySpatialGrid.SetUp(ReadLivingEnemyPool);
+        StartCoroutine(_enemyGenerator.SpawnRoutine());
     }
     // Update is called once per frame
     void Update()
     {
-        if (IsCreaterEnemy)
+        if (_enemyGenerator.setting.IsCreaterEnemy)
         {
-            IsCreaterEnemy = false;
-            unitTest();
+            _enemyGenerator.setting.IsCreaterEnemy = false;
+            _enemyGenerator.unitTest();
         }
     }
-    void unitTest()
+    private void FixedUpdate()
     {
-        int configCountMax = Random.Range(1, (int)ENEMY_TYPE.SLIME+1);
-        //ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
-        ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
-        type = enemyType;
-        createrEnemy(type, _createEnemyCount);
-
-    }
-    async void createrEnemy(ENEMY_TYPE type, int count)
-    {
-        var config = enemyConfigList.FirstOrDefault(item => item.enemyType == type);
-        if (config == null)
+        if (GameplayManager.CurrentContext.GameController.IsGamePause) return;
+        // 統一由 Manager 迭代所有活著的怪物
+        for (int i = 0; i < _enemyGenerator.LivingEnemyPool.Count; i++)
         {
-            Debug.Log("找不到怪物配置");
-            return;
-        }
-       
-        for (int i = 0; i < count; i++)
-        {
-            //將偏移量加到基底位置（這裡是 this.transform.position）
-            Vector3 finalSpawnPosition = GetStartPosition();
+            EnemyView enemy = _enemyGenerator.LivingEnemyPool[i];
+         
+            // 1. Manager 自己就知道網格，在這裡抓鄰居
+            var neighbors = enemySpatialGrid.GetNeighbors(enemy.transform.position);
 
-            //加上 await，這會讓迴圈「等待」這一隻生完後才跑下一次迴圈
-            GameObject enemy = await GetEnemy(Instantiate(config), finalSpawnPosition, i);
-        }
-    }
-    async Task <GameObject> GetEnemy(EnemyConfigData data,Vector3 enemyPosition,int count)
-    {
-        if (!enemyPool.ContainsKey(data.enemyType))
-        {
-            enemyPool[data.enemyType] = new Stack<GameObject>();
-        }
-        // 1. 如果池子裡有，直接回傳（不需要 await）
-        if (enemyPool[data.enemyType].Count > 0)
-        {
-            var enemy = enemyPool[data.enemyType].Pop();
-            EnemyView enemyView = enemy.GetComponent<EnemyView>();
-            enemyView.SetUpStartPosition(enemyPosition);
-            enemy.SetActive(true);
-            LivingEnemyPool.Add(enemyView);
-            return enemy;
-        }
+            // 2. 計算這隻怪物的斥力
+            Vector3 repulsion = CalculateRepulsionFor(enemy, neighbors);
 
-        // 2. 非同步生成
-        var handle = data.PrefabReference.InstantiateAsync(enemyPosition, Quaternion.identity,transform);
+            // 3. 呼叫物理移動
+            float speed = enemy._enemyModel.CurrentMoveSpeed;
+            Vector3 targetPos = enemy._enemyModel.GetTrackingTargetPosition();
 
-        // 等待生成完成
-        GameObject enemyInstance = await handle.Task;
-
-        // 3. 檢查組件
-        if (!enemyInstance.TryGetComponent(out EnemyView view))
-        {
-            _enemyCount[((int)data.enemyType-1)]++;
-            enemyInstance.name = data.enemyType.ToString() + "_"+ _enemyCount[((int)data.enemyType - 1)];
-            //添加敵人代碼
-            EnemyView enemyView = enemyInstance.AddComponent<EnemyView>();
-            enemyView.SetUp(data, RecycleEnemy);
-            enemyView.SetUpStartPosition(enemyPosition);
-            LivingEnemyPool.Add(enemyView);
-        }
-        return enemyInstance;
-    }
-    void RecycleEnemy(ENEMY_TYPE type, GameObject enemy)
-    {
-        int recycleEnemyIndex = LivingEnemyPool.FindIndex(e => e.gameObject.GetInstanceID() == enemy.GetInstanceID());
-        
-        if (recycleEnemyIndex != -1)
-        {
-            var recycleEnemy = LivingEnemyPool[recycleEnemyIndex].gameObject;
-            LivingEnemyPool.RemoveAt(recycleEnemyIndex);
-            recycleEnemy.SetActive(false); // 關閉物件
-            recycleEnemy.transform.SetParent(this.transform); // 移回父物件下收納
-
-            // 確保存放的池子存在
-            if (!enemyPool.ContainsKey(type))
+            switch (enemy._enemyModel.ConfigData.moveAction)
             {
-                enemyPool[type] = new Stack<GameObject>();
+                case MOVE_ACTION.FOLLOW:
+                   PhysicsMovementUtils.ApplyMovementWithRepulsion(enemy.rb, targetPos, repulsion, speed);
+                    break;
+                case MOVE_ACTION.DIRECTION:
+                    PhysicsMovementUtils.ApplyProjectileMotion(enemy.rb, targetPos, speed, repulsion);
+                    break;
+                default:
+                    break;
             }
-            enemyPool[type].Push(recycleEnemy);
         }
+    }
+    //偵測鄰居轉向偏差
+    Vector3 CalculateRepulsionFor(EnemyView enemy, List<EnemyView> neighbors)
+    {
+        Vector3 output = Vector3.zero;
+        foreach (var neighbor in neighbors)
+         {
+             if (neighbor == this) continue;
+
+             float dist = Vector3.Distance(enemy.transform.position, neighbor.transform.position);
+             if (dist < _enemyGenerator.setting.detectionRadius && dist > 0)
+             {
+                 output += (enemy.transform.position - neighbor.transform.position).normalized / dist;
+             }
+         }
+         return output;
     }
     public static Vector3 GetStartPosition()
     {
@@ -154,17 +104,9 @@ public class EnemyManager : MonoBehaviour
 
         return spawnPos;
     }
-    IEnumerator SpawnRoutine()
+   
+    private void OnDestroy()
     {
-        while (_isSpawning)
-        {
-            int configCountMax = Random.Range(1,(int)ENEMY_TYPE.SLIME+1);
-            int createrCount = Random.Range(1, _createEnemyCount);
-            ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
-            createrEnemy(type, createrCount);
-
-            // 2. 等待設定的時間
-            yield return new WaitForSeconds(_spawnInterval);
-        }
+        enemySpatialGrid.Dispose();
     }
 }

@@ -1,6 +1,8 @@
 ﻿using NaughtyAttributes;
 using System;
 using UnityEngine;
+using Base.BehaviorMode;
+using Base.BaseBodyData;
 
 public enum PLAYER_STATE_TPYE
 {
@@ -24,42 +26,23 @@ public enum OUTBOUNDS_ACTION {
     RE_ENTER,   //重新進場
 }
 
+
 public abstract class BasicAttributeData : ScriptableObject
 {
     [Label("敵人代號")]
     [SerializeField]
-    public ENEMY_TYPE enemyType;      //敵人代號
-    [Label("基礎移動速度")]
+    public ENEMY_TYPE enemyType;        //敵人代號
+    [Header("基礎數值")]
     [SerializeField]
-    private float _basicMoveSpeed;      //移動速度
-    [Label("基礎攻擊力")]
+    private BaseBodyData _bodyData;
+    [Header("行為設定")]
     [SerializeField]
-    private float _basicATK;            //攻擊力
-    [Label("基礎防禦力")]
-    [SerializeField]
-    private float _basicDEF;            //防禦力
-    [Label("基礎血量")]
-    [SerializeField]
-    private float _basicHp;             //基礎血量
-    [Label("基礎魔力")]
-    [SerializeField]
-    private float _basicMp;             //基礎魔力
-    [Label("攻擊頻率")]
-    [SerializeField]
-    private float _atkSpeed;
-    [Label("移動模式")]
-    [SerializeField]
-    public MOVE_ACTION moveAction;
-    [Label("出界處理")]
-    [SerializeField]
-    public OUTBOUNDS_ACTION outboundsAction;
-
-    public Action _OnDieNotify;
+    private BaseBehaviorMode _baseBehaviorMode;
     private float _teampHp;
+   
     public void SetUp()
     {
-        _teampHp = _basicHp;
-        currentMp = _basicMp;
+        _teampHp = _bodyData.basicHp;
     }
     public PLAYER_STATE_TPYE currentState() {
         return currentHp > 0f ? PLAYER_STATE_TPYE.LIVING : PLAYER_STATE_TPYE.DIE;
@@ -73,22 +56,22 @@ public abstract class BasicAttributeData : ScriptableObject
             if (_teampHp <= 0)
             {
                 Debug.Log("此怪物死亡");
-                OnDieNotify();
             }
         }
     }
-    public float currentMp;
     public float currentATK() {
-        return _basicATK;
+        return _bodyData.basicATK;
     }
     public float currentDEF()
     {
-        return _basicDEF;
+        return _bodyData.basicDEF;
     }
-    public float moveSpeed { get { return _basicMoveSpeed; } }
-    public float atkSpeed { get { return _atkSpeed; } }
-    private void OnDieNotify() {
-        _OnDieNotify?.Invoke();
+    public float moveSpeed { get { return _bodyData.basicMoveSpeed; } }
+    public float atkSpeed { get { return _bodyData.atkSpeed; } }
+    public MOVE_ACTION moveAction { get { return _baseBehaviorMode.moveType; } }
+    public OUTBOUNDS_ACTION outboundsAction { get { return _baseBehaviorMode.outboundsAction; } }
+    public void OnDieNotify() {
+       // _OnDieNotify?.Invoke();
     }
 
 }

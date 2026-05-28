@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Slime
   m_EditorClassIdentifier: Assembly-CSharp::EnemyConfigData
   enemyType: 2
-  _basicMoveSpeed: 20
-  _basicATK: 1
-  _basicDEF: 1
-  _basicHp: 5
-  _basicMp: 0
-  _atkSpeed: 2
-  moveAction: 1
-  outboundsAction: 0
+  _bodyData:
+    basicMoveSpeed: 15
+    basicATK: 2
+    basicDEF: 0
+    basicHp: 5
+    basicMp: 0
+    atkSpeed: 1
+  _baseBehaviorMode:
+    moveType: 0
+    outboundsAction: 1
+    isMove: 0
   currentMp: 0
   PrefabReference:
     m_AssetGUID: 750e1497690957143b78d567d4fe6e90

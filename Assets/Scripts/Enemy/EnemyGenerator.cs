@@ -1,0 +1,239 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using UniRx;
+using UnityEngine;
+using Random = UnityEngine.Random;
+using Enemy.GeneratorSettings;
+using static UnityEngine.Rendering.STP;
+
+
+namespace Enemy.Generator
+{
+    [Serializable]
+    public class EnemyGenerator
+    {
+        private List<EnemyConfigData> _enemyConfigList;
+        private Dictionary<ENEMY_TYPE, Stack<EnemyView>> enemyPool = new Dictionary<ENEMY_TYPE, Stack<EnemyView>>();
+        private List<int> _enemyCount;
+        int _leaderCount = 0;
+        //存活的敵人池
+        public readonly ReactiveCollection<EnemyView> _LivingEnemyPool = new();
+        public IReactiveCollection<EnemyView> LivingEnemyPool => _LivingEnemyPool;
+
+        Transform _parents;
+
+        [Header("設定值")]
+        [SerializeField]
+        EnemyGeneratorSetting _generatorSetting = new();
+        public EnemyGeneratorSetting setting { get { return _generatorSetting; } }
+        public void SetUp(List<EnemyConfigData> configList, Transform parents)
+        {
+            _enemyConfigList = configList;
+            _parents = parents;
+            _enemyCount = new List<int>(new int[_enemyConfigList.Count]);
+        }
+        //創建軍隊
+        async void SpawnGroupEnemy(ENEMY_TYPE enemyType, int count, FORMATION_TYPE type)
+        {
+            EnemyConfigData config = GetEnemyConfig(enemyType);
+
+            EnemyLeader leader = SpawnGroupLeader(count, config);
+            if (leader == null)
+            {
+                Debug.Log("領導創建失敗");
+                return;
+            }
+
+            List<EnemyView> groupEnemy = new();
+
+            for (int i = 0; i < count; i++)
+            {
+                EnemyView view = await GetEnemy(config, leader.transform);
+               view.SetUpActionCB(new EnemyActionCB { recycleLeaderCB = RecycleLaderEnemy });
+                view.leader = leader;
+                groupEnemy.Add(view);
+            }
+            Vector2 spacing = new Vector2(2, 2);
+            SetUpFormation(type, groupEnemy, spacing);
+        }
+        async void SpawnSingleEnemy(ENEMY_TYPE enemyType, int count)
+        {
+            EnemyConfigData config = GetEnemyConfig(enemyType);
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 finalSpawnPosition = EnemyManager.GetStartPosition();
+
+                EnemyView view = await GetEnemy(config, _parents);
+                view.SetUpStartPosition(finalSpawnPosition);
+                view.gameObject.SetActive(true);
+            }
+        }
+        //獲取怪物設定檔
+        EnemyConfigData GetEnemyConfig(ENEMY_TYPE enemyType)
+        {
+            EnemyConfigData config =_enemyConfigList.FirstOrDefault(item => item.enemyType == enemyType);
+            if (config == null)
+            {
+                Debug.Log("找不到怪物配置");
+                return null;
+            }
+            return config;
+        }
+        //創建軍隊領導
+        private EnemyLeader SpawnGroupLeader(int count, EnemyConfigData config)
+        {
+            _leaderCount++;
+            GameObject leaderObjecet = new GameObject("EnemyLeader_"+ _leaderCount);
+            EnemyLeader leader = leaderObjecet.AddComponent<EnemyLeader>();
+            leader.transform.SetParent(_parents);
+            leader.subordinatesCount = count;
+            leader.moveType = config.moveAction;
+            leader.outboundsAction = config.outboundsAction;
+            return leader;
+        }
+        //設置隊形
+        private void SetUpFormation(FORMATION_TYPE type, List<EnemyView> objects, Vector2 spacing)
+        {
+            Vector3[] Position_Array = FormationUtils.GeneratePositions(type, objects.Count, spacing);
+            for (int i = 0; i < objects.Count; i++)
+            {
+                Vector3 v3 = Position_Array[i];
+                objects[i].SetUpStartPosition(v3);
+                objects[i].gameObject.SetActive(true);
+            }
+        }
+        //從物件池拿取
+        async Task<EnemyView> GetEnemy(EnemyConfigData data, Transform parents )
+        {
+            
+            if (!enemyPool.ContainsKey(data.enemyType))
+            {
+                enemyPool[data.enemyType] = new Stack<EnemyView>();
+            }
+            // 1. 如果池子裡有，直接回傳（不需要 await）
+            if (enemyPool[data.enemyType].Count > 0)
+            {
+                var enemy = enemyPool[data.enemyType].Pop();
+                EnemyView enemyView = enemy.GetComponent<EnemyView>();
+                enemy.transform.SetParent(parents);
+                //enemyView.SetUpStartPosition(enemyPosition);
+                enemy.gameObject.SetActive(false);
+                LivingEnemyPool.Add(enemyView);
+                return enemy;
+            }
+
+            // 2. 非同步生成
+            var handle = data.PrefabReference.InstantiateAsync(parents);
+
+            // 等待生成完成
+            GameObject enemyInstance = await handle.Task;
+            enemyInstance.SetActive(false);
+            enemyInstance.transform.SetParent(parents);
+            // 3. 檢查組件
+            if (!enemyInstance.TryGetComponent(out EnemyView view))
+            {
+                _enemyCount[((int)data.enemyType - 1)]++;
+                enemyInstance.name = data.enemyType.ToString() + "_" + _enemyCount[((int)data.enemyType - 1)];
+                //添加敵人代碼
+                EnemyView enemyView = enemyInstance.AddComponent<EnemyView>();
+                enemyView.SetUp(data);
+                enemyView.SetUpActionCB(new EnemyActionCB { recycleCB = RecycleEnemy });
+                LivingEnemyPool.Add(enemyView);
+                return enemyView;
+            }
+            return null;
+        }
+        /*回收至物件池*/
+        void RecycleEnemy(ENEMY_TYPE type, EnemyView recycleEnemy)
+        {
+            if (recycleEnemy == null) return;
+
+            // 1. 直接從 List 移除，不用自己算 Index
+            if (LivingEnemyPool.Remove(recycleEnemy))
+            {
+                // 2. 處理物件狀態
+                recycleEnemy.gameObject.SetActive(false);
+                recycleEnemy.transform.SetParent(_parents);
+
+                if (!enemyPool.ContainsKey(type))
+                {
+                    enemyPool[type] = new Stack<EnemyView>();
+                }
+                enemyPool[type].Push(recycleEnemy);
+            }
+        }
+        void RecycleLaderEnemy(EnemyLeader enemyLeader)
+        {
+            Debug.Log($"1 士兵數量: {enemyLeader.subordinatesCount}");
+            if(enemyLeader == null) {
+                Debug.Log($"找不到領導 {enemyLeader.name}");
+            }
+            enemyLeader.subordinatesCount -= 1;
+            Debug.Log($"2 士兵數量: {enemyLeader.subordinatesCount}");
+            if (enemyLeader.subordinatesCount <= 0)
+            {
+                Debug.Log($"刪除領導 {enemyLeader.name}");
+                enemyLeader.Remove();
+            }
+        }
+        //設置間隔生成怪物
+        public IEnumerator SpawnRoutine()
+        {
+            while (_generatorSetting.isSpawning)
+            {
+                int configCountMax = Random.Range(1, (int)ENEMY_TYPE.SLIME + 1);
+                int createrCount = Random.Range(1, _generatorSetting.createEnemyCount);
+                ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
+                // createrEnemy(type, createrCount);
+
+                // 2. 等待設定的時間
+                yield return new WaitForSeconds(_generatorSetting.spawnInterval);
+            }
+        }
+        public void unitTest()
+        {
+            int configCountMax = Random.Range(1, (int)ENEMY_TYPE.SLIME + 1);
+           ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
+           type = setting.enemyType;
+
+            int formationRandom = Random.Range(0, (int)FORMATION_TYPE.CIRCULAR + 1);
+            FORMATION_TYPE formationType = (setting.formationType == FORMATION_TYPE.RENDOMS) ? (FORMATION_TYPE)formationRandom:setting.formationType;
+
+            int spawnRandom = Random.Range(1, (int)SPAWN_MODE.GROUP + 1);
+            SPAWN_MODE spawnMode = (SPAWN_MODE)spawnRandom;
+
+            switch (setting.spawnMode)
+            {
+                case SPAWN_MODE.RANDOM:
+                    if (spawnMode == SPAWN_MODE.GROUP) {
+                        for (int i = 0; i < setting.armyCount; i++)
+                        {
+                            SpawnGroupEnemy(type, setting.soldierCount, formationType);
+                        }
+                    }
+                    else
+                    {
+                        SpawnSingleEnemy(type, setting.createEnemyCount);
+                    }
+                    break;
+                case SPAWN_MODE.SINGLE:
+                    SpawnSingleEnemy(type, setting.createEnemyCount);
+                    break;
+                case SPAWN_MODE.GROUP:
+                    for (int i = 0; i < setting.armyCount; i++)
+                    {
+                      SpawnGroupEnemy(type, setting.soldierCount, formationType);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            //createrEnemy(type, _createEnemyCount);
+
+        }
+    }
+}

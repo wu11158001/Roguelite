@@ -1,60 +1,78 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UniRx;
 using UnityEngine;
+
+/*public class EnemyActionCB
+{
+    public Action<ENEMY_TYPE, EnemyView> recycleCB = null;
+    public Action<EnemyLeader> recycleLeaderCB = null;
+    public Action outBoundsCB = null;
+}*/
 
 public class EnemyView : BaseGameObject
 {
     List<int> _actionList;
-    EnemyModel _enemyModel;
+    public  EnemyModel _enemyModel;
     float _attackedTimes;
 
     MaterialPropertyBlock _propBlock;
     Renderer _renderer;
+    private Renderer[] _renderers; // 改成陣列
     Rigidbody _rigidbody;
     public Collider Collider { get; private set; }
     float _colliderHeight;
-    bool isKnockedBack; // 是否處於被擊退狀態
-    bool isExtendedBounds; //
+    bool isKnockedBack; //是否處於被擊退狀態
     Coroutine knockbackHandler; //擊退流程
-
+    public EnemyLeader leader = null;
 
     public AnchorPoint anchorPoint; //錨點物件
-    public Action<ENEMY_TYPE, GameObject> _callBack;
+
+    private EnemyActionCB actionCB = new EnemyActionCB();
+    public Action<ENEMY_TYPE, EnemyView> _callBack;
+    public Action recycleLeaderCB;
     public Action _outBounds; //出界通知
+
     public float screenMargin = 0.4f; // 擴大的範圍 (0.2 代表超出螢幕 20% 的距離)
     float outBounds = 100f; //出界範圍判定
 
+
+    // 暴露唯讀的位置屬性
+    public IReadOnlyReactiveProperty<Vector3> Position => _position;
+    private readonly ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
     /// <summary>
     /// 設置怪物表與死亡回調
     /// </summary>
     /// <param name="data">怪物設定值</param>
     /// <param name="cb">死亡時通知物件池回收</param>
     ///
-    public void SetUp(BasicAttributeData data,Action<ENEMY_TYPE , GameObject > cb = null,Action outBounds = null)
+    public Rigidbody rb { get { return _rigidbody; } }
+    public void SetUpActionCB(EnemyActionCB newCB)
+    {
+        _enemyModel.SetUpActionCB(newCB);
+    }
+    public void SetUp(BasicAttributeData data)
     {
         _enemyModel = new(data);
-        if(cb != null) _callBack = cb;
-        if(outBounds != null) _outBounds = outBounds;
         Debug.Log($"[{gameObject.name}]  初始HP:[ { _enemyModel.ConfigData.currentHp} ]");
 
-        _enemyModel.ConfigData._OnDieNotify += OnDieNotify;
+        if (_enemyModel != null)  _enemyModel._OnDieNotify += OnDieNotify;
         _renderer = GetComponent<Renderer>();
+        _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new MaterialPropertyBlock();
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.freezeRotation = true;
         Collider = GetComponent<Collider>();
         _colliderHeight = Collider.bounds.size.y;
-        
+        Debug.Log($"_colliderHeight : [{_colliderHeight}]");
         anchorPoint = gameObject.GetComponentInChildren<AnchorPoint>();
         anchorPoint.SetUp(Collider,gameObject);
         SetUpPlayerPosition();
     }
     private void OnEnable()
     {
-        if(_enemyModel != null) _enemyModel.ConfigData._OnDieNotify += OnDieNotify;
+        _colliderHeight = Collider.bounds.size.y;
         SetUpPlayerPosition();
     }
     private void OnDisable()
@@ -65,7 +83,7 @@ public class EnemyView : BaseGameObject
             knockbackHandler = null; // 清空引用
         }
         _enemyModel.Reset();
-        _enemyModel.ConfigData._OnDieNotify -= OnDieNotify;
+        //_enemyModel.ConfigData._OnDieNotify -= OnDieNotify;
         _rigidbody.linearVelocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
 
@@ -85,7 +103,8 @@ public class EnemyView : BaseGameObject
     void FixedUpdate()
     {
         if (isKnockedBack) return;
-        Move();
+        //更新位置
+        _position.Value = transform.position;
     }
     public void OnAttacked(HitData data)
     {
@@ -99,23 +118,6 @@ public class EnemyView : BaseGameObject
             if (knockbackHandler != null) StopCoroutine(knockbackHandler);
 
             knockbackHandler = StartCoroutine(KnockbackRoutine(data.Knockback));
-        }
-    }
-    private void Move()
-    {
-        // 基本移動速度 * 速度調節器
-        float moveSpeed = _enemyModel.ConfigData.moveSpeed * _enemyModel.SpeedModifier;
-
-        switch (_enemyModel.ConfigData.moveAction)  
-        {
-            case MOVE_ACTION.FOLLOW:
-                PhysicsMovementUtils.ApplyLinearFollow(_rigidbody, _enemyModel._trackingTarget.transform.position, moveSpeed, 10f);
-                break;
-            case MOVE_ACTION.DIRECTION:
-                PhysicsMovementUtils.ApplyProjectileMotion(_rigidbody, _enemyModel._trackingTargetV3, moveSpeed);
-                break;
-            default:
-                break;
         }
     }
     private void OnCollisionStay(Collision collision)
@@ -138,24 +140,44 @@ public class EnemyView : BaseGameObject
     //死亡通知
     public void OnDieNotify() {
         Debug.Log("觸發死亡");
-        _callBack?.Invoke(_enemyModel.ConfigData.enemyType,gameObject);
+        _enemyModel.actionCB.recycleCB?.Invoke(_enemyModel.ConfigData.enemyType,this);
+        _enemyModel.actionCB.recycleLeaderCB?.Invoke(leader);
     }
     private void Attacked_Ani()
     {
-        _renderer.GetPropertyBlock(_propBlock);
-        // 修改顏色屬性
-        _propBlock.SetColor("_BaseColor", UnityEngine.Color.red);
-        // 套用回 Renderer（這不會產生新的材質實體）
-        _renderer.SetPropertyBlock(_propBlock);
+        /*   _renderer.GetPropertyBlock(_propBlock);
+           // 修改顏色屬性
+           _propBlock.SetColor("_BaseColor", UnityEngine.Color.red);
+           // 套用回 Renderer（這不會產生新的材質實體）
+           _renderer.SetPropertyBlock(_propBlock);
+
+           Invoke(nameof(ResetColor), 0.1f);*/
+        foreach (var r in _renderers)
+        {
+            // 1. 先讀取該 Renderer 現有的 PropertyBlock
+            r.GetPropertyBlock(_propBlock);
+
+            // 2. 修改顏色 (這裡要對應你找出的屬性名稱，例如 _BaseColor)
+            _propBlock.SetColor("_BaseColor", Color.red);
+
+            // 3. 套用回去
+            r.SetPropertyBlock(_propBlock);
+        }
 
         Invoke(nameof(ResetColor), 0.1f);
     }
     //受擊效果
     void ResetColor()
     {
-        _renderer.GetPropertyBlock(_propBlock);
+        /*_renderer.GetPropertyBlock(_propBlock);
         _propBlock.SetColor("_BaseColor", UnityEngine.Color.white); // 假設原本是白色
-        _renderer.SetPropertyBlock(_propBlock);
+        _renderer.SetPropertyBlock(_propBlock);*/
+        foreach (var r in _renderers)
+        {
+            r.GetPropertyBlock(_propBlock);
+            _propBlock.SetColor("_BaseColor", Color.white); // 恢復白色
+            r.SetPropertyBlock(_propBlock);
+        }
     }
     /*回收範圍偵測*/
     private bool IsWithinExtendedBounds()
@@ -225,5 +247,5 @@ public class EnemyView : BaseGameObject
         float offset = _colliderHeight/2;
         transform.position = new Vector3(startPos.x, 0 + offset, startPos.z);
     }
-        
+
 }
