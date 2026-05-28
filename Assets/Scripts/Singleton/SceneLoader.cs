@@ -26,6 +26,8 @@ public class SceneLoader : SingletonMonoBehaviour<SceneLoader>
     /// <returns></returns>
     public async UniTask LoadSceneAsync(SCENE_TYPE sceneType)
     {
+        ViewManager.Instance.ClearAll();
+
         _canvasGroup.alpha = 1;
 
         // 當前場景與轉換場景一樣

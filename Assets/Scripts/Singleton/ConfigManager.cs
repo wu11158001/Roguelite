@@ -1,5 +1,9 @@
+using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using System.Linq;
 
 public class ConfigManager : MonoBehaviour
 {
@@ -15,6 +19,9 @@ public class ConfigManager : MonoBehaviour
     [SerializeField] AllEffectPrefabData _allEffectPrefabData;
     [Label("強化項目配置檔")]
     [SerializeField] AbilityUpgradeConfigData _abilityUpgradeConfigData;
+    [Label("所有關卡配置檔")]
+    [HideInInspector]
+    public List<LevelConfigData> _allLevelConfigs;
 
     protected void Awake()
     {
@@ -33,5 +40,22 @@ public class ConfigManager : MonoBehaviour
         GameStateData.AllCharacterConfig = _allCharacterConfig;
         GameStateData.AllEffectPrefabData = _allEffectPrefabData;
         GameStateData.AbilityUpgradeConfigData = _abilityUpgradeConfigData;
+
+        LoadLevelConfigs().Forget();
+    }
+
+    /// <summary>
+    /// 載入所有關卡配置檔
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask LoadLevelConfigs()
+    {
+        var handle = Addressables.LoadAssetsAsync<LevelConfigData>("LevelConfigs");
+        await handle.Task;
+
+        _allLevelConfigs = new(handle.Result);
+        _allLevelConfigs.Sort((a, b) => a.LevelIndex.CompareTo(b.LevelIndex));
+
+        GameStateData.AllLevelConfig = _allLevelConfigs;
     }
 }

@@ -945,7 +945,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u958B\u59CB"
+  m_text: "\u78BA\u8A8D"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aa67b823fbca4cc4da606b7c1e5f2cc6, type: 2}
   m_sharedMaterial: {fileID: 6105520199779406489, guid: aa67b823fbca4cc4da606b7c1e5f2cc6, type: 2}
@@ -1185,7 +1185,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.021919644}
+  m_AnchoredPosition: {x: 0, y: -0.000055517346}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6660127770722324986
@@ -1885,7 +1885,7 @@ MonoBehaviour:
   _sampleSelectCharacterTog: {fileID: 4271925804703941036}
   Text_CharacterName: {fileID: 3488233895512589864}
   _uiRotate3DModel: {fileID: 5892999707349872723}
-  _btn_Start: {fileID: 2658393402639948028}
+  _btn_Confirm: {fileID: 2658393402639948028}
   CharacterPoint: {fileID: 5129005667812064757}
 --- !u!225 &-6038331463186533773
 CanvasGroup:
@@ -1912,7 +1912,7 @@ GameObject:
   - component: {fileID: 3238406550948568192}
   - component: {fileID: 2658393402639948028}
   m_Layer: 5
-  m_Name: Btn_Start
+  m_Name: Btn_Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2527,7 +2527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1803099168033427944, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 4530788947947039044, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_Pivot.x

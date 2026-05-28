@@ -140,10 +140,10 @@ public class SelectCharacterViewModel
     }
 
     /// <summary>
-    /// 開始遊戲
+    /// 確認角色
     /// </summary>
-    public void OnStartGame()
+    public void OnConfirmCharacter()
     {
-        SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Game).Forget();
+        ViewManager.Instance.OpenView<SelectLevelView>(VIEW_TYPE.SelectLevelView).Forget();
     }
 }

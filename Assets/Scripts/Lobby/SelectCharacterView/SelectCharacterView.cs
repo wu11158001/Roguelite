@@ -36,7 +36,7 @@ public class SelectCharacterView : BaseView
     [SerializeField] private TextMeshProUGUI Text_CharacterName;
     [SerializeField] private UIRotate3DModel _uiRotate3DModel;
     // 開始按鈕
-    [SerializeField] private Button _btn_Start;
+    [SerializeField] private Button _btn_Confirm;
 
     [Header("3DModel")]
     [SerializeField] private Transform CharacterPoint;
@@ -59,10 +59,13 @@ public class SelectCharacterView : BaseView
             .Subscribe(_ => Close())
             .AddTo(this);
 
-        // 開始按鈕
-        _btn_Start.OnClickAsObservable()
-            .First()
-            .Subscribe(_ => _viewModel.OnStartGame())
+        // 確認按鈕
+        _btn_Confirm.OnClickAsObservable()
+            .Subscribe(_ =>
+            {
+                gameObject.SetActive(false);
+                _viewModel.OnConfirmCharacter();
+            })
             .AddTo(this);
 
         // 當前角色資料變更

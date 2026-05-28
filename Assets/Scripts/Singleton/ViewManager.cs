@@ -71,4 +71,12 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
             }
         }
     }
+
+    /// <summary>
+    /// 清除所有介面
+    /// </summary>
+    public void ClearAll()
+    {
+        _viewStack.Clear();
+    }
 }
