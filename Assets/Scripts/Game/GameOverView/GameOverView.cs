@@ -47,6 +47,7 @@ public class GameOverView : BaseView
         BindViewModel();
 
         Init();
+        SaveLocalData();
         SetLevelTrackData();
         SetTrackSkillData();
         SetCharacterSkill();
@@ -87,13 +88,25 @@ public class GameOverView : BaseView
         int seconds = Mathf.FloorToInt(elapsedTime % 60f);
         _text_SurvivalTime.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
 
-        _text_GetCoin.text = $"{0}";
+        int coin = GameplayManager.CurrentContext.GameController.GetCoinCount;
+        _text_GetCoin.text = $"{coin}";
 
         int level = GameplayManager.CurrentContext.CharacterController.CurrentLevel.Value;
         _text_MaxLevel.text = $"{level + 1}";
 
         int killEnemy = GameplayManager.CurrentContext.GameController.KillEnemyCount;
         _text_EnemyCount.text = $"{killEnemy}";
+    }
+
+    /// <summary>
+    /// 本地資料存檔
+    /// </summary>
+    private void SaveLocalData()
+    {
+        // 獲得金幣
+        PlayerInfoData data = PlayerInfoStateData.PlayerInfo.Value;
+        data.Coin += GameplayManager.CurrentContext.GameController.GetCoinCount;
+        PlayerInfoStateData.PlayerInfo.Value = data;
     }
 
     /// <summary>
