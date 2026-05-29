@@ -23,7 +23,7 @@ namespace Enemy.Generator
         public readonly ReactiveCollection<EnemyView> _LivingEnemyPool = new();
         public IReactiveCollection<EnemyView> LivingEnemyPool => _LivingEnemyPool;
 
-        Transform _parents;
+        Transform _parents; //存EnemyManager的物件
 
         [Header("設定值")]
         [SerializeField]
@@ -106,7 +106,7 @@ namespace Enemy.Generator
                 objects[i].gameObject.SetActive(true);
             }
         }
-        //從物件池拿取
+        //從物件池拿取怪物  沒有的話生一個
         async Task<EnemyView> GetEnemy(EnemyConfigData data, Transform parents )
         {
             
@@ -119,9 +119,11 @@ namespace Enemy.Generator
             {
                 var enemy = enemyPool[data.enemyType].Pop();
                 EnemyView enemyView = enemy.GetComponent<EnemyView>();
+                enemy.gameObject.SetActive(true);
                 enemy.transform.SetParent(parents);
-                enemy.gameObject.SetActive(false);
+                enemy.ResetAnchorPoint();
                 LivingEnemyPool.Add(enemyView);
+                enemy.gameObject.SetActive(false);
                 return enemy;
             }
 
@@ -133,7 +135,7 @@ namespace Enemy.Generator
 
             // 等待生成完成
             GameObject enemyInstance = await handle.Task;
-            enemyInstance.SetActive(false);
+            enemyInstance.SetActive(true);
             enemyInstance.transform.SetParent(parents);
             // 3. 檢查組件
             if (!enemyInstance.TryGetComponent(out EnemyView view))
@@ -143,8 +145,9 @@ namespace Enemy.Generator
                 //添加敵人代碼
                 EnemyView enemyView = enemyInstance.AddComponent<EnemyView>();
                 enemyView.SetUp(data);
-                enemyView.SetUpActionCB(new EnemyActionCB { recycleCB = RecycleEnemy });
+                enemyView.SetUpActionCB(new EnemyActionCB { recycleCB = RecycleEnemy});
                 LivingEnemyPool.Add(enemyView);
+                enemyInstance.SetActive(false);
                 return enemyView;
             }
             return null;
@@ -168,14 +171,14 @@ namespace Enemy.Generator
                 enemyPool[type].Push(recycleEnemy);
             }
         }
+        /*回收領隊*/
         void RecycleLaderEnemy(EnemyLeader enemyLeader)
         {
-            Debug.Log($"1 士兵數量: {enemyLeader.subordinatesCount}");
             if(enemyLeader == null) {
-                Debug.Log($"找不到領導 {enemyLeader.name}");
+                Debug.Log($"找不到領導");
+                return;
             }
             enemyLeader.subordinatesCount -= 1;
-            Debug.Log($"2 士兵數量: {enemyLeader.subordinatesCount}");
             if (enemyLeader.subordinatesCount <= 0)
             {
                 Debug.Log($"刪除領導 {enemyLeader.name}");
@@ -187,18 +190,17 @@ namespace Enemy.Generator
         {
             while (_generatorSetting.isSpawning)
             {
-                if (LivingEnemyPool.Count > 60)
+                if (LivingEnemyPool.Count > setting.livingEnemyMax)
                 {
                     Debug.Log($"場上怪物數量過多 [{LivingEnemyPool.Count}],跳過此次生成");
                     yield return new WaitForSeconds(_generatorSetting.spawnInterval);
                 }
-
                 int createrCount = Random.Range(1, setting.createEnemyCount);
                 int configCountMax = Random.Range(0, Enum.GetValues(typeof(ENEMY_TYPE)).Length);
                 int soldierCountMax = Random.Range(setting.soldierCountMin, setting.soldierCountMax);
                 ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
-                
 
+                //隨機抽 生成的怪物陣型
                 int formationRandom = Random.Range(0, Enum.GetValues(typeof(FORMATION_TYPE)).Length);
                 FORMATION_TYPE formationType = (FORMATION_TYPE)formationRandom;
 
@@ -262,5 +264,6 @@ namespace Enemy.Generator
                     break;
             }
         }
+       
     }
 }

@@ -55,9 +55,7 @@ public class EnemyView : BaseGameObject
     public void SetUp(BasicAttributeData data)
     {
         _enemyModel = new(data);
-        Debug.Log($"[{gameObject.name}]  初始HP:[ { _enemyModel.ConfigData.currentHp} ]");
-
-        if (_enemyModel != null)  _enemyModel._OnDieNotify += OnDieNotify;
+        _enemyModel._OnDieNotify += OnDieNotify;
         _renderer = GetComponent<Renderer>();
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new MaterialPropertyBlock();
@@ -67,9 +65,12 @@ public class EnemyView : BaseGameObject
         anchorPoint = gameObject.GetComponentInChildren<AnchorPoint>();
         ResetAnchorPoint();
         SetUpPlayerPosition();
+
+        Debug.Log($"[{gameObject.name}]  初始HP:[ {_enemyModel.ConfigData.currentHp} ]");
     }
     private void OnEnable()
-    {
+    {   
+        if(_enemyModel != null)_enemyModel._OnDieNotify += OnDieNotify;
         SetUpPlayerPosition();
     }
     private void OnDisable()
@@ -79,8 +80,8 @@ public class EnemyView : BaseGameObject
             StopCoroutine(knockbackHandler);
             knockbackHandler = null; // 清空引用
         }
-        _enemyModel._OnDieNotify -= OnDieNotify;
         _enemyModel.Reset();
+        _enemyModel._OnDieNotify -= OnDieNotify;
         _rigidbody.linearVelocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
 
@@ -246,9 +247,7 @@ public class EnemyView : BaseGameObject
         }
     }
     public void ResetAnchorPoint() {
-        gameObject.SetActive(true);
         _colliderHeight = Collider.bounds.size.y;
         anchorPoint.SetUp(Collider, gameObject);
-        gameObject.SetActive(false);
     }
 }

@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+﻿using NaughtyAttributes;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
@@ -11,18 +11,20 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private List<EnemyConfigData> _enemyConfigList;
     public IReactiveCollection<EnemyView> ReadLivingEnemyPool => _enemyGenerator.LivingEnemyPool;
+
     //怪物網格地圖
     EnemySpatialGrid enemySpatialGrid = new();
-
     //怪物產生器
     [SerializeField]
     EnemyGenerator _enemyGenerator = new EnemyGenerator();
+    //自動生成定時
+    private Coroutine _spawnCoroutine;
 
     public void SetUp(List<EnemyConfigData>conifgList) {
         _enemyConfigList = conifgList;
         _enemyGenerator.SetUp(_enemyConfigList, transform);
         enemySpatialGrid.SetUp(ReadLivingEnemyPool);
-        StartCoroutine(_enemyGenerator.SpawnRoutine());
+        _spawnCoroutine = StartCoroutine(_enemyGenerator.SpawnRoutine());
        
     }
     // Update is called once per frame
@@ -34,9 +36,15 @@ public class EnemyManager : MonoBehaviour
             _enemyGenerator.unitTest();
             if (_enemyGenerator.setting.isSpawning)
             {
-               StartCoroutine(_enemyGenerator.SpawnRoutine());
+                _spawnCoroutine = StartCoroutine(_enemyGenerator.SpawnRoutine());
             } 
         }
+        /*遇到暫停或停止時 */
+        if (GameplayManager.CurrentContext.GameController.IsGameOver)
+        {
+            StopCoroutine(_spawnCoroutine);
+        }
+        
     }
     private void FixedUpdate()
     {
