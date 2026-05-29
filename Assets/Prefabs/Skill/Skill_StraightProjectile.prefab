@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4969289324566950156}
   - component: {fileID: 6002251403688146405}
   - component: {fileID: 5105016583902039055}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Skill_StraightProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 5443446992416369336}
   - component: {fileID: 7285439088635596940}
   - component: {fileID: 6726075429544558671}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Knife
   m_TagString: Untagged
   m_Icon: {fileID: 0}

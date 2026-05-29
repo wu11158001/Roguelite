@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5045661748624471771}
   - component: {fileID: 9120535949537930977}
   - component: {fileID: 8168377054345996345}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Skill_Around_AttackObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 7384121979430020589}
   - component: {fileID: 141243581315867314}
   - component: {fileID: 6390317757866050833}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BlackBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4914,7 +4914,7 @@ GameObject:
   - component: {fileID: 7791653569416925566}
   - component: {fileID: 577885824666009100}
   - component: {fileID: 7183181251712827296}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9752,7 +9752,7 @@ GameObject:
   - component: {fileID: 8417371295324264477}
   - component: {fileID: 9115509380586763457}
   - component: {fileID: 2353684996916298672}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spinning
   m_TagString: Untagged
   m_Icon: {fileID: 0}

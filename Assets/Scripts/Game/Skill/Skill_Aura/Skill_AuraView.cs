@@ -20,8 +20,6 @@ public class Skill_AuraView : BaseSkill
 
         _controller ??= new Skill_AuraController(this);
         _controller.Activate(data);
-
-        SetDistanceMonitoring();
     }
 
     /// <summary>

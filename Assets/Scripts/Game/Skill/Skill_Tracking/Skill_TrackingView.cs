@@ -14,8 +14,7 @@ public class Skill_TrackingView : BaseSkill
         base.Setup(data);
 
         // 尋找目標
-        EnemyView enemyView = GameplayManager.CurrentContext.SkillController.GetNearestEnemy(_playerObject.transform.position);
-        Transform target = enemyView != null ? enemyView.gameObject.transform : null;
+        Transform target = GameplayManager.CurrentContext.SkillController.GetNearestTarget(_playerObject.transform.position);
 
         _controller ??= new Skill_TrackingController(this);
         _controller.Activate(data, _playerObject);

@@ -16,10 +16,14 @@ public class SkillSpawner
     // 技能未搜尋到敵人產生的虛擬位置
     private Transform _fallbackTarget;
 
+    private int _enemyLayerMask;
+
     public SkillSpawner(MonoBehaviour runner)
     {
         _coroutineRunner = runner;
-        _mainCamera = Camera.main;
+        _mainCamera ??= Camera.main;
+
+        _enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
     }
 
     public Dictionary<string, OnlySkillData> OnlySkills => _onlySkills;
@@ -274,24 +278,27 @@ public class SkillSpawner
     /// <param name="isInBottom">是否生成在角色底部</param>
     private void SpawnInRandomEnemy(SkillItemData data, bool isInBottom = false)
     {
-        Transform tr = null;
+        Transform target = GetRandomTargetInCamera();
+        EnemyView enemyView = null;
 
-        EnemyView enemyView = GetRandomEnemyInCamera();
-        if(enemyView != null)
+        if (target != null)
         {
-            if(isInBottom) tr = enemyView.anchorPoint.bottom.transform;
-            else tr = enemyView.anchorPoint.midder.transform;
+            if(target.TryGetComponent(out enemyView))
+            {
+                if (isInBottom) target = enemyView.anchorPoint.bottom.transform;
+                else target = enemyView.anchorPoint.midder.transform;
+            }
         }
 
         // 周圍沒有敵人在角色周圍隨機產生
-        if (tr == null) tr = GetFallbackTransform();
+        if (target == null) target = GetFallbackTransform();
 
         // 產生技能
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: data.SkillName,
             assetRef: data.PrefabReference,
-            position: tr.position,
-            rotation: tr.rotation,
+            position: target.position,
+            rotation: target.rotation,
             callback: (obj) =>
             {
                 if (obj.TryGetComponent(out BaseSkill skill))
@@ -362,42 +369,29 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 獲取隨機敵人位置在攝影機視野內
+    /// 獲取隨機目標位置在攝影機視野內
     /// </summary>
     /// <returns></returns>
-    public EnemyView GetRandomEnemyInCamera()
+    public Transform GetRandomTargetInCamera()
     {
-        EnemyManager enemyManager = GameplayManager.CurrentContext.EnemyManager;
-        if (_mainCamera == null) _mainCamera = Camera.main;
+        _mainCamera ??= Camera.main;
 
-        List<EnemyView> visibleEnemies = new();
-        if (enemyManager?.LivingEnemyPool != null)
+        float maxRadarDistance = 30.0f;
+
+        Plane[] cameraPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
+        Collider[] hitColliders = Physics.OverlapSphere(_mainCamera.transform.position, maxRadarDistance, _enemyLayerMask);
+
+        List<Transform> visibleTargets = new();
+        foreach (var col in hitColliders)
         {
-            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
-
-            for (int i = 0; i < enemyManager.LivingEnemyPool.Count; i++)
+            // 檢查 Enemy 的包圍盒 (Bounds) 是否在攝影機的 6 個平面之內
+            if (GeometryUtility.TestPlanesAABB(cameraPlanes, col.bounds))
             {
-                EnemyView enemyView = enemyManager.LivingEnemyPool[i];
-                if (enemyView == null || !enemyView.gameObject.activeInHierarchy) continue;
-
-                if (enemyView.Collider != null)
-                {
-                    if (GeometryUtility.TestPlanesAABB(planes, enemyView.Collider.bounds))
-                        visibleEnemies.Add(enemyView);
-                }
-                else
-                {
-                    // 轉換成攝影機視角比例的 2D 座標, 判斷是否在畫面內
-                    Vector3 viewportPos = _mainCamera.WorldToViewportPoint(enemyView.transform.position);
-                    if (viewportPos.x >= 0f && viewportPos.x <= 1f && viewportPos.y >= 0f && viewportPos.y <= 1f && viewportPos.z > 0f)
-                    {
-                        visibleEnemies.Add(enemyView);
-                    }
-                }
+                visibleTargets.Add(col.transform);
             }
         }
 
-        return visibleEnemies.Count > 0 ? visibleEnemies[UnityEngine.Random.Range(0, visibleEnemies.Count)] : null;
+        return visibleTargets.Count > 0 ? visibleTargets[UnityEngine.Random.Range(0, visibleTargets.Count)] : null;
     }
 
     /// <summary>
@@ -426,37 +420,41 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 獲取最近的敵人位置
+    /// 獲取最近的目標位置
     /// </summary>
     /// <param name="origin">角色位置</param>
     /// <returns></returns>
-    public EnemyView GetNearestEnemy(Vector3 origin)
+    public Transform GetNearestTarget(Vector3 origin)
     {
-        EnemyManager enemyManager = GameplayManager.CurrentContext.EnemyManager;
+        _mainCamera ??= Camera.main;
 
-        if (enemyManager == null || enemyManager.LivingEnemyPool == null)
-        {
-            return null;
-        }
+        float maxRadarDistance = 30.0f;
 
-        EnemyView nearestTarget = null;
+        Plane[] cameraPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
+        Collider[] hitColliders = Physics.OverlapSphere(_mainCamera.transform.position, maxRadarDistance, _enemyLayerMask);
+
+        Transform nearestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
-
-        foreach (EnemyView enemyView in enemyManager.LivingEnemyPool)
+        foreach (var col in hitColliders)
         {
-            if (!enemyView.gameObject.activeInHierarchy)
+            // 檢查 Enemy 的包圍盒 (Bounds) 是否在攝影機的 6 個平面之內
+            if (GeometryUtility.TestPlanesAABB(cameraPlanes, col.bounds))
             {
-                continue;
-            }
+                if (!col.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
 
-            Vector3 directionToTarget = enemyView.transform.position - origin;
-            float dSqrToTarget = directionToTarget.sqrMagnitude;
-            if (dSqrToTarget < closestDistanceSqr)
-            {
-                closestDistanceSqr = dSqrToTarget;
-                nearestTarget = enemyView;
+                Vector3 directionToTarget = col.transform.position - origin;
+                float dSqrToTarget = directionToTarget.sqrMagnitude;
+                if (dSqrToTarget < closestDistanceSqr)
+                {
+                    closestDistanceSqr = dSqrToTarget;
+                    nearestTarget = col.transform;
+                }
             }
         }
+
         return nearestTarget;
     }
 

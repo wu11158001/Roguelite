@@ -123,7 +123,7 @@ public class SkillTrackData
 public class SkillController : MonoBehaviour
 {
     /// <summary> 距離玩家多遠移除技能 </summary>
-    public readonly float SkillRemoveDistance = 30;
+    public readonly float SkillRemoveDistance = 30.0f;
 
     private SkillInventory _inventory;
     private SkillTimerManager _timerManager;
@@ -225,17 +225,17 @@ public class SkillController : MonoBehaviour
     public void OnGainSkill(SkillItemData newSkill) => _inventory.AddOrUpgradeSkill(newSkill);
 
     /// <summary>
-    /// 獲取隨機敵人在攝影機視野內
+    /// 獲取隨機目標在攝影機視野內
     /// </summary>
     /// <returns></returns>
-    public EnemyView GetRandomEnemyInCamera() => _spawner.GetRandomEnemyInCamera();
+    public Transform GetRandomTargetInCamera() => _spawner.GetRandomTargetInCamera();
 
     /// <summary>
-    /// 獲取最近的敵人位置
+    /// 獲取最近的目標位置
     /// </summary>
     /// <param name="origin"></param>
     /// <returns></returns>
-    public EnemyView GetNearestEnemy(Vector3 origin) => _spawner.GetNearestEnemy(origin);
+    public Transform GetNearestTarget(Vector3 origin) => _spawner.GetNearestTarget(origin);
 
     /// <summary>
     /// 角色獲取新技能

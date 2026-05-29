@@ -26,7 +26,7 @@ public class PlayerView : BaseGameObject
     // 動畫
     private Animator _anim;
     private readonly int _isMovingParamId = Animator.StringToHash("IsMove");
-    private readonly int _isDieParamId = Animator.StringToHash("Die");
+    private readonly int _dieParamId = Animator.StringToHash("Die");
 
     private HpBarView _hpBarView;
     private CharacterConfigData _characterConfig;
@@ -247,7 +247,7 @@ public class PlayerView : BaseGameObject
     {
         GameplayManager.CurrentContext.GameController.GameOver();
 
-        _anim.SetTrigger(_isDieParamId);
+        _anim.SetTrigger(_dieParamId);
         _hpBarView.gameObject.SetActive(false);
 
         StartCoroutine(IHandleDieRoutine());

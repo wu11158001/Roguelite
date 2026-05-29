@@ -25,6 +25,14 @@ public class GameConfigData : ScriptableObject
     public List<Texture> GroundTexture;
 
     [HorizontalLine(color: EColor.Gray)]
+    [Label("箱子模型")]
+    public AssetReferenceGameObject BoxPrefabReference;
+    [Label("每塊地板最大產生箱子數量")]
+    public int MaxBoxCountInGround;
+    [Label("箱子產生機率(0~1)")]
+    public float SpawnBoxRate;
+
+    [HorizontalLine(color: EColor.Gray)]
     [Label("最大等級上限")]
     public int MaxLevel;
     [Label("基礎升級所需經驗值")]

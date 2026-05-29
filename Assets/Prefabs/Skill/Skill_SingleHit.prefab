@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4020812889994623965}
   - component: {fileID: 6495577906865193022}
   - component: {fileID: 2625060290537439022}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Trails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4916,7 +4916,7 @@ GameObject:
   - component: {fileID: 2159221255404733593}
   - component: {fileID: 3665190972962075241}
   - component: {fileID: 8957382857490267356}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9819,7 +9819,7 @@ GameObject:
   - component: {fileID: 4095854403765623410}
   - component: {fileID: 4847900231163721811}
   - component: {fileID: 3672593129836486424}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Shoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14713,7 +14713,7 @@ GameObject:
   - component: {fileID: 6400957371728169964}
   - component: {fileID: 5688733671907101177}
   - component: {fileID: 1864265496286646955}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Plexus AoE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19613,7 +19613,7 @@ GameObject:
   - component: {fileID: 1719308906941702932}
   - component: {fileID: 941805233909615733}
   - component: {fileID: 4094253053303297336}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24515,7 +24515,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5239076826550048480}
   - component: {fileID: 8734183446630756980}
-  m_Layer: 0
+  - component: {fileID: 8052906700558345609}
+  m_Layer: 10
   m_Name: Skill_SingleHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24550,6 +24551,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bac730519470ac447871c2a283066066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_SingleHitView
+--- !u!135 &8052906700558345609
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5747573670565319106}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7981391866387932875
 GameObject:
   m_ObjectHideFlags: 0
@@ -24563,7 +24585,7 @@ GameObject:
   - component: {fileID: 1217012719505431716}
   - component: {fileID: 651713755873780754}
   - component: {fileID: 5759428325464332585}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29614,7 +29636,7 @@ GameObject:
   - component: {fileID: 6277356010880907179}
   - component: {fileID: 6154438149293504185}
   - component: {fileID: 1898171927653400769}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

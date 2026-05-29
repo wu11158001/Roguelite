@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5414631678028267159}
   - component: {fileID: 5264425561118993051}
   - component: {fileID: 3650151986994832929}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Skill_RangeSlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,39 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 239527732b587974d96d87dacd55d059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_RangeSlowView
-  Data:
-    SkillType: 0
-    IsUpdateNow: 0
-    SkillLevel: 0
-    SkillName: 
-    SkillIcon: {fileID: 0}
-    SkillDescribe: 
-    SkillSpawnModeType: 0
-    PrefabReference:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-    SkillCd: 0
-    SkillAttack: 0
-    SkillShotCount: 0
-    SkillShotInterval: 0
-    SkillPenetrate: 0
-    SkillFlightSpeed: 0
-    SkillKnockback: 0
-    SkillCriticalChance: 0
-    SkillCriticalMultiplier: 0
-    SkillEffectRange: 0
-    SkillKeepTime: 0
-    SpeedModifier: 0
-    SpeedModifierTime: 0
-    IsPassive: 0
-    PassiveType: 0
-    PassiveAddValue: 0
-    IsProps: 0
-    PropsSkillType: 0
-    PropsAddValue: 0
 --- !u!135 &3650151986994832929
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -111,7 +78,7 @@ GameObject:
   - component: {fileID: 7570000001878416317}
   - component: {fileID: 5828220058426554438}
   - component: {fileID: 1590432996070755758}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bamboo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5017,7 +4984,7 @@ GameObject:
   - component: {fileID: 2432823445319022719}
   - component: {fileID: 6227296025329172869}
   - component: {fileID: 8361279550524562701}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: YinYand attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9928,7 +9895,7 @@ GameObject:
   - component: {fileID: 2094109114070202234}
   - component: {fileID: 8694922995751476716}
   - component: {fileID: 8962600629654716696}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Expl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14834,7 +14801,7 @@ GameObject:
   - component: {fileID: 3603183676000130182}
   - component: {fileID: 1843179315917572741}
   - component: {fileID: 4901398007744754406}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GroundWave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19740,7 +19707,7 @@ GameObject:
   - component: {fileID: 855583858507525982}
   - component: {fileID: 810363273020608824}
   - component: {fileID: 388474972125819072}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SmokeExpl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24646,7 +24613,7 @@ GameObject:
   - component: {fileID: 7842003380424090191}
   - component: {fileID: 1451552921249871642}
   - component: {fileID: 4393487592773719354}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: YinYang
   m_TagString: Untagged
   m_Icon: {fileID: 0}

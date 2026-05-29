@@ -35,8 +35,7 @@ public class Skill_TrackingController
         _penetrate = model.SkillPenetrate;
 
         // 尋找目標
-        EnemyView enemyView = GameplayManager.CurrentContext.SkillController.GetNearestEnemy(playerObject.transform.position);
-        _target = enemyView != null ? enemyView.gameObject.transform : null;
+        _target = GameplayManager.CurrentContext.SkillController.GetNearestTarget(playerObject.transform.position);
 
         _isTracking = true;
         _hitTargets.Clear();

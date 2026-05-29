@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 342822950477281255}
   - component: {fileID: 2431464826750360976}
   - component: {fileID: 6327840704730456318}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Skill_Aura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 4657770027286325821}
   - component: {fileID: 5708202532143254370}
   - component: {fileID: 8598996725518980131}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rune1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4959,7 +4959,7 @@ GameObject:
   - component: {fileID: 5136478980466634075}
   - component: {fileID: 4619619095929440006}
   - component: {fileID: 1023360598777893410}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rot_ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9874,7 +9874,7 @@ GameObject:
   - component: {fileID: 6564124302469250118}
   - component: {fileID: 33448626613397559}
   - component: {fileID: 6568181496717970283}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14762,7 +14762,7 @@ GameObject:
   - component: {fileID: 8356421851702580343}
   - component: {fileID: 6809143955225753890}
   - component: {fileID: 2254710195829084552}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rot_rune
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19677,7 +19677,7 @@ GameObject:
   - component: {fileID: 4422431389286368633}
   - component: {fileID: 6727119347972804904}
   - component: {fileID: 8719856188845899029}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24525,7 +24525,7 @@ GameObject:
   - component: {fileID: 3534379574278198576}
   - component: {fileID: 409727047190788044}
   - component: {fileID: 5363356409703883349}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FX_MagicCircle_Icearrow01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29374,7 +29374,7 @@ GameObject:
   - component: {fileID: 4406840201467093205}
   - component: {fileID: 3681887792639749734}
   - component: {fileID: 7176986213919313793}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: eye_lwy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34222,7 +34222,7 @@ GameObject:
   - component: {fileID: 610610851020862906}
   - component: {fileID: 5963277919340824296}
   - component: {fileID: 9015249472151164573}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: twinkle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38939,7 +38939,7 @@ GameObject:
   - component: {fileID: 3618387873199321280}
   - component: {fileID: 6221787493671966191}
   - component: {fileID: 6786973222523138393}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}

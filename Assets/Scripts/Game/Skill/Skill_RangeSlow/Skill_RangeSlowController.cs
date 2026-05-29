@@ -60,15 +60,17 @@ public class Skill_RangeSlowController :IDisposable
         hitData.SpeedModifierTime = _model.SpeedModifierTime;
 
         // 攻擊敵人
-        EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
-        enemyView?.OnAttacked(hitData);
+        if(enemyObj.TryGetComponent(out EnemyView enemyView))
+        {
+            enemyView?.OnAttacked(hitData);
+
+            SpawnSlowEffect(
+                target: enemyView.anchorPoint.bottom.transform,
+                recycleTime: hitData.SpeedModifierTime);
+        }        
 
         // 技能追蹤傷害
         GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
-
-        SpawnSlowEffect(
-            target: enemyView.anchorPoint.bottom.transform,
-            recycleTime: hitData.SpeedModifierTime);
     }
 
     /// <summary>

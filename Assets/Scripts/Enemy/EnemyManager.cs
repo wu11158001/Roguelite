@@ -1,4 +1,4 @@
-﻿using NaughtyAttributes;
+using NaughtyAttributes;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
@@ -17,8 +17,7 @@ public class EnemyManager : MonoBehaviour
     //怪物產生器
     [SerializeField]
     EnemyGenerator _enemyGenerator = new EnemyGenerator();
-    //存活的敵人池
-    public IReactiveCollection<EnemyView> LivingEnemyPool => _enemyGenerator._LivingEnemyPool;
+
     public void SetUp(List<EnemyConfigData>conifgList) {
         _enemyConfigList = conifgList;
         _enemyGenerator.SetUp(_enemyConfigList, transform);

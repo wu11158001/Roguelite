@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3939512661364167431}
   - component: {fileID: 6963013968011639713}
   - component: {fileID: 1767509736655341377}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Snowflakes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4914,7 +4914,7 @@ GameObject:
   - component: {fileID: 2612242062344709920}
   - component: {fileID: 4251874719044107609}
   - component: {fileID: 3608580976450529986}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Skill_FrontHit_Mega
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4981,7 +4981,7 @@ GameObject:
   - component: {fileID: 3013640139780663006}
   - component: {fileID: 6370148589883648776}
   - component: {fileID: 7483309723040452216}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9884,7 +9884,7 @@ GameObject:
   - component: {fileID: 5620490769394004130}
   - component: {fileID: 6727062149875792017}
   - component: {fileID: 8316773360755270113}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14787,7 +14787,7 @@ GameObject:
   - component: {fileID: 7780190146260236528}
   - component: {fileID: 423842659830217461}
   - component: {fileID: 7408130333363896600}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Snow slash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
