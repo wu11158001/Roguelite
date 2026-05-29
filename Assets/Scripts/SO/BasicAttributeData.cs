@@ -11,7 +11,7 @@ public enum PLAYER_STATE_TPYE
 }
 public enum ENEMY_TYPE
 {
-    ZOMBIES = 1,
+    ZOMBIES,
     SLIME,
 }
 

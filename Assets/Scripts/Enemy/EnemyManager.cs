@@ -24,6 +24,7 @@ public class EnemyManager : MonoBehaviour
         _enemyGenerator.SetUp(_enemyConfigList, transform);
         enemySpatialGrid.SetUp(ReadLivingEnemyPool);
         StartCoroutine(_enemyGenerator.SpawnRoutine());
+       
     }
     // Update is called once per frame
     void Update()
@@ -32,6 +33,10 @@ public class EnemyManager : MonoBehaviour
         {
             _enemyGenerator.setting.IsCreaterEnemy = false;
             _enemyGenerator.unitTest();
+            if (_enemyGenerator.setting.isSpawning)
+            {
+               StartCoroutine(_enemyGenerator.SpawnRoutine());
+            } 
         }
     }
     private void FixedUpdate()
@@ -41,7 +46,7 @@ public class EnemyManager : MonoBehaviour
         for (int i = 0; i < _enemyGenerator.LivingEnemyPool.Count; i++)
         {
             EnemyView enemy = _enemyGenerator.LivingEnemyPool[i];
-         
+           
             // 1. Manager 自己就知道網格，在這裡抓鄰居
             var neighbors = enemySpatialGrid.GetNeighbors(enemy.transform.position);
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677b9df9b81551e44bd4b5324b83cce6, type: 3}
   m_Name: Slime
   m_EditorClassIdentifier: Assembly-CSharp::EnemyConfigData
-  enemyType: 2
+  enemyType: 1
   _bodyData:
     basicMoveSpeed: 15
     basicATK: 2
@@ -21,10 +21,9 @@ MonoBehaviour:
     basicMp: 0
     atkSpeed: 1
   _baseBehaviorMode:
-    moveType: 0
-    outboundsAction: 1
+    moveType: 1
+    outboundsAction: 0
     isMove: 0
-  currentMp: 0
   PrefabReference:
     m_AssetGUID: 750e1497690957143b78d567d4fe6e90
     m_SubObjectName: 

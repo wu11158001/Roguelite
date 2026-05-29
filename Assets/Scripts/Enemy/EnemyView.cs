@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -64,15 +64,12 @@ public class EnemyView : BaseGameObject
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.freezeRotation = true;
         Collider = GetComponent<Collider>();
-        _colliderHeight = Collider.bounds.size.y;
-        Debug.Log($"_colliderHeight : [{_colliderHeight}]");
         anchorPoint = gameObject.GetComponentInChildren<AnchorPoint>();
-        anchorPoint.SetUp(Collider,gameObject);
+        ResetAnchorPoint();
         SetUpPlayerPosition();
     }
     private void OnEnable()
     {
-        _colliderHeight = Collider.bounds.size.y;
         SetUpPlayerPosition();
     }
     private void OnDisable()
@@ -82,8 +79,8 @@ public class EnemyView : BaseGameObject
             StopCoroutine(knockbackHandler);
             knockbackHandler = null; // 清空引用
         }
+        _enemyModel._OnDieNotify -= OnDieNotify;
         _enemyModel.Reset();
-        //_enemyModel.ConfigData._OnDieNotify -= OnDieNotify;
         _rigidbody.linearVelocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
 
@@ -146,13 +143,6 @@ public class EnemyView : BaseGameObject
     }
     private void Attacked_Ani()
     {
-        /*   _renderer.GetPropertyBlock(_propBlock);
-           // 修改顏色屬性
-           _propBlock.SetColor("_BaseColor", UnityEngine.Color.red);
-           // 套用回 Renderer（這不會產生新的材質實體）
-           _renderer.SetPropertyBlock(_propBlock);
-
-           Invoke(nameof(ResetColor), 0.1f);*/
         foreach (var r in _renderers)
         {
             // 1. 先讀取該 Renderer 現有的 PropertyBlock
@@ -170,9 +160,7 @@ public class EnemyView : BaseGameObject
     //受擊效果
     void ResetColor()
     {
-        /*_renderer.GetPropertyBlock(_propBlock);
-        _propBlock.SetColor("_BaseColor", UnityEngine.Color.white); // 假設原本是白色
-        _renderer.SetPropertyBlock(_propBlock);*/
+
         foreach (var r in _renderers)
         {
             r.GetPropertyBlock(_propBlock);
@@ -245,8 +233,22 @@ public class EnemyView : BaseGameObject
     }
     public void SetUpStartPosition(Vector3 startPos)
     {
-        float offset = _colliderHeight/2;
-        transform.position = new Vector3(startPos.x, 0 + offset, startPos.z);
-    }
 
+        float offset = _colliderHeight/2;
+       Vector3 newV3= new Vector3(startPos.x, 0 + offset, startPos.z);
+
+        if(leader != null)
+        {
+            leader.transform.position = newV3;
+        }else
+        {
+            transform.position = newV3;
+        }
+    }
+    public void ResetAnchorPoint() {
+        gameObject.SetActive(true);
+        _colliderHeight = Collider.bounds.size.y;
+        anchorPoint.SetUp(Collider, gameObject);
+        gameObject.SetActive(false);
+    }
 }

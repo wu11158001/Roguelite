@@ -2,7 +2,6 @@
 using UnityEngine;
 public enum FORMATION_TYPE
 {
-    RENDOMS ,      //隨機
     WEDGE,       //楔形陣
     SQUARE,      //方形陣
     CIRCULAR,    //環形陣

@@ -9,8 +9,9 @@ public class AnchorPoint : MonoBehaviour
         _midder = transform.Find("Middle").gameObject;
         _bottom = transform.Find("Bottom").gameObject;
 
+
         //設置所有錨點初始位置
-        transform.localPosition = Vector3.zero;
+        transform.position = collider.bounds.center;
         _midder.transform.localPosition = Vector3.zero;
         _bottom.transform.localPosition = new Vector3(0, -((collider.bounds.size.y/2)/ parents.transform.localScale.y), 0);
     }

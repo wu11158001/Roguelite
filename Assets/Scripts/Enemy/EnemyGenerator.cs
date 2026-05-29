@@ -99,7 +99,7 @@ namespace Enemy.Generator
         private void SetUpFormation(FORMATION_TYPE type, List<EnemyView> objects, Vector2 spacing)
         {
             Vector3[] Position_Array = FormationUtils.GeneratePositions(type, objects.Count, spacing);
-            for (int i = 0; i < objects.Count; i++)
+           for (int i = 0; i < objects.Count; i++)
             {
                 Vector3 v3 = Position_Array[i];
                 objects[i].SetUpStartPosition(v3);
@@ -120,14 +120,16 @@ namespace Enemy.Generator
                 var enemy = enemyPool[data.enemyType].Pop();
                 EnemyView enemyView = enemy.GetComponent<EnemyView>();
                 enemy.transform.SetParent(parents);
-                //enemyView.SetUpStartPosition(enemyPosition);
                 enemy.gameObject.SetActive(false);
                 LivingEnemyPool.Add(enemyView);
                 return enemy;
             }
 
+            //依照玩家位置為基準，生成在玩家可視覺範圍外
+            Vector3 playerV3 = GameplayManager.CurrentContext.ControlCharacter.transform.position;
+            Vector3 startV3 = new Vector3(playerV3.x+50, playerV3.y, playerV3.z);
             // 2. 非同步生成
-            var handle = data.PrefabReference.InstantiateAsync(parents);
+            var handle = data.PrefabReference.InstantiateAsync(startV3, Quaternion.identity,  parents);
 
             // 等待生成完成
             GameObject enemyInstance = await handle.Task;
@@ -136,8 +138,8 @@ namespace Enemy.Generator
             // 3. 檢查組件
             if (!enemyInstance.TryGetComponent(out EnemyView view))
             {
-                _enemyCount[((int)data.enemyType - 1)]++;
-                enemyInstance.name = data.enemyType.ToString() + "_" + _enemyCount[((int)data.enemyType - 1)];
+                _enemyCount[((int)data.enemyType)]++;
+                enemyInstance.name = data.enemyType.ToString() + "_" + _enemyCount[((int)data.enemyType)];
                 //添加敵人代碼
                 EnemyView enemyView = enemyInstance.AddComponent<EnemyView>();
                 enemyView.SetUp(data);
@@ -151,7 +153,7 @@ namespace Enemy.Generator
         void RecycleEnemy(ENEMY_TYPE type, EnemyView recycleEnemy)
         {
             if (recycleEnemy == null) return;
-
+            
             // 1. 直接從 List 移除，不用自己算 Index
             if (LivingEnemyPool.Remove(recycleEnemy))
             {
@@ -185,10 +187,36 @@ namespace Enemy.Generator
         {
             while (_generatorSetting.isSpawning)
             {
-                int configCountMax = Random.Range(1, (int)ENEMY_TYPE.SLIME + 1);
-                int createrCount = Random.Range(1, _generatorSetting.createEnemyCount);
+                if (LivingEnemyPool.Count > 60)
+                {
+                    Debug.Log($"場上怪物數量過多 [{LivingEnemyPool.Count}],跳過此次生成");
+                    yield return new WaitForSeconds(_generatorSetting.spawnInterval);
+                }
+
+                int createrCount = Random.Range(1, setting.createEnemyCount);
+                int configCountMax = Random.Range(0, Enum.GetValues(typeof(ENEMY_TYPE)).Length);
+                int soldierCountMax = Random.Range(setting.soldierCountMin, setting.soldierCountMax);
                 ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
-                // createrEnemy(type, createrCount);
+                
+
+                int formationRandom = Random.Range(0, Enum.GetValues(typeof(FORMATION_TYPE)).Length);
+                FORMATION_TYPE formationType = (FORMATION_TYPE)formationRandom;
+
+                //隨機抽 生成的怪物模式
+                int spawnRandom = Random.Range(1, Enum.GetValues(typeof(SPAWN_MODE)).Length + 1);
+                SPAWN_MODE spawnMode = (SPAWN_MODE)spawnRandom;
+
+                if (spawnMode == SPAWN_MODE.GROUP)
+                {
+                    for (int i = 0; i < setting.armyCount; i++)
+                    {
+                        SpawnGroupEnemy(type, soldierCountMax, formationType);
+                    }
+                }
+                else
+                {
+                    SpawnSingleEnemy(type, createrCount);
+                }
 
                 // 2. 等待設定的時間
                 yield return new WaitForSeconds(_generatorSetting.spawnInterval);
@@ -196,15 +224,16 @@ namespace Enemy.Generator
         }
         public void unitTest()
         {
-            int configCountMax = Random.Range(1, (int)ENEMY_TYPE.SLIME + 1);
+            int configCountMax = Random.Range(0, Enum.GetValues(typeof(ENEMY_TYPE)).Length);
            ENEMY_TYPE type = (ENEMY_TYPE)configCountMax;
            type = setting.enemyType;
 
-            int formationRandom = Random.Range(0, (int)FORMATION_TYPE.CIRCULAR + 1);
-            FORMATION_TYPE formationType = (setting.formationType == FORMATION_TYPE.RENDOMS) ? (FORMATION_TYPE)formationRandom:setting.formationType;
+            int formationRandom = Random.Range(0, Enum.GetValues(typeof(FORMATION_TYPE)).Length);
+            FORMATION_TYPE formationType = setting.formationType;
 
-            int spawnRandom = Random.Range(1, (int)SPAWN_MODE.GROUP + 1);
+            int spawnRandom = Random.Range(1, Enum.GetValues(typeof(SPAWN_MODE)).Length + 1);
             SPAWN_MODE spawnMode = (SPAWN_MODE)spawnRandom;
+
 
             switch (setting.spawnMode)
             {
@@ -212,7 +241,7 @@ namespace Enemy.Generator
                     if (spawnMode == SPAWN_MODE.GROUP) {
                         for (int i = 0; i < setting.armyCount; i++)
                         {
-                            SpawnGroupEnemy(type, setting.soldierCount, formationType);
+                            SpawnGroupEnemy(type, setting.soldierCountMax, formationType);
                         }
                     }
                     else
@@ -226,14 +255,12 @@ namespace Enemy.Generator
                 case SPAWN_MODE.GROUP:
                     for (int i = 0; i < setting.armyCount; i++)
                     {
-                      SpawnGroupEnemy(type, setting.soldierCount, formationType);
+                      SpawnGroupEnemy(type, setting.soldierCountMax, formationType);
                     }
                     break;
                 default:
                     break;
             }
-            //createrEnemy(type, _createEnemyCount);
-
         }
     }
 }
