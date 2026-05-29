@@ -547,10 +547,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 71292748}
     m_Modifications:
+    - target: {fileID: 822564231932052848, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1905845888552590248, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
       propertyPath: _configManager
       value: 
       objectReference: {fileID: 4753989378979081882}
+    - target: {fileID: 4081319609683944923, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638531006013892077, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5638531006013892077, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -643,8 +655,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_Value
+      value: 0.361
+      objectReference: {fileID: 0}
+    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_HandleRect
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5336607229930371472, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}

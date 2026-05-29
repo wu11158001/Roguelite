@@ -20,9 +20,9 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Icon: {fileID: 21300000, guid: dd4b8f28595fcfb41a310f0c3688040e, type: 3}
-  HpBarHight: 3.5
+  HpBarHight: 4.1
   RotationSpeed: 10
-  InitSkill: 7
+  InitSkill: 1
   _baseMoveSpeed: 10
   MoveSpeed:
     value: 0
