@@ -7,7 +7,7 @@ using UnityEngine;
 public class MapProps_Coin : BaseMapProps
 {
     [HorizontalLine(color: EColor.Gray)]
-    [Header("MapProps_HpRecover")]
+    [Header("MapProps_Coin")]
     [Label("獲得金幣")]
     [SerializeField] private int _addCoinValue = 10;
 

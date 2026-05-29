@@ -170,6 +170,11 @@ public class PlayerView : BaseGameObject
                     // 回復生命
                     _controller.TriggerHpRecoverEffect();
                 }
+                // 角色無敵
+                else if (GameplayManager.CurrentContext.GameController.IsCharacterInvincible)
+                {
+                    _characterConfig.Hp.Value = previousHp;
+                }
                 else if (previousHp > currentHp)
                 {
                     // 減少生命

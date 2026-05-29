@@ -1,4 +1,5 @@
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 遊戲控制
@@ -9,6 +10,8 @@ public class GameController : MonoBehaviour
     public bool IsGamePause { get; private set; }
     /// <summary> 是否遊戲結束 </summary>
     public bool IsGameOver { get; private set; }
+    /// <summary> 是否角色無敵 </summary>
+    public bool IsCharacterInvincible { get; private set; }
     /// <summary> 遊戲時間 </summary>
     public float ElapsedTime { get; set; }
     /// <summary> 累積擊倒敵人數量 </summary>
@@ -33,6 +36,17 @@ public class GameController : MonoBehaviour
     {
         IsGameOver = true;
         GameplayManager.CurrentContext.SkillController.Clear();
+    }
+
+    /// <summary>
+    /// 設置角色無敵
+    /// </summary>
+    /// <param name="time">無敵時間</param>
+    public async UniTaskVoid SetCharacterInvincible(float time)
+    {
+        IsCharacterInvincible = true;
+        await UniTask.WaitForSeconds(time);
+        IsCharacterInvincible = false;
     }
 
     /// <summary>

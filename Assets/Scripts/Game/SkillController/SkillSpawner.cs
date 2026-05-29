@@ -17,6 +17,8 @@ public class SkillSpawner
     private Transform _fallbackTarget;
 
     private int _enemyLayerMask;
+    // 搜索畫面距離
+    private const float _maxRadarDistance = 30.0f;
 
     public SkillSpawner(MonoBehaviour runner)
     {
@@ -376,7 +378,7 @@ public class SkillSpawner
     {
         _mainCamera ??= Camera.main;
 
-        float maxRadarDistance = 30.0f;
+        float maxRadarDistance = _maxRadarDistance;
 
         Plane[] cameraPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
         Collider[] hitColliders = Physics.OverlapSphere(_mainCamera.transform.position, maxRadarDistance, _enemyLayerMask);
@@ -384,7 +386,6 @@ public class SkillSpawner
         List<Transform> visibleTargets = new();
         foreach (var col in hitColliders)
         {
-            // 檢查 Enemy 的包圍盒 (Bounds) 是否在攝影機的 6 個平面之內
             if (GeometryUtility.TestPlanesAABB(cameraPlanes, col.bounds))
             {
                 visibleTargets.Add(col.transform);
@@ -392,6 +393,34 @@ public class SkillSpawner
         }
 
         return visibleTargets.Count > 0 ? visibleTargets[UnityEngine.Random.Range(0, visibleTargets.Count)] : null;
+    }
+
+    /// <summary>
+    /// 獲取畫面中所有敵人
+    /// </summary>
+    /// <returns></returns>
+    public List<EnemyView> GetAllEnemyInCamera()
+    {
+        _mainCamera ??= Camera.main;
+
+        float maxRadarDistance = _maxRadarDistance;
+
+        Plane[] cameraPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
+        Collider[] hitColliders = Physics.OverlapSphere(_mainCamera.transform.position, maxRadarDistance, _enemyLayerMask);
+
+        List<EnemyView> visibleTargets = new();
+        foreach (var col in hitColliders)
+        {
+            if (GeometryUtility.TestPlanesAABB(cameraPlanes, col.bounds))
+            {
+                if(col.TryGetComponent(out EnemyView enemyView))
+                {
+                    visibleTargets.Add(enemyView);
+                }                
+            }
+        }
+
+        return visibleTargets;
     }
 
     /// <summary>

@@ -90,6 +90,7 @@ public class Skill_RangeSlowController :IDisposable
                 callback: (obj) =>
                 {
                     obj.transform.SetParent(target);
+                    obj.transform.position = target.position;
 
                     if (obj.TryGetComponent(out EffectRecycle effectRecycle))
                     {

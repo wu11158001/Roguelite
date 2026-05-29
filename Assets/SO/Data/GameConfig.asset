@@ -30,8 +30,8 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  MaxBoxCountInGround: 3
-  SpawnBoxRate: 0.5
+  MaxBoxCountInGround: 4
+  SpawnBoxRate: 0.7
   MaxLevel: 100
   BaseUpgradeExp: 3
   UpgradeExpMultiplier:

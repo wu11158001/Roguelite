@@ -238,6 +238,12 @@ public class SkillController : MonoBehaviour
     public Transform GetNearestTarget(Vector3 origin) => _spawner.GetNearestTarget(origin);
 
     /// <summary>
+    /// 獲取畫面中所有敵人
+    /// </summary>
+    /// <returns></returns>
+    public List<EnemyView> GetAllEnemyInCamera() => _spawner.GetAllEnemyInCamera();
+
+    /// <summary>
     /// 角色獲取新技能
     /// </summary>
     /// <param name="skill"></param>

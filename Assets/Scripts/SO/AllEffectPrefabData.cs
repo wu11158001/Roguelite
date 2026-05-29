@@ -19,6 +19,8 @@ public enum EFFET_TYPE
     SlowDown,
     /// <summary> 擊殺怪物 </summary>
     KillEnemy,
+    /// <summary> 角色無敵 </summary>
+    Invincible,
 }
 
 /// <summary>
