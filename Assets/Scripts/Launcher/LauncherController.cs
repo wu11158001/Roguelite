@@ -18,6 +18,7 @@ public class LauncherController : MonoBehaviour
 
     void Start()
     {
+        _sli_ProgressBar.value = 0;
         DownloadAssets().Forget();
     }
 
@@ -47,6 +48,7 @@ public class LauncherController : MonoBehaviour
 
         await downloadHandle.Task;
 
+        _sli_ProgressBar.value = 1;
         _text_Loading.text = "完成！進入大廳...";
 
         await PreLoadAssets();
