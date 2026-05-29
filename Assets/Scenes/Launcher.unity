@@ -547,18 +547,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 71292748}
     m_Modifications:
-    - target: {fileID: 822564231932052848, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_RaycastTarget
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1905845888552590248, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: _configManager
-      value: 
-      objectReference: {fileID: 4753989378979081882}
-    - target: {fileID: 4081319609683944923, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_RaycastTarget
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5638531006013892077, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -570,10 +558,6 @@ PrefabInstance:
     - target: {fileID: 6667231972299811641, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
       propertyPath: m_Name
       value: LauncherController
-      objectReference: {fileID: 0}
-    - target: {fileID: 8733006082600145305, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8887221007371188592, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
       propertyPath: m_Pivot.x
@@ -655,29 +639,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_Value
-      value: 0.361
-      objectReference: {fileID: 0}
-    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_HandleRect
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_Transition
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8954829756660083336, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5336607229930371472, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f1b2b60101935848bfdbe3e824d117b, type: 3}
@@ -738,17 +701,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 385620a184219a34aa0a6c3eb7c399c8, type: 3}
---- !u!114 &4753989378979081882 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3789386043141433074, guid: 385620a184219a34aa0a6c3eb7c399c8, type: 3}
-  m_PrefabInstance: {fileID: 4753989378979081881}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a9c0d15d5adc3045a6050b5a8050db5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ConfigManager
 --- !u!1001 &7587865511826507781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -841,13 +793,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ViewManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7912788463999315684, guid: 685d2e6c205e14343b59a24bc6481f9c, type: 3}
-      propertyPath: m_SortingOrder
-      value: 100
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 1756337916980502374, guid: 685d2e6c205e14343b59a24bc6481f9c, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 685d2e6c205e14343b59a24bc6481f9c, type: 3}

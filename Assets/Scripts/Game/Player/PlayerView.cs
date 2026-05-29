@@ -22,6 +22,7 @@ public class PlayerView : BaseGameObject
     public Transform ShotPoint { get; private set; }
     public Transform MiddlePoint { get; private set; }
     public Transform BottomPoint { get; private set; }
+    private SphereCollider _pickRange;
 
     // 動畫
     private Animator _anim;
@@ -52,6 +53,7 @@ public class PlayerView : BaseGameObject
         HeadPoint = transform.Find("CharacterNecessary/HeadPoint");
         MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
         BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
+        _pickRange = transform.Find("CharacterNecessary/PickupRange").GetComponent<SphereCollider>();
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();
@@ -113,9 +115,10 @@ public class PlayerView : BaseGameObject
         if (GameplayManager.CurrentContext.GameController.IsGamePause ||
             GameplayManager.CurrentContext.GameController.IsGameOver) return;
 
+        _controller.ExecuteTick(_inputVector, Time.deltaTime);
+
         // 測試用鍵盤輸入監聽
         TestDebugInput();
-        _controller.ExecuteTick(_inputVector, Time.deltaTime);
     }
 
     /// <summary>
@@ -185,6 +188,9 @@ public class PlayerView : BaseGameObject
                 if (_hpBarView != null) _hpBarView.SetHpBar(hpRatio);
             })
             .AddTo(this);
+
+        // 監聽拾取範圍
+        _characterConfig.PickupRange.Subscribe((value) => _pickRange.radius = value).AddTo(this);
 
         // 外部虛擬搖桿輸入監聽
         GameStateData.JoystickInput

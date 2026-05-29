@@ -4,6 +4,8 @@ using NaughtyAttributes;
 using System.Linq;
 using System.Collections;
 using System;
+using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 /// <summary>
 /// 地圖道具_箱子
@@ -98,6 +100,7 @@ public class MapProps_BoxView : BaseGameObject
                 .SetEase(Ease.OutBounce)
                 .OnComplete(() =>
                 {
+                    SpawnRandomMapProps();
                     StartCoroutine(IHandleBang());
                 });
 
@@ -122,9 +125,44 @@ public class MapProps_BoxView : BaseGameObject
         // 取得動畫的實際長度
         AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
         float animationLength = stateInfo.length;
-        yield return new WaitForSeconds(animationLength + _waitRecycleTime);
+        yield return new WaitForSeconds(animationLength);
+
+        yield return new WaitForSeconds(_waitRecycleTime);
 
         Recycle();
+    }
+
+    /// <summary>
+    /// 產生隨機地圖道具
+    /// </summary>
+    private void SpawnRandomMapProps()
+    {
+        try
+        {
+            List<AssetReferenceGameObject> mapProps = GameStateData.AllMapPropsConfig.AllMapPropsRef;
+            if (mapProps != null && mapProps.Count > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, mapProps.Count);
+                AssetReferenceGameObject selectedPropRef = mapProps[randomIndex];
+
+                GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+                    parentName: "地圖道具",
+                    assetRef: selectedPropRef,
+                    position: this.transform.position,
+                    rotation: Quaternion.identity,
+                    callback: (obj) =>
+                    {
+                        if (obj.TryGetComponent<BaseMapProps>(out var mapPropsComp))
+                        {
+                            mapPropsComp.Setup(selectedPropRef);
+                        }
+                    });
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"道具載入失敗: {e}");
+        }
     }
 
     /// <summary>

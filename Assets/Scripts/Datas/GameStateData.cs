@@ -1,6 +1,7 @@
 using UniRx;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 /// <summary>
 /// 全域遊戲資料
@@ -22,6 +23,8 @@ public static class GameStateData
     public static AbilityUpgradeConfigData AbilityUpgradeConfigData { get; set; }
     /// <summary> 所有關卡配置檔 </summary>
     public static List<LevelConfigData> AllLevelConfig { get; set; }
+    /// <summary> 所有地圖道具 </summary>
+    public static AllMapPropsConfigData AllMapPropsConfig { get; set; }
 
     [Header("遊戲狀態資料")]
     /// <summary> 搖桿輸入位置 </summary>
