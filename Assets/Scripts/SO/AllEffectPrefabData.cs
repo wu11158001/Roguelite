@@ -21,6 +21,8 @@ public enum EFFET_TYPE
     KillEnemy,
     /// <summary> 角色無敵 </summary>
     Invincible,
+    /// <summary> 道具擊殺效果 </summary>
+    PropsKill,
 }
 
 /// <summary>

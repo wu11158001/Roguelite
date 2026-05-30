@@ -13,22 +13,7 @@ MonoBehaviour:
   m_Name: AllMapPropsConfig
   m_EditorClassIdentifier: Assembly-CSharp::AllMapPropsConfigData
   AllMapPropsRef:
-  - m_AssetGUID: bb5c807fcf898e24b8d82f1e726d60d1
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: a0fee03996af6d94d89ae807e9a49fe1
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: c8056fa57f1f3334c94b7302639541a8
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 2016703973f3c8d489504d5e3295ed88
+  - m_AssetGUID: 299c3d2583892fb418d3c350e7c8a4b8
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
