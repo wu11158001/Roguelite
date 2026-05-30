@@ -8,6 +8,7 @@ public enum VIEW_TYPE
     BackgroundView = 0,
     AskPopupView,
     AbilityUpgradeView,
+    SkillDescribeView,
 
     LobbyView = 100,
     SelectCharacterView,
@@ -19,6 +20,7 @@ public enum VIEW_TYPE
     SelectSkillView,
     GamePauseView,
     GameOverView,
+    BossBonusView,
 }
 
 /// <summary>

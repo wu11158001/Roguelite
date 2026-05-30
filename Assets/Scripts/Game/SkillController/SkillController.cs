@@ -222,7 +222,7 @@ public class SkillController : MonoBehaviour
     /// 獲取技能
     /// </summary>
     /// <param name="newSkill"></param>
-    public void OnGainSkill(SkillItemData newSkill) => _inventory.AddOrUpgradeSkill(newSkill);
+    public void AddOrUpgradeSkill(SkillItemData newSkill) => _inventory.AddOrUpgradeSkill(newSkill);
 
     /// <summary>
     /// 獲取隨機目標在攝影機視野內

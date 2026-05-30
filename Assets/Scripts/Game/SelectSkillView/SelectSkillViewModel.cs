@@ -23,6 +23,6 @@ public class SelectSkillViewModel
         }
 
         // 學習技能
-        GameplayManager.CurrentContext.SkillController.OnGainSkill(data);
+        GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(data);
     }
 }

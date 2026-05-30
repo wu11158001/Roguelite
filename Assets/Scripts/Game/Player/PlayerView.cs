@@ -215,7 +215,7 @@ public class PlayerView : BaseGameObject
         if (gameCameraView != null) gameCameraView.Setup(transform);
 
         SkillItemData skillItemData = GameStateData.AllSkillConfigData.GetActiveSkill(_characterConfig.InitSkill, 1);
-        GameplayManager.CurrentContext.SkillController.OnGainSkill(newSkill: skillItemData);
+        GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(newSkill: skillItemData);
     }
 
     private void OnMoveInternal(InputAction.CallbackContext context)
@@ -293,6 +293,12 @@ public class PlayerView : BaseGameObject
         if (Keyboard.current.numpad2Key.wasPressedThisFrame) _controller.GainExp(3);
         if (Keyboard.current.numpad4Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(10);
         if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(10);
+
+        if (Keyboard.current.numpad9Key.wasPressedThisFrame)
+        {
+            GameplayManager.CurrentContext.GameController.GamePause(true);
+            ViewManager.Instance.OpenView<BossBonusView>(viewType: VIEW_TYPE.BossBonusView).Forget();
+        }
     }
 
     public override void Remove()
