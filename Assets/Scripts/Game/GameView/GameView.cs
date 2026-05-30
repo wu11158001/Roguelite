@@ -12,21 +12,16 @@ public class GameView : BaseView
     [HorizontalLine(color: EColor.Gray)]
     [Header("GameView")]
     [SerializeField] private Button _btn_Pause;
-    [SerializeField] private TextMeshProUGUI Text_Level;
-    [SerializeField] private TextMeshProUGUI Text_Time;
-    [SerializeField] private Slider Sli_ExpBar;
+    [SerializeField] private TextMeshProUGUI _text_Level;
+    [SerializeField] private TextMeshProUGUI _text_Time;
+    [SerializeField] private TextMeshProUGUI _text_LimitTimeTip;
+    [SerializeField] private Slider _sli_ExpBar;
 
     [Header("技能欄")]
     [SerializeField] private SkillItemView[] _skillItemViews = new SkillItemView[6];
 
     [Header("被動技能欄")]
     [SerializeField] private SkillItemView[] _passiveSkillItemViews = new SkillItemView[6];
-
-    [Header("角色能力")]
-    [SerializeField] private TextMeshProUGUI Text_Attack;
-    [SerializeField] private TextMeshProUGUI Text_MaxHp;
-    [SerializeField] private TextMeshProUGUI Text_MoveSpeed;
-    [SerializeField] private TextMeshProUGUI Text_Hp;
 
     private void Init()
     {
@@ -39,6 +34,8 @@ public class GameView : BaseView
         {
             passiveSkillItemView.Setup();
         }
+
+        _text_LimitTimeTip.gameObject.SetActive(false);
     }
 
     public override void Setup(AssetReferenceGameObject myRef)
@@ -54,11 +51,6 @@ public class GameView : BaseView
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
-        characterConfig.AddAttack.Subscribe(x => Text_Attack.text = $"增加攻擊力:{x}").AddTo(this);
-        characterConfig.MaxHp.Subscribe(x => Text_MaxHp.text = $"最大生命:{x}").AddTo(this);
-        characterConfig.MoveSpeed.Subscribe(x => Text_MoveSpeed.text = $"移動速度:{x}").AddTo(this);
-        characterConfig.Hp.Subscribe(x => Text_Hp.text = $"當前Hp:{x}").AddTo(this);
-
         GameplayManager.CurrentContext.CharacterController.CurrentLevel.Subscribe(value => UpdateLevel(value)).AddTo(this);
         GameplayManager.CurrentContext.CharacterController.CurrentExpprogress.Subscribe(value => UpdateExpBar(value)).AddTo(this);
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
@@ -68,6 +60,23 @@ public class GameView : BaseView
         {
             GameplayManager.CurrentContext.GameController.GamePause(true);
             ViewManager.Instance.OpenView<GamePauseView>(VIEW_TYPE.GamePauseView).Forget();
+        }).AddTo(this);
+
+        // 監聽時間
+        GameplayManager.CurrentContext.GameController.ElapsedTime.Subscribe((t) =>
+        {
+            // 關卡限制時間剩餘10秒以下
+            int timeLimit = GameStateData.SelectLevel.TimeLimit;
+            if (timeLimit - t <= 10 && !GameplayManager.CurrentContext.GameController.IsGameOver)
+            {
+                _text_LimitTimeTip.gameObject.SetActive(true);
+
+                float remainingTime = timeLimit - t;
+                int minutes = Mathf.FloorToInt(remainingTime / 60f);
+                int seconds = Mathf.FloorToInt(remainingTime % 60f);
+                _text_LimitTimeTip.text = $"存活時間剩餘: {string.Format("{0:D2}:{1:D2}", minutes, seconds)}";
+            }
+
         }).AddTo(this);
     }
 
@@ -79,15 +88,15 @@ public class GameView : BaseView
         if(GameplayManager.CurrentContext.GameController.IsGamePause ||
             GameplayManager.CurrentContext.GameController.IsGameOver) return;
 
-        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime;
+        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
         elapsedTime += 1;
 
-        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
-        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+        int minutes = Mathf.FloorToInt(elapsedTime / 60);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
 
-        GameplayManager.CurrentContext.GameController.ElapsedTime = elapsedTime;
+        GameplayManager.CurrentContext.GameController.ElapsedTime.Value = elapsedTime;
 
-        Text_Time.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
+        _text_Time.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
     }
 
     /// <summary>
@@ -96,7 +105,7 @@ public class GameView : BaseView
     /// <param name="level"></param>
     private void UpdateLevel(int level)
     {
-        Text_Level.text = $"等級:{level + 1}";
+        _text_Level.text = $"等級:{level + 1}";
 
         // 升級
         if(level > 0)
@@ -120,7 +129,7 @@ public class GameView : BaseView
     /// <param name="value"></param>
     private void UpdateExpBar(float value)
     {
-        Sli_ExpBar.value = value;
+        _sli_ExpBar.value = value;
     }
 
     /// <summary>

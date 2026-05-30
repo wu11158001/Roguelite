@@ -83,9 +83,9 @@ public class GameOverView : BaseView
     {
         _text_LevelData.text = $"關卡名稱 - 等級 - 金幣加成";
 
-        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime;
+        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
         int minutes = Mathf.FloorToInt(elapsedTime / 60f);
-        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
         _text_SurvivalTime.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
 
         int coin = GameplayManager.CurrentContext.GameController.GetCoinCount;

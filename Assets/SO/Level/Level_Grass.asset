@@ -15,5 +15,5 @@ MonoBehaviour:
   LevelName: "\u68EE\u6797"
   LevelIcon: {fileID: 21300000, guid: 328c3447173fbaa43b0953bb23b5fa65, type: 3}
   LevelIndex: 1
-  TimeLimit: 1
+  TimeLimit: 65
   CoinBonus: 0.1

@@ -197,6 +197,18 @@ public class PlayerView : BaseGameObject
         // 監聽拾取範圍
         _characterConfig.PickupRange.Subscribe((value) => _pickRange.radius = value).AddTo(this);
 
+        // 監聽時間
+        GameplayManager.CurrentContext.GameController.ElapsedTime.Subscribe((t) =>
+        {
+            // 已達到關卡限制時間
+            int timeLimit = GameStateData.SelectLevel.TimeLimit;
+            if(timeLimit - t <= 0 && !GameplayManager.CurrentContext.GameController.IsGameOver)
+            {
+                _characterConfig.Hp.Value = 0;
+            }
+
+        }).AddTo(this);
+
         // 外部虛擬搖桿輸入監聽
         GameStateData.JoystickInput
             .Subscribe(joystickValue =>

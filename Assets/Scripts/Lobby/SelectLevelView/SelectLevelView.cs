@@ -106,8 +106,10 @@ public class SelectLevelView : BaseView
     {
         GameStateData.SelectLevel = level;
 
+        int minutes = Mathf.FloorToInt(level.TimeLimit / 60);
+        int seconds = Mathf.FloorToInt(level.TimeLimit % 60);
+        _text_TimeLimit.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
         _text_LevelName.text = level.LevelName;
-        _text_TimeLimit.text = string.Format("{0:D2}:{1:D2}", level.TimeLimit, 0);
         _text_CoinBonus.text = $"{level.CoinBonus * 100}%";
     }
 }

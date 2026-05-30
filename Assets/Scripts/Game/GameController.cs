@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using UniRx;
 
 /// <summary>
 /// 遊戲控制
@@ -13,7 +14,7 @@ public class GameController : MonoBehaviour
     /// <summary> 是否角色無敵 </summary>
     public bool IsCharacterInvincible { get; private set; }
     /// <summary> 遊戲時間 </summary>
-    public float ElapsedTime { get; set; }
+    public ReactiveProperty<float> ElapsedTime = new ReactiveProperty<float>(0);
     /// <summary> 累積擊倒敵人數量 </summary>
     public int KillEnemyCount { get; private set; }
     /// <summary> 累積獲得金幣數量 </summary>
