@@ -144,19 +144,9 @@ public class MapProps_BoxView : BaseGameObject
             {
                 int randomIndex = UnityEngine.Random.Range(0, mapProps.Count);
                 AssetReferenceGameObject selectedPropRef = mapProps[randomIndex];
-
-                GameplayManager.CurrentContext.GameScenePool.SpawnObject(
-                    parentName: "地圖道具",
-                    assetRef: selectedPropRef,
-                    position: this.transform.position,
-                    rotation: Quaternion.identity,
-                    callback: (obj) =>
-                    {
-                        if (obj.TryGetComponent<BaseMapProps>(out var mapPropsComp))
-                        {
-                            mapPropsComp.Setup(selectedPropRef);
-                        }
-                    });
+                GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
+                    worldPos: transform.position,
+                    prefabRef: selectedPropRef);
             }
         }
         catch (Exception e)
@@ -170,6 +160,7 @@ public class MapProps_BoxView : BaseGameObject
     /// </summary>
     public void Recycle()
     {
+        StopAllCoroutines();
         _moveObj.DOKill();
         GameplayManager.CurrentContext.GameScenePool.ReturnToPool(gameObject);
     }

@@ -88,7 +88,8 @@ public class GameLauncher : MonoBehaviour
 
         // 產生地圖
         GameObject mapGroup = new("InfiniteMapController");
-        InfiniteMap infiniteMap = mapGroup.AddComponent<InfiniteMap>();
+        InfiniteMapController infiniteMap = mapGroup.AddComponent<InfiniteMapController>();
+        _context.InfiniteMapController = infiniteMap;
         await infiniteMap.Setup(playerView.transform);
     }
 

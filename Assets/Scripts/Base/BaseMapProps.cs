@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using NaughtyAttributes;
+using UniRx;
 
 public interface IMapProps
 {
@@ -24,6 +25,9 @@ public abstract class BaseMapProps : BaseGameObject
     private int _targetLayer;
     // 避免重複觸發
     private bool _isTriggered = false;
+
+    // 綁定地板道具資料
+    private MapPropsData _assignedData;
 
     public override void OnDestroy()
     {
@@ -49,7 +53,24 @@ public abstract class BaseMapProps : BaseGameObject
         {
             _isTriggered = true;
             FlyToPlayer(other.transform);
+
+            MessageBroker.Default.Publish(new MapPropsTriggerMessage
+            {
+                BaseMapProps = this,
+                MapPropsData = _assignedData
+            });
         }
+    }
+
+    /// <summary>
+    /// 綁定身分
+    /// </summary>
+    /// <param name="gridId"></param>
+    /// <param name="data"></param>
+    public void LinkData(string gridId, MapPropsData data)
+    {
+        _assignedData = data;
+        _isTriggered = false;
     }
 
     /// <summary>

@@ -131,9 +131,6 @@ public class SkillController : MonoBehaviour
 
     public IReactiveCollection<SkillItemData> OwnSkills => _inventory.OwnSkills;
 
-    private readonly Subject<GainSkillMessage> _onSkillChanged = new();
-    public IObservable<GainSkillMessage> OnSkillChanged => _onSkillChanged;
-
     public Dictionary<SKILL_TYPE, SkillTrackData> TrackDataMap { get; private set; } = new();
 
     private void Awake()

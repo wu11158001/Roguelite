@@ -2,32 +2,36 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
+using UniRx;
+
+/// <summary>
+/// 道具被拾取訊息
+/// </summary>
+public class MapPropsTriggerMessage
+{
+    public BaseMapProps BaseMapProps;
+    public MapPropsData MapPropsData;
+}
 
 /// <summary>
 /// 無限地圖
 /// </summary>
-public class InfiniteMap : MonoBehaviour
+public class InfiniteMapController : MonoBehaviour
 {
-    // 玩家物件
     private Transform _player;
-    // 地板網格大小(3 = 3*3)
     private int _gridSize;
-    // 地板大小
     private float _groundSize;
-    // 地圖大小
     private float _fullMapSize;
-    // 地圖大小一半(計算邊界)
     private float _halfMapSize;
 
-    // 地形
     private GameObject[] _grounds;
     private Transform _groundParent;
-
-    // 用於快取動態生成的材質球，以便在銷毀時釋放記憶體
     private Material _runtimeMaterial;
 
-    // 畫面上正在顯示的箱子，Key: GridId
+    // 紀錄畫面中的箱子
     private Dictionary<string, List<MapProps_BoxView>> _activeBoxViews = new();
+    // 紀錄畫面中的道具
+    private Dictionary<string, List<BaseMapProps>> _activePropsViews = new();
 
     private InfiniteMapModel _model = new();
 
@@ -41,12 +45,16 @@ public class InfiniteMap : MonoBehaviour
         GameObject obj = new GameObject("GroundGroup");
         obj.transform.SetParent(this.transform);
         _groundParent = obj.transform;
+
+        // 監聽道具拾取訊息
+        MessageBroker.Default.Receive<MapPropsTriggerMessage>()
+           .Subscribe(message => { RemoveMapPropsData(message); })
+           .AddTo(this);
     }
 
     public async UniTask Setup(Transform player)
     {
         _player = player;
-
         _gridSize = GameStateData.GameConfig.GridSize;
         _groundSize = GameStateData.GameConfig.GroundSize;
         _fullMapSize = _groundSize * _gridSize;
@@ -66,57 +74,49 @@ public class InfiniteMap : MonoBehaviour
             Vector3 oldPosition = ground.transform.position;
             Vector3 newPosition = oldPosition;
             bool isMoved = false;
-
-            // 緩衝區
             float buffer = _groundSize * 0.1f;
 
-            // --- 水平循環 ---
             float deltaX = ground.transform.position.x - _player.position.x;
-            if (deltaX < -_halfMapSize - buffer)
-            {
-                newPosition.x += _fullMapSize;
-                isMoved = true;
-            }
-            else if (deltaX > _halfMapSize + buffer)
-            {
-                newPosition.x -= _fullMapSize;
-                isMoved = true;
-            }
-            // --- 垂直循環 ---
+            if (deltaX < -_halfMapSize - buffer) { newPosition.x += _fullMapSize; isMoved = true; }
+            else if (deltaX > _halfMapSize + buffer) { newPosition.x -= _fullMapSize; isMoved = true; }
+
             float deltaZ = ground.transform.position.z - _player.position.z;
-            if (deltaZ < -_halfMapSize - buffer)
-            {
-                newPosition.z += _fullMapSize;
-                isMoved = true;
-            }
-            else if (deltaZ > _halfMapSize + buffer)
-            {
-                newPosition.z -= _fullMapSize;
-                isMoved = true;
-            }
+            if (deltaZ < -_halfMapSize - buffer) { newPosition.z += _fullMapSize; isMoved = true; }
+            else if (deltaZ > _halfMapSize + buffer) { newPosition.z -= _fullMapSize; isMoved = true; }
 
             if (isMoved)
             {
-                // 隱藏舊地版的箱子
                 RecycleBoxesAtGrid(GetGridId(oldPosition));
+                RecyclePropsAtGrid(GetGridId(oldPosition));
 
-                // 移位地板
                 ground.transform.position = newPosition;
 
-                // 顯示新地板的箱子
-                UpdateBoxForGrid(
-                    gridId: GetGridId(newPosition), 
-                    groundPos: newPosition);
+                UpdateBoxForGrid(gridId: GetGridId(newPosition), groundPos: newPosition);
+                UpdatePropsForGrid(GetGridId(newPosition));
             }
         }
     }
 
     /// <summary>
-    /// 產生地板
+    /// 獲取地板唯一ID
     /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
+    private string GetGridId(Vector3 pos)
+    {
+        int gridX = Mathf.RoundToInt(pos.x / _groundSize);
+        int gridZ = Mathf.RoundToInt(pos.z / _groundSize);
+        return $"{gridX}_{gridZ}";
+    }
+
+    #region 地板
+
+    /// <summary>
+    /// 創建地板
+    /// </summary>
+    /// <returns></returns>
     private async UniTask CreateGround()
     {
-        // 產生地板
         _grounds = new GameObject[_gridSize * _gridSize];
         float scale = _groundSize / 10;
 
@@ -125,10 +125,8 @@ public class InfiniteMap : MonoBehaviour
             for (int z = 0; z < _gridSize; z++)
             {
                 int index = x * _gridSize + z;
-
                 float posX = (x - 1) * _groundSize;
                 float posZ = (z - 1) * _groundSize;
-
                 Vector3 spawnPosition = new Vector3(posX, 0f, posZ);
 
                 GameObject ground = await GameStateData.GameConfig.GroundPrefabReference
@@ -140,67 +138,44 @@ public class InfiniteMap : MonoBehaviour
                 ground.transform.SetParent(_groundParent);
                 _grounds[index] = ground;
 
-                // 產生箱子
                 string gridId = GetGridId(spawnPosition);
-                UpdateBoxForGrid(
-                    gridId: GetGridId(spawnPosition),
-                    groundPos: spawnPosition);
+                UpdateBoxForGrid(gridId: gridId, groundPos: spawnPosition);
             }
         }
 
-        // 更換材質球貼圖
-        if (_grounds.Length > 0 && _grounds[0] != null)
+        if (_grounds.Length > 0 && _grounds[0] != null && GameStateData.GameConfig.GroundTexture?.Count > 0)
         {
-            if (GameStateData.GameConfig.GroundTexture != null && GameStateData.GameConfig.GroundTexture.Count > 0)
+            int currentLevel = GameStateData.SelectLevel.LevelIndex;
+            Texture groundTexture = GameStateData.GameConfig.GroundTexture[currentLevel];
+
+            if (_grounds[0].TryGetComponent<MeshRenderer>(out var firstRenderer))
             {
-                int currentLevel = GameStateData.SelectLevel.LevelIndex;
-                Texture groundTexture = GameStateData.GameConfig.GroundTexture[currentLevel];
-
-                if (_grounds[0].TryGetComponent<MeshRenderer>(out var firstRenderer))
+                _runtimeMaterial = new Material(firstRenderer.sharedMaterial) { mainTexture = groundTexture };
+                foreach (GameObject ground in _grounds)
                 {
-                    Material baseMaterial = firstRenderer.sharedMaterial;
-                    _runtimeMaterial = new Material(baseMaterial);
-                    _runtimeMaterial.mainTexture = groundTexture;
-
-                    // 將新材質球套用到所有產生的地塊上 (使用 sharedMaterial 確保合批渲染)
-                    foreach (GameObject ground in _grounds)
+                    if (ground != null && ground.TryGetComponent<MeshRenderer>(out var renderer))
                     {
-                        if (ground != null && ground.TryGetComponent<MeshRenderer>(out var renderer))
-                        {
-                            renderer.sharedMaterial = _runtimeMaterial;
-                        }
+                        renderer.sharedMaterial = _runtimeMaterial;
                     }
                 }
             }
         }
     }
 
-    /// <summary>
-    /// 計算地塊的唯一 ID（基於座標）
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <returns></returns>
-    private string GetGridId(Vector3 pos)
-    {
-        // 四捨五入避免浮點數誤差
-        int gridX = Mathf.RoundToInt(pos.x / _groundSize);
-        int gridZ = Mathf.RoundToInt(pos.z / _groundSize);
-        return $"{gridX}_{gridZ}";
-    }
+    #endregion
+
+    #region 箱子
 
     /// <summary>
-    /// 更新地面箱子
+    /// 刷新地板上箱子
     /// </summary>
     /// <param name="gridId"></param>
     /// <param name="groundPos"></param>
-    /// <returns></returns>
     private void UpdateBoxForGrid(string gridId, Vector3 groundPos)
     {
-        // 未探索過
         if (!_model.IsGridExplored(gridId))
         {
             _model.MarkGridAsExplored(gridId);
-
             if (Random.value < GameStateData.GameConfig.SpawnBoxRate)
             {
                 int count = Random.Range(1, GameStateData.GameConfig.MaxBoxCountInGround);
@@ -208,21 +183,17 @@ public class InfiniteMap : MonoBehaviour
             }
         }
 
-        // 產生箱子
         List<BoxData> boxesData = _model.GetBoxesData(gridId);
-        if (boxesData == null) return;
+        if (boxesData == null || boxesData.Count == 0) return;
 
-        _activeBoxViews[gridId] = new List<MapProps_BoxView>();
+        if (!_activeBoxViews.ContainsKey(gridId))
+        {
+            _activeBoxViews[gridId] = new List<MapProps_BoxView>();
+        }
 
         AssetReferenceGameObject prefabRef = GameStateData.GameConfig.BoxPrefabReference;
         foreach (var data in boxesData)
         {
-            // 箱子已被觸發
-            if (data.IsTargeted)
-            {
-                continue;
-            }
-
             Vector3 worldPos = groundPos + data.LocalPosition;
             worldPos.y = 0;
 
@@ -233,18 +204,27 @@ public class InfiniteMap : MonoBehaviour
                 rotation: Quaternion.identity,
                 callback: (obj) =>
                 {
+                    if (!_activeBoxViews.ContainsKey(gridId))
+                    {
+                        if (obj != null) GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
+                        return;
+                    }
+
                     if (obj.TryGetComponent<MapProps_BoxView>(out var boxView))
                     {
-                        // 當箱子被踩時，修改 Model 數據
-                        boxView.OnBoxTriggered += () => { data.IsTargeted = true; };
-                        _activeBoxViews[gridId].Add(boxView);
+                        boxView.OnBoxTriggered += () => { _model.RemoveBoxData(gridId, data); };
+
+                        if (!_activeBoxViews[gridId].Contains(boxView))
+                        {
+                            _activeBoxViews[gridId].Add(boxView);
+                        }
                     }
                 });
         }
     }
 
     /// <summary>
-    /// 回收箱子
+    /// 地板隱藏回收箱子
     /// </summary>
     /// <param name="gridId"></param>
     private void RecycleBoxesAtGrid(string gridId)
@@ -258,4 +238,157 @@ public class InfiniteMap : MonoBehaviour
             _activeBoxViews.Remove(gridId);
         }
     }
+
+    #endregion
+
+    #region 地圖道具
+
+    /// <summary>
+    /// 產生道具公開方法
+    /// </summary>
+    /// <param name="worldPos"></param>
+    /// <param name="prefabRef"></param>
+    public void SpawnPropsAtWorld(Vector3 worldPos, AssetReferenceGameObject prefabRef)
+    {
+        string gridId = GetGridId(worldPos);
+
+        GameObject currentGround = null;
+        foreach (GameObject ground in _grounds)
+        {
+            if (ground != null && GetGridId(ground.transform.position) == gridId)
+            {
+                currentGround = ground;
+                break;
+            }
+        }
+
+        Vector3 groundCenterPos = currentGround != null ? currentGround.transform.position : worldPos;
+        Vector3 localPos = worldPos - groundCenterPos;
+
+        MapPropsData data = new()
+        {
+            PrefabRef = prefabRef,
+            LocalPosition = localPos
+        };
+
+        _model.AddPropsData(gridId, data);
+
+        if (currentGround != null)
+        {
+            CreatePropsViewEntity(gridId, data, groundCenterPos);
+        }
+    }
+
+    /// <summary>
+    /// 產生實體道具
+    /// </summary>
+    /// <param name="gridId"></param>
+    /// <param name="data"></param>
+    /// <param name="groundCenterPos"></param>
+    private void CreatePropsViewEntity(string gridId, MapPropsData data, Vector3 groundCenterPos)
+    {
+        Vector3 currentWorldPos = groundCenterPos + data.LocalPosition;
+
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+            parentName: $"地圖道具",
+            assetRef: data.PrefabRef,
+            position: currentWorldPos, // 使用計算後的正確世界座標
+            rotation: Quaternion.identity,
+            callback: (obj) =>
+            {
+                bool isGroundStillActive = false;
+                foreach (GameObject ground in _grounds)
+                {
+                    if (ground != null && GetGridId(ground.transform.position) == gridId)
+                    {
+                        isGroundStillActive = true;
+                        break;
+                    }
+                }
+
+                // 如果產生時角色已離開了該區域就回收
+                if (!isGroundStillActive)
+                {
+                    if (obj != null) GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
+                    return;
+                }
+
+                if (obj.TryGetComponent<BaseMapProps>(out var mapProps))
+                {
+                    mapProps.Setup(data.PrefabRef);
+                    mapProps.LinkData(gridId, data);
+
+                    if (!_activePropsViews.TryGetValue(gridId, out var list))
+                    {
+                        list = new List<BaseMapProps>();
+                        _activePropsViews[gridId] = list;
+                    }
+
+                    if (!list.Contains(mapProps))
+                    {
+                        list.Add(mapProps);
+                    }
+                }
+            });
+    }
+
+    /// <summary>
+    /// 移除地圖道具資料
+    /// </summary>
+    /// <param name="message"></param>
+    private void RemoveMapPropsData(MapPropsTriggerMessage message)
+    {
+        string gridId = GetGridId(message.BaseMapProps.transform.position);
+
+        if (_activePropsViews.TryGetValue(gridId, out var list))
+        {
+            list.Remove(message.BaseMapProps);
+            if (list.Count == 0) _activePropsViews.Remove(gridId);
+        }
+
+        _model.RemovePropsData(gridId, message.MapPropsData);
+    }
+
+    /// <summary>
+    /// 刷新地板上道具
+    /// </summary>
+    /// <param name="gridId"></param>
+    private void UpdatePropsForGrid(string gridId)
+    {
+        List<MapPropsData> propsData = _model.GetMapPropsData(gridId);
+        if (propsData == null || propsData.Count == 0) return;
+
+        Vector3 groundCenterPos = Vector3.zero;
+        foreach (GameObject ground in _grounds)
+        {
+            if (ground != null && GetGridId(ground.transform.position) == gridId)
+            {
+                groundCenterPos = ground.transform.position;
+                break;
+            }
+        }
+
+        foreach (var data in propsData)
+        {
+            CreatePropsViewEntity(gridId, data, groundCenterPos);
+        }
+    }
+
+    /// <summary>
+    /// 地板隱藏回收道具
+    /// </summary>
+    /// <param name="gridId"></param>
+    private void RecyclePropsAtGrid(string gridId)
+    {
+        if (_activePropsViews.TryGetValue(gridId, out var viewList) && viewList != null)
+        {
+            foreach (var propView in viewList)
+            {
+                if (propView != null) propView.Recycle();
+            }
+            _activePropsViews.Remove(gridId);
+        }
+    }
+
+    #endregion
 }
