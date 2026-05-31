@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using static UnityEditor.Profiling.HierarchyFrameDataView;
+using UnityEngine;
 
 public static class PhysicsMovementUtils
 {
