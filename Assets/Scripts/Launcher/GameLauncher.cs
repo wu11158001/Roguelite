@@ -20,6 +20,7 @@ public class GameLauncher : MonoBehaviour
 
             await SpawnPlayerAndMap();
             await SpawnEnemyManager();
+            SpawnExpManager();
 
             SceneLoader.Instance.CloseLoading();
         }
@@ -111,4 +112,10 @@ public class GameLauncher : MonoBehaviour
         Debug.Log($"成功加載了 {configs.Count} 個敵人設定！");
         manager.SetUp(configs);
     }
+    private void SpawnExpManager() { 
+        ExpManager manager = gameObject.AddComponent<ExpManager>();
+        _context.ExpManager = manager;
+       
+    }
+    
 }

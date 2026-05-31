@@ -22,7 +22,7 @@ namespace Enemy.GeneratorSettings
         [Label("生成模式")]
         [SerializeField]
         [AllowNesting]
-        public SPAWN_MODE spawnMode = SPAWN_MODE.RANDOM;
+        public SPAWN_MODE spawnMode = SPAWN_MODE.GROUP;
 
         [Label("偵測鄰居的範圍")]
         [SerializeField]
@@ -41,7 +41,7 @@ namespace Enemy.GeneratorSettings
         [Label("是否持續生成")]
         [SerializeField]
         [AllowNesting]
-        public bool isSpawning = true;        // 是否持續生成
+        public bool isSpawning = false;        // 是否持續生成
 
         [Space(10)]
 

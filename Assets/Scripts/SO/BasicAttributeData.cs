@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using Base.BehaviorMode;
 using Base.BaseBodyData;
+using Random = UnityEngine.Random;
 
 public enum PLAYER_STATE_TPYE
 {
@@ -65,6 +66,14 @@ public abstract class BasicAttributeData : ScriptableObject
     public float currentDEF()
     {
         return _bodyData.basicDEF;
+    }
+    public int currentEXP
+    {
+        get
+        {
+            int rangeExp = _bodyData.basicEXP + Random.Range(-8, 8);
+            return rangeExp;
+        }
     }
     public float moveSpeed { get { return _bodyData.basicMoveSpeed; } }
     public float atkSpeed { get { return _bodyData.atkSpeed; } }

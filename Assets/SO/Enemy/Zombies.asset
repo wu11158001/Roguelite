@@ -19,6 +19,7 @@ MonoBehaviour:
     basicDEF: 5
     basicHp: 20
     basicMp: 0
+    basicEXP: 20
     atkSpeed: 1
   _baseBehaviorMode:
     moveType: 0

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Exp_Prefab
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Exp_Prefab
+  m_GUID: e1367e70407007a4caaed885e29e6c9b
+  m_SerializeEntries:
+  - m_GUID: 238878d345839d64aa50774fefccf60c
+    m_Address: Assets/Prefabs/EXP/ExpBall.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EXP
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff8c29b771cec1f4f92fad11fda35c4c
+    m_Address: Assets/Prefabs/EXP/ExpColor.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 50febc42c81c83148ac201765ed0d7a1, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 23c5df853c735834cb4b594bec6f3391, type: 2}
+    - {fileID: 11400000, guid: b2fa04b349508a54f9c154f1fdb593a8, type: 2}

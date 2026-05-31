@@ -61,28 +61,32 @@ public class EnemySpatialGrid : IDisposable
         AddToGrid(entity, startCell);
         _enemyLastCells[entity] = startCell;
 
-        // 【核心優化】利用 UniRx 監聽這隻怪物的 Update 每幀位置
-        // 備註：配合 MVVM，若前面有實作「ViewModel 暴露 Position」，也可以改聽 entity.ViewModel.Position
-        IDisposable positionSubscription = entity.Position
-        .DistinctUntilChanged(pos => WorldToGrid(pos)) // 依然保留：只有當計算出來的網格座標「跳格」時才往下跑
-        .Subscribe(newPos =>
-        {
-            //Debug.Log($"[{entity.name}] newPos : " + newPos);
-                // 走到這一步，代表怪物真的跨越格子了
+        OnEnemyLeavePool(entity);
+
+        // 3. 建立新訂閱
+        var sub = entity.Position
+            .Select(pos => WorldToGrid(pos)) // 先轉成網格座標
+            .DistinctUntilChanged()          // 只有網格座標變了才往下跑
+            .Subscribe(newCell =>
+            {
                 if (_enemyLastCells.TryGetValue(entity, out Vector3Int oldCell))
                 {
-                    Vector3Int newCell = WorldToGrid(newPos);
                     if (oldCell != newCell)
                     {
                         RemoveFromGrid(entity, oldCell);
                         AddToGrid(entity, newCell);
-                        _enemyLastCells[entity] = newCell; // 更新最後紀錄
+                        _enemyLastCells[entity] = newCell;
                     }
+                }
+                else
+                {
+                    // 如果紀錄掉了，補救
+                    _enemyLastCells[entity] = newCell;
+                    AddToGrid(entity, newCell);
                 }
             });
 
-        // 記錄這個訂閱，未來怪死掉要拔除
-        _enemyTrackingDisposables[entity] = positionSubscription;
+        _enemyTrackingDisposables[entity] = sub;
     }
 
     private void OnEnemyLeavePool(EnemyView entity)
@@ -124,7 +128,14 @@ public class EnemySpatialGrid : IDisposable
 
     public void RemoveFromGrid(EnemyView entity, Vector3Int cell)
     {
-        if (grid.ContainsKey(cell)) grid[cell].Remove(entity);
+        if (grid.TryGetValue(cell, out var list))
+        {
+            // 最好用 while 確保乾淨，雖然理論上只會有一隻
+            while (list.Remove(entity));
+
+            // 如果格子空了，把 List 刪掉節省記憶體
+            if (list.Count == 0) grid.Remove(cell);
+        }
     }
 
     // (維持原樣) 核心：找鄰居
@@ -148,7 +159,22 @@ public class EnemySpatialGrid : IDisposable
     }
 
     public Vector3Int WorldToGrid(Vector3 pos) => new Vector3Int(Mathf.FloorToInt(pos.x / cellSize), 0, Mathf.FloorToInt(pos.z / cellSize));
+    public void UpdateEntityGridImmediately(EnemyView entity)
+    {
+        // 取得當前真實物理位置
+        Vector3Int newCell = WorldToGrid(entity.transform.position);
 
+        // 取得舊紀錄
+        if (_enemyLastCells.TryGetValue(entity, out Vector3Int oldCell))
+        {
+            if (oldCell == newCell) return;
+            RemoveFromGrid(entity, oldCell);
+        }
+
+        // 更新為新座標
+        _enemyLastCells[entity] = newCell;
+        AddToGrid(entity, newCell);
+    }
     // 當整個遊戲結束、場景切換或網格銷毀時，呼叫此處釋放免漏電
     public void Dispose()
     {

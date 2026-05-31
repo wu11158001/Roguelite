@@ -4,28 +4,43 @@ using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Enemy.Generator;
+using System;
 
 public class EnemyManager : MonoBehaviour
 {
     [Label("怪物屬性配置表")]
     [SerializeField]
     private List<EnemyConfigData> _enemyConfigList;
-    public IReactiveCollection<EnemyView> ReadLivingEnemyPool => _enemyGenerator.LivingEnemyPool;
-
+  
     //怪物網格地圖
-    EnemySpatialGrid enemySpatialGrid = new();
+    EnemySpatialGrid _enemySpatialGrid = new();
     //怪物產生器
     [SerializeField]
     EnemyGenerator _enemyGenerator = new EnemyGenerator();
     //自動生成定時
     private Coroutine _spawnCoroutine;
 
+
+    static float _outBoundsRange = 100f; // 判定出界的極限半徑
+    static float _spawnSafeMargin = 10f;  // 怪物生在判定線內多少距離
+
+    // 同步後的生怪範圍
+     static float MinSpawnRadius => _outBoundsRange * 0.4f; // 假設內圈是判定範圍的 40%
+    static float MaxSpawnRadius => _outBoundsRange - _spawnSafeMargin; // 絕不能超過 _
+
+    static GameObject target;
     public void SetUp(List<EnemyConfigData>conifgList) {
         _enemyConfigList = conifgList;
         _enemyGenerator.SetUp(_enemyConfigList, transform);
-        enemySpatialGrid.SetUp(ReadLivingEnemyPool);
+        _enemySpatialGrid.SetUp(_enemyGenerator.LivingEnemyPool);
         _spawnCoroutine = StartCoroutine(_enemyGenerator.SpawnRoutine());
-       
+        target = GameObject.FindGameObjectWithTag("Player");
+
+        Observable.Interval(TimeSpan.FromSeconds(0.2f))
+            .Where(_ => !GameplayManager.CurrentContext.GameController.IsGamePause)
+            .Subscribe(_ => CheckAllEnemiesBounds())
+            .AddTo(this);
+
     }
     // Update is called once per frame
     void Update()
@@ -40,7 +55,7 @@ public class EnemyManager : MonoBehaviour
             } 
         }
         /*遇到暫停或停止時 */
-        if (GameplayManager.CurrentContext.GameController.IsGameOver)
+        if (GameplayManager.CurrentContext.GameController.IsGameOver&& _spawnCoroutine!=null)
         {
             StopCoroutine(_spawnCoroutine);
         }
@@ -55,7 +70,7 @@ public class EnemyManager : MonoBehaviour
             EnemyView enemy = _enemyGenerator.LivingEnemyPool[i];
            
             // 1. Manager 自己就知道網格，在這裡抓鄰居
-            var neighbors = enemySpatialGrid.GetNeighbors(enemy.transform.position);
+            var neighbors = _enemySpatialGrid.GetNeighbors(enemy.transform.position);
 
             // 2. 計算這隻怪物的斥力
             Vector3 repulsion = CalculateRepulsionFor(enemy, neighbors);
@@ -99,14 +114,11 @@ public class EnemyManager : MonoBehaviour
         var startPos = new Vector3(target.transform.position.x, 0, target.transform.position.z);
         
 
-        float minRadius = 40f;
-        float maxRadius = 80f;
-
         // 1. 隨機角度 (0 到 360 度)
         float angle = Random.Range(0f, Mathf.PI * 2);
 
         // 2. 隨機距離 (從基準值 min 開始往外)
-        float distance = Random.Range(minRadius, maxRadius);
+        float distance = Random.Range(MinSpawnRadius, MaxSpawnRadius);
 
         // 3. 計算偏移量
         float offsetX = Mathf.Cos(angle) * distance;
@@ -116,9 +128,39 @@ public class EnemyManager : MonoBehaviour
 
         return spawnPos;
     }
-   
+    /// <summary>
+    /// 怪物出界偵測
+    /// </summary>
+    private void CheckAllEnemiesBounds()
+    {
+        // 使用倒序遍歷，防止在循環中怪物死亡移除導致報錯
+        for (int i = _enemyGenerator.LivingEnemyPool.Count - 1; i >= 0; i--)
+        {
+            var enemy = _enemyGenerator.LivingEnemyPool[i];
+            if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
+
+            if (enemy._enemyModel.GetTrackingTargetPosition() == null) continue;
+
+            // 1. 計算距離
+            float distSqr = (enemy.transform.position - enemy._enemyModel.GetTrackingTargetPosition()).sqrMagnitude;
+            float limitSqr = _outBoundsRange * _outBoundsRange;
+
+            // 2. 判定出界
+            if (distSqr > limitSqr)
+            {
+                // 3. 執行出界邏輯
+                enemy.HandleOutOfBounds();
+                // 4. 如果是瞬移(RE_ENTER)，強制讓網格系統立即同步
+                if (enemy.OutboundsAction == OUTBOUNDS_ACTION.RE_ENTER)
+                {
+                    _enemySpatialGrid.UpdateEntityGridImmediately(enemy);
+                }
+            }
+        }
+    }
+
     private void OnDestroy()
     {
-        enemySpatialGrid.Dispose();
+        _enemySpatialGrid.Dispose();
     }
 }

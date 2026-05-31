@@ -7,8 +7,6 @@ using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Enemy.GeneratorSettings;
-using static UnityEngine.Rendering.STP;
-
 
 namespace Enemy.Generator
 {
@@ -21,6 +19,8 @@ namespace Enemy.Generator
         int _leaderCount = 0;
         //存活的敵人池
         public readonly ReactiveCollection<EnemyView> _LivingEnemyPool = new();
+        private List<EnemyLeader> _leaderPool = new List<EnemyLeader>();
+        private List<EnemyLeader> _RecycleLeaderPool = new List<EnemyLeader>();
         public IReactiveCollection<EnemyView> LivingEnemyPool => _LivingEnemyPool;
 
         Transform _parents; //存EnemyManager的物件
@@ -34,6 +34,7 @@ namespace Enemy.Generator
             _enemyConfigList = configList;
             _parents = parents;
             _enemyCount = new List<int>(new int[_enemyConfigList.Count]);
+            
         }
         //創建軍隊
         async void SpawnGroupEnemy(ENEMY_TYPE enemyType, int count, FORMATION_TYPE type)
@@ -52,7 +53,7 @@ namespace Enemy.Generator
             for (int i = 0; i < count; i++)
             {
                 EnemyView view = await GetEnemy(config, leader.transform);
-               view.SetUpActionCB(new EnemyActionCB { recycleLeaderCB = RecycleLaderEnemy });
+                view.SetUpActionCB(new EnemyActionCB { recycleLeaderCB = RecycleLaderEnemy });
                 view.leader = leader;
                 groupEnemy.Add(view);
             }
@@ -86,13 +87,23 @@ namespace Enemy.Generator
         //創建軍隊領導
         private EnemyLeader SpawnGroupLeader(int count, EnemyConfigData config)
         {
-            _leaderCount++;
-            GameObject leaderObjecet = new GameObject("EnemyLeader_"+ _leaderCount);
-            EnemyLeader leader = leaderObjecet.AddComponent<EnemyLeader>();
+            EnemyLeader leader;
+
+            if (_RecycleLeaderPool.Count > 0)
+            {
+                leader = _RecycleLeaderPool[0];
+                _RecycleLeaderPool.RemoveAt(0);
+            }
+            else
+            {
+                _leaderCount++;
+                GameObject leaderObjecet = new GameObject("EnemyLeader_" + _leaderCount);
+                leader = leaderObjecet.AddComponent<EnemyLeader>();
+            }
             leader.transform.SetParent(_parents);
-            leader.subordinatesCount = count;
-            leader.moveType = config.moveAction;
-            leader.outboundsAction = config.outboundsAction;
+            leader.SetUp(count, config);
+            leader.gameObject.SetActive(true);
+            _leaderPool.Add(leader);
             return leader;
         }
         //設置隊形
@@ -156,10 +167,12 @@ namespace Enemy.Generator
         void RecycleEnemy(ENEMY_TYPE type, EnemyView recycleEnemy)
         {
             if (recycleEnemy == null) return;
-            
+            //放置經驗球
+          
             // 1. 直接從 List 移除，不用自己算 Index
-            if (LivingEnemyPool.Remove(recycleEnemy))
+            if (LivingEnemyPool.Contains(recycleEnemy))
             {
+                LivingEnemyPool.Remove(recycleEnemy);
                 // 2. 處理物件狀態
                 recycleEnemy.gameObject.SetActive(false);
                 recycleEnemy.transform.SetParent(_parents);
@@ -178,11 +191,13 @@ namespace Enemy.Generator
                 Debug.Log($"找不到領導");
                 return;
             }
+            
             enemyLeader.subordinatesCount -= 1;
             if (enemyLeader.subordinatesCount <= 0)
             {
-                Debug.Log($"刪除領導 {enemyLeader.name}");
-                enemyLeader.Remove();
+                _leaderPool.Remove(enemyLeader);
+                _RecycleLeaderPool.Add(enemyLeader);
+                enemyLeader.gameObject.SetActive(false);
             }
         }
         //設置間隔生成怪物

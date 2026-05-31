@@ -27,6 +27,10 @@ namespace Base.BaseBodyData
         [SerializeField]
         [AllowNesting]
         public float basicMp;             //基礎魔力
+        [Label("基礎經驗值")]
+        [SerializeField]
+        [AllowNesting]
+        public int basicEXP;             //基礎經驗值
         [Label("攻擊頻率")]
         [SerializeField]
         [AllowNesting]

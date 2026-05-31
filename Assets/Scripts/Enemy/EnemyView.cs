@@ -32,12 +32,8 @@ public class EnemyView : BaseGameObject
     private EnemyActionCB actionCB = new EnemyActionCB();
     public Action<ENEMY_TYPE, EnemyView> _callBack;
     public Action recycleLeaderCB;
-    public Action _outBounds; //出界通知
 
-    public float screenMargin = 0.4f; // 擴大的範圍 (0.2 代表超出螢幕 20% 的距離)
-    float outBounds = 100f; //出界範圍判定
-
-
+    public OUTBOUNDS_ACTION OutboundsAction => _enemyModel.ConfigData.outboundsAction;
     // 暴露唯讀的位置屬性
     public IReadOnlyReactiveProperty<Vector3> Position => _position;
     private readonly ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
@@ -92,17 +88,13 @@ public class EnemyView : BaseGameObject
         if (GameplayManager.CurrentContext.GameController.IsGamePause)
             return;
         _attackedTimes += Time.deltaTime;
-        if (!IsWithinExtendedBounds())
-        {
-            RecycleEnemy();
-        }
 
     }
     void FixedUpdate()
     {
-        if (isKnockedBack) return;
         //更新位置
         _position.Value = transform.position;
+        if (isKnockedBack) return;
     }
     public void OnAttacked(HitData data)
     {
@@ -138,7 +130,12 @@ public class EnemyView : BaseGameObject
     //死亡通知
     public void OnDieNotify() {
         Debug.Log("觸發死亡");
+        //製作經驗球
+        ExpManager.Instance.SpawnExperienceBalls(transform.position, _enemyModel.ConfigData.currentEXP);
+        //擊殺紀錄
         GameplayManager.CurrentContext.GameController.OnEnemyDie(this);
+
+        //回收怪跟領導
         _enemyModel.actionCB.recycleCB?.Invoke(_enemyModel.ConfigData.enemyType,this);
         _enemyModel.actionCB.recycleLeaderCB?.Invoke(leader);
     }
@@ -161,40 +158,11 @@ public class EnemyView : BaseGameObject
     //受擊效果
     void ResetColor()
     {
-
         foreach (var r in _renderers)
         {
             r.GetPropertyBlock(_propBlock);
             _propBlock.SetColor("_BaseColor", Color.white); // 恢復白色
             r.SetPropertyBlock(_propBlock);
-        }
-    }
-    /*回收範圍偵測*/
-    private bool IsWithinExtendedBounds()
-    {
-        if (_enemyModel._trackingTarget == null) return true;
-        // 1. 計算怪物與玩家的距離
-        float distance = Vector3.Distance(transform.position, _enemyModel._trackingTarget.transform.position);
-
-        // 2. 判斷是否在距離內
-        // 只要距離小於設定值，就回傳 true (保留怪物)
-        return distance <= outBounds;
-    }
-    //回收通知 
-    private void RecycleEnemy()
-    {
-        // 這裡執行回收邏輯
-        Debug.Log($"{gameObject.name} 已超出螢幕緩衝區，自動回收  動作模式:[{_enemyModel.ConfigData.outboundsAction}]");
-        switch (_enemyModel.ConfigData.outboundsAction)
-        {
-            case OUTBOUNDS_ACTION.RE_ENTER:
-                SetUpStartPosition(EnemyManager.GetStartPosition());
-                break;
-            case OUTBOUNDS_ACTION.DIE_RECYCLE:
-                OnDieNotify();
-                break;
-            default:
-                break;
         }
     }
     private IEnumerator KnockbackRoutine(float strength, float duration = 0.2f)
@@ -205,7 +173,7 @@ public class EnemyView : BaseGameObject
         isKnockedBack = true;
 
         // 計算方向
-        Vector3 direction = (transform.position - _enemyModel._trackingTarget.transform.position);
+        Vector3 direction = (transform.position - _enemyModel.trackingTarget.transform.position);
         direction.y = 0;
 
         // 先將原本往玩家衝的速度歸零，避免物理疊加
@@ -223,13 +191,13 @@ public class EnemyView : BaseGameObject
     }
     private void SetUpPlayerPosition()
     {
-        if (_enemyModel != null && _enemyModel?._trackingTarget == null)
+        if (_enemyModel != null && _enemyModel?.trackingTarget == null)
         {
-            _enemyModel._trackingTarget = GameObject.FindWithTag("Player");
+            _enemyModel.trackingTarget = GameObject.FindWithTag("Player");
         }
-        if (_enemyModel != null && _enemyModel?._trackingTarget != null)
+        if (_enemyModel != null && _enemyModel?.trackingTarget != null)
         {
-            _enemyModel._trackingTargetV3 = (_enemyModel._trackingTarget.transform.position - _rigidbody.position).normalized;
+            _enemyModel._trackingTargetV3 = (_enemyModel.trackingTarget.transform.position - _rigidbody.position).normalized;
         }
     }
     public void SetUpStartPosition(Vector3 startPos)
@@ -237,17 +205,37 @@ public class EnemyView : BaseGameObject
 
         float offset = _colliderHeight/2;
        Vector3 newV3= new Vector3(startPos.x, 0 + offset, startPos.z);
-
-        if(leader != null)
+        //歸零物理效果 以防亂跳
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        if (leader != null)
         {
             leader.transform.position = newV3;
         }else
         {
             transform.position = newV3;
         }
+        Physics.SyncTransforms();
+        // 強制同步 ReactiveProperty (避免 FixedUpdate 延遲)
+        _position.Value = newV3;
     }
     public void ResetAnchorPoint() {
         _colliderHeight = Collider.bounds.size.y;
         anchorPoint.SetUp(Collider, gameObject);
+    }
+    //出界通知
+    public void HandleOutOfBounds()
+    {
+       // Debug.Log($"{gameObject.name} 被 Manager 判定出界，執行行動:[{OutboundsAction}]");
+        switch (OutboundsAction)
+        {
+            case OUTBOUNDS_ACTION.RE_ENTER:
+                // 這裡依然呼叫 SetUpStartPosition，內含 _position.Value 的同步
+                SetUpStartPosition(EnemyManager.GetStartPosition());
+                break;
+            case OUTBOUNDS_ACTION.DIE_RECYCLE:
+                _enemyModel.actionCB.recycleCB?.Invoke(_enemyModel.ConfigData.enemyType, this);
+                break;
+        }
     }
 }

@@ -12,7 +12,7 @@ public class EnemyActionCB
 }
 public class EnemyModel : BasicActionModel
 {
-    public GameObject _trackingTarget = null;
+    public GameObject trackingTarget = null;
     public Vector3 _trackingTargetV3;
     public Vector3 CurrentVelocity; //存放碰撞阻尼效果
 
@@ -38,11 +38,11 @@ public class EnemyModel : BasicActionModel
         switch (ConfigData.moveAction)
         {
             case MOVE_ACTION.FOLLOW:
-                return _trackingTarget.transform.position;
+                return trackingTarget.transform.position;
             case MOVE_ACTION.DIRECTION:
                 return _trackingTargetV3;
             default:
-                return _trackingTarget.transform.position;
+                return trackingTarget.transform.position;
 
         }
     }

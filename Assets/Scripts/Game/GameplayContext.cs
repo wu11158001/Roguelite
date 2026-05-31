@@ -1,4 +1,4 @@
-/// <summary>
+﻿/// <summary>
 /// 當前關卡資料內容，遊戲中資料由這取得
 /// </summary>
 public class GameplayContext
@@ -17,4 +17,6 @@ public class GameplayContext
     public EnemyManager EnemyManager { get; set; }
     /// <summary> 當前使用的無限地圖控制器 </summary>
     public InfiniteMapController InfiniteMapController { get; set; }
+    /// <summary> 經驗球管理器 </summary>
+    public ExpManager ExpManager { get; set; }
 }
