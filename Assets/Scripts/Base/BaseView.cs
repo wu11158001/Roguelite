@@ -146,7 +146,7 @@ public abstract class BaseView : MonoBehaviour
         {
             _popupObj.DOKill();
             _popupObj.anchoredPosition = new(0, -1280);
-            _popupObj.DOAnchorPos(Vector2.zero, 0.5f).SetEase(Ease.OutBack).SetLink(gameObject);
+            _popupObj.DOAnchorPos(Vector2.zero, 0.5f).SetEase(Ease.OutBack).SetLink(gameObject).SetUpdate(true);
         }
     }
 
