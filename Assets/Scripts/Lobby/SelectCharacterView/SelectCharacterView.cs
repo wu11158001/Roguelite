@@ -22,9 +22,7 @@ public class SelectCharacterView : BaseView
     // 各項能力值
     [SerializeField] private AbilityView _abilityView;
     // 初始技能
-    [SerializeField] Image Img_InitSkillIcon;
-    [SerializeField] TextMeshProUGUI Text_InitSkillName;
-    [SerializeField] TextMeshProUGUI Text_InitSkillDescribe;
+    [SerializeField] Button _btn_InitSkillIcon;
 
     [Header("Middle_Right")]
     // 角色_卷軸移動至目標工具
@@ -84,9 +82,15 @@ public class SelectCharacterView : BaseView
                 SkillItemData initSkill = GameStateData.AllSkillConfigData.GetActiveSkill(data.InitSkill, 1);
                 if(initSkill != null)
                 {
-                    Img_InitSkillIcon.sprite = initSkill.SkillIcon;
-                    Text_InitSkillName.text = initSkill.SkillName;
-                    Text_InitSkillDescribe.text = initSkill.SkillDescribe;
+                    _btn_InitSkillIcon.image.sprite = initSkill.SkillIcon;
+                    _btn_InitSkillIcon.OnClickAsObservable().Subscribe(
+                        _ => ViewManager.Instance.OpenView<SkillDescribeView>(
+                            viewType: VIEW_TYPE.SkillDescribeView,
+                            callback: (view) =>
+                            {
+                                view.Setup(initSkill);
+                            })
+                            .Forget()).AddTo(this);
                 }
             })
             .AddTo(this);
