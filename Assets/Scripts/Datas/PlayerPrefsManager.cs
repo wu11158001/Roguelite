@@ -160,7 +160,9 @@ public static class PlayerPrefsManager
     /// <returns></returns>
     public static bool IsOwnCharacter(CharacterConfigData config)
     {
-        PlayerInfoData data =LoadPlayerInfoData();
+        if (config == null) return false;
+
+        PlayerInfoData data = LoadPlayerInfoData();
 
         if (config.Price == 0) return true;
         if (data.Characters == null) return false;

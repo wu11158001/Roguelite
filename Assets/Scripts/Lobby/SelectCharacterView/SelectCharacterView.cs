@@ -34,16 +34,19 @@ public class SelectCharacterView : BaseView
     [SerializeField] private Transform _characterTogParent;
     [SerializeField] private SelectCharacterTogView _sampleSelectCharacterTog;
     // 3D角色
-    [SerializeField] private TextMeshProUGUI Text_CharacterName;
+    [SerializeField] private TextMeshProUGUI _text_CharacterName;
     [SerializeField] private UIRotate3DModel _uiRotate3DModel;
-    // 開始按鈕
+    // 確認按鈕
     [SerializeField] private Button _btn_Confirm;
+    [SerializeField] private TextMeshProUGUI _text_BtnConfirm;
 
     [Header("3DModel")]
     [SerializeField] private Transform CharacterPoint;
 
     private List<SelectCharacterTogView> _selectCharacterTogViews = new();
-    private IDisposable __InitSkillIconSubscription;
+
+    private IDisposable __btnConfirmSub;
+    private IDisposable __imgInitSkillIconSub;
 
     private SelectCharacterViewModel _viewModel = new();
 
@@ -74,14 +77,6 @@ public class SelectCharacterView : BaseView
             .Subscribe(_ => Close())
             .AddTo(this);
 
-        // 確認按鈕
-        _btn_Confirm.OnClickAsObservable()
-            .Subscribe(_ =>
-            {
-                _viewModel.OnConfirmCharacter(gameObject, _selectCharacterTogViews[0].MainTog);
-            })
-            .AddTo(this);
-
         // 當前角色資料變更
         _viewModel.CurrentCharacterData
             .Where(data => data != null)
@@ -91,7 +86,7 @@ public class SelectCharacterView : BaseView
                 GameStateData.SelectedCharacter = _viewModel.SetCharacterAbility(characterConfigData);
 
                 // 角色名稱
-                Text_CharacterName.text = data.CharacterName;
+                _text_CharacterName.text = data.CharacterName;
                 // 各項能力值
                 _abilityView.Setup(GameStateData.SelectedCharacter);
                 // 初始主動技能
@@ -100,8 +95,8 @@ public class SelectCharacterView : BaseView
                 {
                     _img_InitISkillcon.sprite = initSkill.SkillIcon;
 
-                    __InitSkillIconSubscription?.Dispose();
-                    __InitSkillIconSubscription = _btn_InitSkillIcon.OnClickAsObservable().Subscribe(
+                    __imgInitSkillIconSub?.Dispose();
+                    __imgInitSkillIconSub = _btn_InitSkillIcon.OnClickAsObservable().Subscribe(
                         _ => ViewManager.Instance.OpenView<SkillDescribeView>(
                             viewType: VIEW_TYPE.SkillDescribeView,
                             callback: (view) =>
@@ -114,13 +109,63 @@ public class SelectCharacterView : BaseView
             .AddTo(this);
 
         // // 角色模型變更
-        _viewModel.CurrentModel
+        _viewModel.Current3DModel
             .Where(model => model != null)
             .Subscribe(model =>
             {
                 _uiRotate3DModel.SetTargetModel(model.transform);
             })
             .AddTo(this);
+
+        // 角色擁有狀態變更
+        _viewModel.OwnState.Subscribe((isOwn) =>
+        {
+            __btnConfirmSub?.Dispose();
+
+            if(isOwn)
+            {
+                // 確認按鈕
+                _btn_Confirm.interactable = true;
+                __btnConfirmSub = _btn_Confirm.OnClickAsObservable()
+                    .Subscribe(_ =>
+                    {
+                        _viewModel.OnConfirmCharacter(gameObject, _selectCharacterTogViews[0].MainTog);
+                    })
+                    .AddTo(this);
+
+                // 確認按鈕文字
+                _text_BtnConfirm.text = "確認";
+            }
+            else
+            {
+                if (_viewModel.CurrentCharacterData.Value == null) return;
+
+                int ownCoin = PlayerInfoStateData.PlayerInfo.Value.Coin;
+                int price = _viewModel.CurrentCharacterData.Value.Price;
+
+                // 確認按鈕
+                _btn_Confirm.interactable = (ownCoin - price >= 0);
+
+                if (ownCoin - price >= 0)
+                {
+                    __btnConfirmSub = _btn_Confirm.OnClickAsObservable()
+                    .Subscribe(_ =>
+                    {
+                        _viewModel.OnConfirmCharacter(gameObject, _selectCharacterTogViews[0].MainTog);
+                    })
+                    .AddTo(this);
+
+                    // 確認按鈕文字
+                    _text_BtnConfirm.text = $"購買 ${price}";
+                }
+                else
+                {
+                    // 確認按鈕文字
+                    _text_BtnConfirm.text = $"${price}";
+                }
+            }
+
+        }).AddTo(this);
 
         // 玩家訊息變更
         PlayerInfoStateData.PlayerInfo.DistinctUntilChanged().Subscribe(data =>
@@ -132,6 +177,8 @@ public class SelectCharacterView : BaseView
             {
                 togView.CheckOwn();
             }
+
+            _viewModel.CheckOwn();
 
         }).AddTo(this);
     }

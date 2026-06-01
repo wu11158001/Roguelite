@@ -10,8 +10,11 @@ public class SelectCharacterViewModel
     public IReadOnlyReactiveProperty<CharacterConfigData> CurrentCharacterData => _currentCharacterData;
     private readonly ReactiveProperty<CharacterConfigData> _currentCharacterData = new();
 
-    public IReadOnlyReactiveProperty<GameObject> CurrentModel => _currentModel;
-    private readonly ReactiveProperty<GameObject> _currentModel = new();
+    public IReadOnlyReactiveProperty<GameObject> Current3DModel => _current3DModel;
+    private readonly ReactiveProperty<GameObject> _current3DModel = new();
+
+    public IReactiveProperty<bool> OwnState => _ownState;
+    private readonly ReactiveProperty<bool> _ownState = new ReactiveProperty<bool>(true);
 
     private readonly Dictionary<string, GameObject> _model3Ds = new();
     private string _loadingCharacterName;
@@ -20,6 +23,15 @@ public class SelectCharacterViewModel
     public void Setup(Transform characterPoint)
     {
         _characterPoint = characterPoint;
+    }
+
+    /// <summary>
+    /// 檢查角色擁有狀態
+    /// </summary>
+    public void CheckOwn()
+    {
+        _ownState.Value = true;
+        _ownState.Value = PlayerPrefsManager.IsOwnCharacter(_currentCharacterData.Value);
     }
 
     /// <summary>
@@ -34,10 +46,12 @@ public class SelectCharacterViewModel
         _loadingCharacterName = data.CharacterName;
         _currentCharacterData.Value = data;
 
+        CheckOwn();
+
         // 隱藏當前正在顯示的模型
-        if (_currentModel.Value != null)
+        if (_current3DModel.Value != null)
         {
-            _currentModel.Value.SetActive(false);
+            _current3DModel.Value.SetActive(false);
         }
 
         GameObject targetModel = null;
@@ -61,7 +75,7 @@ public class SelectCharacterViewModel
             targetModel.SetActive(true);
             targetModel.transform.rotation = Quaternion.identity;
 
-            _currentModel.Value = targetModel;
+            _current3DModel.Value = targetModel;
         }
         else
         {
@@ -166,12 +180,14 @@ public class SelectCharacterViewModel
                         string name = _currentCharacterData.Value.CharacterName;
 
                         view.SetContent(
-                            contentText: $"是否購買角色?\n${price}",
+                            contentText: $"是否購買角色?\n\n<color=#FFEB66>${price}</color>",
                             confirmAction: () =>
                             {
                                 // 購買角色進入遊戲
                                 if (ownCoin - price >= 0)
                                 {
+                                    _ownState.Value = true;
+
                                     // 扣除金幣
                                     PlayerInfoData data = PlayerInfoStateData.PlayerInfo.Value;
                                     data.Coin -= price;
@@ -187,11 +203,6 @@ public class SelectCharacterViewModel
                                     // 進入選擇關卡
                                     viewObj.SetActive(false);
                                     ViewManager.Instance.OpenView<SelectLevelView>(VIEW_TYPE.SelectLevelView).Forget();
-                                }
-                                else
-                                {
-                                    // 金幣不足跳回第一隻角色
-                                    tog.isOn = true;
                                 }
                             });
                     }

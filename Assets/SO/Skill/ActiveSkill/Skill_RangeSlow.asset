@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u5728\u96A8\u6A5F\u6575\u4EBA\u4F4D\u7F6E\u7522\u751F\u7BC4\u570D\u653B\u64CA,
       \u4E26\u6E1B\u901F50%, \u6301\u7E8C1\u79D2"
     NeedActiveSkills: []
@@ -49,7 +49,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u6E1B\u901F\u6548\u679C\u589E\u52A010%, \u50B7\u5BB3\u63D0\u53471"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -83,7 +83,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u6280\u80FD\u6578\u91CF+1, \u50B7\u5BB3\u63D0\u53471"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -117,7 +117,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u6E1B\u901F\u6548\u679C\u6301\u9700\u6642\u9593+1\u79D2, \u6548\u679C\u7BC4\u570D+20%"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -151,7 +151,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u51B7\u537B\u6642\u9593\u6E1B\u5C110.2\u79D2, \u50B7\u5BB3\u63D0\u53471"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -185,7 +185,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u51B7\u537B\u6642\u9593\u6E1B\u5C110.2\u79D2, \u6548\u679C\u7BC4\u570D+20%"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -219,7 +219,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u6E1B\u901F\u6548\u679C\u589E\u52A010%, \u50B7\u5BB3\u63D0\u53471"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -253,7 +253,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u7BC4\u570D\u6E1B\u901F"
-    SkillIcon: {fileID: 21300000, guid: bb0ac9f6afa281145a8e37f693c20773, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
     SkillDescribe: "\u6280\u80FD\u6578\u91CF+1, \u6E1B\u901F\u6548\u679C\u6301\u9700\u6642\u9593+0.5\u79D2,
       \u50B7\u5BB3\u63D0\u53471"
     NeedActiveSkills: []
