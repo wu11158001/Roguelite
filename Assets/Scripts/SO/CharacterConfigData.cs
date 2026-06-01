@@ -18,6 +18,9 @@ public class CharacterConfigData : ScriptableObject
     [Label("角色Icon")]
     public Sprite Icon;
 
+    [Label("角色購買金額")]
+    public int Price;
+
     [Label("生命條高度")]
     public float HpBarHight = 4.0f;
 

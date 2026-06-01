@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 7b7b7063f51899d4ab6475ddb0f94ca9
+guid: c0ea4b6e528e7fe4aa6cdc94d38691a1
 AssetOrigin:
   serializedVersion: 1
   productId: 143805
   packageName: 'Fantasy Inventory Icons [Free]'
   packageVersion: 1.2
-  assetPath: Assets/FantasyIconsPackFree/Icons/Gloves/Scout [Paint].png
+  assetPath: Assets/FantasyIconsPackFree/Icons/MeleeWeapon2H/AriostinGreatsword.png
   uploadId: 607428
 TextureImporter:
   internalIDToNameTable: []

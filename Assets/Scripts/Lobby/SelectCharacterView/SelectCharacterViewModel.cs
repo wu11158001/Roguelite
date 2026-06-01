@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectCharacterViewModel
 {
@@ -142,8 +143,60 @@ public class SelectCharacterViewModel
     /// <summary>
     /// 確認角色
     /// </summary>
-    public void OnConfirmCharacter()
+    /// <param name="viewObj"></param>
+    /// <param name="tog"></param>
+    public void OnConfirmCharacter(GameObject viewObj, Toggle tog)
     {
-        ViewManager.Instance.OpenView<SelectLevelView>(VIEW_TYPE.SelectLevelView).Forget();
+        // 檢查角色是否購買
+        if (PlayerPrefsManager.IsOwnCharacter(_currentCharacterData.Value))
+        {
+            viewObj.SetActive(false);
+            ViewManager.Instance.OpenView<SelectLevelView>(VIEW_TYPE.SelectLevelView).Forget();
+        }
+        else
+        {
+            ViewManager.Instance.OpenView<AskPopupView>(
+                viewType: VIEW_TYPE.AskPopupView,
+                callback: (view) =>
+                {
+                    if(view != null)
+                    {
+                        int ownCoin = PlayerInfoStateData.PlayerInfo.Value.Coin;
+                        int price = _currentCharacterData.Value.Price;
+                        string name = _currentCharacterData.Value.CharacterName;
+
+                        view.SetContent(
+                            contentText: $"是否購買角色?\n${price}",
+                            confirmAction: () =>
+                            {
+                                // 購買角色進入遊戲
+                                if (ownCoin - price >= 0)
+                                {
+                                    // 扣除金幣
+                                    PlayerInfoData data = PlayerInfoStateData.PlayerInfo.Value;
+                                    data.Coin -= price;
+
+                                    // 紀錄購買角色
+                                    HashSet<string> newCharacters = data.GetCharactersList();
+                                    newCharacters.Add(name);
+                                    data.SetCharacters(newCharacters);
+
+                                    // 更新本地資料
+                                    PlayerInfoStateData.PlayerInfo.Value = data;
+
+                                    // 進入選擇關卡
+                                    viewObj.SetActive(false);
+                                    ViewManager.Instance.OpenView<SelectLevelView>(VIEW_TYPE.SelectLevelView).Forget();
+                                }
+                                else
+                                {
+                                    // 金幣不足跳回第一隻角色
+                                    tog.isOn = true;
+                                }
+                            });
+                    }
+
+                }).Forget();
+        }
     }
 }

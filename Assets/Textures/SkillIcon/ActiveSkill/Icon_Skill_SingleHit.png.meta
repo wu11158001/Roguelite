@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 7b7b7063f51899d4ab6475ddb0f94ca9
+guid: 37665b2ddd98b1849afa610bb8214b9e
 AssetOrigin:
   serializedVersion: 1
   productId: 143805
   packageName: 'Fantasy Inventory Icons [Free]'
   packageVersion: 1.2
-  assetPath: Assets/FantasyIconsPackFree/Icons/Gloves/Scout [Paint].png
+  assetPath: Assets/FantasyIconsPackFree/Icons/MeleeWeapon2H/TwoHandedWoodenMace.png
   uploadId: 607428
 TextureImporter:
   internalIDToNameTable: []

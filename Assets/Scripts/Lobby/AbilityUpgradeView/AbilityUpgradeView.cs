@@ -50,8 +50,8 @@ public class AbilityUpgradeView : BaseView
 
     private void BindViewModel()
     {
-        // 玩家金幣變化
-        PlayerInfoStateData.PlayerInfo.DistinctUntilChanged().Subscribe(data => UpdatePlayerCoin(data.Coin)).AddTo(this);
+        // 玩家訊息變更
+        PlayerInfoStateData.PlayerInfo.DistinctUntilChanged().Subscribe(data => _text_PlayerCoin.text = $"{data.Coin}").AddTo(this);
 
         // 返回按鈕
         _btn_Back.OnClickAsObservable().First().Subscribe(_ => Close()).AddTo(this);
@@ -110,15 +110,6 @@ public class AbilityUpgradeView : BaseView
                 item.Value.UpdatePoint(0);
             }
         }).AddTo(this);
-    }
-
-    /// <summary>
-    /// 更新玩家持有金幣
-    /// </summary>
-    /// <param name="coin"></param>
-    private void UpdatePlayerCoin(int coin)
-    {
-        _text_PlayerCoin.text = $"{coin}";
     }
 
     /// <summary>

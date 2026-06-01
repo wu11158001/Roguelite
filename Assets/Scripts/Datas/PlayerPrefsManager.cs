@@ -13,6 +13,26 @@ public struct PlayerInfoData
 {
     /// <summary> 持有金幣 </summary>
     public int Coin;
+    /// <summary> 持有角色 </summary>
+    public string[] Characters;
+
+    /// <summary>
+    /// 設置擁有角色
+    /// </summary>
+    /// <param name="charList"></param>
+    public void SetCharacters(HashSet<string> charList)
+    {
+        Characters = charList?.ToArray() ?? new string[0];
+    }
+
+    /// <summary>
+    /// 獲取擁有角色
+    /// </summary>
+    /// <returns></returns>
+    public HashSet<string> GetCharactersList()
+    {
+        return Characters != null ? new HashSet<string>(Characters) : new HashSet<string>();
+    }
 }
 
 #endregion
@@ -119,13 +139,33 @@ public static class PlayerPrefsManager
     {
         if (!PlayerPrefs.HasKey(PLAYER_INFO_KEY))
         {
-            return new PlayerInfoData();
+            return new PlayerInfoData { Characters = new string[0] };
         }
 
         string jsonString = PlayerPrefs.GetString(PLAYER_INFO_KEY);
         PlayerInfoData data = JsonUtility.FromJson<PlayerInfoData>(jsonString);
 
+        if (data.Characters == null)
+        {
+            data.Characters = new string[0];
+        }
+
         return data;
+    }
+
+    /// <summary>
+    /// 查詢是否擁有角色
+    /// </summary>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    public static bool IsOwnCharacter(CharacterConfigData config)
+    {
+        PlayerInfoData data =LoadPlayerInfoData();
+
+        if (config.Price == 0) return true;
+        if (data.Characters == null) return false;
+
+        return Array.Exists(data.Characters, name => name == config.CharacterName);
     }
 
     #endregion

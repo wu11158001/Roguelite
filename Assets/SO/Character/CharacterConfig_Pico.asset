@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
   m_Name: CharacterConfig_Pico
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  CharacterName: Pico
+  CharacterName: "\u76AE\u53EF"
   PrefabReference:
     m_AssetGUID: 0dd4c433bac6fba4f800c6a7c6c7370a
     m_SubObjectName: 

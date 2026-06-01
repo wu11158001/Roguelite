@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
   m_Name: CharacterConfig_Cat
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  CharacterName: Cat
+  CharacterName: "\u9EBB\u7CEC"
   PrefabReference:
     m_AssetGUID: 3b16283a4fac21d4c950a8359b00e92b
     m_SubObjectName: 
@@ -20,6 +20,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Icon: {fileID: 21300000, guid: 2d84c81d7d329014eb3d58f0be1fb98e, type: 3}
+  Price: 400
   HpBarHight: 5.9
   RotationSpeed: 10
   InitSkill: 3

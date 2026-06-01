@@ -6,7 +6,7 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using System.Collections.Generic;
-using System.Collections;
+using System;
 
 /// <summary>
 /// 選擇角色介面
@@ -17,12 +17,15 @@ public class SelectCharacterView : BaseView
     [Header("SelectCharacterView")]
     [Header("Top")]
     [SerializeField] private Button _btn_Back;
+    [SerializeField] private TextMeshProUGUI _text_PlayerCoin;
 
     [Header("Middle_Left")]
     // 各項能力值
     [SerializeField] private AbilityView _abilityView;
-    // 初始技能
+    // 初始技能按鈕
     [SerializeField] Button _btn_InitSkillIcon;
+    // 初始技能Icon
+    [SerializeField] Image _img_InitISkillcon;
 
     [Header("Middle_Right")]
     // 角色_卷軸移動至目標工具
@@ -39,7 +42,21 @@ public class SelectCharacterView : BaseView
     [Header("3DModel")]
     [SerializeField] private Transform CharacterPoint;
 
+    private List<SelectCharacterTogView> _selectCharacterTogViews = new();
+    private IDisposable __InitSkillIconSubscription;
+
     private SelectCharacterViewModel _viewModel = new();
+
+    private void Update()
+    {
+        // 測試用
+        if (UnityEngine.InputSystem.Keyboard.current.numpad7Key.wasPressedThisFrame)
+        {
+            PlayerInfoData data = PlayerInfoStateData.PlayerInfo.Value;
+            data.Coin += 200;
+            PlayerInfoStateData.PlayerInfo.Value = data;
+        }
+    }
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
@@ -61,8 +78,7 @@ public class SelectCharacterView : BaseView
         _btn_Confirm.OnClickAsObservable()
             .Subscribe(_ =>
             {
-                gameObject.SetActive(false);
-                _viewModel.OnConfirmCharacter();
+                _viewModel.OnConfirmCharacter(gameObject, _selectCharacterTogViews[0].MainTog);
             })
             .AddTo(this);
 
@@ -82,8 +98,10 @@ public class SelectCharacterView : BaseView
                 SkillItemData initSkill = GameStateData.AllSkillConfigData.GetActiveSkill(data.InitSkill, 1);
                 if(initSkill != null)
                 {
-                    _btn_InitSkillIcon.image.sprite = initSkill.SkillIcon;
-                    _btn_InitSkillIcon.OnClickAsObservable().Subscribe(
+                    _img_InitISkillcon.sprite = initSkill.SkillIcon;
+
+                    __InitSkillIconSubscription?.Dispose();
+                    __InitSkillIconSubscription = _btn_InitSkillIcon.OnClickAsObservable().Subscribe(
                         _ => ViewManager.Instance.OpenView<SkillDescribeView>(
                             viewType: VIEW_TYPE.SkillDescribeView,
                             callback: (view) =>
@@ -103,6 +121,19 @@ public class SelectCharacterView : BaseView
                 _uiRotate3DModel.SetTargetModel(model.transform);
             })
             .AddTo(this);
+
+        // 玩家訊息變更
+        PlayerInfoStateData.PlayerInfo.DistinctUntilChanged().Subscribe(data =>
+        {
+            // 金幣
+            _text_PlayerCoin.text = $"{data.Coin}";
+            // Tog擁有狀態
+            foreach (var togView in _selectCharacterTogViews)
+            {
+                togView.CheckOwn();
+            }
+
+        }).AddTo(this);
     }
 
     public override void CloseViewHandle()
@@ -116,7 +147,6 @@ public class SelectCharacterView : BaseView
     private void CreateSelectTogs()
     {
         int index = 0;
-        List<Toggle> togs = new();
 
         _sampleSelectCharacterTog.gameObject.SetActive(false);
         foreach (var config in GameStateData.AllCharacterConfig.AllCharacterConfigs)
@@ -138,22 +168,22 @@ public class SelectCharacterView : BaseView
                 SnapToTarget(selectCharacterTogView.MainTog.GetComponent<RectTransform>());
                 });
 
-            togs.Add(selectCharacterTogView.MainTog);
+            _selectCharacterTogViews.Add(selectCharacterTogView);
             index++;
         }
 
         int preSelectIndex = GameStateData.PreSelectCharacter;
         int targetIndex = 0;
-        if (preSelectIndex >= 0 && preSelectIndex < togs.Count)
+        if (preSelectIndex >= 0 && preSelectIndex < _selectCharacterTogViews.Count)
         {
             targetIndex = preSelectIndex;
         }
 
-        togs[targetIndex].isOn = true;
+        _selectCharacterTogViews[targetIndex].MainTog.isOn = true;
 
-        if (togs.Count > 0)
+        if (_selectCharacterTogViews.Count > 0)
         {
-            SnapToTarget(togs[targetIndex].GetComponent<RectTransform>());
+            SnapToTarget(_selectCharacterTogViews[targetIndex].MainTog.GetComponent<RectTransform>());
         }
     }
 

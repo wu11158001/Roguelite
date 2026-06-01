@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 7b7b7063f51899d4ab6475ddb0f94ca9
+guid: e29f293938fc0494d87d11a7532e32ea
 AssetOrigin:
   serializedVersion: 1
   productId: 143805
   packageName: 'Fantasy Inventory Icons [Free]'
   packageVersion: 1.2
-  assetPath: Assets/FantasyIconsPackFree/Icons/Gloves/Scout [Paint].png
+  assetPath: Assets/FantasyIconsPackFree/Icons/Armor/RoyalTunic.png
   uploadId: 607428
 TextureImporter:
   internalIDToNameTable: []
@@ -52,7 +52,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100

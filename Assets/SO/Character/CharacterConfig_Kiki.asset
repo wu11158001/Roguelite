@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
   m_Name: CharacterConfig_Kiki
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  CharacterName: Kiki
+  CharacterName: "\u742A\u742A"
   PrefabReference:
     m_AssetGUID: f92b32fbf7d4aef499170f1b497579ab
     m_SubObjectName: 
@@ -20,6 +20,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Icon: {fileID: 21300000, guid: caceba55f98bc084fb5e7211e143481b, type: 3}
+  Price: 400
   HpBarHight: 3.9
   RotationSpeed: 10
   InitSkill: 4
