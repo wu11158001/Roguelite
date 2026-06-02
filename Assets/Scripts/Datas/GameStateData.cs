@@ -25,6 +25,8 @@ public static class GameStateData
     public static List<LevelConfigData> AllLevelConfig { get; set; }
     /// <summary> 所有地圖道具 </summary>
     public static AllMapPropsConfigData AllMapPropsConfig { get; set; }
+    /// <summary> 介面相關配置檔 </summary>
+    public static UiViewConfigData UiViewConfigData { get; set; }
 
     [Header("遊戲狀態資料")]
     /// <summary> 搖桿輸入位置 </summary>

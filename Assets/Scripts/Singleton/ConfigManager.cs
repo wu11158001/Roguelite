@@ -20,6 +20,8 @@ public class ConfigManager : MonoBehaviour
     [SerializeField] private AbilityUpgradeConfigData _abilityUpgradeConfigData;
     [Label("所有地圖道具配置檔")]
     [SerializeField] private AllMapPropsConfigData _allMapPropsConfig;
+    [Label("介面相關配置檔")]
+    [SerializeField] private UiViewConfigData _uiViewConfigData;
 
     protected void Awake()
     {
@@ -39,6 +41,7 @@ public class ConfigManager : MonoBehaviour
         GameStateData.AllEffectPrefabData = _allEffectPrefabData;
         GameStateData.AbilityUpgradeConfigData = _abilityUpgradeConfigData;
         GameStateData.AllMapPropsConfig = _allMapPropsConfig;
+        GameStateData.UiViewConfigData = _uiViewConfigData;
 
         LoadLevelConfigs().Forget();
     }

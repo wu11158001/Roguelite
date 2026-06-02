@@ -8,8 +8,9 @@ public class MakeupItemView : MonoBehaviour
     [SerializeField] private RectTransform _makeupItemSample;
     [SerializeField] private RectTransform _addIcon;
     [SerializeField] private RectTransform _equalIcon;
-    [SerializeField] private RectTransform _finishBg;
+    [SerializeField] private Image _img_Bg;
     [SerializeField] private HorizontalLayoutGroup _horizontalLayout;
+    [SerializeField] private Color _finishColor;
 
     public void Setup(SkillItemData mainItem, List<SkillItemData> usingSkills)
     {
@@ -59,16 +60,26 @@ public class MakeupItemView : MonoBehaviour
         {
             int index = i;
 
-            bool isUsing = usingSkills.Any(x => x.SkillType == allItems[i].SkillType);
+            // 遊戲中是否已獲得
+            bool isUsing = false;
+            // 主動技能判斷
+            if(!allItems[i].IsPassive && !allItems[i].IsProps)
+            {
+                isUsing = usingSkills.Any(x => x.SkillType == allItems[i].SkillType);
+            }
+            // 被動技能判斷
+            else if (allItems[i].IsPassive)
+            {
+                isUsing = usingSkills.Any(x => x.PassiveType == allItems[i].PassiveType);
+            }
 
             GameObject obj = Instantiate(_makeupItemSample.gameObject, transform);
             obj.SetActive(true);
             if (obj.TryGetComponent(out MakeupItemSampleView makeItem))
             {
                 makeItem.Setup(
-                    icon: IsAcquired(allItems[index].SkillName) ? allItems[index].SkillIcon : null,
-                    name: allItems[index].SkillName,
-                    level: allItems[index].SkillLevel,
+                    data: allItems[index],
+                    isAcquired: IsAcquired(allItems[index].SkillName),
                     isUsing: isUsing && !isFinish);
             }
             finishSize.x += obj.GetComponent<RectTransform>().sizeDelta.x;
@@ -94,18 +105,14 @@ public class MakeupItemView : MonoBehaviour
         if (mainObj.TryGetComponent(out MakeupItemSampleView mainMakeItem))
         {
             mainMakeItem.Setup(
-                icon: IsAcquired(mainItem.SkillName) ? mainItem.SkillIcon : null,
-                name: mainItem.SkillName,
-                level: mainItem.SkillLevel,
+                data: mainItem,
+                isAcquired: IsAcquired(mainItem.SkillName),
                 isUsing: false);
         }
         finishSize.x += mainObj.GetComponent<RectTransform>().sizeDelta.x;
 
         // 完成合成顯示
-        finishSize.x += _horizontalLayout.padding.left + _horizontalLayout.padding.right;
-        finishSize.y = _makeupItemSample.sizeDelta.y + _horizontalLayout.padding.top + _horizontalLayout.padding.bottom;
-        _finishBg.gameObject.SetActive(isFinish);
-        _finishBg.sizeDelta = finishSize;
+        _img_Bg.color = isFinish ? _finishColor : Color.white;
 
         // 檢查獲取過狀態
         bool IsAcquired(string skillName)

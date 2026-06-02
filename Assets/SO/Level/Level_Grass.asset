@@ -17,3 +17,4 @@ MonoBehaviour:
   LevelIndex: 1
   TimeLimit: 65
   CoinBonus: 0.1
+  ExpBonus: 0.2

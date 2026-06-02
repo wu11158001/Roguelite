@@ -23,6 +23,8 @@ MonoBehaviour:
     NeedPassiveSkills:
     - Type: 8
       Level: 1
+    - Type: 1
+      Level: 1
     _skillType: 6
     IsUpdateNow: 0
     SkillLevel: 1

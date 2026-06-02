@@ -30,12 +30,6 @@ public class SkillDescribeView : BaseView
         _text_SkillName.text = item.SkillName;
         _text_SkillLevel.text = $"LV:{item.SkillLevel}";
         _text_SkillDescribe.text = item.SkillDescribe;
-
-        // 道具技能背景顏色
-        if (item.IsProps) _img_SkillBg.color = _propsBgColor;
-        // 被動技能背景顏色
-        else if (item.IsPassive) _img_SkillBg.color = _passiveBgColor;
-        // 主動技能背景顏色
-        else _img_SkillBg.color = _activeBgColor;
+        _img_SkillBg.color = GameStateData.UiViewConfigData.GetSkillBgColor(item);
     }
 }
