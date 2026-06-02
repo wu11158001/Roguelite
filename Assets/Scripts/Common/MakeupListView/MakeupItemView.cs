@@ -9,7 +9,6 @@ public class MakeupItemView : MonoBehaviour
     [SerializeField] private RectTransform _addIcon;
     [SerializeField] private RectTransform _equalIcon;
     [SerializeField] private Image _img_Bg;
-    [SerializeField] private HorizontalLayoutGroup _horizontalLayout;
     [SerializeField] private Color _finishColor;
 
     public void Setup(SkillItemData mainItem, List<SkillItemData> usingSkills)

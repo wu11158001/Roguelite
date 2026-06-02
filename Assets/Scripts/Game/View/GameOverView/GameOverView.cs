@@ -32,13 +32,16 @@ public class GameOverView : BaseView
     [SerializeField] private Image _img_CharacterAvatar;
     [SerializeField] private TextMeshProUGUI _text_CharacterName;
     [Header("技能欄")]
-    [SerializeField] private SkillItemView[] _skillItemViews = new SkillItemView[6];
-    [Header("被動技能欄")]
-    [SerializeField] private SkillItemView[] _passiveSkillItemViews = new SkillItemView[6];
+    [SerializeField] private BaseBtnSkillItem _btnSkillItem;
+    [SerializeField] private Transform _activeSkillGroup;
+    [SerializeField] private Transform _passiveSkillGroup;
 
     [HorizontalLine(color: EColor.Gray)]
     [Header("確認按鈕")]
     [SerializeField] private Button _btn_Confirm;
+
+    private List<BaseBtnSkillItem> _activeSkillItems;
+    private List<BaseBtnSkillItem> _passiveSkillItems;
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
@@ -65,14 +68,30 @@ public class GameOverView : BaseView
 
     private void Init()
     {
-        foreach (var skillItemView in _skillItemViews)
+        // 產生主動技能欄位
+        _btnSkillItem.gameObject.SetActive(false);
+        _activeSkillItems = new();
+        for (int i = 0; i < 6; i++)
         {
-            skillItemView.Setup();
+            GameObject obj = Instantiate(_btnSkillItem.gameObject, _activeSkillGroup);
+            obj.SetActive(true);
+            if (obj.TryGetComponent(out BaseBtnSkillItem activeSkillItem))
+            {
+                activeSkillItem.Setup(null);
+                _activeSkillItems.Add(activeSkillItem);
+            };
         }
-
-        foreach (var passiveSkillItemView in _passiveSkillItemViews)
+        // 產生被動技能欄位
+        _passiveSkillItems = new();
+        for (int i = 0; i < 6; i++)
         {
-            passiveSkillItemView.Setup();
+            GameObject obj = Instantiate(_btnSkillItem.gameObject, _passiveSkillGroup);
+            obj.SetActive(true);
+            if (obj.TryGetComponent(out BaseBtnSkillItem passiveSkillItem))
+            {
+                passiveSkillItem.Setup(null);
+                _passiveSkillItems.Add(passiveSkillItem);
+            };
         }
     }
 
@@ -145,12 +164,12 @@ public class GameOverView : BaseView
         {
             if (skill.IsPassive)
             {
-                _passiveSkillItemViews[passiveIndex].SetSkillIte(skill);
+                _passiveSkillItems[passiveIndex].Setup(skill);
                 passiveIndex++;
             }
             else
             {
-                _skillItemViews[skillIndex].SetSkillIte(skill);
+                _activeSkillItems[skillIndex].Setup(skill);
                 skillIndex++;
             }
         }

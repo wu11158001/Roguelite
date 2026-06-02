@@ -16,14 +16,6 @@ public class SkillDescribeView : BaseView
     [SerializeField] private TextMeshProUGUI _text_SkillLevel;
     [SerializeField] private TextMeshProUGUI _text_SkillDescribe;
 
-    [HorizontalLine(color: EColor.Gray)]
-    [Label("主動技能背景顏色")]
-    [SerializeField] private Color _activeBgColor;
-    [Label("被動技能背景顏色")]
-    [SerializeField] private Color _passiveBgColor;
-    [Label("道具技能背景顏色")]
-    [SerializeField] private Color _propsBgColor;
-
     public void Setup(SkillItemData item)
     {
         _img_SkillIcon.sprite = item.SkillIcon;

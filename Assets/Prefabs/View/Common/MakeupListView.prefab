@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: MPUIKit::MPUIKIT.MPImage
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9245283, g: 0.30962977, b: 0.8489259, a: 1}
+  m_Color: {r: 0.8018868, g: 0.13238695, b: 0.71659994, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_DrawShape: 3
   m_ImageType: 0
   m_MaterialMode: 0
-  m_StrokeWidth: 5
+  m_StrokeWidth: 2
   m_OutlineWidth: 0
   m_OutlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_FalloffDistance: 0.5
@@ -521,7 +521,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 110, y: -72.5}
-  m_SizeDelta: {x: 200, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6681387219929649574
 MonoBehaviour:
@@ -1585,7 +1585,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 100, y: -62.5}
-  m_SizeDelta: {x: 200, y: 125}
+  m_SizeDelta: {x: 0, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2155538901536761961
 MonoBehaviour:
@@ -1603,7 +1603,6 @@ MonoBehaviour:
   _addIcon: {fileID: 6051409090612507060}
   _equalIcon: {fileID: 4834508249998722860}
   _img_Bg: {fileID: 8265637404752926850}
-  _horizontalLayout: {fileID: 7256317671313291687}
   _finishColor: {r: 0.9882353, g: 1, b: 0.23137255, a: 1}
 --- !u!114 &7256317671313291687
 MonoBehaviour:

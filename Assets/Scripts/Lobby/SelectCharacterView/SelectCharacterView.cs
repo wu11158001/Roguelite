@@ -22,10 +22,7 @@ public class SelectCharacterView : BaseView
     [Header("Middle_Left")]
     // 各項能力值
     [SerializeField] private AbilityView _abilityView;
-    // 初始技能按鈕
-    [SerializeField] Button _btn_InitSkillIcon;
-    // 初始技能Icon
-    [SerializeField] Image _img_InitISkillcon;
+    [SerializeField] private BaseBtnSkillItem _initSkillItem;
 
     [Header("Middle_Right")]
     // 角色_卷軸移動至目標工具
@@ -93,17 +90,7 @@ public class SelectCharacterView : BaseView
                 SkillItemData initSkill = GameStateData.AllSkillConfigData.GetActiveSkill(data.InitSkill, 1);
                 if(initSkill != null)
                 {
-                    _img_InitISkillcon.sprite = initSkill.SkillIcon;
-
-                    __imgInitSkillIconSub?.Dispose();
-                    __imgInitSkillIconSub = _btn_InitSkillIcon.OnClickAsObservable().Subscribe(
-                        _ => ViewManager.Instance.OpenView<SkillDescribeView>(
-                            viewType: VIEW_TYPE.SkillDescribeView,
-                            callback: (view) =>
-                            {
-                                view.Setup(initSkill);
-                            })
-                            .Forget()).AddTo(this);
+                    _initSkillItem.Setup(initSkill);
                 }
             })
             .AddTo(this);
