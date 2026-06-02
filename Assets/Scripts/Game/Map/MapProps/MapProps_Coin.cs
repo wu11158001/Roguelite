@@ -13,6 +13,6 @@ public class MapProps_Coin : BaseMapProps
 
     public override void OnPickUpDo()
     {
-        GameplayManager.CurrentContext.GameController.GetCoinCount += _addCoinValue;
+        GameplayManager.CurrentContext.GameController.GainCoin(_addCoinValue);
     }
 }

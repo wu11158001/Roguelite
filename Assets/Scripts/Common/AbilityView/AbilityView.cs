@@ -35,8 +35,6 @@ public class AbilityView : MonoBehaviour
     private List<AbilityItemView> _abilityItems = new();
 
     private CharacterConfigData _characterConfigData;
-    private List<AbilityUpgradeData> _abilityUpgrades = new();
-    private List<AbilityUpgradeItemData> _upgradeConfigs = new();
 
     public void Setup(CharacterConfigData data)
     {
@@ -47,8 +45,6 @@ public class AbilityView : MonoBehaviour
         }
 
         _characterConfigData = data;
-        _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
-        _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.AbilityUpgradeItemDatas.ToList();
 
         if (_abilityItems == null || _abilityItems.Count == 0)
         {

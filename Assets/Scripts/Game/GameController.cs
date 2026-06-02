@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
     /// <summary> 累積擊倒敵人數量 </summary>
     public int KillEnemyCount { get; private set; }
     /// <summary> 累積獲得金幣數量 </summary>
-    public int GetCoinCount { get; set; }
+    public int GetCoinCount { get; private set; }
 
     /// <summary>
     /// 遊戲暫停
@@ -74,5 +74,15 @@ public class GameController : MonoBehaviour
                     effectRecycle.Setup(data.PrefabReference);
                 }
             });
+    }
+
+    /// <summary>
+    /// 獲得金幣
+    /// </summary>
+    /// <param name="gainCoin"></param>
+    public void GainCoin(int gainCoin)
+    {
+        float coinBonus = GameStateData.SelectLevel.CoinBonus;
+        GetCoinCount += gainCoin + Mathf.CeilToInt(gainCoin * coinBonus);
     }
 }

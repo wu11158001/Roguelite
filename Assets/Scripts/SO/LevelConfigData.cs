@@ -13,6 +13,8 @@ public class LevelConfigData : ScriptableObject
 
     [Label("關卡時間上限(秒)")]
     public int TimeLimit;
-    [Label("金幣加成(%)")]
+    [Label("金幣加成(0~1)(%)")]
     public float CoinBonus;
+    [Label("經驗加成(0~1)(%)")]
+    public float ExpBonus;
 }

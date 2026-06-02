@@ -25,6 +25,7 @@ public class SelectLevelView : BaseView
     [SerializeField] private TextMeshProUGUI _text_LevelName;
     [SerializeField] private TextMeshProUGUI _text_TimeLimit;
     [SerializeField] private TextMeshProUGUI _text_CoinBonus;
+    [SerializeField] private TextMeshProUGUI _text_ExpBonus;
 
     [HorizontalLine(color: EColor.Gray)]
     [Header("開始按鈕")]
@@ -111,5 +112,6 @@ public class SelectLevelView : BaseView
         _text_TimeLimit.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
         _text_LevelName.text = level.LevelName;
         _text_CoinBonus.text = $"{level.CoinBonus * 100}%";
+        _text_ExpBonus.text = $"{level.ExpBonus * 100}%";
     }
 }
