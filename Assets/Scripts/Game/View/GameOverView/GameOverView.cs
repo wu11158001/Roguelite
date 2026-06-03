@@ -40,6 +40,11 @@ public class GameOverView : BaseView
     [Header("確認按鈕")]
     [SerializeField] private Button _btn_Confirm;
 
+    [HorizontalLine(color: EColor.Gray)]
+    [Header("刷新介面物件")]
+    [SerializeField] private RectTransform _skillTrackDataGroup;
+    [SerializeField] private RectTransform _ownSkillDataGroup;
+
     private List<Common_BtnSkillItem> _activeSkillItems;
     private List<Common_BtnSkillItem> _passiveSkillItems;
 
@@ -54,6 +59,8 @@ public class GameOverView : BaseView
         SetLevelTrackData();
         SetTrackSkillData();
         SetCharacterSkill();
+
+        RefreshUI().Forget();
     }
 
     private void BindViewModel()
@@ -96,11 +103,26 @@ public class GameOverView : BaseView
     }
 
     /// <summary>
+    /// 刷新畫面
+    /// </summary>
+    private async UniTaskVoid RefreshUI()
+    {
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_skillTrackDataGroup);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_ownSkillDataGroup);
+
+        _canvasGroup.alpha = 0;
+        await UniTask.NextFrame();
+        _canvasGroup.alpha = 1;
+    }
+
+    /// <summary>
     /// 設置關卡紀錄
     /// </summary>
     private void SetLevelTrackData()
     {
-        _text_LevelData.text = $"關卡名稱 - 等級 - 金幣加成";
+        LevelConfigData levelConfig = GameStateData.SelectLevel;
+        _text_LevelData.text = $"{levelConfig.LevelName} - 金幣加成:{levelConfig.CoinBonus * 100}%";
 
         float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
         int minutes = Mathf.FloorToInt(elapsedTime / 60f);

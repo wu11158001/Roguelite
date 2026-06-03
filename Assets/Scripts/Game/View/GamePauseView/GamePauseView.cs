@@ -29,9 +29,9 @@ public class GamePauseView : BaseView
         // 離開按鈕
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
         {
+            GameplayManager.CurrentContext.GameController.GamePause(false);
             GameplayManager.CurrentContext.GameController.GameOver();
             ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
-            GameplayManager.CurrentContext.GameController.GamePause(false);
         }).AddTo(this);
 
         // 合成表按鈕

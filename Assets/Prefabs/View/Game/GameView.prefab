@@ -394,6 +394,7 @@ MonoBehaviour:
   _isCanClickMask: 0
   _isPopupEffect: 0
   _popupObj: {fileID: 0}
+  _popupType: 0
   _btn_Pause: {fileID: 7703854661477712508}
   _text_Level: {fileID: 1494172683142104395}
   _text_Time: {fileID: 1771643536761440130}
@@ -472,7 +473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.08721964, g: 0.36085948, b: 0.5283019, a: 1}
+  m_Color: {r: 0.31181023, g: 0.8387312, b: 0.8584906, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -610,7 +611,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.974
+  m_Value: 0.56
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -747,7 +748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.08677464, g: 0.7153095, b: 0.735849, a: 1}
+  m_Color: {r: 0.024875412, g: 0.3918972, b: 0.4056604, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1061,6 +1062,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3481110299586575817}
     m_Modifications:
+    - target: {fileID: 1048936125604931594, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
+      propertyPath: _isShowLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1519179401807100518, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
       propertyPath: m_Name
       value: Btn_SkillItem

@@ -54,6 +54,7 @@ MonoBehaviour:
   _isCanClickMask: 1
   _isPopupEffect: 1
   _popupObj: {fileID: 7721025987530201098}
+  _popupType: 1
   _skillDescribe: {fileID: 2436731591173400824}
 --- !u!1001 &891973902528474576
 PrefabInstance:

@@ -2301,6 +2301,7 @@ MonoBehaviour:
   _isCanClickMask: 0
   _isPopupEffect: 0
   _popupObj: {fileID: 0}
+  _popupType: 0
   _btn_Back: {fileID: 2419457218217151022}
   _text_PlayerCoin: {fileID: 4715152456363974599}
   _abilityView: {fileID: 1682145793301236454}

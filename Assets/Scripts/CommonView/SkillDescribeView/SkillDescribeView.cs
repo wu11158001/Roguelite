@@ -10,8 +10,10 @@ public class SkillDescribeView : BaseView
     [Header("SkillDescribeView")]
     [SerializeField] private Common_BtnSkillDescribe _skillDescribe;
 
-    public void Setup(SkillItemData item)
+    public void Setup(SkillItemData data, bool isShowLevelOne = false)
     {
-        _skillDescribe.Setup(item);
+        _skillDescribe.Setup(
+            data: data,
+            isShowLevelOne: isShowLevelOne);
     }
 }

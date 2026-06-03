@@ -7,7 +7,7 @@ using TMPro;
 /// </summary>
 public class TrackSkillItemsView : MonoBehaviour
 {
-    [SerializeField] private Image _img_SkillIcon;
+    [SerializeField] private Common_BtnSkillItem _btnSkillItem;
     [SerializeField] private TextMeshProUGUI _text_SkillName;
     [SerializeField] private TextMeshProUGUI _text_SkillLevel;
     [SerializeField] private TextMeshProUGUI _text_TotalDamage;
@@ -16,7 +16,9 @@ public class TrackSkillItemsView : MonoBehaviour
 
     public void Setup(SkillTrackData data)
     {
-        _img_SkillIcon.sprite = data.Skill.SkillIcon;
+        if (data == null) return;
+
+        _btnSkillItem.Setup(data.Skill);
         _text_SkillName.name = data.Skill.SkillName;
         _text_SkillLevel.text = $"{data.MaxLevel}";
         _text_TotalDamage.text = $"{data.CumulativeDamage}";

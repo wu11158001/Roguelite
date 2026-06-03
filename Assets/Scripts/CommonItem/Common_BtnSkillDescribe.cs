@@ -30,8 +30,23 @@ public class Common_BtnSkillDescribe : MonoBehaviour
         DOTween.Kill(this);
     }
 
-    public void Setup(SkillItemData data, bool isNewSkill = false, Action<SkillItemData> clickCallback = null)
+    /// <summary>
+    /// 設置技能描述
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="isNewSkill">是否是新技能</param>
+    /// <param name="isShowLevelOne">是否顯示1級資訊</param>
+    /// <param name="clickCallback"></param>
+    public void Setup(SkillItemData data, bool isNewSkill = false, bool isShowLevelOne = false, Action<SkillItemData> clickCallback = null)
     {
+        // 只顯示1級資訊
+        if(isShowLevelOne)
+        {
+            if (data.IsPassive) data = GameStateData.AllSkillConfigData.GetPassiveSkill(data.PassiveType, 1);
+            else if(data.IsProps) data = GameStateData.AllSkillConfigData.GetPropsSkill(data.PropsSkillType);
+            else data = GameStateData.AllSkillConfigData.GetActiveSkill(data.SkillType, 1);
+        }
+
         _img_SkillIcon.sprite = data.SkillIcon;
         _text_SkillName.text = data.SkillName;
         _text_SkillLevel.text = $"LV:{data.SkillLevel}";

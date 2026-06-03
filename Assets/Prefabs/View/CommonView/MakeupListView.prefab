@@ -615,8 +615,9 @@ MonoBehaviour:
   ViewType: 102
   _isUsingMask: 1
   _isCanClickMask: 1
-  _isPopupEffect: 0
-  _popupObj: {fileID: 0}
+  _isPopupEffect: 1
+  _popupObj: {fileID: 2035941836208035302}
+  _popupType: 1
   _leftParent: {fileID: 5260803215261495680}
   _rightParent: {fileID: 5687599997466536289}
   _makeupItemView: {fileID: 2155538901536761961}

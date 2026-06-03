@@ -5,6 +5,17 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
 /// <summary>
+/// 彈出效果類型
+/// </summary>
+public enum POPUP_TYPE
+{
+    // 下至上彈出
+    DownToUp,
+    // 縮放彈出
+    Scaling
+}
+
+/// <summary>
 /// 介面物件
 /// </summary>
 public abstract class BaseView : MonoBehaviour
@@ -23,9 +34,8 @@ public abstract class BaseView : MonoBehaviour
     [SerializeField] private bool _isPopupEffect;
     [Label("彈出效果物件")]
     [SerializeField] [ShowIf(nameof(_isPopupEffect))] private RectTransform _popupObj;
-
-    /// <summary> 是否使用SetupAsync </summary>
-    public bool IsAsync => _isPopupEffect;
+    [Label("彈出效果類型")]
+    [SerializeField] [ShowIf(nameof(_isPopupEffect))] private POPUP_TYPE _popupType;
 
     protected CanvasGroup _canvasGroup;
 
@@ -54,14 +64,26 @@ public abstract class BaseView : MonoBehaviour
 
         SetBackgroundMask().Forget();
 
+        // 執行彈出效果
         if (_isPopupEffect)
         {
-            DoPopupEffect();
+            switch (_popupType)
+            {
+                // 下至上彈出
+                case POPUP_TYPE.DownToUp:
+                    DoDownToUpPopupEffect();
+                    break;
+
+                // 縮放彈出
+                case POPUP_TYPE.Scaling:
+                    DoScalingPopupEffect();
+                    break;
+            }
         }
     }
 
     /// <summary>
-    /// 關閉面需要開啟前個介面複寫這裡
+    /// 關閉後需要開啟前個介面複寫這裡
     /// </summary>
     public virtual void CloseViewHandle()
     {
@@ -138,15 +160,28 @@ public abstract class BaseView : MonoBehaviour
     #region 彈出效果
 
     /// <summary>
-    /// 執行彈出效果
+    /// 執行下至上彈出效果
     /// </summary>
-    private void DoPopupEffect()
+    private void DoDownToUpPopupEffect()
     {
         if (_isPopupEffect && _popupObj != null)
         {
             _popupObj.DOKill();
             _popupObj.anchoredPosition = new(0, -1280);
             _popupObj.DOAnchorPos(Vector2.zero, 0.5f).SetEase(Ease.OutBack).SetLink(gameObject).SetUpdate(true);
+        }
+    }
+
+    /// <summary>
+    /// 執行小至大縮放彈出效果
+    /// </summary>
+    private void DoScalingPopupEffect()
+    {
+        if (_isPopupEffect && _popupObj != null)
+        {
+            _popupObj.DOKill();
+            _popupObj.localScale = Vector3.zero;
+            _popupObj.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetLink(gameObject).SetUpdate(true);
         }
     }
 

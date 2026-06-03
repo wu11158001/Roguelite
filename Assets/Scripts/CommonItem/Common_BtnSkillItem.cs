@@ -15,6 +15,7 @@ public class Common_BtnSkillItem : MonoBehaviour
     [SerializeField] private Image _img_Bg;
     [SerializeField] private Image _img_SkillIcon;
     [SerializeField] private TextMeshProUGUI _text_SkillLevel;
+    [SerializeField] private TextMeshProUGUI _text_SkillName;
 
     [HorizontalLine(color: EColor.Gray)]
     [Label("是否顯示等級")] [SerializeField] private bool _isShowLevel = false;
@@ -37,6 +38,8 @@ public class Common_BtnSkillItem : MonoBehaviour
         _text_SkillLevel.text = $"{data.SkillLevel}";
         _text_SkillLevel.enabled = _isShowLevel;
 
+        if(_text_SkillName != null) _text_SkillName.text = data.SkillName;
+
         _mainBtnSub?.Dispose();
         _mainBtnSub = _btn_Main.OnClickAsObservable().Subscribe(_ =>
         {
@@ -44,7 +47,7 @@ public class Common_BtnSkillItem : MonoBehaviour
                 viewType: VIEW_TYPE.SkillDescribeView,
                 callback: (view) =>
                 {
-                    view.Setup(data);
+                    view.Setup(data, true);
                 }).Forget();
         }).AddTo(this);
     }
