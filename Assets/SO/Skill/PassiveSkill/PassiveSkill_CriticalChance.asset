@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PassiveSkill_CriticalChance
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387"
-    SkillIcon: {fileID: 21300000, guid: 24a785ede1231d84885e56f84e51691e, type: 3}
+  - SkillName: "\u88AB\u52D5:\u7206\u64CA\u6A5F\u7387"
+    SkillIcon: {fileID: -1984016468, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387+5%"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -47,8 +47,8 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387"
-    SkillIcon: {fileID: 21300000, guid: 24a785ede1231d84885e56f84e51691e, type: 3}
+  - SkillName: "\u88AB\u52D5:\u7206\u64CA\u6A5F\u7387"
+    SkillIcon: {fileID: -1984016468, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387+5%"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -81,8 +81,8 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387"
-    SkillIcon: {fileID: 21300000, guid: 24a785ede1231d84885e56f84e51691e, type: 3}
+  - SkillName: "\u88AB\u52D5:\u7206\u64CA\u6A5F\u7387"
+    SkillIcon: {fileID: -1984016468, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u7206\u64CA\u6A5F\u7387+5%"
     NeedActiveSkills: []
     NeedPassiveSkills: []

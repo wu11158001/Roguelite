@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PassiveSkill_MoveSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6"
-    SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
+  - SkillName: "\u88AB\u52D5:\u79FB\u52D5\u901F\u5EA6"
+    SkillIcon: {fileID: -1596805310, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6+3"
     NeedActiveSkills: []
     NeedPassiveSkills: []
@@ -47,8 +47,8 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6"
-    SkillIcon: {fileID: 21300000, guid: 5055f1206f038e14e807891e1d842194, type: 3}
+  - SkillName: "\u88AB\u52D5:\u79FB\u52D5\u901F\u5EA6"
+    SkillIcon: {fileID: -1596805310, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u79FB\u52D5\u901F\u5EA6+3"
     NeedActiveSkills: []
     NeedPassiveSkills: []

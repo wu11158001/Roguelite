@@ -57,6 +57,7 @@ MonoBehaviour:
   _img_Bg: {fileID: 2964334334872683283}
   _img_SkillIcon: {fileID: 6856151019266076197}
   _text_SkillLevel: {fileID: 6495848200985923496}
+  _text_SkillName: {fileID: 0}
   _isShowLevel: 0
 --- !u!222 &3872477487156707010
 CanvasRenderer:
@@ -307,8 +308,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

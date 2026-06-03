@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: UiViewConfigData
   m_EditorClassIdentifier: Assembly-CSharp::UiViewConfigData
   ActiveBgColor: {r: 0.9254902, g: 0.83137256, b: 0, a: 1}
-  PassiveBgColor: {r: 0, g: 0.9254902, b: 0.78431374, a: 1}
-  PropsBgColor: {r: 0.972549, g: 0.1882353, b: 0.9647059, a: 1}
-  NullBgColor: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
+  PassiveBgColor: {r: 0.22352941, g: 0.7254902, b: 0.5568628, a: 1}
+  PropsBgColor: {r: 0.27058825, g: 0.8784314, b: 0.12941177, a: 1}
+  NullBgColor: {r: 0.5686275, g: 0.5686275, b: 0.5686275, a: 1}

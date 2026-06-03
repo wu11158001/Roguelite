@@ -1,5 +1,12 @@
 fileFormatVersion: 2
-guid: 734d8576ff08de64fb0094053a177198
+guid: 1cc9be078c052ba4aa0c1658aa1627db
+AssetOrigin:
+  serializedVersion: 1
+  productId: 191548
+  packageName: Sweets Icon Pack
+  packageVersion: 1.1
+  assetPath: Assets/Sweets Icon Pack/Icons with outline/Piece-of-cake_outline.png
+  uploadId: 444702
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -39,7 +46,7 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 0
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -65,7 +72,7 @@ TextureImporter:
   ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PropsSkill_HpRecover
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillName: "\u9053\u5177-\u751F\u547D\u56DE\u5FA9"
-    SkillIcon: {fileID: 21300000, guid: 52de62f6b6c70e748b2ae0507622b4a9, type: 3}
+  - SkillName: "\u7ACB\u5373:\u56DE\u5FA9\u751F\u547D"
+    SkillIcon: {fileID: 21300000, guid: 1cc9be078c052ba4aa0c1658aa1627db, type: 3}
     SkillDescribe: "\u56DE\u5FA9\u751F\u547D30%"
     NeedActiveSkills: []
     NeedPassiveSkills: []
