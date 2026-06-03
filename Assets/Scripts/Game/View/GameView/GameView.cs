@@ -20,12 +20,12 @@ public class GameView : BaseView
 
     [HorizontalLine(color: EColor.Gray)]
     [Header("技能欄")]
-    [SerializeField] private BaseBtnSkillItem _btnSkillItem;
+    [SerializeField] private Common_BtnSkillItem _btnSkillItem;
     [SerializeField] private Transform _activeSkillGroup;
     [SerializeField] private Transform _passiveSkillGroup;
 
-    private List<BaseBtnSkillItem> _activeSkillItems;
-    private List<BaseBtnSkillItem> _passiveSkillItems;
+    private List<Common_BtnSkillItem> _activeSkillItems;
+    private List<Common_BtnSkillItem> _passiveSkillItems;
 
     private GameViewModel _viewModel = new();
 
@@ -38,7 +38,7 @@ public class GameView : BaseView
         {
             GameObject obj = Instantiate(_btnSkillItem.gameObject, _activeSkillGroup);
             obj.SetActive(true);
-            if(obj.TryGetComponent(out BaseBtnSkillItem activeSkillItem))
+            if(obj.TryGetComponent(out Common_BtnSkillItem activeSkillItem))
             {
                 activeSkillItem.Setup(null);
                 _activeSkillItems.Add(activeSkillItem);
@@ -50,7 +50,7 @@ public class GameView : BaseView
         {
             GameObject obj = Instantiate(_btnSkillItem.gameObject, _passiveSkillGroup);
             obj.SetActive(true);
-            if (obj.TryGetComponent(out BaseBtnSkillItem passiveSkillItem))
+            if (obj.TryGetComponent(out Common_BtnSkillItem passiveSkillItem))
             {
                 passiveSkillItem.Setup(null);
                 _passiveSkillItems.Add(passiveSkillItem);

@@ -32,7 +32,7 @@ public class GameOverView : BaseView
     [SerializeField] private Image _img_CharacterAvatar;
     [SerializeField] private TextMeshProUGUI _text_CharacterName;
     [Header("技能欄")]
-    [SerializeField] private BaseBtnSkillItem _btnSkillItem;
+    [SerializeField] private Common_BtnSkillItem _btnSkillItem;
     [SerializeField] private Transform _activeSkillGroup;
     [SerializeField] private Transform _passiveSkillGroup;
 
@@ -40,8 +40,8 @@ public class GameOverView : BaseView
     [Header("確認按鈕")]
     [SerializeField] private Button _btn_Confirm;
 
-    private List<BaseBtnSkillItem> _activeSkillItems;
-    private List<BaseBtnSkillItem> _passiveSkillItems;
+    private List<Common_BtnSkillItem> _activeSkillItems;
+    private List<Common_BtnSkillItem> _passiveSkillItems;
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
@@ -75,7 +75,7 @@ public class GameOverView : BaseView
         {
             GameObject obj = Instantiate(_btnSkillItem.gameObject, _activeSkillGroup);
             obj.SetActive(true);
-            if (obj.TryGetComponent(out BaseBtnSkillItem activeSkillItem))
+            if (obj.TryGetComponent(out Common_BtnSkillItem activeSkillItem))
             {
                 activeSkillItem.Setup(null);
                 _activeSkillItems.Add(activeSkillItem);
@@ -87,7 +87,7 @@ public class GameOverView : BaseView
         {
             GameObject obj = Instantiate(_btnSkillItem.gameObject, _passiveSkillGroup);
             obj.SetActive(true);
-            if (obj.TryGetComponent(out BaseBtnSkillItem passiveSkillItem))
+            if (obj.TryGetComponent(out Common_BtnSkillItem passiveSkillItem))
             {
                 passiveSkillItem.Setup(null);
                 _passiveSkillItems.Add(passiveSkillItem);

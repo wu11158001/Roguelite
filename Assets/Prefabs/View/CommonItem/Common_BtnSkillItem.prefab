@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2336816432942711394}
-  - component: {fileID: 6431249393766463001}
+  - component: {fileID: 1048936125604931594}
   - component: {fileID: 3872477487156707010}
   - component: {fileID: 2964334334872683283}
   - component: {fileID: 5992275045420313903}
   m_Layer: 5
-  m_Name: Btn_SkillItem
+  m_Name: Common_BtnSkillItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0}
---- !u!114 &6431249393766463001
+--- !u!114 &1048936125604931594
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -50,9 +50,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1519179401807100518}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea01e9ffa0e7144981517ae907228f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f4f309e1bfc77844a71d642716c590e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseBtnSkillItem
+  m_EditorClassIdentifier: Assembly-CSharp::Common_BtnSkillItem
   _btn_Main: {fileID: 5992275045420313903}
   _img_Bg: {fileID: 2964334334872683283}
   _img_SkillIcon: {fileID: 6856151019266076197}

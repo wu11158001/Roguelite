@@ -7,9 +7,9 @@ using TMPro;
 using NaughtyAttributes;
 
 /// <summary>
-/// 技能項目按鈕
+/// 通用項目_技能項目按鈕
 /// </summary>
-public class BaseBtnSkillItem : MonoBehaviour
+public class Common_BtnSkillItem : MonoBehaviour
 {
     [SerializeField] private Button _btn_Main;
     [SerializeField] private Image _img_Bg;

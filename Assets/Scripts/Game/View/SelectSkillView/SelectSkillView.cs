@@ -6,7 +6,7 @@ public class SelectSkillView : BaseView
 {
     [HorizontalLine(color: EColor.Gray)]
     [Header("SelectSkillView")]
-    [SerializeField] private GameObject _selectSkillItemView;
+    [SerializeField] private Common_BtnSkillDescribe _selectSkillItem;
     [SerializeField] private Transform _itemGroup;
 
     SelectSkillViewModel _viewModel = new();
@@ -17,18 +17,18 @@ public class SelectSkillView : BaseView
     /// <param name="datas"></param>
     public void SetSkillItemData(List<SkillItemData> datas)
     {
-        _selectSkillItemView.SetActive(false);
+        _selectSkillItem.gameObject.SetActive(false);
 
         foreach (var data in datas)
         {
-            GameObject obj = Instantiate(_selectSkillItemView, _itemGroup);
+            GameObject obj = Instantiate(_selectSkillItem.gameObject, _itemGroup);
             obj.SetActive(true);
-
-            if(obj.TryGetComponent(out SelectSkillItemView selectSkillItemView))
+            if(obj.TryGetComponent(out Common_BtnSkillDescribe skillItem))
             {
-                selectSkillItemView.Setup(
+                skillItem.Setup(
                     data: data,
-                    callback: SelectSkill);
+                    isNewSkill: data.SkillLevel == 1,
+                    clickCallback: SelectSkill);
             }
         }
     }

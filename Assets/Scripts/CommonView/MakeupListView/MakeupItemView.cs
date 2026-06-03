@@ -9,6 +9,7 @@ public class MakeupItemView : MonoBehaviour
     [SerializeField] private RectTransform _addIcon;
     [SerializeField] private RectTransform _equalIcon;
     [SerializeField] private Image _img_Bg;
+    [SerializeField] private Color _normalColor;
     [SerializeField] private Color _finishColor;
 
     public void Setup(SkillItemData mainItem, List<SkillItemData> usingSkills)
@@ -111,7 +112,7 @@ public class MakeupItemView : MonoBehaviour
         finishSize.x += mainObj.GetComponent<RectTransform>().sizeDelta.x;
 
         // 完成合成顯示
-        _img_Bg.color = isFinish ? _finishColor : Color.white;
+        _img_Bg.color = isFinish ? _finishColor : _normalColor;
 
         // 檢查獲取過狀態
         bool IsAcquired(string skillName)

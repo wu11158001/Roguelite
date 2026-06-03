@@ -96,7 +96,7 @@ public class BossBonusView : BaseView
             .From(1.0f)
             .SetLoops(-1, LoopType.Yoyo)
             .SetUpdate(true)
-            .SetTarget(gameObject);
+            .SetLink(gameObject);
     }
 
     /// <summary>

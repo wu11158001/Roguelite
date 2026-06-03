@@ -2304,7 +2304,7 @@ MonoBehaviour:
   _btn_Back: {fileID: 2419457218217151022}
   _text_PlayerCoin: {fileID: 4715152456363974599}
   _abilityView: {fileID: 1682145793301236454}
-  _initSkillItem: {fileID: 1816284511392185377}
+  _initSkillItem: {fileID: 5690948787858039346}
   _characterScrollViewToTarget: {fileID: 3407995540339911256}
   _characterTogParent: {fileID: 5313327190399299095}
   _sampleSelectCharacterTog: {fileID: 4271925804703941036}
@@ -2733,10 +2733,10 @@ RectTransform:
   - {fileID: 2906779794643166054}
   m_Father: {fileID: 5313327190399299095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: -40}
-  m_SizeDelta: {x: 80, y: 80}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4271925804703941036
 MonoBehaviour:
@@ -3185,17 +3185,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
---- !u!114 &1816284511392185377 stripped
+--- !u!114 &5690948787858039346 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6431249393766463001, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1048936125604931594, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
   m_PrefabInstance: {fileID: 4644581327599192632}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea01e9ffa0e7144981517ae907228f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f4f309e1bfc77844a71d642716c590e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseBtnSkillItem
+  m_EditorClassIdentifier: Assembly-CSharp::Common_BtnSkillItem
 --- !u!224 &6925080706220476506 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2336816432942711394, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
@@ -3239,7 +3239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1803099168033427944, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 415
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1803099168033427944, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_SizeDelta.y

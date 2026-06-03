@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skill_Tracking
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u767C\u5C041\u679A\u8FFD\u8E64\u5F48"
     NeedActiveSkills: []
@@ -47,7 +47,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u8FFD\u8E64\u5F48\u6578\u91CF+1"
     NeedActiveSkills: []
@@ -81,7 +81,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u51B7\u537B\u6642\u9593\u6E1B\u5C110.2\u79D2"
     NeedActiveSkills: []
@@ -115,7 +115,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u8FFD\u8E64\u5F48\u6578\u91CF+1"
     NeedActiveSkills: []
@@ -149,7 +149,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u50B7\u5BB3\u63D0\u534710"
     NeedActiveSkills: []
@@ -183,7 +183,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u8FFD\u8E64\u5F48\u6578\u91CF+1"
     NeedActiveSkills: []
@@ -217,7 +217,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u7A7F\u900F\u6578\u91CF+1"
     NeedActiveSkills: []
@@ -251,7 +251,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u8FFD\u8E64\u5F48"
+  - SkillName: "\u6CD5\u6756"
     SkillIcon: {fileID: 21300000, guid: a4b5f62f33b3e004e8aace652e009615, type: 3}
     SkillDescribe: "\u50B7\u5BB3\u63D0\u534710"
     NeedActiveSkills: []

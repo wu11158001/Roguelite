@@ -399,7 +399,7 @@ MonoBehaviour:
   _text_Time: {fileID: 1771643536761440130}
   _text_LimitTimeTip: {fileID: 5402732207664778952}
   _sli_ExpBar: {fileID: 7021690543666017242}
-  _btnSkillItem: {fileID: 5265228664657736460}
+  _btnSkillItem: {fileID: 2224544519863676191}
   _activeSkillGroup: {fileID: 3481110299586575817}
   _passiveSkillGroup: {fileID: 8877179227816995503}
 --- !u!225 &1507179741366332853
@@ -1170,19 +1170,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
---- !u!224 &3476691531448780663 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2336816432942711394, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
-  m_PrefabInstance: {fileID: 1175926230504277269}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5265228664657736460 stripped
+--- !u!114 &2224544519863676191 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6431249393766463001, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1048936125604931594, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
   m_PrefabInstance: {fileID: 1175926230504277269}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea01e9ffa0e7144981517ae907228f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f4f309e1bfc77844a71d642716c590e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseBtnSkillItem
+  m_EditorClassIdentifier: Assembly-CSharp::Common_BtnSkillItem
+--- !u!224 &3476691531448780663 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2336816432942711394, guid: 8f8b2313584176c4c9155d9c19995c78, type: 3}
+  m_PrefabInstance: {fileID: 1175926230504277269}
+  m_PrefabAsset: {fileID: 0}

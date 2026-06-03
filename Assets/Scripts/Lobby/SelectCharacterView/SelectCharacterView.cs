@@ -22,7 +22,7 @@ public class SelectCharacterView : BaseView
     [Header("Middle_Left")]
     // 各項能力值
     [SerializeField] private AbilityView _abilityView;
-    [SerializeField] private BaseBtnSkillItem _initSkillItem;
+    [SerializeField] private Common_BtnSkillItem _initSkillItem;
 
     [Header("Middle_Right")]
     // 角色_卷軸移動至目標工具
