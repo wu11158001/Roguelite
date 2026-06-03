@@ -30,7 +30,8 @@ public class GamePauseView : BaseView
         _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
         {
             GameplayManager.CurrentContext.GameController.GamePause(false);
-            GameplayManager.CurrentContext.GameController.GameOver();
+            GameplayManager.CurrentContext.GameController.SetGameOver();
+            GameplayManager.CurrentContext.GameController.GameOverClear();
             ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
         }).AddTo(this);
 

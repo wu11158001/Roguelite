@@ -2,9 +2,12 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 public class ViewManager : SingletonMonoBehaviour<ViewManager>
 {
+    private Transform _canvasRoot;
+
     private Stack<BaseView> _viewStack = new();
 
     /// <summary>
@@ -17,18 +20,20 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     /// <returns></returns>
     public async UniTask OpenView<T>(VIEW_TYPE viewType, bool isClosePreView = false, Action<T> callback = null) where T : BaseView
     {
-        // 從 SO 獲取引用
         var prefabRef = GameStateData.ViewConfig.GetPrefabRef(viewType);
-
         if (prefabRef == null)
         {
             Debug.LogError($"找不到 ViewType: {viewType} 的配置");
             return;
         }
 
-        Transform canvusRoot = GameObject.Find("Canvas").transform;
+        if (_canvasRoot == null)
+        {
+            var canvas = GameObject.Find("Canvas").transform;
+            if (canvas != null) _canvasRoot = canvas.transform;
+        }
 
-        var handle = prefabRef.InstantiateAsync(canvusRoot);
+        var handle = prefabRef.InstantiateAsync(_canvasRoot);
         GameObject obj = await handle.Task;
 
         T view = obj.GetComponent<T>();
@@ -46,7 +51,6 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
         }
 
         _viewStack.Push(view);
-
         callback?.Invoke(view);
     }
 
@@ -58,14 +62,18 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     {
         if (_viewStack == null || _viewStack.Count == 0) return;
 
-        BaseView baseView = _viewStack.Pop();
+        // 取出釋放當前介面
+        BaseView currentView = _viewStack.Pop();
+        if (currentView != null)
+        {
+            Addressables.ReleaseInstance(currentView.gameObject);
+        }
 
-        // 開啟前個介面
-        if (_viewStack == null || _viewStack.Count == 0) return;
-        if (isOpenPreView)
+        // 檢查並開啟前一個介面
+        if (_viewStack.Count > 0 && isOpenPreView)
         {
             BaseView preView = _viewStack.Peek();
-            if(preView != null)
+            if (preView != null)
             {
                 preView.gameObject.SetActive(true);
             }
@@ -77,6 +85,20 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     /// </summary>
     public void ClearAll()
     {
-        _viewStack.Clear();
+        try
+        {
+            while (_viewStack != null && _viewStack.Count > 0)
+            {
+                BaseView baseView = _viewStack.Pop();
+                if (baseView != null && baseView.gameObject != null)
+                {
+                    Addressables.ReleaseInstance(baseView.gameObject);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"清除介面時發生錯誤: {e}");
+        }
     }
 }

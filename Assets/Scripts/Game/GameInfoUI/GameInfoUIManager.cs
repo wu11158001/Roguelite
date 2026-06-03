@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets;
 
 /// <summary>
 /// <para>遊戲場景使用。</para>
@@ -41,19 +41,47 @@ public class GameInfoUIManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        // 讓UI的朝向與相機同步
-        if (_mainCameraTransform != null)
+        for (int i = _lookCameraUIs.Count - 1; i >= 0; i--)
+        {
+            var item = _lookCameraUIs[i];
+
+            if (item.SelfObj == null || item.Target == null)
+            {
+                _lookCameraUIs.RemoveAt(i);
+                continue;
+            }
+
+            if (!item.SelfObj.activeInHierarchy)
+            {
+                continue;
+            }
+
+            // 跟隨與朝向
+            item.SelfObj.transform.position = item.Target.position + item.Offset;
+            item.SelfObj.transform.LookAt(item.Target.position + _mainCameraTransform.forward);
+        }
+    }
+
+    /// <summary>
+    /// 清除所有跟隨物件
+    /// </summary>
+    public void ClearAll()
+    {
+        try
         {
             foreach (var item in _lookCameraUIs)
             {
-                if(item.SelfObj == null || !item.SelfObj.activeInHierarchy || item.Target == null)
+                if (item.SelfObj == null)
                 {
-                    break;
+                    continue;
                 }
-
-                item.SelfObj.transform.position = item.Target.position + item.Offset;
-                item.SelfObj.transform.LookAt(item.Target.position + _mainCameraTransform.forward);
-            }            
+                Addressables.ReleaseInstance(item.SelfObj);
+            }
+            _lookCameraUIs.Clear();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"清除遊戲訊息UI時發生錯誤: {e}");
         }
     }
 

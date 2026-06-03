@@ -98,6 +98,45 @@ public class InfiniteMapController : MonoBehaviour
     }
 
     /// <summary>
+    /// 清除地板、釋放動態材質球，並重置地圖資料快取
+    /// </summary>
+    public void ClearGround()
+    {
+        try
+        {
+            // 釋放所有地板
+            if (_grounds != null)
+            {
+                foreach (var ground in _grounds)
+                {
+                    if (ground != null)
+                    {
+                        Addressables.ReleaseInstance(ground);
+                    }
+                }
+                _grounds = null;
+            }
+
+            // 銷毀動態生成的材質球
+            if (_runtimeMaterial != null)
+            {
+                Destroy(_runtimeMaterial);
+                _runtimeMaterial = null;
+            }
+
+            _activeBoxViews?.Clear();
+            _activePropsViews?.Clear();
+
+            // 重置 Model 內部的地圖資料快取
+            _model = new InfiniteMapModel();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"清除地圖時發生錯誤: {e}");
+        }
+    }
+
+    /// <summary>
     /// 獲取地板唯一ID
     /// </summary>
     /// <param name="pos"></param>

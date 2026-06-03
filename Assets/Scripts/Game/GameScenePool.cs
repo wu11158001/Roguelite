@@ -18,11 +18,11 @@ public class PoolObjectMark : MonoBehaviour
 public class GameScenePool : MonoBehaviour
 {
     // 儲存池子的資料夾：Key 是 PoolKey(GUID), Value 是對應的空物件 Parent
-    private Dictionary<string, Transform> _poolParents = new Dictionary<string, Transform>();
-
+    private Dictionary<string, Transform> _poolParents = new();
     // 儲存不同物件的池子：Key是GUID
-    private Dictionary<string, Queue<GameObject>> _poolDictionary = new Dictionary<string, Queue<GameObject>>();
-
+    private Dictionary<string, Queue<GameObject>> _poolDictionary = new();
+    // 記錄目前在畫面上的物件
+    private HashSet<GameObject> _activeObjects = new();
     /// <summary>
     /// 生成物件
     /// </summary>
@@ -53,6 +53,9 @@ public class GameScenePool : MonoBehaviour
                 GameObject obj = _poolDictionary[key].Dequeue();
                 obj.transform.position = position;
                 obj.transform.rotation = rotation;
+
+                _activeObjects.Add(obj);
+
                 callback?.Invoke(obj);
                 obj.SetActive(true);
             }
@@ -71,6 +74,8 @@ public class GameScenePool : MonoBehaviour
                     if (mark == null) mark = obj.AddComponent<PoolObjectMark>();
                     mark.PoolKey = key;
 
+                    _activeObjects.Add(obj);
+
                     callback?.Invoke(obj);
                 }
             }
@@ -87,6 +92,8 @@ public class GameScenePool : MonoBehaviour
     /// <param name="obj"></param>
     public void ReturnToPool(GameObject obj)
     {
+        _activeObjects.Remove(obj);
+
         PoolObjectMark mark = obj.GetComponent<PoolObjectMark>();
         if (mark == null)
         {
@@ -103,5 +110,47 @@ public class GameScenePool : MonoBehaviour
         }
 
         _poolDictionary[mark.PoolKey].Enqueue(obj);
+    }
+
+    /// <summary>
+    /// 清除物件池所有物件
+    /// </summary>
+    public void ClearAllPools()
+    {
+        try
+        {
+            // 清除未激活的物件
+            foreach (var kvp in _poolDictionary)
+            {
+                Queue<GameObject> queue = kvp.Value;
+                while (queue.Count > 0)
+                {
+                    GameObject obj = queue.Dequeue();
+                    if (obj != null) Addressables.ReleaseInstance(obj);
+                }
+            }
+            _poolDictionary.Clear();
+
+            // 清除畫面上激活中的物件
+            foreach (GameObject obj in _activeObjects)
+            {
+                if (obj != null)
+                {
+                    Addressables.ReleaseInstance(obj);
+                }
+            }
+            _activeObjects.Clear();
+
+            // 銷毀父節點資料夾
+            foreach (var kvp in _poolParents)
+            {
+                if (kvp.Value != null) Destroy(kvp.Value.gameObject);
+            }
+            _poolParents.Clear();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"清除物件池錯誤: {e}");
+        }
     }
 }

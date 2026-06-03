@@ -31,12 +31,25 @@ public class GameController : MonoBehaviour
     }
 
     /// <summary>
-    /// 遊戲結束
+    /// 設置遊戲結束
     /// </summary>
-    public void GameOver()
+    public void SetGameOver()
     {
         IsGameOver = true;
         GameplayManager.CurrentContext.SkillController.Clear();
+    }
+
+    /// <summary>
+    /// 遊戲結束清理遊戲場景
+    /// </summary>
+    public void GameOverClear()
+    {
+        GameplayManager.CurrentContext.ControlCharacter.Remove();
+        GameplayManager.CurrentContext.GameScenePool.ClearAllPools();
+        GameplayManager.CurrentContext.InfiniteMapController.ClearGround();
+        ViewManager.Instance.ClearAll();
+        GameInfoUIManager gameInfoUIManager = FindFirstObjectByType<GameInfoUIManager>();
+        gameInfoUIManager?.ClearAll();
     }
 
     /// <summary>

@@ -268,7 +268,7 @@ public class PlayerView : BaseGameObject
     /// </summary>
     private void OnDie()
     {
-        GameplayManager.CurrentContext.GameController.GameOver();
+        GameplayManager.CurrentContext.GameController.SetGameOver();
 
         _anim.SetTrigger(_dieParamId);
         _hpBarView.gameObject.SetActive(false);
@@ -293,6 +293,7 @@ public class PlayerView : BaseGameObject
         float animationLength = stateInfo.length;
         yield return new WaitForSeconds(animationLength);
 
+        GameplayManager.CurrentContext.GameController.GameOverClear();
         ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
     }
 
