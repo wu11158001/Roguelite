@@ -36,7 +36,7 @@ MonoBehaviour:
   _baseDefense: 0
   Defense:
     value: 0
-  _baseLifeRecover: 0
+  _baseLifeRecover: 1
   HpRecover:
     value: 0
   _baseCdReduce: 0

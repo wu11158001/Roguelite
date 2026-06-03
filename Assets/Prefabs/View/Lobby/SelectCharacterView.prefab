@@ -968,6 +968,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6119927386460433205}
+  - {fileID: 2254256037580464170}
   - {fileID: 3547800587597108722}
   m_Father: {fileID: 5699088004697612764}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1109,7 +1110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.24313726, g: 0.3372549, b: 1, a: 1}
+  m_Color: {r: 0.8117647, g: 0.45882353, b: 0.38039216, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1407,7 +1408,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 5
+  far clip plane: 10
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1704,12 +1705,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4467360962907208968}
-  m_Father: {fileID: 545392030478089112}
+  m_Father: {fileID: 9173662234204296454}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -93, y: 35}
-  m_SizeDelta: {x: 0, y: 48}
+  m_AnchoredPosition: {x: 240, y: 160}
+  m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &7625547934980239692
 CanvasRenderer:
@@ -1741,15 +1742,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u89D2\u8272\u540D\u7A31"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7015fa2a0132c274891a718aaff919c6, type: 2}
-  m_sharedMaterial: {fileID: 6105520199779406489, guid: 7015fa2a0132c274891a718aaff919c6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: aa67b823fbca4cc4da606b7c1e5f2cc6, type: 2}
+  m_sharedMaterial: {fileID: 6105520199779406489, guid: aa67b823fbca4cc4da606b7c1e5f2cc6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294923581
-  m_fontColor: {r: 0.24056602, g: 0.33519396, b: 1, a: 1}
+    rgba: 4284576975
+  m_fontColor: {r: 0.8113208, g: 0.45638716, b: 0.37887147, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1928,7 +1929,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2254256037580464170}
   - {fileID: 7197935094669682703}
   - {fileID: 5755757478375849964}
   - {fileID: 5782152430697607311}
@@ -2734,10 +2734,10 @@ RectTransform:
   - {fileID: 2906779794643166054}
   m_Father: {fileID: 5313327190399299095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 40, y: -40}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4271925804703941036
 MonoBehaviour:
@@ -3240,7 +3240,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1803099168033427944, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 415
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1803099168033427944, guid: c285c69b8ce11ea4faf2d7bbf3aad0b2, type: 3}
       propertyPath: m_SizeDelta.y

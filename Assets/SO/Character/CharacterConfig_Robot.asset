@@ -39,7 +39,7 @@ MonoBehaviour:
   _baseLifeRecover: 0
   HpRecover:
     value: 0
-  _baseCdReduce: 0
+  _baseCdReduce: 0.1
   CdReduce:
     value: 0
   _basePickupRange: 5
