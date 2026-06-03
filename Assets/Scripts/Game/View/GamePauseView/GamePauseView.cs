@@ -13,7 +13,11 @@ public class GamePauseView : BaseView
     [SerializeField] private Button _btn_Makeup;
     [SerializeField] private Button _btn_Continue;
 
+    [Header("能力介面")]
     [SerializeField] AbilityView _abilityView;
+
+    [Header("刷新介面物件")]
+    [SerializeField] private RectTransform _ownSkillDataGroup;
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
@@ -22,6 +26,8 @@ public class GamePauseView : BaseView
         BindViewModel();
 
         _abilityView.Setup(GameStateData.SelectedCharacter);
+
+        RefreshUI().Forget();
     }
 
     private void BindViewModel()
@@ -47,5 +53,18 @@ public class GamePauseView : BaseView
             GameplayManager.CurrentContext.GameController.GamePause(false);
             Close();
         }).AddTo(this);
+    }
+
+    /// <summary>
+    /// 刷新畫面
+    /// </summary>
+    private async UniTaskVoid RefreshUI()
+    {
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_ownSkillDataGroup);
+
+        _canvasGroup.alpha = 0;
+        await UniTask.NextFrame();
+        _canvasGroup.alpha = 1;
     }
 }
