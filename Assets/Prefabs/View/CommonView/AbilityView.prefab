@@ -29,8 +29,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1803099168033427944}
+  m_Children: []
   m_Father: {fileID: 3644877118040653914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -241,7 +240,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296347227115418025}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -249,12 +248,12 @@ RectTransform:
   - {fileID: 443902982022466618}
   - {fileID: 8648802122762666191}
   - {fileID: 5326025754523425894}
-  m_Father: {fileID: 1335095280875707877}
+  m_Father: {fileID: 4530788947947039044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 207.5, y: -20}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 222.5, y: -35}
+  m_SizeDelta: {x: 415, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7628042243267409358
 MonoBehaviour:
@@ -574,6 +573,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7538316960917481753}
+  - {fileID: 1803099168033427944}
   - {fileID: 5968525564787165811}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -597,53 +597,53 @@ MonoBehaviour:
   _itemSample: {fileID: 7628042243267409358}
   _itemParent: {fileID: 1335095280875707877}
   _abilityConfigDatas:
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: -1596805310, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 3
     AbilityName: "\u79FB\u52D5\u901F\u5EA6"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 1
-    AbilityName: "\u589E\u52A0\u653B\u64CA\u529B"
+    AbilityName: "\u653B\u64CA\u529B\u589E\u52A0"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: -244588363, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 2
     AbilityName: "\u6700\u5927\u751F\u547D\u503C"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: 1787706319, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 4
     AbilityName: "\u6E1B\u5C11\u50B7\u5BB3"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: 1543525236, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 5
     AbilityName: "\u6BCF\u79D2\u751F\u547D\u56DE\u5FA9"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: 828782831, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 6
-    AbilityName: "\u6280\u80FDCD\u6E1B\u5C11(\u79D2)"
+    AbilityName: "CD\u6E1B\u5C11"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: 1638775749, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 7
     AbilityName: "\u62FE\u53D6\u7BC4\u570D"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: -1984016468, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 8
-    AbilityName: "\u589E\u52A0\u7206\u64CA\u6A5F\u7387"
+    AbilityName: "\u7206\u64CA\u6A5F\u7387"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: -1378960612, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 9
-    AbilityName: "\u7206\u64CA\u653B\u64CA\u529B\u52A0\u6210(%)"
+    AbilityName: "\u7206\u64CA\u653B\u64CA\u529B"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: 300482850, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 10
-    AbilityName: "\u589E\u52A0\u6295\u5C04\u7269\u6578\u91CF"
+    AbilityName: "\u589E\u52A0\u6280\u80FD\u6578\u91CF"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: -892878142, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 11
-    AbilityName: "\u589E\u52A0\u6548\u679C\u7BC4\u570D"
+    AbilityName: "\u6548\u679C\u7BC4\u570D"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 21300000, guid: 46efc9bdc637ad6449589db4005d9181, type: 3}
+  - AbilityIcon: {fileID: 645026409, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     AbilityType: 12
-    AbilityName: "\u589E\u52A0\u6301\u7E8C\u6642\u9593(\u79D2)"
+    AbilityName: "\u6301\u7E8C\u6642\u9593"
     AbilityValue: 0
 --- !u!1 &8595538282899219320
 GameObject:
