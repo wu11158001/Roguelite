@@ -10,11 +10,8 @@ using Cysharp.Threading.Tasks;
 /// </summary>
 public class BonusSkillItemView : MonoBehaviour
 {
-    [SerializeField] private Button _mainBtn;
-    [SerializeField] private Image _img_SkillIcon;
+    [SerializeField] private Common_BtnSkillItem _common_BtnSkillItem;
     [SerializeField] private Image _img_Mask;
-    [SerializeField] private TextMeshProUGUI _text_SkillName;
-    [SerializeField] private TextMeshProUGUI _text_SkillLevel;
 
     private void OnDestroy()
     {
@@ -23,20 +20,7 @@ public class BonusSkillItemView : MonoBehaviour
 
     public void Setup(SkillItemData skillItem)
     {
-        // 主按鈕
-        _mainBtn.OnClickAsObservable().Subscribe(_ =>
-        {
-            ViewManager.Instance.OpenView<SkillDescribeView>(
-                viewType: VIEW_TYPE.SkillDescribeView,
-                callback: (view) =>
-                {
-                    view.Setup(skillItem);
-                }).Forget();
-        }).AddTo(this);
-
-        _img_SkillIcon.sprite = skillItem.SkillIcon;
-        _text_SkillName.text = skillItem.SkillName;
-        _text_SkillLevel.text = $"LV:{skillItem.SkillLevel}";
+        _common_BtnSkillItem.Setup(skillItem);
 
         // 效果
         DOTween.Kill(gameObject);

@@ -28,10 +28,14 @@ public class SkillDescribeView : BaseView
     /// 設置技能描述介面
     /// </summary>
     /// <param name="data">技能資料</param>
-    /// <param name="isShowLevelOne">是否顯示其他等級</param>
-    public void Setup(SkillItemData data, bool isShowOtherLevel = false)
+    /// <param name="isShowOtherLevel">是否顯示其他等級</param>
+    /// <param name="isShowCurrentLevel">是否顯示當前等級資訊</param>
+    public void Setup(SkillItemData data, bool isShowOtherLevel = false, bool isShowCurrentLevel = false)
     {
-        _skillDescribe.Setup(data, isShowOtherLevel);
+        _skillDescribe.Setup(
+            data: data,
+            isShowOtherLevel: isShowOtherLevel, 
+            isShowCurrentLevel: isShowCurrentLevel);
 
         Init();
 

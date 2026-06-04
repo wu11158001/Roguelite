@@ -140,7 +140,7 @@ public class GameView : BaseView
                 _passiveSkillItems[passiveIndex].Setup(skill);
                 passiveIndex++;
             }
-            else
+            else if(!skill.IsPassive && !skill.IsProps)
             {
                 _activeSkillItems[skillIndex].Setup(skill);
                 skillIndex++;

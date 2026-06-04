@@ -26,7 +26,8 @@ public class BossBonusDiceController : MonoBehaviour
 
     private Sequence _diceSequence;
 
-    private bool isRolling = false;
+    private bool _isRolling = false;
+    private bool _isSkip = false;
 
     // 點數對應角度
     private Vector3[] diceRotations = new Vector3[]
@@ -45,6 +46,11 @@ public class BossBonusDiceController : MonoBehaviour
         new Vector3(-180, 0, 0)
     };
 
+    private void Start()
+    {
+        _diceEffect.SetActive(false);
+    }
+
     /// <summary>
     /// 擲骰子
     /// </summary>
@@ -52,10 +58,10 @@ public class BossBonusDiceController : MonoBehaviour
     /// <param name="callback"></param>
     public void Roll(int targetResult, Action callback)
     {
-        if (isRolling) return;
+        if (_isRolling) return;
 
-        _diceEffect.SetActive(false);
-        isRolling = true;
+        _isRolling = true;
+        _isSkip = false;
         transform.localPosition = Vector3.zero;
 
         if(targetResult <= 0 || targetResult > 6) targetResult = UnityEngine.Random.Range(1, 7);
@@ -100,11 +106,17 @@ public class BossBonusDiceController : MonoBehaviour
         // 結束執行
         _diceSequence.OnComplete(() =>
         {
-            _diceEffect.SetActive(true);
+            _isRolling = false;
 
             // 修正數值，確保角度絕對精準 (扣除掉多轉的 360 度)
             transform.rotation = Quaternion.Euler(targetAngle);
-            isRolling = false;
+
+            // 跳過就不打開效果
+            if(!_isSkip)
+            {
+                _diceEffect.SetActive(true);
+                _diceEffect.transform.position = transform.position;
+            }
 
             callback?.Invoke();
         });
@@ -115,7 +127,8 @@ public class BossBonusDiceController : MonoBehaviour
     /// </summary>
     public void Skip()
     {
-        if (!isRolling) return;
+        if (!_isRolling) return;
+        _isSkip = true;
         _diceSequence?.Complete(true);
     }
 }

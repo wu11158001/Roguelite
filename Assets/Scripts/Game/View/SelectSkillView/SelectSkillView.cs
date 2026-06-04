@@ -9,8 +9,6 @@ public class SelectSkillView : BaseView
     [SerializeField] private Common_BtnSkillDescribe _selectSkillItem;
     [SerializeField] private Transform _itemGroup;
 
-    SelectSkillViewModel _viewModel = new();
-
     /// <summary>
     /// 設置可選技能項目
     /// </summary>
@@ -39,8 +37,8 @@ public class SelectSkillView : BaseView
     /// <param name="data"></param>
     private void SelectSkill(SkillItemData data)
     {
-        _viewModel.OnSelectSkillHandle(data);
-
+        // 學習技能
+        GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(data);
         // 遊戲暫停結束
         GameplayManager.CurrentContext.GameController.GamePause(false);
 

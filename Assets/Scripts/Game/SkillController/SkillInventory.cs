@@ -24,27 +24,34 @@ public class SkillInventory
     /// <param name="newSkill"></param>
     public void AddOrUpgradeSkill(SkillItemData newSkill)
     {
-        SkillItemData existing = newSkill.IsPassive
+        try
+        {
+            SkillItemData existing = newSkill.IsPassive
             ? _ownSkills.FirstOrDefault(s => s.IsPassive && s.PassiveType == newSkill.PassiveType)
             : _ownSkills.FirstOrDefault(s => !s.IsPassive && s.SkillType == newSkill.SkillType);
 
-        if (existing != null)
-        {
-            int index = _ownSkills.IndexOf(existing);
-            _ownSkills[index] = newSkill;
-        }
-        else
-        {
-            _ownSkills.Add(newSkill);
-        }
+            if (existing != null)
+            {
+                int index = _ownSkills.IndexOf(existing);
+                _ownSkills[index] = newSkill;
+            }
+            else
+            {
+                _ownSkills.Add(newSkill);
+            }
 
-        MessageBroker.Default.Publish(new GainSkillMessage 
-        { 
-            SkillItem = newSkill, 
-            OwnSkills = _ownSkills 
-        });
+            MessageBroker.Default.Publish(new GainSkillMessage
+            {
+                SkillItem = newSkill,
+                OwnSkills = _ownSkills
+            });
 
-        PlayerPrefsManager.SaveAcquiredSkill(newSkill.SkillName);
+            PlayerPrefsManager.SaveAcquiredSkill(newSkill.SkillName);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogError($"新增或升級技能錯誤: {e}");
+        }        
     }
 
     /// <summary>

@@ -20,6 +20,7 @@ public class Common_BtnSkillItem : MonoBehaviour
     [HorizontalLine(color: EColor.Gray)]
     [Label("是否顯示等級")] [SerializeField] private bool _isShowLevel = false;
     [Label("技能描述是否顯示其他等級")] [SerializeField] private bool _isShowOtherLevel = false;
+    [Label("是否顯示當前等級資訊")] [SerializeField] private bool _isShowCurrentLevel = false;
 
     private IDisposable _mainBtnSub;
 
@@ -36,7 +37,7 @@ public class Common_BtnSkillItem : MonoBehaviour
         _img_Bg.color = GameStateData.UiViewConfigData.GetSkillBgColor(data);
         _img_SkillIcon.enabled = true;
         _img_SkillIcon.sprite = data.SkillIcon;
-        _text_SkillLevel.text = $"{data.SkillLevel}";
+        _text_SkillLevel.text = data.SkillLevel > 0 ? $"{data.SkillLevel}" : "";
         _text_SkillLevel.enabled = _isShowLevel;
 
         if(_text_SkillName != null) _text_SkillName.text = data.SkillName;
@@ -48,7 +49,7 @@ public class Common_BtnSkillItem : MonoBehaviour
                 viewType: VIEW_TYPE.SkillDescribeView,
                 callback: (view) =>
                 {
-                    view.Setup(data, _isShowOtherLevel);
+                    view.Setup(data, _isShowOtherLevel, _isShowCurrentLevel);
                 }).Forget();
         }).AddTo(this);
     }

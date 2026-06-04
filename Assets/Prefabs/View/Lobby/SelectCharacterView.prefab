@@ -541,8 +541,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 9900000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: aa67b823fbca4cc4da606b7c1e5f2cc6, type: 2}
-  m_sharedMaterial: {fileID: 6105520199779406489, guid: aa67b823fbca4cc4da606b7c1e5f2cc6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7015fa2a0132c274891a718aaff919c6, type: 2}
+  m_sharedMaterial: {fileID: 6105520199779406489, guid: 7015fa2a0132c274891a718aaff919c6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2475,10 +2475,10 @@ RectTransform:
   - {fileID: 2906779794643166054}
   m_Father: {fileID: 5313327190399299095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: -40}
-  m_SizeDelta: {x: 80, y: 80}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4271925804703941036
 MonoBehaviour:

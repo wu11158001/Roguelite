@@ -219,7 +219,24 @@ public class SkillController : MonoBehaviour
     /// 獲取技能
     /// </summary>
     /// <param name="newSkill"></param>
-    public void AddOrUpgradeSkill(SkillItemData newSkill) => _inventory.AddOrUpgradeSkill(newSkill);
+    public void AddOrUpgradeSkill(SkillItemData newSkill)
+    {
+        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
+
+        // 被動技能處理
+        GameplayManager.CurrentContext.SkillController.OnGainPassiveHandle(newSkill);
+
+        // 道具技能處理
+        GameplayManager.CurrentContext.SkillController.OnGainPropsHandle(newSkill);
+
+        // 道具技能不觸發學習技能
+        if (newSkill.IsProps)
+        {
+            return;
+        }
+
+        _inventory.AddOrUpgradeSkill(newSkill);
+    }
 
     /// <summary>
     /// 獲取隨機目標在攝影機視野內
