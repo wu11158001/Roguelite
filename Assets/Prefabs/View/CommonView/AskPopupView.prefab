@@ -405,6 +405,7 @@ MonoBehaviour:
   _isCanClickMask: 0
   _isPopupEffect: 1
   _popupObj: {fileID: 8762807180493176496}
+  _popupType: 0
   _btn_Confirm: {fileID: 4387534553542429569}
   _btn_Cancel: {fileID: 4344846340053728803}
   _text_Content: {fileID: 771176062556200476}
@@ -417,6 +418,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7143365532893689070}
+  - component: {fileID: 8364856418521910052}
   - component: {fileID: 3662521581331469590}
   - component: {fileID: 6669231984235139740}
   - component: {fileID: 4387534553542429569}
@@ -447,6 +449,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8364856418521910052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4187519879645979311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c4141dc058bbd4d92ea6cbb7c09c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  _sfxType: 100
 --- !u!222 &3662521581331469590
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -600,6 +615,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1915463054191357198}
+  - component: {fileID: 7790147409486482263}
   - component: {fileID: 1495854179457370115}
   - component: {fileID: 6362395335854411587}
   - component: {fileID: 4344846340053728803}
@@ -630,6 +646,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7790147409486482263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7531774628916184670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c4141dc058bbd4d92ea6cbb7c09c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  _sfxType: 100
 --- !u!222 &1495854179457370115
 CanvasRenderer:
   m_ObjectHideFlags: 0

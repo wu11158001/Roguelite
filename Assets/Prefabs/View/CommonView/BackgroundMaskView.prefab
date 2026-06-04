@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 115927496767878789}
+  - component: {fileID: 6394839793545646833}
   - component: {fileID: 3983330473582388537}
   - component: {fileID: 6035658582009011171}
   - component: {fileID: 895392522924907096}
@@ -38,6 +39,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6394839793545646833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3379165574708839364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c4141dc058bbd4d92ea6cbb7c09c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  _sfxType: 100
 --- !u!222 &3983330473582388537
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -170,3 +184,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundMaskView
   _btn_Mask: {fileID: 895392522924907096}
+  _img_Mask: {fileID: 6035658582009011171}

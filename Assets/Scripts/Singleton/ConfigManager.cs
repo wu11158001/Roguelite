@@ -22,6 +22,8 @@ public class ConfigManager : MonoBehaviour
     [SerializeField] private AllMapPropsConfigData _allMapPropsConfig;
     [Label("介面相關配置檔")]
     [SerializeField] private UiViewConfigData _uiViewConfigData;
+    [Label("音樂音效配置檔")]
+    [SerializeField] private AudioConfigData _audioConfigData;
 
     protected void Awake()
     {
@@ -42,6 +44,7 @@ public class ConfigManager : MonoBehaviour
         GameStateData.AbilityUpgradeConfigData = _abilityUpgradeConfigData;
         GameStateData.AllMapPropsConfig = _allMapPropsConfig;
         GameStateData.UiViewConfigData = _uiViewConfigData;
+        GameStateData.AudioConfigData = _audioConfigData;
 
         LoadLevelConfigs().Forget();
     }

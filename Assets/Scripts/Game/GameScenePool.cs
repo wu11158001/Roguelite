@@ -23,6 +23,7 @@ public class GameScenePool : MonoBehaviour
     private Dictionary<string, Queue<GameObject>> _poolDictionary = new();
     // 記錄目前在畫面上的物件
     private HashSet<GameObject> _activeObjects = new();
+
     /// <summary>
     /// 生成物件
     /// </summary>
@@ -37,7 +38,6 @@ public class GameScenePool : MonoBehaviour
         {
             string key = assetRef.AssetGUID;
 
-            // 確保該類別的池子與父物件已初始化
             if (!_poolDictionary.ContainsKey(key))
             {
                 _poolDictionary.Add(key, new Queue<GameObject>());
@@ -49,7 +49,6 @@ public class GameScenePool : MonoBehaviour
 
             if (_poolDictionary[key].Count > 0)
             {
-                // 從池子提取
                 GameObject obj = _poolDictionary[key].Dequeue();
                 obj.transform.position = position;
                 obj.transform.rotation = rotation;

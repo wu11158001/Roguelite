@@ -15,7 +15,7 @@ MonoBehaviour:
   SkillItems:
   - SkillName: "\u62FE\u53D6\u7BC4\u570D"
     SkillIcon: {fileID: 1638775749, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D+3"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D+10"
     NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 0
@@ -43,18 +43,18 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 7
-    PassiveAddValue: 2
+    PassiveAddValue: 10
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u62FE\u53D6\u7BC4\u570D"
     SkillIcon: {fileID: 1638775749, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D+3"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D+10"
     NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 0
     IsUpdateNow: 0
-    SkillLevel: 2
+    SkillLevel: 10
     SkillSpawnModeType: 0
     PrefabReference:
       m_AssetGUID: 
@@ -83,7 +83,7 @@ MonoBehaviour:
     PropsAddValue: 0
   - SkillName: "\u62FE\u53D6\u7BC4\u570D"
     SkillIcon: {fileID: 1638775749, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D+3"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u62FE\u53D6\u7BC4\u570D+10"
     NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 7
-    PassiveAddValue: 2
+    PassiveAddValue: 10
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0

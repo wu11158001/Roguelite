@@ -52,3 +52,4 @@ MonoBehaviour:
   _abilityUpgradeConfigData: {fileID: 11400000, guid: 24ce66765a2a51d40a747d3385e3a16c, type: 2}
   _allMapPropsConfig: {fileID: 11400000, guid: 81debb718fd420a4d918ffc6881e375c, type: 2}
   _uiViewConfigData: {fileID: 11400000, guid: fef89cba6fed18e42b342eceba5a0fe4, type: 2}
+  _audioConfigData: {fileID: 11400000, guid: e8b50326ab42f76468ea05a448b7d093, type: 2}

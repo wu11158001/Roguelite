@@ -6,7 +6,7 @@ using NaughtyAttributes;
 /// <summary>
 /// 能力值強化設定檔
 /// </summary>
-[CreateAssetMenu(fileName = "AbilityUpgradeConfig", menuName = "SO Config / Ability Upgrad eConfig")]
+[CreateAssetMenu(fileName = "AbilityUpgradeConfig", menuName = "SO Config/Ability Upgrad eConfig")]
 public class AbilityUpgradeConfigData : ScriptableObject
 {
     public List<AbilityUpgradeItemData> AbilityUpgradeItemDatas = new();
