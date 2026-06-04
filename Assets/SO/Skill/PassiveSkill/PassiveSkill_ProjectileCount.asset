@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PassiveSkill_ProjectileCount
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillName: "\u88AB\u52D5:\u6280\u80FD\u6578\u91CF"
+  - SkillName: "\u6280\u80FD\u6578\u91CF"
     SkillIcon: {fileID: 300482850, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FD\u6578\u91CF+1"
     NeedActiveSkills: []
@@ -47,7 +47,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u88AB\u52D5:\u6280\u80FD\u6578\u91CF"
+  - SkillName: "\u6280\u80FD\u6578\u91CF"
     SkillIcon: {fileID: 300482850, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FD\u7269\u6578\u91CF+1"
     NeedActiveSkills: []

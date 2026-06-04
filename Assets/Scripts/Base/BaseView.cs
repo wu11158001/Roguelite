@@ -168,7 +168,11 @@ public abstract class BaseView : MonoBehaviour
         {
             _popupObj.DOKill();
             _popupObj.anchoredPosition = new(0, -1280);
-            _popupObj.DOAnchorPos(Vector2.zero, 0.5f).SetEase(Ease.OutBack).SetLink(gameObject).SetUpdate(true);
+            _popupObj.DOAnchorPos(Vector2.zero, 0.5f)
+                .SetEase(Ease.OutBack)
+                .SetLink(gameObject)
+                .SetUpdate(true)
+                .OnComplete(() => OnEffectComplete());
         }
     }
 
@@ -181,8 +185,20 @@ public abstract class BaseView : MonoBehaviour
         {
             _popupObj.DOKill();
             _popupObj.localScale = Vector3.zero;
-            _popupObj.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetLink(gameObject).SetUpdate(true);
+            _popupObj.DOScale(Vector3.one, 0.5f)
+                .SetEase(Ease.OutBack)
+                .SetLink(gameObject)
+                .SetUpdate(true)
+                .OnComplete(() => OnEffectComplete());
         }
+    }
+
+    /// <summary>
+    /// 移動效果完成
+    /// </summary>
+    protected virtual void OnEffectComplete()
+    {
+
     }
 
     #endregion

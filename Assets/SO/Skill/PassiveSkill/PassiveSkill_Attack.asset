@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PassiveSkill_Attack
   m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
   SkillItems:
-  - SkillName: "\u88AB\u52D5:\u653B\u64CA"
+  - SkillName: "\u653B\u64CA"
     SkillIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+10"
     NeedActiveSkills: []
@@ -47,7 +47,7 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
-  - SkillName: "\u88AB\u52D5:\u653B\u64CA"
+  - SkillName: "\u653B\u64CA"
     SkillIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
     SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+10"
     NeedActiveSkills: []

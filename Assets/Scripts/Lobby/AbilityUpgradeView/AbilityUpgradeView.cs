@@ -6,6 +6,7 @@ using UniRx;
 using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 能力強化介面
@@ -24,6 +25,7 @@ public class AbilityUpgradeView : BaseView
     [SerializeField] private ScrollViewToTarget _characterScrollViewToTarget;
     [SerializeField] private Transform _itemParent;
     [SerializeField] private AbilityUpgradeItemView _abilityUpgradeItemView;
+    [SerializeField] private ScrollRect scrollRect;
 
     [Header("Bottom")]
     [SerializeField] private Image _img_CurrentIcon;
@@ -32,10 +34,10 @@ public class AbilityUpgradeView : BaseView
     [SerializeField] private TextMeshProUGUI _text_BuyCoin;
     [SerializeField] private Button _btn_Buy;
 
-    private List<AbilityUpgradeItemData> _upgradeConfigs = new();
-    private AbilityUpgradeItemData _currentItemData = new();
     private Dictionary<PASSIVE_SKILL_TYPE, AbilityUpgradeItemView> _items = new();
-    private List<AbilityUpgradeData> _abilityUpgrades = new();
+    private List<AbilityUpgradeItemData> _upgradeConfigs = new();
+
+    private AbilityUpgradeViewModel _viewModel;
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
@@ -43,9 +45,11 @@ public class AbilityUpgradeView : BaseView
 
         BindViewModel();
 
+        _viewModel = new();
         _upgradeConfigs = GameStateData.AbilityUpgradeConfigData.AbilityUpgradeItemDatas.ToList();
-        _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
+
         CreateItem();
+        RefreshUI().Forget();
     }
 
     private void BindViewModel()
@@ -59,50 +63,14 @@ public class AbilityUpgradeView : BaseView
         // 購買按鈕
         _btn_Buy.OnClickAsObservable().Subscribe(_ =>
         {
-            AbilityUpgradeData itemData = GetItemData(_currentItemData.UpgradeItemType);
-            int price = _currentItemData.UpgradeItemPrice[itemData.UpgradedLevel];
-
-            int haveCoint = PlayerInfoStateData.PlayerInfo.Value.Coin;
-            if (haveCoint - price >= 0)
-            {
-                // 扣除本地玩家金幣
-                PlayerInfoData infoData = PlayerInfoStateData.PlayerInfo.Value;
-                infoData.Coin -= price;
-                PlayerInfoStateData.PlayerInfo.Value = infoData;
-
-                // 更新本地強化能力項目等級
-                ++itemData.UpgradedLevel;
-                itemData.Type = _currentItemData.UpgradeItemType;
-                PlayerPrefsManager.SaveAbilityUpgradeData(itemData);
-
-                // 更新項目等級
-                _items[_currentItemData.UpgradeItemType].UpdatePoint(itemData.UpgradedLevel);
-                _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
-                SwitchItem(_currentItemData);
-            }
-
+            _viewModel.OnBuyAbility(item: _items, switchAction: SwitchItem);
+            
         }).AddTo(this);
 
         // 返還金幣重製能力按鈕
         _btn_Reset.OnClickAsObservable().Subscribe(_ =>
         {
-            List<AbilityUpgradeData> savedDatas = PlayerPrefsManager.LoadAbilityUpgradeData();
-
-            int totalSpent = savedDatas.Sum(saved =>
-            {
-                var config = _upgradeConfigs.FirstOrDefault(c => c.UpgradeItemType == saved.Type);
-                if (config == null) return 0;
-                return config.UpgradeItemPrice.Take(saved.UpgradedLevel).Sum();
-            });
-
-            // 返還本地玩家金幣
-            PlayerInfoData infoData = PlayerInfoStateData.PlayerInfo.Value;
-            infoData.Coin += totalSpent;
-            PlayerInfoStateData.PlayerInfo.Value = infoData;
-
-            // 清除本地能力強化資料
-            PlayerPrefsManager.DeleteAbilityUpgradeData();
-            _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
+            _viewModel.ResetAbility(_upgradeConfigs);
 
             // 項目等級重製
             foreach (var item in _items)
@@ -112,15 +80,19 @@ public class AbilityUpgradeView : BaseView
         }).AddTo(this);
     }
 
-    /// <summary>
-    /// 獲取項目資料
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    private AbilityUpgradeData GetItemData(PASSIVE_SKILL_TYPE type)
+    protected override void OnEffectComplete()
     {
-        AbilityUpgradeData abilityUpgradeData = _abilityUpgrades.Where(x => x.Type == type).FirstOrDefault();
-        return abilityUpgradeData; ;
+        RefreshUI().Forget();
+    }
+
+    /// <summary>
+    /// 刷新畫面
+    /// </summary>
+    private async UniTaskVoid RefreshUI()
+    {
+        Canvas.ForceUpdateCanvases();
+        await UniTask.NextFrame();
+        scrollRect.verticalNormalizedPosition = 1;
     }
 
     /// <summary>
@@ -133,7 +105,7 @@ public class AbilityUpgradeView : BaseView
         _abilityUpgradeItemView.gameObject.SetActive(false);
         foreach (var data in _upgradeConfigs)
         {
-            int currentLevel = GetItemData(data.UpgradeItemType).UpgradedLevel;
+            int currentLevel = _viewModel.GetItemData(data.UpgradeItemType).UpgradedLevel;
 
             GameObject obj = Instantiate(_abilityUpgradeItemView.gameObject, _itemParent);
             obj.SetActive(true);
@@ -162,10 +134,7 @@ public class AbilityUpgradeView : BaseView
     /// <param name="data"></param>
     private void SwitchItem(AbilityUpgradeItemData data)
     {
-        _currentItemData = data;
-
-        AbilityUpgradeData abilityUpgradeData = GetItemData(data.UpgradeItemType);
-        int price = data.UpgradeItemPrice[abilityUpgradeData.UpgradedLevel];
+        int price = _viewModel.SwitchItem(data);
 
         _img_CurrentIcon.sprite = data.UpgradeItemIcon;
         _text_CurrentName.text = data.UpgradeItemName;
