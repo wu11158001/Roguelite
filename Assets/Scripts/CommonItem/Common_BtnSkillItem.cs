@@ -19,6 +19,7 @@ public class Common_BtnSkillItem : MonoBehaviour
 
     [HorizontalLine(color: EColor.Gray)]
     [Label("是否顯示等級")] [SerializeField] private bool _isShowLevel = false;
+    [Label("技能描述是否顯示其他等級")] [SerializeField] private bool _isShowOtherLevel = false;
 
     private IDisposable _mainBtnSub;
 
@@ -47,7 +48,7 @@ public class Common_BtnSkillItem : MonoBehaviour
                 viewType: VIEW_TYPE.SkillDescribeView,
                 callback: (view) =>
                 {
-                    view.Setup(data, true);
+                    view.Setup(data, _isShowOtherLevel);
                 }).Forget();
         }).AddTo(this);
     }

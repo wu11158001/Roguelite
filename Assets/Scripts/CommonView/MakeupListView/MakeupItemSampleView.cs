@@ -42,7 +42,7 @@ public class MakeupItemSampleView : MonoBehaviour
                     viewType: VIEW_TYPE.SkillDescribeView,
                     callback: (view) =>
                     {
-                        view.Setup(data, true);
+                        view.Setup(data, false);
                     }).Forget();
             }).AddTo(this);
         }

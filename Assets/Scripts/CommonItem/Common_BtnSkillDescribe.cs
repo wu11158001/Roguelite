@@ -35,12 +35,12 @@ public class Common_BtnSkillDescribe : MonoBehaviour
     /// </summary>
     /// <param name="data"></param>
     /// <param name="isNewSkill">是否是新技能</param>
-    /// <param name="isShowLevelOne">是否顯示1級資訊</param>
+    /// <param name="isShowLevelOne">是否顯示其他等級</param>
     /// <param name="clickCallback"></param>
-    public void Setup(SkillItemData data, bool isNewSkill = false, bool isShowLevelOne = false, Action<SkillItemData> clickCallback = null)
+    public void Setup(SkillItemData data, bool isNewSkill = false, bool isShowOtherLevel = false, Action<SkillItemData> clickCallback = null)
     {
         // 只顯示1級資訊
-        if(isShowLevelOne)
+        if(!isShowOtherLevel)
         {
             if (data.IsPassive) data = GameStateData.AllSkillConfigData.GetPassiveSkill(data.PassiveType, 1);
             else if(data.IsProps) data = GameStateData.AllSkillConfigData.GetPropsSkill(data.PropsSkillType);
@@ -49,12 +49,12 @@ public class Common_BtnSkillDescribe : MonoBehaviour
 
         _img_SkillIcon.sprite = data.SkillIcon;
         _text_SkillName.text = data.SkillName;
-        _text_SkillLevel.text = $"LV:{data.SkillLevel}";
+        _text_SkillLevel.text = $"Lv:{data.SkillLevel}";
         _text_SkillDescribe.text = data.SkillDescribe;
         _img_SkillBg.color = GameStateData.UiViewConfigData.GetSkillBgColor(data);
-        _newSkillTextObj.gameObject.SetActive(isNewSkill);
 
-        if(isNewSkill)
+        _newSkillTextObj.gameObject.SetActive(isNewSkill && clickCallback != null);
+        if(isNewSkill && clickCallback != null)
         {
             _newSkillTextObj.DOKill();
             _newSkillTextObj.DOScale(0.8f, 0.5f)
