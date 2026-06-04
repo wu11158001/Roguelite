@@ -791,6 +791,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 706376339912345839}
+  - component: {fileID: 231036891357666027}
   - component: {fileID: 2318734054500662309}
   - component: {fileID: 4204272476864168990}
   - component: {fileID: 3202599719594678021}
@@ -821,6 +822,19 @@ RectTransform:
   m_AnchoredPosition: {x: -30, y: -25}
   m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &231036891357666027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3395072826994989580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c4141dc058bbd4d92ea6cbb7c09c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  _sfxType: 101
 --- !u!222 &2318734054500662309
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2160,6 +2174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7605622576398527927}
   - component: {fileID: 2824553800903727498}
+  - component: {fileID: 8018316021020724036}
   - component: {fileID: 8219686142957451871}
   - component: {fileID: 9046333080216066803}
   m_Layer: 5
@@ -2205,6 +2220,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelItemView
   _mainTog: {fileID: 9046333080216066803}
   _img_LevelIcon: {fileID: 2332637436925945095}
+--- !u!114 &8018316021020724036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6157963029065493424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c4141dc058bbd4d92ea6cbb7c09c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  _sfxType: 100
 --- !u!114 &8219686142957451871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3038,6 +3066,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 786753819818102986}
+  - component: {fileID: 3501814731569426663}
   - component: {fileID: 2745124404400589894}
   - component: {fileID: 3375438941705884677}
   - component: {fileID: 737760605334822881}
@@ -3068,6 +3097,19 @@ RectTransform:
   m_AnchoredPosition: {x: -30, y: 30}
   m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 1, y: 0}
+--- !u!114 &3501814731569426663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7746703306270215023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c4141dc058bbd4d92ea6cbb7c09c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  _sfxType: 100
 --- !u!222 &2745124404400589894
 CanvasRenderer:
   m_ObjectHideFlags: 0

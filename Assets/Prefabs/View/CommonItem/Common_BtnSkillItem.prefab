@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2336816432942711394}
   - component: {fileID: 1048936125604931594}
+  - component: {fileID: -7093379117382207096}
   - component: {fileID: 3872477487156707010}
   - component: {fileID: 2964334334872683283}
   - component: {fileID: 5992275045420313903}
@@ -59,6 +60,21 @@ MonoBehaviour:
   _text_SkillLevel: {fileID: 6495848200985923496}
   _text_SkillName: {fileID: 0}
   _isShowLevel: 0
+  _isShowOtherLevel: 0
+  _isShowCurrentLevel: 0
+--- !u!114 &-7093379117382207096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519179401807100518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c4141dc058bbd4d92ea6cbb7c09c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  _sfxType: 100
 --- !u!222 &3872477487156707010
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -275,7 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

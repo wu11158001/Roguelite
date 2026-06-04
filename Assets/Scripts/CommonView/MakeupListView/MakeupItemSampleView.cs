@@ -33,7 +33,8 @@ public class MakeupItemSampleView : MonoBehaviour
         _img_Bg.color = !isAcquired ? _nullBgColor : GameStateData.UiViewConfigData.GetSkillBgColor(data);
         _usingObj.SetActive(isUsing);
 
-        if(isAcquired)
+        _btn_Main.image.raycastTarget = isAcquired;
+        if (isAcquired)
         {
             _mainBtnSub?.Dispose();
             _mainBtnSub = _btn_Main.OnClickAsObservable().Subscribe(_ =>

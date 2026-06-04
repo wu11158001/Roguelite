@@ -113,6 +113,7 @@ public class SelectCharacterView : BaseView
             {
                 // 確認按鈕
                 _btn_Confirm.interactable = true;
+                _btn_Confirm.image.raycastTarget = true;
                 __btnConfirmSub = _btn_Confirm.OnClickAsObservable()
                     .Subscribe(_ =>
                     {
@@ -132,6 +133,7 @@ public class SelectCharacterView : BaseView
 
                 // 確認按鈕
                 _btn_Confirm.interactable = (ownCoin - price >= 0);
+                _btn_Confirm.image.raycastTarget = (ownCoin - price >= 0);
 
                 if (ownCoin - price >= 0)
                 {

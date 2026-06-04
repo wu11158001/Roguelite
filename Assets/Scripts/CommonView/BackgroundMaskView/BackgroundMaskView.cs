@@ -33,7 +33,6 @@ public class BackgroundMaskView : MonoBehaviour
         _clickCallback = clickCallback;
 
         _btn_Mask.interactable = isCanClick;
-        _img_Mask.raycastTarget = isCanClick;
     }
 
     public void OnDestroy()

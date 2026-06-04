@@ -134,11 +134,11 @@ public class AbilityUpgradeView : BaseView
     /// <param name="data"></param>
     private void SwitchItem(AbilityUpgradeItemData data)
     {
-        int price = _viewModel.SwitchItem(data);
+        string price = _viewModel.SwitchItemAndGetPrice(data);
 
         _img_CurrentIcon.sprite = data.UpgradeItemIcon;
         _text_CurrentName.text = data.UpgradeItemName;
         _text_CurrentDescribe.text = data.UpgradeItemDescribe;
-        _text_BuyCoin.text = $"{price}";
+        _text_BuyCoin.text = price;
     }
 }

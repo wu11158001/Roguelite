@@ -24,6 +24,9 @@ public class AbilityUpgradeViewModel
     public void OnBuyAbility(Dictionary<PASSIVE_SKILL_TYPE, AbilityUpgradeItemView> item, Action<AbilityUpgradeItemData> switchAction)
     {
         AbilityUpgradeData itemData = GetItemData(_currentItemData.UpgradeItemType);
+
+        if (itemData.UpgradedLevel >= _currentItemData.UpgradeItemPrice.Length) return;
+
         int price = _currentItemData.UpgradeItemPrice[itemData.UpgradedLevel];
 
         int haveCoint = PlayerInfoStateData.PlayerInfo.Value.Coin;
@@ -58,17 +61,21 @@ public class AbilityUpgradeViewModel
     }
 
     /// <summary>
-    /// 切換項目
+    /// 切換項目與獲取升級價格
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public int SwitchItem(AbilityUpgradeItemData data)
+    public string SwitchItemAndGetPrice(AbilityUpgradeItemData data)
     {
         _currentItemData = data;
 
         AbilityUpgradeData abilityUpgradeData = GetItemData(data.UpgradeItemType);
-        int price = data.UpgradeItemPrice[abilityUpgradeData.UpgradedLevel];
 
+        string price = "滿級";
+        if (abilityUpgradeData.UpgradedLevel < data.UpgradeItemPrice.Length)
+        {
+            price = $"{data.UpgradeItemPrice[abilityUpgradeData.UpgradedLevel]}";
+        }
         return price;
     }
 
