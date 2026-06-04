@@ -123,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_0
+      name: Passive_Attack
       rect:
         serializedVersion: 2
         x: 19
@@ -145,7 +145,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_1
+      name: Passive_CdReduce
       rect:
         serializedVersion: 2
         x: 154
@@ -167,7 +167,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_2
+      name: Passive_CriticalChance
       rect:
         serializedVersion: 2
         x: 295
@@ -189,7 +189,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_3
+      name: Passive_CiticalMulitiplier
       rect:
         serializedVersion: 2
         x: 434
@@ -211,7 +211,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_4
+      name: Passive_Defense
       rect:
         serializedVersion: 2
         x: 18
@@ -233,7 +233,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_5
+      name: Passive_EffectRange
       rect:
         serializedVersion: 2
         x: 156
@@ -255,7 +255,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_6
+      name: Passive_HpRecover
       rect:
         serializedVersion: 2
         x: 295
@@ -277,7 +277,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_7
+      name: Passive_KeepTime
       rect:
         serializedVersion: 2
         x: 434
@@ -299,7 +299,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_8
+      name: Passive_MaxHp
       rect:
         serializedVersion: 2
         x: 18
@@ -321,7 +321,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_9
+      name: Passive_MoveSpeed
       rect:
         serializedVersion: 2
         x: 156
@@ -343,7 +343,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_10
+      name: Passive_PickupRange
       rect:
         serializedVersion: 2
         x: 295
@@ -365,7 +365,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gemini_Generated_Image_nj246anj246anj24-removebg-preview_11
+      name: Passive_ProjectileCount
       rect:
         serializedVersion: 2
         x: 433
@@ -402,18 +402,18 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_0: -166154676
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_1: 828782831
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_10: 1638775749
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_11: 300482850
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_2: -1984016468
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_3: -1378960612
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_4: 1787706319
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_5: -892878142
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_6: 1543525236
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_7: 645026409
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_8: -244588363
-      Gemini_Generated_Image_nj246anj246anj24-removebg-preview_9: -1596805310
+      Passive_Attack: -166154676
+      Passive_CdReduce: 828782831
+      Passive_CiticalMulitiplier: -1378960612
+      Passive_CriticalChance: -1984016468
+      Passive_Defense: 1787706319
+      Passive_EffectRange: -892878142
+      Passive_HpRecover: 1543525236
+      Passive_KeepTime: 645026409
+      Passive_MaxHp: -244588363
+      Passive_MoveSpeed: -1596805310
+      Passive_PickupRange: 1638775749
+      Passive_ProjectileCount: 300482850
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
