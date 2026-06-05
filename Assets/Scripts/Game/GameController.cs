@@ -44,6 +44,8 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void GameOverClear()
     {
+        AudioManager.Instance.PlayBgm(audioType: AUDIO_TYPE.GameOver).Forget();
+
         GameplayManager.CurrentContext.ControlCharacter.Remove();
         GameplayManager.CurrentContext.GameScenePool.ClearAllPools();
         GameplayManager.CurrentContext.InfiniteMapController.ClearGround();

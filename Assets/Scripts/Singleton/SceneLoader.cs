@@ -34,7 +34,28 @@ public class SceneLoader : SingletonMonoBehaviour<SceneLoader>
         if (SceneManager.GetActiveScene().name == sceneType.ToString())
             return;
 
+        PlayBgm(sceneType);
+
         await SceneManager.LoadSceneAsync(sceneType.ToString()).ToUniTask();
+
+        AudioManager.Instance.ClearAll();
+    }
+
+    /// <summary>
+    /// 場景判斷背景音樂
+    /// </summary>
+    private void PlayBgm(SCENE_TYPE sceneType)
+    {
+        switch (sceneType)
+        {
+            case SCENE_TYPE.Lobby:
+                AudioManager.Instance.PlayBgm(audioType: AUDIO_TYPE.Lobby).Forget();
+                break;
+
+            case SCENE_TYPE.Game:
+                AudioManager.Instance.PlayBgm(audioType: AUDIO_TYPE.Game).Forget();
+                break;
+        }
     }
 
     /// <summary>
