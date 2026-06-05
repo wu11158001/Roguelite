@@ -7,6 +7,8 @@ using UnityEngine.AddressableAssets;
 /// </summary>
 public class BoxData
 {
+    /// <summary> 唯一ID </summary>
+    public string Id { get; set; } = System.Guid.NewGuid().ToString();
     /// <summary> 紀錄箱子位置 </summary>
     public Vector3 LocalPosition { get; set; }
 }
@@ -16,6 +18,8 @@ public class BoxData
 /// </summary>
 public class MapPropsData
 {
+    /// <summary> 唯一ID </summary>
+    public string Id { get; set; } = System.Guid.NewGuid().ToString();
     /// <summary> 紀錄道具物件 </summary>
     public AssetReferenceGameObject PrefabRef;
     /// <summary> 紀錄箱子位置 </summary>
@@ -85,12 +89,12 @@ public class InfiniteMapModel
     /// 移除箱子資料
     /// </summary>
     /// <param name="gridId"></param>
-    /// <param name="boxData"></param>
-    public void RemoveBoxData(string gridId, BoxData boxData)
+    /// <param name="targetData"></param>
+    public void RemoveBoxData(string gridId, BoxData targetData)
     {
         if (_mapBoxesData.TryGetValue(gridId, out var list))
         {
-            list.Remove(boxData);
+            list.RemoveAll(box => box.Id == targetData.Id);
             if (list.Count == 0)
             {
                 _mapBoxesData.Remove(gridId);
@@ -134,9 +138,11 @@ public class InfiniteMapModel
     /// <param name="mapPropsData"></param>
     public void RemovePropsData(string gridId, MapPropsData mapPropsData)
     {
+        if (mapPropsData == null) return;
+
         if (_mapPropsData.TryGetValue(gridId, out var list))
         {
-            list.Remove(mapPropsData);
+            list.RemoveAll(props => props.Id == mapPropsData.Id);
             if (list.Count == 0)
             {
                 _mapPropsData.Remove(gridId);

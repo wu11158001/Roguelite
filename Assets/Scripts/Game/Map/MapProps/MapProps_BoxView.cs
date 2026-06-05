@@ -156,10 +156,19 @@ public class MapProps_BoxView : BaseGameObject
     }
 
     /// <summary>
+    /// 事件重製
+    /// </summary>
+    public void ResetEvents()
+    {
+        OnBoxTriggered = null;
+    }
+
+    /// <summary>
     /// 回收
     /// </summary>
     public void Recycle()
     {
+        ResetEvents();
         StopAllCoroutines();
         _moveObj.DOKill();
         GameplayManager.CurrentContext.GameScenePool.ReturnToPool(gameObject);

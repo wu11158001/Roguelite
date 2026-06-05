@@ -33,6 +33,9 @@ public class InfiniteMapController : MonoBehaviour
     // 紀錄畫面中的道具
     private Dictionary<string, List<BaseMapProps>> _activePropsViews = new();
 
+    // 防止同個地塊在異步載入未完成前，重複排隊刷新的快取集合
+    private HashSet<string> _pendingSpawnGrids = new();
+
     private InfiniteMapModel _model = new();
 
     private void OnDestroy()
@@ -212,6 +215,9 @@ public class InfiniteMapController : MonoBehaviour
     /// <param name="groundPos"></param>
     private void UpdateBoxForGrid(string gridId, Vector3 groundPos)
     {
+        // 如果該地塊正在異步生成中，直接返回避免重複生成
+        if (_pendingSpawnGrids.Contains(gridId)) return;
+
         if (!_model.IsGridExplored(gridId))
         {
             _model.MarkGridAsExplored(gridId);
@@ -230,11 +236,16 @@ public class InfiniteMapController : MonoBehaviour
             _activeBoxViews[gridId] = new List<MapProps_BoxView>();
         }
 
+        _pendingSpawnGrids.Add(gridId);
+        int remainingCount = boxesData.Count;
+
         AssetReferenceGameObject prefabRef = GameStateData.GameConfig.BoxPrefabReference;
         foreach (var data in boxesData)
         {
             Vector3 worldPos = groundPos + data.LocalPosition;
             worldPos.y = 0;
+
+            BoxData currentBoxData = data;
 
             GameplayManager.CurrentContext.GameScenePool.SpawnObject(
                 parentName: "箱子",
@@ -243,15 +254,27 @@ public class InfiniteMapController : MonoBehaviour
                 rotation: Quaternion.identity,
                 callback: (obj) =>
                 {
+                    remainingCount--;
+                    if (remainingCount <= 0) _pendingSpawnGrids.Remove(gridId);
+
+                    // 檢查異步回傳時，玩家是不是已經跑遠、導致該地塊已經被回收了
                     if (!_activeBoxViews.ContainsKey(gridId))
                     {
                         if (obj != null) GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
                         return;
                     }
 
-                    if (obj.TryGetComponent<MapProps_BoxView>(out var boxView))
+                    if (obj != null && obj.TryGetComponent<MapProps_BoxView>(out var boxView))
                     {
-                        boxView.OnBoxTriggered += () => { _model.RemoveBoxData(gridId, data); };
+                        boxView.ResetEvents();
+                        boxView.OnBoxTriggered += () =>
+                        {
+                            _model.RemoveBoxData(gridId, currentBoxData);
+                            if (_activeBoxViews.TryGetValue(gridId, out var list))
+                            {
+                                list.Remove(boxView);
+                            }
+                        };
 
                         if (!_activeBoxViews[gridId].Contains(boxView))
                         {
