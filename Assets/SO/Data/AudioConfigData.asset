@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f895643aba24a24c973f73b6146a59b, type: 3}
   m_Name: AudioConfigData
   m_EditorClassIdentifier: Assembly-CSharp::AudioConfigData
+  BgmFadeDuration: 0.15
   AudioDatas:
   - AudioType: 100
     AudioClip:
@@ -20,6 +21,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+    Volume: 1
   - AudioType: 101
     AudioClip:
       m_AssetGUID: d80216010caf4a344bee1affb238dea3
@@ -27,3 +29,28 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+    Volume: 1
+  - AudioType: 0
+    AudioClip:
+      m_AssetGUID: 3e1be45b3fa641a4aae80aea171c99f5
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.25
+  - AudioType: 10
+    AudioClip:
+      m_AssetGUID: 82340f122dc0b964eb21bbbb683866cd
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.1
+  - AudioType: 80
+    AudioClip:
+      m_AssetGUID: 713737a3d2f528642aac372b2faef208
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.5

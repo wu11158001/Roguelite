@@ -40,11 +40,10 @@ public class AbilityUpgradeViewModel
             // 更新本地強化能力項目等級
             ++itemData.UpgradedLevel;
             itemData.Type = _currentItemData.UpgradeItemType;
-            PlayerPrefsManager.SaveAbilityUpgradeData(itemData);
+            _abilityUpgrades = PlayerPrefsManager.SaveAbilityUpgradeData(itemData);
 
             // 更新項目等級
             item[_currentItemData.UpgradeItemType].UpdatePoint(itemData.UpgradedLevel);
-            _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
             switchAction?.Invoke(_currentItemData);
         }
     }
@@ -100,6 +99,6 @@ public class AbilityUpgradeViewModel
 
         // 清除本地能力強化資料
         PlayerPrefsManager.DeleteAbilityUpgradeData();
-        _abilityUpgrades = PlayerPrefsManager.LoadAbilityUpgradeData();
+        _abilityUpgrades = new();
     }
 }

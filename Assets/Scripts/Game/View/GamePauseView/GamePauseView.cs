@@ -12,6 +12,7 @@ public class GamePauseView : BaseView
     [SerializeField] private Button _btn_Exit;
     [SerializeField] private Button _btn_Makeup;
     [SerializeField] private Button _btn_Continue;
+    [SerializeField] private Button _btn_Setting;
 
     [Header("能力介面")]
     [SerializeField] AbilityView _abilityView;
@@ -32,13 +33,11 @@ public class GamePauseView : BaseView
 
     private void BindViewModel()
     {
-        // 離開按鈕
-        _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
+        // 繼續按鈕
+        _btn_Continue.OnClickAsObservable().First().Subscribe(_ =>
         {
             GameplayManager.CurrentContext.GameController.GamePause(false);
-            GameplayManager.CurrentContext.GameController.SetGameOver();
-            GameplayManager.CurrentContext.GameController.GameOverClear();
-            ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
+            Close();
         }).AddTo(this);
 
         // 合成表按鈕
@@ -47,11 +46,19 @@ public class GamePauseView : BaseView
             ViewManager.Instance.OpenView<MakeupListView>(viewType: VIEW_TYPE.MakeupListView).Forget();
         }).AddTo(this);
 
-        // 繼續按鈕
-        _btn_Continue.OnClickAsObservable().First().Subscribe(_ =>
+        // 設定按鈕
+        _btn_Setting.OnClickAsObservable().Subscribe(_ =>
+        {
+            ViewManager.Instance.OpenView<SettingView>(viewType: VIEW_TYPE.SettingView).Forget();
+        }).AddTo(this);
+
+        // 離開按鈕
+        _btn_Exit.OnClickAsObservable().First().Subscribe(_ =>
         {
             GameplayManager.CurrentContext.GameController.GamePause(false);
-            Close();
+            GameplayManager.CurrentContext.GameController.SetGameOver();
+            GameplayManager.CurrentContext.GameController.GameOverClear();
+            ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
         }).AddTo(this);
     }
 

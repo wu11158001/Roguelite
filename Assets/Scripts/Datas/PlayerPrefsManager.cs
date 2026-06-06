@@ -85,6 +85,26 @@ public class AbilityUpgradeDataWrapper
 
 #endregion
 
+#region 設定資料
+
+/// <summary>
+/// 設定資料
+/// </summary>
+[Serializable]
+public class SettingData
+{
+    /// <summary> 是否開啟音樂 </summary>
+    public bool IsOnMusic;
+    /// <summary> 是否開啟音效 </summary>
+    public bool IsOnSound;
+    /// <summary> 是否開顯示虛擬搖桿 </summary>
+    public bool IsOnJoystick;
+    /// <summary> 是否開顯示傷害 </summary>
+    public bool IsOnDamageText;
+}
+
+#endregion
+
 public static class PlayerPrefsManager
 {
     /// <summary> 玩家訊息 </summary>
@@ -93,6 +113,8 @@ public static class PlayerPrefsManager
     public const string ACQUIRED_SKILL_KEY = "ACQUIRED_SKILL_KEY";
     /// <summary> 強化能力資料 </summary>
     public const string ABILITY_UPGRADE_KEY = "ABILITY_UPGRADE_KEY";
+    /// <summary> 設定資料 </summary>
+    public const string SETTING_KEY = "SETTING_KEY";
 
     /// <summary>
     /// 清除所有資料
@@ -116,6 +138,12 @@ public static class PlayerPrefsManager
         if (PlayerPrefs.HasKey(ABILITY_UPGRADE_KEY))
         {
             PlayerPrefs.DeleteKey(ABILITY_UPGRADE_KEY);
+        }
+
+        // 移除:設定資料
+        if (PlayerPrefs.HasKey(SETTING_KEY))
+        {
+            PlayerPrefs.DeleteKey(SETTING_KEY);
         }
     }
 
@@ -232,7 +260,7 @@ public static class PlayerPrefsManager
     /// 寫入強化能力資料
     /// </summary>
     /// <param name="data"></param>
-    public static void SaveAbilityUpgradeData(AbilityUpgradeData data)
+    public static List<AbilityUpgradeData> SaveAbilityUpgradeData(AbilityUpgradeData data)
     {
         List<AbilityUpgradeData> currentList = LoadAbilityUpgradeData();
 
@@ -252,6 +280,8 @@ public static class PlayerPrefsManager
 
         string jsonString = JsonUtility.ToJson(wrapper);
         PlayerPrefs.SetString(ABILITY_UPGRADE_KEY, jsonString);
+
+        return currentList;
     }
 
     /// <summary>
@@ -269,6 +299,40 @@ public static class PlayerPrefsManager
         AbilityUpgradeDataWrapper wrapper = JsonUtility.FromJson<AbilityUpgradeDataWrapper>(jsonString);
 
         return wrapper.datas;
+    }
+
+    #endregion
+
+    #region 設定資料
+
+    /// <summary>
+    /// 寫入設定資料
+    /// </summary>
+    /// <param name="data"></param>
+    public static void SavaSettingData(SettingData data)
+    {
+        if (data == null) return;
+
+        string jsonString = JsonUtility.ToJson(data);
+        PlayerPrefs.SetString(SETTING_KEY, jsonString);
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    /// 讀取設定資料
+    /// </summary>
+    /// <returns></returns>
+    public static SettingData LoadSettingData()
+    {
+        if (!PlayerPrefs.HasKey(SETTING_KEY))
+        {
+            return null;
+        }
+
+        string jsonString = PlayerPrefs.GetString(SETTING_KEY);
+        SettingData data = JsonUtility.FromJson<SettingData>(jsonString);
+
+        return data;
     }
 
     #endregion

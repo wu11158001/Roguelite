@@ -55,6 +55,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - Type: 4
+    PrefabRef:
+      m_AssetGUID: 9061b10c474d3dc409991c8bd15bcba7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   - Type: 101
     PrefabRef:
       m_AssetGUID: 82bf66329d1c0c645a7513ec1729dfe5

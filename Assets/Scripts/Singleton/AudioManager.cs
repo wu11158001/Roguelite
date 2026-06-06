@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UniRx;
 
 /// <summary>
 /// 音樂/音效控制中心
@@ -23,6 +24,9 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 
     // 用來控制淡入淡出的中斷 Token
     private CancellationTokenSource _fadeCts;
+
+    private bool _isMusicOn = true;
+    private bool _isSoundOn = true;
 
     protected override void OnDestroy()
     {
@@ -59,6 +63,14 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         }
         _sfxPool.Clear();
         _allSfxSources.Clear();
+
+        // 獲取本地音量開關設定
+        SettingData savedSetting = PlayerPrefsManager.LoadSettingData();
+        if (savedSetting != null)
+        {
+            _isMusicOn = savedSetting.IsOnMusic;
+            _isSoundOn = savedSetting.IsOnSound;
+        }
     }
 
     private void Start()
@@ -66,6 +78,12 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         _main_AudioSource = GetComponent<AudioSource>();
 
         Init();
+        BindViewModel();
+    }
+
+    private void BindViewModel()
+    {
+        MessageBroker.Default.Receive<SettingData>().Subscribe((message) => UpdateSettings(message)).AddTo(this);
     }
 
     private void Init()
@@ -117,8 +135,12 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
             _main_AudioSource.loop = true;
             _main_AudioSource.Play();
 
-            // 淡入音樂至 Config 設定的音量
-            await FadeVolumeAsync(targetVolume, token);
+            if (_isMusicOn)
+            {
+                _main_AudioSource.Play();
+                // 淡入音樂至 Config 設定的音量
+                await FadeVolumeAsync(targetVolume, token);
+            }
         }
         catch (System.OperationCanceledException)
         {
@@ -160,6 +182,8 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
     /// </summary>
     public async UniTask PlaySFX(AUDIO_TYPE audioType, float pitch = 1.0f)
     {
+        if (!_isSoundOn) return;
+
         AudioClip clip = await GetAudioClip(audioType);
         if (clip == null) return;
 
@@ -264,6 +288,61 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         if (_configLookUp.TryGetValue(audioType, out var data))
         {
             return data.Volume;
+        }
+        return 1.0f;
+    }
+
+    /// <summary>
+    /// 當設定UI開關變更時更新狀態
+    /// </summary>
+    private void UpdateSettings(SettingData data)
+    {
+        if (data == null) return;
+
+        _isSoundOn = data.IsOnSound;
+
+        // 停止正在撥放音效
+        if (!_isSoundOn)
+        {
+            foreach (var source in _allSfxSources)
+            {
+                if (source != null && source.isPlaying) source.Stop();
+            }
+        }
+
+        // 處理音樂開關
+        if (_isMusicOn != data.IsOnMusic)
+        {
+            _isMusicOn = data.IsOnMusic;
+
+            if (!_isMusicOn)
+            {
+                //停止目前的 BGM
+                _fadeCts?.Cancel();
+                _main_AudioSource.Stop();
+            }
+            else
+            {
+                // 音樂被開啟
+                if (_main_AudioSource.clip != null && !_main_AudioSource.isPlaying)
+                {
+                    _main_AudioSource.volume = GetConfigVolumeByClip(_main_AudioSource.clip);
+                    _main_AudioSource.Play();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 獲取設定檔音量
+    /// </summary>
+    /// <param name="clip"></param>
+    /// <returns></returns>
+    private float GetConfigVolumeByClip(AudioClip clip)
+    {
+        foreach (var data in _configLookUp.Values)
+        {
+            if (data.AudioClip.Asset != null && data.AudioClip.Asset == clip) return data.Volume;
         }
         return 1.0f;
     }

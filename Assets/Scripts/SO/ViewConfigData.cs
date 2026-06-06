@@ -9,6 +9,7 @@ public enum VIEW_TYPE
     AskPopupView,
     AbilityUpgradeView,
     SkillDescribeView,
+    SettingView,
 
     LobbyView = 100,
     SelectCharacterView,

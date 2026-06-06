@@ -35,7 +35,7 @@ public class AbilityUpgradeItemView : MonoBehaviour
 
     private void BineModeView()
     {
-        _mainTog.OnValueChangedAsObservable().Subscribe(isOn => OnSelect(isOn)).AddTo(this);
+        _mainTog.OnValueChangedAsObservable().Skip(1).Subscribe(isOn => OnSelect(isOn)).AddTo(this);
     }
 
     /// <summary>

@@ -201,7 +201,7 @@ public class SelectCharacterView : BaseView
                         data: config.Clone(), 
                         index: currentIndex).Forget();
 
-                SnapToTarget(selectCharacterTogView.MainTog.GetComponent<RectTransform>());
+                    _characterScrollViewToTarget.SnapTo(selectCharacterTogView.MainTog.GetComponent<RectTransform>());
                 });
 
             _selectCharacterTogViews.Add(selectCharacterTogView);
@@ -216,19 +216,5 @@ public class SelectCharacterView : BaseView
         }
 
         _selectCharacterTogViews[targetIndex].MainTog.isOn = true;
-
-        if (_selectCharacterTogViews.Count > 0)
-        {
-            SnapToTarget(_selectCharacterTogViews[targetIndex].MainTog.GetComponent<RectTransform>());
-        }
-    }
-
-    /// <summary>
-    /// 卷軸跳至所選物件位置
-    /// </summary>
-    /// <param name="target"></param>
-    private void SnapToTarget(RectTransform target)
-    {
-        _characterScrollViewToTarget.SnapTo(target);
     }
 }

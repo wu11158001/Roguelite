@@ -34,6 +34,7 @@ public class LobbyView : BaseView
     [SerializeField] private Button _btn_Makeup;
     [SerializeField] private Button _btn_AbilityUpgrade;
     [SerializeField] private Button _btn_DeleteData;
+    [SerializeField] private Button _btn_Setting;
 
     private void Start()
     {
@@ -58,6 +59,12 @@ public class LobbyView : BaseView
         _btn_AbilityUpgrade.OnClickAsObservable().Subscribe(_ =>
         {
             ViewManager.Instance.OpenView<AbilityUpgradeView>(viewType: VIEW_TYPE.AbilityUpgradeView).Forget();
+        }).AddTo(this);
+
+        // 設定按鈕
+        _btn_Setting.OnClickAsObservable().Subscribe(_ =>
+        {
+            ViewManager.Instance.OpenView<SettingView>(viewType: VIEW_TYPE.SettingView).Forget();
         }).AddTo(this);
 
         // 刪除資料按鈕

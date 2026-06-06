@@ -17,16 +17,25 @@ public class JoystickView : BaseView, IPointerDownHandler, IDragHandler, IPointe
     [Header("參數")]
     [SerializeField] private float _moveRange = 100f;          // 搖桿移動半徑
 
-    public IReadOnlyReactiveProperty<Vector2> JoystickOutput => _joystickOutput;
     private readonly ReactiveProperty<Vector2> _joystickOutput = new(Vector2.zero);
 
     private Vector2 _pointerDownPosition;
+
+    private SettingData _currentSetting;
 
     public override void Setup(AssetReferenceGameObject myRef)
     {
         base.Setup(myRef);
 
+        BindViewMode();
+
+        _currentSetting = PlayerPrefsManager.LoadSettingData();
         _canvasGroup.alpha = 0f;
+    }
+
+    private void BindViewMode()
+    {
+        MessageBroker.Default.Receive<SettingData>().Subscribe((message) => UpdateSetting(message)).AddTo(this);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -36,7 +45,10 @@ public class JoystickView : BaseView, IPointerDownHandler, IDragHandler, IPointe
             return;
         }
 
-        _canvasGroup.alpha = 1f; // 顯示搖桿
+        if(_currentSetting.IsOnJoystick)
+        {
+            _canvasGroup.alpha = 1f; // 顯示搖桿
+        }
 
         // 將搖桿背景移動到玩家點擊的手指位置
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -80,5 +92,14 @@ public class JoystickView : BaseView, IPointerDownHandler, IDragHandler, IPointe
         _joystickHandle.anchoredPosition = Vector2.zero;
         _joystickOutput.Value = Vector2.zero;
         GameStateData.JoystickInput.Value = Vector2.zero;
+    }
+
+    /// <summary>
+    /// 當設定UI開關變更時更新狀態
+    /// </summary>
+    /// <param name="settingData"></param>
+    private void UpdateSetting(SettingData settingData)
+    {
+        _currentSetting = settingData;
     }
 }
