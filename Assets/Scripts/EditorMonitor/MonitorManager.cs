@@ -10,9 +10,11 @@ public class MonitorManager : SingletonMonoBehaviour<MonitorManager>
     [SerializeField] private GameObject _prefObj;
     [SerializeField] private TextMeshProUGUI _perfText;
 
+#if UNITY_EDITOR
     private float _deltaTime = 0.0f;
     private float _udpateInterval = 0.5f; // 更新文字頻率
     private float _timer = 0f;
+#endif
 
     private void Start()
     {
@@ -42,13 +44,13 @@ public class MonitorManager : SingletonMonoBehaviour<MonitorManager>
 
     private void DisplayMetrics()
     {
+#if UNITY_EDITOR
         // 計算 FPS
         float msec = _deltaTime * 1000.0f;
         float fps = 1.0f / _deltaTime;
         string fpsText = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
 
         // 獲取渲染數據 (Draw Calls / Batches), 只能在 Editor 編輯器環境下使用
-#if UNITY_EDITOR
         int batches = UnityEditor.UnityStats.batches;
         int drawCalls = UnityEditor.UnityStats.drawCalls; // 舊版稱為 drawCalls，新版主要看 batches
         int setPassCalls = UnityEditor.UnityStats.setPassCalls;

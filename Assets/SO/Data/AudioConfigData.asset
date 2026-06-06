@@ -32,12 +32,12 @@ MonoBehaviour:
     Volume: 1
   - AudioType: 0
     AudioClip:
-      m_AssetGUID: 3e1be45b3fa641a4aae80aea171c99f5
+      m_AssetGUID: ea3bd13b16d135f40b6494e888bd9bc5
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    Volume: 0.25
+    Volume: 0.2
   - AudioType: 10
     AudioClip:
       m_AssetGUID: 82340f122dc0b964eb21bbbb683866cd
