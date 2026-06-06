@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using NaughtyAttributes;
 using UniRx;
+using Cysharp.Threading.Tasks;
 
 public interface IMapProps
 {
@@ -96,6 +97,9 @@ public abstract class BaseMapProps : BaseGameObject
             })
             .OnComplete(() =>
             {
+                // 音效
+                AudioManager.Instance.PlaySFX(AUDIO_TYPE.GetMapProps).Forget();
+
                 OnPickUpDo();
                 Recycle();
             });

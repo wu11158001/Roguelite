@@ -27,6 +27,10 @@ public enum AUDIO_TYPE
 
     /// <summary> 擊殺敵人音效 </summary>
     Kill = 150,
+    /// <summary> 箱子擊破音效 </summary>
+    BoxBreak,
+    /// <summary> 獲取地圖道具音效 </summary>
+    GetMapProps,
 
     /// <summary> 技能:圍繞音效 </summary>
     Skill_Around = 200,

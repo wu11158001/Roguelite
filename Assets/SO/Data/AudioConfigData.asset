@@ -54,7 +54,31 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.5
-  - AudioType: 104
+  - AudioType: 150
+    AudioClip:
+      m_AssetGUID: c4d87f10fe1fa8144956203f67801a94
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.3
+  - AudioType: 151
+    AudioClip:
+      m_AssetGUID: 77adc8804c0fb0e46a45aeb94dc32edb
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.35
+  - AudioType: 152
+    AudioClip:
+      m_AssetGUID: 79892b240ecf0a64c9bec65b9ba9e67b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.1
+  - AudioType: 202
     AudioClip:
       m_AssetGUID: 2a455e6491ab483448371066a3814939
       m_SubObjectName: 
@@ -62,7 +86,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.5
-  - AudioType: 107
+  - AudioType: 205
     AudioClip:
       m_AssetGUID: bfb1974f1800bb64a89c4d8c5abaa7dc
       m_SubObjectName: 
@@ -70,7 +94,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.5
-  - AudioType: 102
+  - AudioType: 200
     AudioClip:
       m_AssetGUID: 85a6c2263d3249744ae4884f9a98786a
       m_SubObjectName: 
@@ -78,7 +102,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.8
-  - AudioType: 108
+  - AudioType: 206
     AudioClip:
       m_AssetGUID: 7729200059ac87047a37dee9eea237f1
       m_SubObjectName: 
@@ -86,7 +110,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.35
-  - AudioType: 103
+  - AudioType: 201
     AudioClip:
       m_AssetGUID: 0b0cb377a7d73b7479c553be5b430864
       m_SubObjectName: 
@@ -94,7 +118,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.3
-  - AudioType: 105
+  - AudioType: 203
     AudioClip:
       m_AssetGUID: 70eb35374e307d7499f339511967481b
       m_SubObjectName: 
@@ -102,7 +126,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.2
-  - AudioType: 106
+  - AudioType: 204
     AudioClip:
       m_AssetGUID: 14d058bf8bccd1f4bb44d3d12ab0f58b
       m_SubObjectName: 

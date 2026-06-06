@@ -6,6 +6,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 地圖道具_箱子
@@ -100,6 +101,9 @@ public class MapProps_BoxView : BaseGameObject
                 .SetEase(Ease.OutBounce)
                 .OnComplete(() =>
                 {
+                    // 音效
+                    AudioManager.Instance.PlaySFX(AUDIO_TYPE.BoxBreak).Forget();
+
                     SpawnRandomMapProps();
                     StartCoroutine(IHandleBang());
                 });
