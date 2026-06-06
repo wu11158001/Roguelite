@@ -48,11 +48,11 @@ public class SceneLoader : SingletonMonoBehaviour<SceneLoader>
         switch (sceneType)
         {
             case SCENE_TYPE.Lobby:
-                AudioManager.Instance.PlayBgm(audioType: AUDIO_TYPE.Lobby).Forget();
+                AudioManager.Instance.PlayBgm(AUDIO_TYPE.Lobby).Forget();
                 break;
 
             case SCENE_TYPE.Game:
-                AudioManager.Instance.PlayBgm(audioType: AUDIO_TYPE.Game).Forget();
+                AudioManager.Instance.PlayBgm(AUDIO_TYPE.Game).Forget();
                 break;
         }
     }

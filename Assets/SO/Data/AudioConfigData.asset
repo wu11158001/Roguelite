@@ -54,6 +54,38 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.5
+  - AudioType: 11
+    AudioClip:
+      m_AssetGUID: 6711b8f588795ee48ab59f19159e7e3b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.1
+  - AudioType: 154
+    AudioClip:
+      m_AssetGUID: f94df5d9aacca054c89147825e12b5ca
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.25
+  - AudioType: 155
+    AudioClip:
+      m_AssetGUID: 27a0ec4e338772b40bc4abddbc60f94f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.6
+  - AudioType: 156
+    AudioClip:
+      m_AssetGUID: 36849eefa7faa4848b95797bf30d9735
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.4
   - AudioType: 150
     AudioClip:
       m_AssetGUID: c4d87f10fe1fa8144956203f67801a94

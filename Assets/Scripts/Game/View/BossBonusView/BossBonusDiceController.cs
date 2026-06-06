@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// Boss獎勵骰子控制
@@ -28,6 +29,9 @@ public class BossBonusDiceController : MonoBehaviour
 
     private bool _isRolling = false;
     private bool _isSkip = false;
+
+    // 用於記錄上一次播放音效的「真實時間」
+    private float _lastPlaySFXTime;
 
     // 點數對應角度
     private Vector3[] diceRotations = new Vector3[]
@@ -103,6 +107,18 @@ public class BossBonusDiceController : MonoBehaviour
         _diceSequence.Join(rotateTween);
         _diceSequence.SetUpdate(true);
 
+        // 彈跳音效
+        _diceSequence.SetUpdate(true);
+        _lastPlaySFXTime = Time.unscaledTime;
+        _diceSequence.OnUpdate(() =>
+        {
+            if (Time.unscaledTime - _lastPlaySFXTime >= 1.0f)
+            {
+                _lastPlaySFXTime = Time.unscaledTime;
+                AudioManager.Instance.PlaySFX(AUDIO_TYPE.DiceBounce).Forget();
+            }
+        });
+
         // 結束執行
         _diceSequence.OnComplete(() =>
         {
@@ -114,6 +130,7 @@ public class BossBonusDiceController : MonoBehaviour
             // 跳過就不打開效果
             if(!_isSkip)
             {
+                AudioManager.Instance.PlaySFX(AUDIO_TYPE.DiceStop).Forget();
                 _diceEffect.SetActive(true);
                 _diceEffect.transform.position = transform.position;
             }

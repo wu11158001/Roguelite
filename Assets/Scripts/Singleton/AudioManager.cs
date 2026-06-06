@@ -4,6 +4,8 @@ using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using UniRx;
+using System;
+using DG.Tweening;
 
 /// <summary>
 /// 音樂/音效控制中心
@@ -145,7 +147,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         }
         catch (System.OperationCanceledException)
         {
-            Debug.Log("BGM Fade interrupted due to a new BGM request.");
+            Debug.Log("由於新的背景音樂請求，背景音樂淡出中斷。");
         }
     }
 
@@ -163,25 +165,21 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         }
 
         float startVolume = _main_AudioSource.volume;
-        float elapsed = 0f;
 
-        while (elapsed < duration)
-        {
-            token.ThrowIfCancellationRequested();
+        _main_AudioSource.DOKill();
+        _main_AudioSource.DOFade(targetVolume, duration).SetUpdate(true);
 
-            elapsed += Time.deltaTime;
-            _main_AudioSource.volume = Mathf.Lerp(startVolume, targetVolume, elapsed / duration);
-
-            await UniTask.Yield(PlayerLoopTiming.Update, token);
-        }
-
-        _main_AudioSource.volume = targetVolume;
+        await UniTask.Delay(
+            millisecondsDelay: Mathf.RoundToInt(duration * 1000),
+            delayType: DelayType.UnscaledDeltaTime,
+            cancellationToken: token
+        );
     }
 
     /// <summary>
     /// 播放音效
     /// </summary>
-    public async UniTask PlaySFX(AUDIO_TYPE audioType, float pitch = 1.0f)
+    public async UniTaskVoid PlaySFX(AUDIO_TYPE audioType, float pitch = 1.0f)
     {
         if (!_isSoundOn) return;
 

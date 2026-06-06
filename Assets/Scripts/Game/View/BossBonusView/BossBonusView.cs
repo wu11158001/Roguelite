@@ -63,6 +63,7 @@ public class BossBonusView : BaseView
         // 確認按鈕
         _btn_Confirm.OnClickAsObservable().First().Subscribe(_ =>
         {
+            AudioManager.Instance.PlayBgm(AUDIO_TYPE.Game).Forget();
             GameplayManager.CurrentContext.GameController.GamePause(false);
             Close();
         }).AddTo(this);
@@ -88,6 +89,8 @@ public class BossBonusView : BaseView
     public override void Setup(AssetReferenceGameObject myRef)
     {
         base.Setup(myRef);
+
+        AudioManager.Instance.PlayBgm(AUDIO_TYPE.BossBonusBGM).Forget();
 
         // 隨機獲得技能數量
         int randomPoint = Random.Range(1, 7);
@@ -175,6 +178,9 @@ public class BossBonusView : BaseView
         for (int i = 0; i < _skillItems.Count; i++)
         {
             int index = i;
+
+            // 開技能音效
+            AudioManager.Instance.PlaySFX(AUDIO_TYPE.BossBonus_OpenCard).Forget();
 
             // 生成技能Item
             GameObject obj = Instantiate(_bonusSkillItemView.gameObject, _itemParent);

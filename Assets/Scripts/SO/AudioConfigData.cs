@@ -16,6 +16,8 @@ public enum AUDIO_TYPE
 
     /// <summary> 遊戲BGM </summary>
     Game = 10,
+    /// <summary> Boss獎勵BGM </summary>
+    BossBonusBGM,
 
     /// <summary> 結算畫面 </summary>
     GameOver = 80,
@@ -33,6 +35,12 @@ public enum AUDIO_TYPE
     GetMapProps,
     /// <summary> 等級提升音效 </summary>
     LevelUp,
+    /// <summary> Boss獎勵彈跳音效 </summary>
+    DiceBounce,
+    /// <summary> Boss獎勵骰子停下音效 </summary>
+    DiceStop,
+    /// <summary> Boss獎勵翻牌音效 </summary>
+    BossBonus_OpenCard,
 
     /// <summary> 技能:圍繞音效 </summary>
     Skill_Around = 200,
