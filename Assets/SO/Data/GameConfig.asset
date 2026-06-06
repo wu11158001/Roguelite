@@ -36,7 +36,7 @@ MonoBehaviour:
   BaseUpgradeExp: 3
   UpgradeExpMultiplier:
   - LevelRange: 5
-    AddNeedValue: 100
+    AddNeedValue: 1
   - LevelRange: 10
     AddNeedValue: 2
   - LevelRange: 15

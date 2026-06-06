@@ -30,6 +30,8 @@ public class GameViewModel
         // 升級
         if (level > 0)
         {
+            // 音效
+            AudioManager.Instance.PlaySFX(AUDIO_TYPE.LevelUp).Forget();
             // 遊戲暫停
             GameplayManager.CurrentContext.GameController.GamePause(true);
             // 開啟選擇技能介面

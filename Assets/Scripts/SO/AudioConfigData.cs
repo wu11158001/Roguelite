@@ -31,6 +31,8 @@ public enum AUDIO_TYPE
     BoxBreak,
     /// <summary> 獲取地圖道具音效 </summary>
     GetMapProps,
+    /// <summary> 等級提升音效 </summary>
+    LevelUp,
 
     /// <summary> 技能:圍繞音效 </summary>
     Skill_Around = 200,

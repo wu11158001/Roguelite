@@ -9,7 +9,6 @@ public class CharacterController : MonoBehaviour
     public IReadOnlyReactiveProperty<int> CurrentLevel = new IntReactiveProperty(0);
     /// <summary> 當前經驗值 </summary>
     private IntReactiveProperty _currentExp = new IntReactiveProperty(0);
-    public IReadOnlyReactiveProperty<int> CurrentExp => _currentExp;
     /// <summary> 當前經驗值進度(0~1) </summary>
     public IReadOnlyReactiveProperty<float> CurrentExpprogress = new FloatReactiveProperty(0);
 

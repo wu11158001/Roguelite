@@ -78,6 +78,14 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.1
+  - AudioType: 153
+    AudioClip:
+      m_AssetGUID: 4cc68713931939b44881a92807c49ca9
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.3
   - AudioType: 202
     AudioClip:
       m_AssetGUID: 2a455e6491ab483448371066a3814939
