@@ -74,6 +74,9 @@ public class GameController : MonoBehaviour
         // 擊殺數量增加
         KillEnemyCount++;
 
+        // 音效
+        AudioManager.Instance.PlaySFX(AUDIO_TYPE.Kill).Forget();
+
         // 產生效果
         EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.KillEnemy);
         Transform effectPoint = enemyView.anchorPoint.midder.transform;

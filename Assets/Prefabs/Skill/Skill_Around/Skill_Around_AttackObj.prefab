@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6aea836cf603654f8d774838881b5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_Around_AttackObjView
-  _soundType: 102
+  _soundType: 200
 --- !u!135 &8168377054345996345
 SphereCollider:
   m_ObjectHideFlags: 0

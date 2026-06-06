@@ -25,8 +25,11 @@ public enum AUDIO_TYPE
     /// <summary> 取消音效 </summary>
     CancelClick,
 
+    /// <summary> 擊殺敵人音效 </summary>
+    Kill = 150,
+
     /// <summary> 技能:圍繞音效 </summary>
-    Skill_Around,
+    Skill_Around = 200,
     /// <summary> 技能:靈氣音效 </summary>
     Skill_Aura,
     /// <summary> 技能:前方打擊音效 </summary>

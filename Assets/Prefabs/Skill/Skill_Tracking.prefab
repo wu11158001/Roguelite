@@ -14566,7 +14566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afcc60c3d84502f44a622996dbb4f764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_TrackingView
-  _soundType: 108
+  _soundType: 206
 --- !u!135 &5197408505142929544
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -4949,7 +4949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c58edac30261243baf3d04651eb70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_FrontHitView
-  _soundType: 104
+  _soundType: 202
 --- !u!65 &3608580976450529986
 BoxCollider:
   m_ObjectHideFlags: 0

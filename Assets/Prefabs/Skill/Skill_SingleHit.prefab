@@ -24551,7 +24551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bac730519470ac447871c2a283066066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_SingleHitView
-  _soundType: 106
+  _soundType: 204
 --- !u!135 &8052906700558345609
 SphereCollider:
   m_ObjectHideFlags: 0
