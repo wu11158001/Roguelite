@@ -44,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cfbc9880221f5a428d45c23d7128019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_AroundView
+  _soundType: 0
   _attackObj:
     m_AssetGUID: 6ba0b167ba593ad44984b5c810162070
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  _baseRotateSpeed: 50
   _baseDistance: 3.5

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 技能_追蹤彈
@@ -12,6 +13,9 @@ public class Skill_TrackingView : BaseSkill
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
+
+        // 音效
+        AudioManager.Instance.PlaySFX(_soundType, 2).Forget();
 
         // 尋找目標
         Transform target = GameplayManager.CurrentContext.SkillController.GetNearestTarget(_playerObject.transform.position);

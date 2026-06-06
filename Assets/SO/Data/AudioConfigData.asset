@@ -30,7 +30,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 1
-  - AudioType: 0
+  - AudioType: 1
     AudioClip:
       m_AssetGUID: ea3bd13b16d135f40b6494e888bd9bc5
       m_SubObjectName: 
@@ -54,3 +54,59 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     Volume: 0.5
+  - AudioType: 104
+    AudioClip:
+      m_AssetGUID: 2a455e6491ab483448371066a3814939
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.5
+  - AudioType: 107
+    AudioClip:
+      m_AssetGUID: bfb1974f1800bb64a89c4d8c5abaa7dc
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.5
+  - AudioType: 102
+    AudioClip:
+      m_AssetGUID: 85a6c2263d3249744ae4884f9a98786a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.8
+  - AudioType: 108
+    AudioClip:
+      m_AssetGUID: 7729200059ac87047a37dee9eea237f1
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.35
+  - AudioType: 103
+    AudioClip:
+      m_AssetGUID: 0b0cb377a7d73b7479c553be5b430864
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.3
+  - AudioType: 105
+    AudioClip:
+      m_AssetGUID: 70eb35374e307d7499f339511967481b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.2
+  - AudioType: 106
+    AudioClip:
+      m_AssetGUID: 14d058bf8bccd1f4bb44d3d12ab0f58b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    Volume: 0.15

@@ -21,6 +21,8 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
     private Dictionary<AUDIO_TYPE, AudioClip> _audioCache = new();
     // 設定檔資料
     private Dictionary<AUDIO_TYPE, AudioData> _configLookUp = new();
+    // 記錄「正在加載中」的任務
+    private Dictionary<AUDIO_TYPE, UniTaskCompletionSource<AudioClip>> _loadingTasks = new();
 
     // 用來控制淡入淡出的中斷 Token
     private CancellationTokenSource _fadeCts;
@@ -250,30 +252,55 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
     /// </summary>
     private async UniTask<AudioClip> GetAudioClip(AUDIO_TYPE audioType)
     {
+        // 如果早就載入過，直接回傳快取好的音訊
         if (_audioCache.TryGetValue(audioType, out var cachedClip))
         {
             return cachedClip;
         }
 
+        // 如果正在載入中，等待這個現有的 TCS 任務
+        if (_loadingTasks.TryGetValue(audioType, out var tcs))
+        {
+            return await tcs.Task;
+        }
+
         if (_configLookUp.TryGetValue(audioType, out var audioData))
         {
+            // 建立一個新的傳輸控制源 (Promise)
+            var newTcs = new UniTaskCompletionSource<AudioClip>();
+            _loadingTasks[audioType] = newTcs;
+
             try
             {
-                AudioClip loadedClip = await audioData.AudioClip.LoadAssetAsync().ToUniTask(cancellationToken: this.GetCancellationTokenOnDestroy());
+                // 執行 Addressables 載入
+                AudioClip loadedClip = await audioData.AudioClip.LoadAssetAsync()
+                    .ToUniTask(cancellationToken: this.GetCancellationTokenOnDestroy());
+
                 if (loadedClip != null)
                 {
                     _audioCache[audioType] = loadedClip;
+
+                    newTcs.TrySetResult(loadedClip);
                     return loadedClip;
+                }
+                else
+                {
+                    newTcs.TrySetResult(null);
+                    return null;
                 }
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"Addressables 載入音效失敗: {audioType}, 錯誤: {e.Message}");
+                // 發生異常時，也要釋放排隊的，給 null 避免卡死
+                newTcs.TrySetResult(null);
+                return null;
             }
-        }
-        else
-        {
-            Debug.LogWarning($"配置檔中沒有註冊此音效類型: {audioType}");
+            finally
+            {
+                // 移除載入中清單
+                _loadingTasks.Remove(audioType);
+            }
         }
 
         return null;

@@ -200,8 +200,10 @@ public class SkillSpawner
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
 
-                Skill_AuraView skill_AuraView = obj.AddComponent<Skill_AuraView>();
-                skill_AuraView.Setup(data);
+                if(obj.TryGetComponent(out Skill_AuraView skill_AuraView))
+                {
+                    skill_AuraView.Setup(data);
+                }
 
                 OnlySkillData auraData = new()
                 {
@@ -318,7 +320,7 @@ public class SkillSpawner
     private void SpawnInCharacterMiddle8Way(SkillItemData data, int index)
     {
         PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
-        Transform middlePoint = playerView.ShotPoint;
+        Transform middlePoint = playerView.MiddlePoint;
 
         // 技能方向
         Vector3[] relativeAngles = new Vector3[]

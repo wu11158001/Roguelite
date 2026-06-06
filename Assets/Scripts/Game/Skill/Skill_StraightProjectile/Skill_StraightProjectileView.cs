@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 技能_直線投射物
@@ -15,6 +16,9 @@ public class Skill_StraightProjectileView : BaseSkill
 
         _controller ??= new Skill_StraightProjectileController(this);
         _controller.Activate(data);
+
+        // 音效
+        AudioManager.Instance.PlaySFX(_soundType).Forget();
 
         // 使用 UniRx 的 Update 觸發器
         this.UpdateAsObservable()

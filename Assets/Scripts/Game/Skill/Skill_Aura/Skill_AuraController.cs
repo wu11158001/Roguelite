@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UniRx;
 using UnityEngine;
@@ -10,9 +11,12 @@ public class Skill_AuraController : IDisposable
     private IDisposable _timerDisposable;
     private readonly CompositeDisposable _disposables = new();
 
-    public Skill_AuraController(Skill_AuraView view)
+    private AUDIO_TYPE _soundType;
+
+    public Skill_AuraController(Skill_AuraView view, AUDIO_TYPE soundType)
     {
         _view = view;
+        _soundType = soundType;
     }
 
     /// <summary>
@@ -51,7 +55,7 @@ public class Skill_AuraController : IDisposable
 
         float cd = GameplayManager.CurrentContext.SkillController.GetActualCd(_model);
 
-        // 時間到了就執行攻擊邏輯
+        // CD完成執行攻擊邏輯
         _timerDisposable = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(cd), Scheduler.MainThread)
             .Subscribe(_ => ExecuteAttack())
             .AddTo(_disposables);
@@ -65,6 +69,7 @@ public class Skill_AuraController : IDisposable
         var enemies = _view.CurrentInAreaEnemies;
 
         HitData hitData = _view.CalculateAttack();
+        bool hasAnyTargetHit = false;
 
         for (int i = enemies.Count - 1; i >= 0; i--)
         {
@@ -78,12 +83,20 @@ public class Skill_AuraController : IDisposable
 
                     // 技能追蹤傷害
                     GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
+
+                    hasAnyTargetHit = true; 
                 }
             }
             else
             {
                 enemies.RemoveAt(i);
             }
+        }
+
+        if (hasAnyTargetHit)
+        {
+            // 音效
+            AudioManager.Instance.PlaySFX(_soundType).Forget();
         }
     }
 

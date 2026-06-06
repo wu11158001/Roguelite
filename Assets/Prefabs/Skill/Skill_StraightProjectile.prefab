@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18010a0b9d8d37c4a9c37e3b8a733b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_StraightProjectileView
+  _soundType: 107
 --- !u!65 &5105016583902039055
 BoxCollider:
   m_ObjectHideFlags: 0

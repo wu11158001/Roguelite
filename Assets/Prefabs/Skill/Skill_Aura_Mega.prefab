@@ -19553,6 +19553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882fdcdb7050f4e45b89b701aeb5e36a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_AuraView
+  _soundType: 103
 --- !u!136 &295132841527180725
 CapsuleCollider:
   m_ObjectHideFlags: 0

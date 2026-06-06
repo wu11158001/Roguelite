@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -18,6 +19,9 @@ public class Skill_RangeSlowView : BaseSkill
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
         base.Setup(data);
+
+        // 音效
+        AudioManager.Instance.PlaySFX(_soundType).Forget();
 
         _controller ??= new(this);
         _controller.Activate(data);

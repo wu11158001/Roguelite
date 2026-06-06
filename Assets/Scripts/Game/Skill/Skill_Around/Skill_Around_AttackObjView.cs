@@ -38,7 +38,10 @@ public class Skill_Around_AttackObjView : BaseSkill
     {
         if (other.gameObject.layer == _targetLayer)
         {
-            _controller.HitEnemy(other.gameObject, CalculateAttack());
+            _controller.HitEnemy(
+                enemyObj: other.gameObject, 
+                hitData: CalculateAttack(), 
+                audioType: _soundType);
         }
     }
 

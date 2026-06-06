@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 239527732b587974d96d87dacd55d059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Skill_RangeSlowView
+  _soundType: 105
 --- !u!135 &3650151986994832929
 SphereCollider:
   m_ObjectHideFlags: 0

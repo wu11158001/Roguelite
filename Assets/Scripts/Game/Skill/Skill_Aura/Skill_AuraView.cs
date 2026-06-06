@@ -18,7 +18,7 @@ public class Skill_AuraView : BaseSkill
     {
         base.Setup(data, targetEnemy);
 
-        _controller ??= new Skill_AuraController(this);
+        _controller ??= new Skill_AuraController(this, _soundType);
         _controller.Activate(data);
     }
 

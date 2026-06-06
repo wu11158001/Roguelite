@@ -26,6 +26,7 @@ public class SelectSkillView : BaseView
                 skillItem.Setup(
                     data: data,
                     isNewSkill: data.SkillLevel == 1,
+                    isShowCurrentLevel: true,
                     clickCallback: SelectSkill);
             }
         }

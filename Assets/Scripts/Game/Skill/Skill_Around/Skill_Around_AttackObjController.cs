@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UniRx;
 using System;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 技能_物件圍繞:攻擊物件
@@ -94,11 +95,14 @@ public class Skill_Around_AttackObjController : IDisposable
         }
     }
 
-    public void HitEnemy(GameObject enemyObj, HitData hitData)
+    public void HitEnemy(GameObject enemyObj, HitData hitData, AUDIO_TYPE audioType)
     {
         if (enemyObj == null || !enemyObj.activeInHierarchy) return;
 
         if (_hitEnemiesTrackers.ContainsKey(enemyObj)) return;
+
+        // 音效
+        AudioManager.Instance.PlaySFX(audioType).Forget();
 
         // 攻擊敵人
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();

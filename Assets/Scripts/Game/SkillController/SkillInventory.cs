@@ -84,7 +84,7 @@ public class SkillInventory
             }
         }
 
-        // 新主動與被動上限限制
+        // 新主動候選
         if (activeOwned.Count < 6)
         {
             var newActives = allConfigs.Where(s =>
@@ -97,6 +97,7 @@ public class SkillInventory
             skillCandidates.AddRange(newActives);
         }
 
+        // 新被動候選
         if (passiveOwned.Count < 6)
         {
             var newPassives = allConfigs.Where(s =>

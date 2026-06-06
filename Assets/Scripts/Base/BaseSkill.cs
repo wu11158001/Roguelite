@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BaseSkill : BaseGameObject
 {
+    [SerializeField] protected AUDIO_TYPE _soundType;
+
     protected GameObject _playerObject;
     protected SkillItemData _data;
 

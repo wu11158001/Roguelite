@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 /// <summary>
 /// 單體精準打擊
 /// </summary>
@@ -15,6 +16,8 @@ public class Skill_SingleHitView : BaseSkill
     {
         base.Setup(data, targetEnemy);
 
+        // 音效
+        AudioManager.Instance.PlaySFX(_soundType).Forget();
         _controller ??= new();
         _controller.Activate(this);
         _controller.HitEnemy(targetEnemy, CalculateAttack());
