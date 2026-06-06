@@ -27,10 +27,8 @@ public class Skill_SingleHitController : IDisposable
     /// <param name="hitData"></param>
     public void HitEnemy(EnemyView enemyView, HitData hitData)
     {
-        if (enemyView == null || !enemyView.gameObject.activeInHierarchy)
-        {
-            return;
-        }
+        if (enemyView == null || !enemyView.gameObject.activeInHierarchy) return;
+        if (hitData == null) return;
 
         // 攻擊敵人
         enemyView?.OnAttacked(hitData);

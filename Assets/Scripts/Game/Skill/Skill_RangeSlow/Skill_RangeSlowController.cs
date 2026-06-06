@@ -51,10 +51,8 @@ public class Skill_RangeSlowController :IDisposable
     /// <param name="hitData"></param>
     public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
-        if (enemyObj == null || !enemyObj.activeInHierarchy)
-        {
-            return;
-        }
+        if (enemyObj == null || !enemyObj.activeInHierarchy) return;
+        if (hitData == null) return;
 
         hitData.SpeedModifier = 1 - (1 * _model.SpeedModifier);
         hitData.SpeedModifierTime = _model.SpeedModifierTime;

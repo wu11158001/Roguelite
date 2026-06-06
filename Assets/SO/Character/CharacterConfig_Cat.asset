@@ -48,7 +48,7 @@ MonoBehaviour:
   _baseAddCriticalChance: 5
   AddCriticalChance:
     value: 0
-  _baseCriticalMultiplier: 50
+  _baseCriticalMultiplier: 150
   CriticalMultiplier:
     value: 0
   _baseAddProjectileCount: 0

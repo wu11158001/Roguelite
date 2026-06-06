@@ -54,6 +54,7 @@ public class Skill_FrontHitController : IDisposable
     public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if (enemyObj == null || !enemyObj.activeInHierarchy) return;
+        if (hitData == null) return;
 
         if (enemyObj.TryGetComponent(out EnemyView enemyView))
         {

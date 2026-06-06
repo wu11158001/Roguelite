@@ -45,10 +45,10 @@ MonoBehaviour:
   _basePickupRange: 5
   PickupRange:
     value: 0
-  _baseAddCriticalChance: 0
+  _baseAddCriticalChance: 100
   AddCriticalChance:
     value: 0
-  _baseCriticalMultiplier: 0
+  _baseCriticalMultiplier: 150
   CriticalMultiplier:
     value: 0
   _baseAddProjectileCount: 0

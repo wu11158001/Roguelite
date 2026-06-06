@@ -2,6 +2,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UniRx;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 /// <summary>
 /// 設定介面
@@ -10,6 +11,9 @@ public class SettingView : BaseView
 {
     [HorizontalLine(color: EColor.Gray)]
     [Header("SettingView")]
+    [SerializeField] private Button _btn_Back;
+
+    [Header("Toggles")]
     [SerializeField] private UISwitcher.UISwitcher _tog_Music;
     [SerializeField] private UISwitcher.UISwitcher _tog_Sound;
     [SerializeField] private UISwitcher.UISwitcher _tog_Joystick;
@@ -22,6 +26,9 @@ public class SettingView : BaseView
 
     private void Start()
     {
+        // 關閉按鈕
+        _btn_Back.OnClickAsObservable().Subscribe(_ => Close()).AddTo(this);
+
         // 音樂開關
         _tog_Music.onValueChanged.AsObservable()
             .Subscribe(isOn =>
@@ -30,7 +37,6 @@ public class SettingView : BaseView
 
                 _currentSetting.IsOnMusic = isOn;
                 PlayerPrefsManager.SavaSettingData(_currentSetting);
-                MessageBroker.Default.Publish(_currentSetting);
             })
             .AddTo(this);
 
@@ -42,7 +48,6 @@ public class SettingView : BaseView
 
                 _currentSetting.IsOnSound = isOn;
                 PlayerPrefsManager.SavaSettingData(_currentSetting);
-                MessageBroker.Default.Publish(_currentSetting);
             })
             .AddTo(this);
 

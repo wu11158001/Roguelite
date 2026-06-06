@@ -146,7 +146,7 @@ public class PlayerView : BaseGameObject
     /// </summary>
     private void SpawnHpBarAndBind()
     {
-        GameInfoUIManager gameInfoUIManager = FindFirstObjectByType<GameInfoUIManager>();
+        GameInfoUIManager gameInfoUIManager = GameplayManager.CurrentContext.GameInfoUIManager;
         if (gameInfoUIManager != null)
         {
             gameInfoUIManager.SpawnHpBar(
@@ -155,7 +155,7 @@ public class PlayerView : BaseGameObject
                 callback: (hpBar) =>
                 {
                     _hpBarView = hpBar;
-                });
+                }).Forget();
         }
 
         // 監聽角色生命變化

@@ -60,6 +60,10 @@ public class GameLauncher : MonoBehaviour
         obj = new("SkillController");
         _context.SkillController = obj.AddComponent<SkillController>();
         obj.transform.parent = parent;
+
+        // 產生遊戲內專用畫布
+        obj = new("GameInfoUIManager");
+        _context.GameInfoUIManager = obj.AddComponent<GameInfoUIManager>();
     }
 
     /// <summary>

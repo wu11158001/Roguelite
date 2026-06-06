@@ -12,6 +12,8 @@ public enum EFFET_TYPE
 {
     /// <summary> 生命條 </summary>
     HpBar = 0,
+    /// <summary> 傷害文字 </summary>
+    DamageText,
 
     /// <summary> 生命回復效果 </summary>
     HpRecover = 100,

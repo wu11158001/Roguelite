@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 
 #region 玩家訊息資料
 
@@ -316,6 +317,8 @@ public static class PlayerPrefsManager
         string jsonString = JsonUtility.ToJson(data);
         PlayerPrefs.SetString(SETTING_KEY, jsonString);
         PlayerPrefs.Save();
+
+        MessageBroker.Default.Publish(data);
     }
 
     /// <summary>

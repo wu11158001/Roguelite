@@ -98,8 +98,8 @@ public class Skill_Around_AttackObjController : IDisposable
     public void HitEnemy(GameObject enemyObj, HitData hitData, AUDIO_TYPE audioType)
     {
         if (enemyObj == null || !enemyObj.activeInHierarchy) return;
-
         if (_hitEnemiesTrackers.ContainsKey(enemyObj)) return;
+        if (hitData == null) return;
 
         // 音效
         AudioManager.Instance.PlaySFX(audioType).Forget();

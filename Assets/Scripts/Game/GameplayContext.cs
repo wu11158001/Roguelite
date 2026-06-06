@@ -1,8 +1,10 @@
-﻿/// <summary>
+/// <summary>
 /// 當前關卡資料內容，遊戲中資料由這取得
 /// </summary>
 public class GameplayContext
 {
+    /// <summary> 遊戲內專用畫布 </summary>
+    public GameInfoUIManager GameInfoUIManager { get; set; }
     /// <summary> 操作角色角色 </summary>
     public PlayerView ControlCharacter { get; set; }
     /// <summary> 當前使用的遊戲控制器 </summary>

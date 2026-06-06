@@ -69,6 +69,8 @@ public class Skill_AuraController : IDisposable
         var enemies = _view.CurrentInAreaEnemies;
 
         HitData hitData = _view.CalculateAttack();
+        if (hitData == null) return;
+
         bool hasAnyTargetHit = false;
 
         for (int i = enemies.Count - 1; i >= 0; i--)

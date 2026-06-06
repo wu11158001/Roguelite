@@ -11,11 +11,12 @@ public class JoystickView : BaseView, IPointerDownHandler, IDragHandler, IPointe
 {
     [HorizontalLine(color: EColor.Gray)]
     [Header("JoystickView")]
-    [SerializeField] private RectTransform _joystickBackground; // 搖桿外圈
-    [SerializeField] private RectTransform _joystickHandle;     // 搖桿內置中心點
-
-    [Header("參數")]
-    [SerializeField] private float _moveRange = 100f;          // 搖桿移動半徑
+    [Label("搖桿外圈")]
+    [SerializeField] private RectTransform _joystickBackground;
+    [Label("搖桿內置中心點")]
+    [SerializeField] private RectTransform _joystickHandle;
+    [Label("搖桿移動半徑")]
+    [SerializeField] private float _moveRange = 100f;
 
     private readonly ReactiveProperty<Vector2> _joystickOutput = new(Vector2.zero);
 

@@ -57,15 +57,9 @@ public class Skill_StraightProjectileController
     /// <param name="enemyObj"></param>
     public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
-        if (_isExpired || _hitTargets.Contains(enemyObj))
-        {
-            return;
-        }
-
-        if (enemyObj == null || !enemyObj.activeInHierarchy)
-        {
-            return;
-        }
+        if (_isExpired || _hitTargets.Contains(enemyObj)) return;
+        if (enemyObj == null || !enemyObj.activeInHierarchy) return;
+        if (hitData == null) return;
 
         // 穿透
         _penetrate--;
