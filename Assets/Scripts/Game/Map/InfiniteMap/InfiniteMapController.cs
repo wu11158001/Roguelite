@@ -310,7 +310,8 @@ public class InfiniteMapController : MonoBehaviour
     /// </summary>
     /// <param name="worldPos"></param>
     /// <param name="prefabRef"></param>
-    public void SpawnPropsAtWorld(Vector3 worldPos, AssetReferenceGameObject prefabRef)
+    /// <param name="isLocked">是否不隨地圖刷新而回收</param>
+    public void SpawnPropsAtWorld(Vector3 worldPos, AssetReferenceGameObject prefabRef, bool isLocked = false)
     {
         string gridId = GetGridId(worldPos);
 
@@ -333,16 +334,24 @@ public class InfiniteMapController : MonoBehaviour
             LocalPosition = localPos
         };
 
-        _model.AddPropsData(gridId, data);
-
-        if (currentGround != null)
+        if(!isLocked)
         {
+            _model.AddPropsData(gridId, data);
+        }
+
+        if (isLocked)
+        {
+            SpawnPersistentPropsEntity(data, worldPos);
+        }
+        else if (currentGround != null)
+        {
+            // 沒鎖定的普通道具，維持原樣
             CreatePropsViewEntity(gridId, data, groundCenterPos);
         }
     }
 
     /// <summary>
-    /// 產生實體道具
+    /// 產生實體道具(會回收)
     /// </summary>
     /// <param name="gridId"></param>
     /// <param name="data"></param>
@@ -354,7 +363,7 @@ public class InfiniteMapController : MonoBehaviour
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: $"地圖道具",
             assetRef: data.PrefabRef,
-            position: currentWorldPos, // 使用計算後的正確世界座標
+            position: currentWorldPos,
             rotation: Quaternion.identity,
             callback: (obj) =>
             {
@@ -378,7 +387,7 @@ public class InfiniteMapController : MonoBehaviour
                 if (obj.TryGetComponent<BaseMapProps>(out var mapProps))
                 {
                     mapProps.Setup(data.PrefabRef);
-                    mapProps.LinkData(gridId, data);
+                    mapProps.LinkData(data);
 
                     if (!_activePropsViews.TryGetValue(gridId, out var list))
                     {
@@ -390,6 +399,28 @@ public class InfiniteMapController : MonoBehaviour
                     {
                         list.Add(mapProps);
                     }
+                }
+            });
+    }
+
+    /// <summary>
+    /// 產生實體道具(不會回收)
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="worldPos"></param>
+    private void SpawnPersistentPropsEntity(MapPropsData data, Vector3 worldPos)
+    {
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+            parentName: "特殊留存道具",
+            assetRef: data.PrefabRef,
+            position: worldPos,
+            rotation: Quaternion.identity,
+            callback: (obj) =>
+            {
+                if (obj != null && obj.TryGetComponent<BaseMapProps>(out var mapProps))
+                {
+                    mapProps.Setup(data.PrefabRef);
+                    mapProps.LinkData(data);
                 }
             });
     }

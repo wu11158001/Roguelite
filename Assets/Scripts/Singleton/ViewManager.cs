@@ -81,6 +81,26 @@ public class ViewManager : SingletonMonoBehaviour<ViewManager>
     }
 
     /// <summary>
+    /// 獲取介面
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="viewType"></param>
+    /// <returns></returns>
+    public T GetView<T>(VIEW_TYPE viewType) where T : BaseView
+    {
+        foreach (var view in _viewStack)
+        {
+            if (view is T targetView)
+            {
+                return targetView;
+            }
+        }
+
+        Debug.LogWarning($"找不到類型為 {typeof(T).Name} 的已開啟 View。");
+        return null;
+    }
+
+    /// <summary>
     /// 清除所有介面
     /// </summary>
     public void ClearAll()

@@ -59,24 +59,26 @@ body {
 
 #unity-logo { 
     width: 200px; 
-    height: 200px; 
+    height: 162px;
     background: url('Roguelite.png') no-repeat center;
     background-size: contain; 
+    margin: 0 auto; /* 確保圖片自己在父層中水平置中 */
 }
 
 #unity-progress-bar-empty { 
-    width: 141px; 
-    height: 18px; 
-    margin-top: 10px; 
-    margin-left: 6.5px; 
+    width: 200px; 
+    height: 20px; 
+    margin-top: 15px; 
     background: url('progress-bar-empty-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center; 
+    background-size: 100% 100%; /* 強制背景圖完美貼合這個外框 */
 }
 
 #unity-progress-bar-full { 
     width: 0%; 
-    height: 18px; 
-    margin-top: 10px; 
+    height: 20px;  /* 必須與 empty 完全一致 */
+    margin-top: 15px; /* 必須與 empty 完全一致 */
     background: url('progress-bar-full-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center; 
+    background-size: 100% 100%; /* 強制背景圖完美貼合這個外框 */
 }
 
 /* 頁尾工具列懸浮在畫面的右下角，不佔用遊戲空間 */

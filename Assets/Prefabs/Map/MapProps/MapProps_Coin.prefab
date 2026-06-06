@@ -5030,6 +5030,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapProps_Coin
   _flyDuration: 0.5
   _flyEase: 26
+  _isLocked: 0
+  LockedIcon: {fileID: 0}
   _addCoinValue: 10
 --- !u!65 &3283127194895732487
 BoxCollider:

@@ -24,10 +24,27 @@ public class GameView : BaseView
     [SerializeField] private Transform _activeSkillGroup;
     [SerializeField] private Transform _passiveSkillGroup;
 
+    [HorizontalLine(color: EColor.Gray)]
+    [Header("追蹤道具位置")]
+    [SerializeField] private RectTransform _lockedParent;
+    [SerializeField] private GameObject _lockedIconPrefab;
+    [Label("距離螢幕邊緣的留白(0.05 = 5%)")]
+    [SerializeField] private float _marginPercentageX = 0.028f;
+    [SerializeField] private float _marginPercentageY = 0.05f;
+
+    // 追蹤雷達項目物件,方便刪除
+    private Dictionary<RadarTrackItemData, GameObject> _radarUiMap = new();
+
     private List<Common_BtnSkillItem> _activeSkillItems;
     private List<Common_BtnSkillItem> _passiveSkillItems;
 
     private GameViewModel _viewModel = new();
+
+    public override void OnDestroy()
+    {
+        _viewModel.Clear();
+        base.OnDestroy();
+    }
 
     private void Init()
     {
@@ -65,8 +82,11 @@ public class GameView : BaseView
     {
         base.Setup(myRef);
 
+        _viewModel.Initialize(_marginPercentageX, _marginPercentageY);
+
         Init();
         BindViewModel();
+        BindRadarViewModel();
     }
 
     private void BindViewModel()
@@ -123,6 +143,81 @@ public class GameView : BaseView
 
         // 獲取技能監聽
         MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
+    }
+
+    /// <summary>
+    /// 綁定雷達資料
+    /// </summary>
+    private void BindRadarViewModel()
+    {
+        if (_lockedIconPrefab != null) _lockedIconPrefab.SetActive(false);
+
+        // 1. 監聽新物件加入
+        _viewModel.RadarItems.ObserveAdd()
+            .Subscribe(evt =>
+            {
+                var item = evt.Value;
+                GameObject uiObj = Instantiate(_lockedIconPrefab, _lockedParent);
+                uiObj.SetActive(true);
+
+                // 設定圖示
+                if (uiObj.TryGetComponent(out Image img) && item.MapProps.LockedIcon != null)
+                {
+                    img.sprite = item.MapProps.LockedIcon;
+                }
+
+                _radarUiMap[item] = uiObj;
+            }).AddTo(this);
+
+        // 2. 監聽物件移除 (當道具被回收或消失)
+        _viewModel.RadarItems.ObserveRemove()
+            .Subscribe(evt =>
+            {
+                var item = evt.Value;
+                if (_radarUiMap.TryGetValue(item, out GameObject uiObj))
+                {
+                    if (uiObj != null) Destroy(uiObj);
+                    _radarUiMap.Remove(item);
+                }
+            }).AddTo(this);
+
+        // 3. 每一格將 ViewModel 算好的資料渲染到 UI 上
+        Observable.EveryLateUpdate()
+            .Subscribe(_ =>
+            {
+                // 取得父層 Canvas 的實際大小
+                Vector2 parentSize = _lockedParent.rect.size;
+
+                foreach (var pair in _radarUiMap)
+                {
+                    var data = pair.Key;
+                    var uiObj = pair.Value;
+
+                    if (uiObj == null) continue;
+
+                    // 依據 ViewModel 的可見性開關 UI
+                    if (uiObj.activeSelf != data.IsVisibleOnEdge)
+                    {
+                        uiObj.SetActive(data.IsVisibleOnEdge);
+                    }
+
+                    if (data.IsVisibleOnEdge)
+                    {
+                        // 核心：將 -0.5 ~ 0.5 的比例乘以 Canvas 實際寬高，得到精準的 anchoredPosition
+                        RectTransform rt = uiObj.GetComponent<RectTransform>();
+                        rt.anchoredPosition = new Vector2(
+                            data.NormalizedPosition.x * parentSize.x,
+                            data.NormalizedPosition.y * parentSize.y
+                        );
+                    }
+                }
+            }).AddTo(this);
+    }
+
+    // 提供給 BaseMapProps 呼叫的接口
+    public void RegisterOutOfScreenTarget(BaseMapProps props)
+    {
+        _viewModel.RegisterTarget(props);
     }
 
     /// <summary>

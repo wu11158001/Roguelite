@@ -34,11 +34,10 @@ public class SceneLoader : SingletonMonoBehaviour<SceneLoader>
         if (SceneManager.GetActiveScene().name == sceneType.ToString())
             return;
 
-        PlayBgm(sceneType);
-
         await SceneManager.LoadSceneAsync(sceneType.ToString()).ToUniTask();
 
         AudioManager.Instance.ClearAll();
+        PlayBgm(sceneType);
     }
 
     /// <summary>

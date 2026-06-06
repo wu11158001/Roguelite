@@ -150,7 +150,8 @@ public class MapProps_BoxView : BaseGameObject
                 AssetReferenceGameObject selectedPropRef = mapProps[randomIndex];
                 GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
                     worldPos: transform.position,
-                    prefabRef: selectedPropRef);
+                    prefabRef: selectedPropRef,
+                    isLocked: false);
             }
         }
         catch (Exception e)

@@ -4862,6 +4862,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapProps_BossBonus
   _flyDuration: 0.5
   _flyEase: 26
+  _isLocked: 1
+  LockedIcon: {fileID: 21300000, guid: 2ea57f91912c96f4d8ecbe62a63895dd, type: 3}
 --- !u!54 &2391994866720188781
 Rigidbody:
   m_ObjectHideFlags: 0

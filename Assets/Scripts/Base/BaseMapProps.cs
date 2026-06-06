@@ -23,12 +23,20 @@ public abstract class BaseMapProps : BaseGameObject
     [Label("飛行移動模式")]
     [SerializeField] private Ease _flyEase = Ease.InBack;
 
+    [HorizontalLine(color: EColor.Gray)]
+    [Header("追蹤位置")]
+    [Label("是否需追蹤位置")]
+    [SerializeField] private bool _isLocked;
+    [Label("追蹤圖片")]
+    [ShowIf(nameof(_isLocked))]
+    [SerializeField] public Sprite LockedIcon;
+
     private int _targetLayer;
     // 避免重複觸發
     private bool _isTriggered = false;
 
     // 綁定地板道具資料
-    private MapPropsData _assignedData;
+    public MapPropsData AssignedData { get; private set; }
 
     public override void OnDestroy()
     {
@@ -39,6 +47,12 @@ public abstract class BaseMapProps : BaseGameObject
     private void OnEnable()
     {
         _isTriggered = false;
+
+        // 需要雷達追蹤註冊
+        if(_isLocked && LockedIcon != null)
+        {
+            RegisterToRadar();
+        }
     }
 
     protected virtual void Start()
@@ -58,19 +72,30 @@ public abstract class BaseMapProps : BaseGameObject
             MessageBroker.Default.Publish(new MapPropsTriggerMessage
             {
                 BaseMapProps = this,
-                MapPropsData = _assignedData
+                MapPropsData = AssignedData
             });
+        }
+    }
+
+    /// <summary>
+    /// 追蹤項目註冊
+    /// </summary>
+    private void RegisterToRadar()
+    {
+        var gameView = ViewManager.Instance.GetView<GameView>(VIEW_TYPE.GameView);
+        if (gameView != null)
+        {
+            gameView.RegisterOutOfScreenTarget(this);
         }
     }
 
     /// <summary>
     /// 綁定身分
     /// </summary>
-    /// <param name="gridId"></param>
     /// <param name="data"></param>
-    public void LinkData(string gridId, MapPropsData data)
+    public void LinkData(MapPropsData data)
     {
-        _assignedData = data;
+        AssignedData = data;
         _isTriggered = false;
     }
 

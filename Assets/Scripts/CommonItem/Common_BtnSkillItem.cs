@@ -15,7 +15,9 @@ public class Common_BtnSkillItem : MonoBehaviour
     [SerializeField] private Image _img_Bg;
     [SerializeField] private Image _img_SkillIcon;
     [SerializeField] private TextMeshProUGUI _text_SkillLevel;
-    [SerializeField] private TextMeshProUGUI _text_SkillName;
+
+    [SerializeField] private bool _isShowName;
+    [SerializeField] [ShowIf(nameof(_isShowName))] private TextMeshProUGUI _text_SkillName;
 
     [HorizontalLine(color: EColor.Gray)]
     [Label("是否顯示等級")] [SerializeField] private bool _isShowLevel = false;

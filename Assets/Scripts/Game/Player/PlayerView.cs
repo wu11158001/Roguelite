@@ -320,7 +320,7 @@ public class PlayerView : BaseGameObject
         base.Remove();
     }
 
-    [SerializeField] private float distanceRadius = 25;
+    [SerializeField] private float distanceRadius = 30;
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
