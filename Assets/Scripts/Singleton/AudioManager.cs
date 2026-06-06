@@ -63,14 +63,6 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         }
         _sfxPool.Clear();
         _allSfxSources.Clear();
-
-        // 獲取本地音量開關設定
-        SettingData savedSetting = PlayerPrefsManager.LoadSettingData();
-        if (savedSetting != null)
-        {
-            _isMusicOn = savedSetting.IsOnMusic;
-            _isSoundOn = savedSetting.IsOnSound;
-        }
     }
 
     private void Start()
@@ -100,6 +92,14 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
             {
                 _configLookUp.Add(data.AudioType, data);
             }
+        }
+
+        // 獲取本地音量開關設定
+        SettingData savedSetting = PlayerPrefsManager.LoadSettingData();
+        if (savedSetting != null)
+        {
+            _isMusicOn = savedSetting.IsOnMusic;
+            _isSoundOn = savedSetting.IsOnSound;
         }
     }
 
@@ -133,7 +133,6 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
             _main_AudioSource.pitch = pitch;
             _main_AudioSource.volume = 0f;
             _main_AudioSource.loop = true;
-            _main_AudioSource.Play();
 
             if (_isMusicOn)
             {
