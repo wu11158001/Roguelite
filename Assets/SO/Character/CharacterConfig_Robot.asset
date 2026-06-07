@@ -23,20 +23,20 @@ MonoBehaviour:
   Price: 400
   HpBarHight: 4.2
   RotationSpeed: 10
-  InitSkill: 5
+  InitSkill: 4
   _baseMoveSpeed: 10
   MoveSpeed:
     value: 0
   _baseAddAttack: 0
   AddAttack:
     value: 0
-  _baseMaxHp: 100
+  _baseMaxHp: 1000
   MaxHp:
     value: 0
-  _baseDefense: 0
+  _baseDefense: 2
   Defense:
     value: 0
-  _baseLifeRecover: 0
+  _baseLifeRecover: 1
   HpRecover:
     value: 0
   _baseCdReduce: 0.1

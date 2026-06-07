@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: a9e0924dd6d9a6547818edd6029a434f
   m_SerializeEntries:
   - m_GUID: 4b50c6198f07c2e42a2579cad61495b5
-    m_Address: Assets/SO/Data
+    m_Address: Data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

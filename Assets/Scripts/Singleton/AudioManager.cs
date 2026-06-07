@@ -10,7 +10,6 @@ using DG.Tweening;
 /// <summary>
 /// 音樂/音效控制中心
 /// </summary>
-[RequireComponent(typeof(AudioSource))]
 public class AudioManager : SingletonMonoBehaviour<AudioManager>
 {
     private AudioSource _main_AudioSource;
@@ -69,9 +68,16 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         _allSfxSources.Clear();
     }
 
-    private void Start()
+    protected override void Awake()
     {
-        _main_AudioSource = GetComponent<AudioSource>();
+        base.Awake();
+
+        if (Instance != this) return;
+
+        if (!TryGetComponent(out _main_AudioSource))
+        {
+            _main_AudioSource = gameObject.AddComponent<AudioSource>();
+        }
 
         Init();
         BindViewModel();

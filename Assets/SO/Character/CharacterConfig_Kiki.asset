@@ -23,7 +23,7 @@ MonoBehaviour:
   Price: 400
   HpBarHight: 3.9
   RotationSpeed: 10
-  InitSkill: 4
+  InitSkill: 5
   _baseMoveSpeed: 10
   MoveSpeed:
     value: 0
