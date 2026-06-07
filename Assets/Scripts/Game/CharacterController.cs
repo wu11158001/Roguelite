@@ -74,6 +74,9 @@ public class CharacterController : MonoBehaviour
     /// <param name="value"></param>
     public void OnGainExp(int value)
     {
+        if (GameplayManager.CurrentContext.GameController.IsGamePause ||
+            GameplayManager.CurrentContext.GameController.IsGameOver) return;
+
         // 經驗獎勵加成
         float expBonus = GameStateData.SelectLevel.ExpBonus;
         // 無條件進位加成
