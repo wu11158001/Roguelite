@@ -38,10 +38,10 @@ public class SelectSkillView : BaseView
     /// <param name="data"></param>
     private void SelectSkill(SkillItemData data)
     {
-        // 學習技能
-        GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(data);
         // 遊戲暫停結束
         GameplayManager.CurrentContext.GameController.GamePause(false);
+        // 學習技能
+        GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(data);
 
         Close();
     }

@@ -329,7 +329,13 @@ public static class PlayerPrefsManager
     {
         if (!PlayerPrefs.HasKey(SETTING_KEY))
         {
-            return null;
+            return new()
+            {
+                IsOnDamageText = true,
+                IsOnJoystick = true,
+                IsOnMusic = true,
+                IsOnSound = true
+            };
         }
 
         string jsonString = PlayerPrefs.GetString(SETTING_KEY);

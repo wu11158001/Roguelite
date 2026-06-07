@@ -10,9 +10,9 @@ using System.Collections.Generic;
 public class GainSkillMessage
 {
     /// <summary> 獲取或提升的技能 </summary>
-    public SkillItemData SkillItem;
+    public SkillItemData SkillItem { get; set; }
     /// <summary> 當前擁有技能 </summary>
-    public ReactiveCollection<SkillItemData> OwnSkills;
+    public IReadOnlyList<SkillItemData> OwnSkills { get; set; }
 }
 
 /// <summary>
@@ -171,6 +171,8 @@ public class SkillController : MonoBehaviour
     /// <param name="skill"></param>
     private void UpdateTrackData(SkillItemData skill)
     {
+        if (skill == null) return;
+
         // 只記錄主動技能
         if (skill.IsPassive || skill.IsProps) return;
 

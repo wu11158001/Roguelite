@@ -142,7 +142,9 @@ public class GameView : BaseView
         }).AddTo(this);
 
         // 獲取技能監聽
-        MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems(msg)).AddTo(this);
+        MessageBroker.Default.Receive<GainSkillMessage>().Subscribe(msg => UpdateSkillItems()).AddTo(this);
+        // 刷新技能監聽
+        MessageBroker.Default.Receive<UpdateOwnSkillMessage>().Subscribe(_ => UpdateSkillItems()).AddTo(this);
     }
 
     /// <summary>
@@ -223,12 +225,16 @@ public class GameView : BaseView
     /// <summary>
     /// 更新技能項目
     /// </summary>
-    private void UpdateSkillItems(GainSkillMessage skillItemDatas)
+    private void UpdateSkillItems()
     {
+        if (GameplayManager.CurrentContext.GameController.IsGamePause) return;
+
+        var ownSkills = GameplayManager.CurrentContext.SkillController.OwnSkills;
+
         int skillIndex = 0;
         int passiveIndex = 0;
 
-        foreach (var skill in skillItemDatas.OwnSkills)
+        foreach (var skill in ownSkills)
         {
             if(skill.IsPassive)
             {

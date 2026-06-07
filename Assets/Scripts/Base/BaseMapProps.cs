@@ -115,6 +115,8 @@ public abstract class BaseMapProps : BaseGameObject
             .SetLink(gameObject)
             .OnUpdate(() =>
             {
+                if (GameplayManager.CurrentContext.GameController.IsGameOver) return;
+
                 if (playerObj != null)
                 {
                     transform.position = Vector3.Lerp(startPos, playerObj.position, timer);
@@ -122,6 +124,8 @@ public abstract class BaseMapProps : BaseGameObject
             })
             .OnComplete(() =>
             {
+                if (GameplayManager.CurrentContext.GameController.IsGameOver) return;
+
                 // 音效
                 AudioManager.Instance.PlaySFX(AUDIO_TYPE.GetMapProps).Forget();
 

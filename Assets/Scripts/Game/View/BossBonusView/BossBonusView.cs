@@ -8,6 +8,12 @@ using UnityEngine.UI;
 using UniRx;
 using DG.Tweening;
 using TMPro;
+using System.Linq;
+
+/// <summary>
+/// 用來發送刷新目前擁有技能訊息
+/// </summary>
+public class UpdateOwnSkillMessage { }
 
 /// <summary>
 /// Boss獎勵介面
@@ -65,6 +71,10 @@ public class BossBonusView : BaseView
         {
             AudioManager.Instance.PlayBgm(AUDIO_TYPE.Game).Forget();
             GameplayManager.CurrentContext.GameController.GamePause(false);
+
+            // 發送通知刷新當前技能
+            MessageBroker.Default.Publish(new UpdateOwnSkillMessage());
+
             Close();
         }).AddTo(this);
 
