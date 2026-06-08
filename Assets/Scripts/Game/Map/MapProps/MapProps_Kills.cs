@@ -8,7 +8,7 @@ public class MapProps_Kills : BaseMapProps
 {
     public override void OnPickUpDo()
     {
-        List<EnemyView> allEnemy = GameplayManager.CurrentContext.SkillController.GetAllEnemyInCamera();
+        List<EnemyView> allEnemy = GameplayManager.CurrentContext.SkillController.GetAllEnemysInCamera();
         foreach (var enemy in allEnemy)
         {
             HitData hitData = new()

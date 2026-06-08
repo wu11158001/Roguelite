@@ -1,8 +1,12 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Skill_AuraView : BaseSkill
 {
+    private CapsuleCollider _capsuleCollider;
+
     private readonly List<GameObject> _currentInAreaEnemies = new();
     public List<GameObject> CurrentInAreaEnemies => _currentInAreaEnemies;
 
@@ -18,16 +22,11 @@ public class Skill_AuraView : BaseSkill
     {
         base.Setup(data, targetEnemy);
 
+        _capsuleCollider ??= GetComponent<CapsuleCollider>();
+        _capsuleCollider.enabled = false;
+
         _controller ??= new Skill_AuraController(this, _soundType);
         _controller.Activate(data);
-    }
-
-    /// <summary>
-    /// 更新效果範圍
-    /// </summary>
-    public void UpdateEffectRange(float scale)
-    {
-        transform.localScale = new Vector3(scale, scale, scale);
     }
 
     private void OnTriggerStay(Collider other)
@@ -41,5 +40,27 @@ public class Skill_AuraView : BaseSkill
     private void OnTriggerExit(Collider other)
     {
         _currentInAreaEnemies.Remove(other.gameObject);
+    }
+
+    /// <summary>
+    /// 更新效果範圍
+    /// </summary>
+    public void UpdateEffectRange(float scale)
+    {
+        transform.localScale = new Vector3(scale, scale, scale);
+    }
+
+    /// <summary>
+    /// 碰撞框開啟
+    /// </summary>
+    /// <param name="isEnable"></param>
+    public async UniTaskVoid ColliderEnable()
+    {
+        _capsuleCollider.enabled = true;
+
+        await UniTask.Yield(PlayerLoopTiming.FixedUpdate);
+        await UniTask.Yield(PlayerLoopTiming.FixedUpdate);
+
+        _capsuleCollider.enabled = false;
     }
 }

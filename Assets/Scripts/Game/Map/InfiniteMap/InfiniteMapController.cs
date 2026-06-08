@@ -29,7 +29,7 @@ public class InfiniteMapController : MonoBehaviour
     private Material _runtimeMaterial;
 
     // 紀錄畫面中的箱子
-    private Dictionary<string, List<MapProps_BoxView>> _activeBoxViews = new();
+    public Dictionary<string, List<MapProps_BoxView>> ActiveBoxViews { get; private set; } = new();
     // 紀錄畫面中的道具
     private Dictionary<string, List<BaseMapProps>> _activePropsViews = new();
 
@@ -127,7 +127,7 @@ public class InfiniteMapController : MonoBehaviour
                 _runtimeMaterial = null;
             }
 
-            _activeBoxViews?.Clear();
+            ActiveBoxViews?.Clear();
             _activePropsViews?.Clear();
 
             // 重置 Model 內部的地圖資料快取
@@ -231,9 +231,9 @@ public class InfiniteMapController : MonoBehaviour
         List<BoxData> boxesData = _model.GetBoxesData(gridId);
         if (boxesData == null || boxesData.Count == 0) return;
 
-        if (!_activeBoxViews.ContainsKey(gridId))
+        if (!ActiveBoxViews.ContainsKey(gridId))
         {
-            _activeBoxViews[gridId] = new List<MapProps_BoxView>();
+            ActiveBoxViews[gridId] = new List<MapProps_BoxView>();
         }
 
         _pendingSpawnGrids.Add(gridId);
@@ -258,7 +258,7 @@ public class InfiniteMapController : MonoBehaviour
                     if (remainingCount <= 0) _pendingSpawnGrids.Remove(gridId);
 
                     // 檢查異步回傳時，玩家是不是已經跑遠、導致該地塊已經被回收了
-                    if (!_activeBoxViews.ContainsKey(gridId))
+                    if (!ActiveBoxViews.ContainsKey(gridId))
                     {
                         if (obj != null) GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
                         return;
@@ -270,15 +270,15 @@ public class InfiniteMapController : MonoBehaviour
                         boxView.OnBoxTriggered += () =>
                         {
                             _model.RemoveBoxData(gridId, currentBoxData);
-                            if (_activeBoxViews.TryGetValue(gridId, out var list))
+                            if (ActiveBoxViews.TryGetValue(gridId, out var list))
                             {
                                 list.Remove(boxView);
                             }
                         };
 
-                        if (!_activeBoxViews[gridId].Contains(boxView))
+                        if (!ActiveBoxViews[gridId].Contains(boxView))
                         {
-                            _activeBoxViews[gridId].Add(boxView);
+                            ActiveBoxViews[gridId].Add(boxView);
                         }
                     }
                 });
@@ -291,13 +291,13 @@ public class InfiniteMapController : MonoBehaviour
     /// <param name="gridId"></param>
     private void RecycleBoxesAtGrid(string gridId)
     {
-        if (_activeBoxViews.TryGetValue(gridId, out var viewList) && viewList != null)
+        if (ActiveBoxViews.TryGetValue(gridId, out var viewList) && viewList != null)
         {
             foreach (var boxView in viewList)
             {
                 if (boxView != null) boxView.Recycle();
             }
-            _activeBoxViews.Remove(gridId);
+            ActiveBoxViews.Remove(gridId);
         }
     }
 

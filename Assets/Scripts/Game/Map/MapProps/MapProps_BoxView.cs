@@ -11,11 +11,10 @@ using Cysharp.Threading.Tasks;
 /// <summary>
 /// 地圖道具_箱子
 /// </summary>
-public class MapProps_BoxView : BaseGameObject
+public class MapProps_BoxView : BaseGameObject, ITargetable
 {
     [SerializeField] private Animator _anim;
     [SerializeField] private Transform _moveObj;
-    [SerializeField] private BoxCollider _boxCollider;
 
     [Header("移動參數")]
     [Label("上下移動的距離")]
@@ -28,6 +27,12 @@ public class MapProps_BoxView : BaseGameObject
     [SerializeField] private float _dropDuration = 0.1f;
     [Label("延遲回收時間")]
     [SerializeField] private float _waitRecycleTime;
+
+    private BoxCollider _boxCollider;
+    private Bounds _cachedBounds;
+    public Transform TargetTransform => transform;
+    public Bounds TargetBounds => _cachedBounds;
+    public bool IsActive => gameObject.activeInHierarchy;
 
     private float _initPosY;
     private int[] _targetLayer;
@@ -85,6 +90,16 @@ public class MapProps_BoxView : BaseGameObject
         };
 
         _initPosY = _moveObj.position.y;
+
+        _boxCollider = GetComponent<BoxCollider>();
+    }
+
+    private void Update()
+    {
+        if (_boxCollider != null)
+        {
+            _cachedBounds = _boxCollider.bounds;
+        }
     }
 
     private void OnTriggerEnter(Collider other)

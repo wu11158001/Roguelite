@@ -4,11 +4,13 @@ using UnityEngine;
 /// <summary>
 /// 敵人
 /// </summary>
-public class EnemyView : BaseCharacter
+public class EnemyView : BaseCharacter, ITargetable
 {
     private CapsuleCollider _capsuleCollider;
     private Bounds _cachedBounds;
-    public Bounds CachedBounds => _cachedBounds;
+    public Transform TargetTransform => transform;
+    public Bounds TargetBounds => _cachedBounds;
+    public bool IsActive => gameObject.activeInHierarchy;
 
     // 膠囊的半徑作為「推擠半徑」
     public float ColliderRadius => _capsuleCollider != null ? _capsuleCollider.radius * transform.localScale.x : 0.5f;

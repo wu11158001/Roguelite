@@ -17,19 +17,23 @@ public class SkillSpawner
     // 技能未搜尋到敵人產生的虛擬位置
     private Transform _fallbackTarget;
 
-    private int _enemyLayerMask;
-    // 搜索畫面距離
-    private const float _maxRadarDistance = 30.0f;
+    // 用來記錄搜尋目標(減少 New)
+    private readonly List<Transform> _tempTargets = new(128);
+    // 宣告一個通用的快取清單，用來給泛型方法填寫結果
+    private readonly List<ITargetable> _visibleTargetsCache = new(128);
 
-    // 用來記錄搜尋敵人
-    private List<Transform> _tempTargets = new();
+    // 額外獨立出專用的快取清單，方便外部上層直接拿取正確型別
+    private readonly List<EnemyView> _visibleEnemiesResult = new(128);
+    private readonly List<MapProps_BoxView> _visibleBoxesResult = new(128);
 
     public Dictionary<string, OnlySkillData> OnlySkills => _onlySkills;
+
+    // 紀錄雷達目標
+    private readonly List<ITargetable> _combinedTargets = new(128);
 
     public SkillSpawner(MonoBehaviour runner)
     {
         _coroutineRunner = runner;
-        _enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
 
         UpdatePlanes();
     }
@@ -296,7 +300,7 @@ public class SkillSpawner
     /// <param name="isInBottom">是否生成在角色底部</param>
     private void SpawnInRandomEnemy(SkillItemData data, bool isInBottom = false)
     {
-        Transform target = GetRandomTargetInCamera();
+        Transform target = GetRandomTargetInCamera<ITargetable>();
         EnemyView enemyView = null;
 
         if (target != null)
@@ -370,6 +374,36 @@ public class SkillSpawner
     #region 功能類
 
     /// <summary>
+    /// 將活耀的敵人與地圖上的箱子合併到同一個清單中
+    /// </summary>
+    private void CombineAllTargets()
+    {
+        _combinedTargets.Clear();
+
+        // 所有活耀敵人
+        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
+        int enemyCount = activeEnemies.Count;
+        for (int i = 0; i < enemyCount; i++)
+        {
+            if (activeEnemies[i] != null) _combinedTargets.Add(activeEnemies[i]);
+        }
+
+        // 地圖上活耀箱子
+        var mapController = GameplayManager.CurrentContext.InfiniteMapController;
+        if (mapController != null && mapController.ActiveBoxViews != null)
+        {
+            foreach (var boxList in mapController.ActiveBoxViews.Values)
+            {
+                int boxCount = boxList.Count;
+                for (int i = 0; i < boxCount; i++)
+                {
+                    if (boxList[i] != null) _combinedTargets.Add(boxList[i]);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// 處理單一技能回收(場上只會存在一個)
     /// </summary>
     /// <param name="skill"></param>
@@ -411,52 +445,102 @@ public class SkillSpawner
         return _fallbackTarget;
     }
 
-    /// <summary>
-    /// 獲取畫面中所有敵人
-    /// </summary>
-    /// <returns></returns>
-    public List<EnemyView> GetAllEnemyInCamera()
-    {
-        UpdatePlanes();
-        List<EnemyView> visibleTargets = new();
+    #region 獲取畫面中所有符合條件的目標
 
-        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
-        int count = activeEnemies.Count;
+    /// <summary>
+    /// 獲取畫面中所有符合條件的目標
+    private List<ITargetable> GetAllTargetsInCameraInternal<T>() where T : class, ITargetable
+    {
+        _visibleTargetsCache.Clear();
+        UpdatePlanes();
+        CombineAllTargets();
+
+        int count = _combinedTargets.Count;
 
         for (int i = 0; i < count; i++)
         {
-            EnemyView enemy = activeEnemies[i];
-            if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
+            ITargetable target = _combinedTargets[i];
+            if (target == null || !target.IsActive) continue;
 
-            if (GeometryUtility.TestPlanesAABB(_cameraPlanes, enemy.CachedBounds))
+            // 檢查是否為指定的型別 T (例如 EnemyView 或 MapProps_BoxView)
+            if (target is T)
             {
-                visibleTargets.Add(enemy);
+                // 畫面檢查
+                if (GeometryUtility.TestPlanesAABB(_cameraPlanes, target.TargetBounds))
+                {
+                    _visibleTargetsCache.Add(target);
+                }
             }
         }
 
-        return visibleTargets;
+        return _visibleTargetsCache;
     }
 
     /// <summary>
-    /// 獲取隨機目標位置在攝影機視野內
+    /// 獲取畫面中所有敵人（外部呼叫這個！）
     /// </summary>
-    /// <returns></returns>
-    public Transform GetRandomTargetInCamera()
+    public List<EnemyView> GetAllEnemyInCamera()
+    {
+        _visibleEnemiesResult.Clear();
+
+        // 呼叫底層撈出符合 EnemyView 的目標
+        var rawList = GetAllTargetsInCameraInternal<EnemyView>();
+
+        // 安全地轉入強型別清單中
+        for (int i = 0; i < rawList.Count; i++)
+        {
+            _visibleEnemiesResult.Add(rawList[i] as EnemyView);
+        }
+
+        return _visibleEnemiesResult;
+    }
+
+    /// <summary>
+    /// 獲取畫面中所有箱子（外部呼叫這個！）
+    /// </summary>
+    public List<MapProps_BoxView> GetAllBoxInCamera()
+    {
+        _visibleBoxesResult.Clear();
+
+        // 呼叫底層撈出符合 MapProps_BoxView 的目標
+        var rawList = GetAllTargetsInCameraInternal<MapProps_BoxView>();
+
+        for (int i = 0; i < rawList.Count; i++)
+        {
+            _visibleBoxesResult.Add(rawList[i] as MapProps_BoxView);
+        }
+
+        return _visibleBoxesResult;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 獲取隨機目標位置在攝影機視野內
+    /// 使用範例：
+    /// Transform randomAny = GetRandomTargetInCamera<ITargetable>(); // 隨機敵人或箱子
+    /// Transform randomEnemy = GetRandomTargetInCamera<EnemyView>(); // 隨機只要敵人
+    /// </summary>
+    public Transform GetRandomTargetInCamera<T>() where T : class, ITargetable
     {
         UpdatePlanes();
-        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
-        int count = activeEnemies.Count;
+        CombineAllTargets();
 
         _tempTargets.Clear();
+        int count = _combinedTargets.Count;
 
         for (int i = 0; i < count; i++)
         {
-            EnemyView enemy = activeEnemies[i];
-            if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
+            ITargetable target = _combinedTargets[i];
+            if (target == null || !target.IsActive) continue;
 
-            if (GeometryUtility.TestPlanesAABB(_cameraPlanes, enemy.CachedBounds))
+            // 型別檢查
+            if (target is T)
             {
-                _tempTargets.Add(enemy.transform);
+                if (GeometryUtility.TestPlanesAABB(_cameraPlanes, target.TargetBounds))
+                {
+                    _tempTargets.Add(target.TargetTransform);
+                }
             }
         }
 
@@ -464,40 +548,46 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 獲取最近的目標位置
+    /// 獲取最近的目標位置（支援泛型過濾）
+    /// 使用範例：
+    /// Transform nearestAny = GetNearestTarget<ITargetable>(playerPos);      // 最近的敵人或箱子
+    /// Transform nearestEnemy = GetNearestTarget<EnemyView>(playerPos);      // 最近的敵人
+    /// Transform nearestBox = GetNearestTarget<MapProps_BoxView>(playerPos); // 最近的箱子
     /// </summary>
     /// <param name="origin">角色位置</param>
-    /// <returns></returns>
-    public Transform GetNearestTarget(Vector3 origin)
+    /// <returns>符合型別且最近目標的 Transform</returns>
+    public Transform GetNearestTarget<T>(Vector3 origin) where T : class, ITargetable
     {
         UpdatePlanes();
-        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
-        int count = activeEnemies.Count;
+        CombineAllTargets();
 
+        int count = _combinedTargets.Count;
         Transform nearestTarget = null;
-
         float closestDistanceSqr = Mathf.Infinity;
-
-        // 最大偵測半徑是平方值
         float maxRadarDistanceSqr = 30.0f * 30.0f;
 
         for (int i = 0; i < count; i++)
         {
-            EnemyView enemy = activeEnemies[i];
-            if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
+            ITargetable target = _combinedTargets[i];
 
-            // 計算向量與距離平方
-            Vector3 directionToTarget = enemy.transform.position - origin;
+            // 1. 基本安全檢查
+            if (target == null || !target.IsActive) continue;
+
+            // 2. 【型別過濾】非指定型別直接跳過（這是泛型版本關鍵）
+            if (target is not T) continue;
+
+            // 3. 距離平方過濾（最省效能的數學計算放最前面）
+            Vector3 directionToTarget = target.TargetTransform.position - origin;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
 
             if (dSqrToTarget > maxRadarDistanceSqr) continue;
             if (dSqrToTarget >= closestDistanceSqr) continue;
 
-            Bounds enemyBounds = enemy.CachedBounds;
-            if (GeometryUtility.TestPlanesAABB(_cameraPlanes, enemyBounds))
+            // 4. 視錐體裁剪（只有擠進前幾名、且夠近的目標才執行這個 C++ 運算）
+            if (GeometryUtility.TestPlanesAABB(_cameraPlanes, target.TargetBounds))
             {
                 closestDistanceSqr = dSqrToTarget;
-                nearestTarget = enemy.transform;
+                nearestTarget = target.TargetTransform;
             }
         }
 

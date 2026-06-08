@@ -12,6 +12,7 @@ public class Skill_AuraController : IDisposable
     private readonly CompositeDisposable _disposables = new();
 
     private AUDIO_TYPE _soundType;
+    private CapsuleCollider _capsuleCollider;
 
     public Skill_AuraController(Skill_AuraView view, AUDIO_TYPE soundType)
     {
@@ -57,7 +58,11 @@ public class Skill_AuraController : IDisposable
 
         // CD完成執行攻擊邏輯
         _timerDisposable = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(cd), Scheduler.MainThread)
-            .Subscribe(_ => ExecuteAttack())
+            .Subscribe(_ =>
+            {
+                _view.ColliderEnable().Forget();
+                ExecuteAttack();
+            })
             .AddTo(_disposables);
     }
 
@@ -100,6 +105,8 @@ public class Skill_AuraController : IDisposable
             // 音效
             AudioManager.Instance.PlaySFX(_soundType).Forget();
         }
+
+        _view.CurrentInAreaEnemies.Clear();
     }
 
     public void Dispose()

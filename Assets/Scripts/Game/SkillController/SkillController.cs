@@ -244,20 +244,20 @@ public class SkillController : MonoBehaviour
     /// 獲取隨機目標在攝影機視野內
     /// </summary>
     /// <returns></returns>
-    public Transform GetRandomTargetInCamera() => _spawner.GetRandomTargetInCamera();
+    public Transform GetRandomTargetInCamera() => _spawner.GetRandomTargetInCamera<ITargetable>();
 
     /// <summary>
     /// 獲取最近的目標位置
     /// </summary>
     /// <param name="origin"></param>
     /// <returns></returns>
-    public Transform GetNearestTarget(Vector3 origin) => _spawner.GetNearestTarget(origin);
+    public Transform GetNearestTarget(Vector3 origin) => _spawner.GetNearestTarget<ITargetable>(origin);
 
     /// <summary>
     /// 獲取畫面中所有敵人
     /// </summary>
     /// <returns></returns>
-    public List<EnemyView> GetAllEnemyInCamera() => _spawner.GetAllEnemyInCamera();
+    public List<EnemyView> GetAllEnemysInCamera() => _spawner.GetAllEnemyInCamera();
 
     /// <summary>
     /// 角色獲取新技能
