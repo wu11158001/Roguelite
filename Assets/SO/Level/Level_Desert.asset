@@ -18,6 +18,6 @@ MonoBehaviour:
   TimeLimit: 600
   CoinBonus: 0
   ExpBonus: 0
-  EnemyHp: 1
+  EnemyHpIncreaseMultiplier: 1
   Mode1EnemyTypes: 0100000002000000
   Mode2EnemyTypes: 

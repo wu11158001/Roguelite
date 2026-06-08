@@ -22,7 +22,7 @@ public struct EnemyJobData
     public int InstanceID;
     public EnemyMoveType MoveType;
 
-    public float CurrentHp;
+    public int CurrentHp;
     public float MoveSpeed;
     public float AttackRange;
     public float Radius;

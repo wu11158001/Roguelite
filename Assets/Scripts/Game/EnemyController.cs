@@ -17,7 +17,7 @@ public struct DamageEvent
     /// <summary> 怪物物件Id </summary>
     public int InstanceID;
     /// <summary> 受到的傷害 </summary>
-    public float Damage;
+    public int Damage;
 }
 
 /// <summary>
@@ -50,7 +50,8 @@ public class EnemyController : MonoBehaviour
     // 這一影格所有怪物吃到的傷害清單
     private List<DamageEvent> _frameDamageEvents = new();
 
-    private EnemySystemConfig _config;
+    private EnemySystemConfig _enemySystemConfig;
+    private LevelConfigData _levelConfig;
 
     private void OnDestroy()
     {
@@ -98,13 +99,16 @@ public class EnemyController : MonoBehaviour
         _player = player;
 
         _isLevelRunning = true;
-        _config = GameStateData.EnemySystemConfig;
-        _config.Initialize();
+        
+        _enemySystemConfig = GameStateData.EnemySystemConfig;
+        _enemySystemConfig.Initialize();
+
+        _levelConfig = GameStateData.SelectLevel;
 
         // 讓第0秒就開始產第一隻敵人
-        _model1_spawnTimer = _config.Mode1_InitialSpawnInterval;
+        _model1_spawnTimer = _enemySystemConfig.Mode1_InitialSpawnInterval;
         // 計算:每秒生成遞減率
-        _spawnDecreaseRate = (_config.Mode1_InitialSpawnInterval - _config.Mode1_MinSpawnInterval) / GameStateData.SelectLevel.TimeLimit;
+        _spawnDecreaseRate = (_enemySystemConfig.Mode1_InitialSpawnInterval - _enemySystemConfig.Mode1_MinSpawnInterval) / GameStateData.SelectLevel.TimeLimit;
     }
 
     /// <summary>
@@ -116,6 +120,29 @@ public class EnemyController : MonoBehaviour
         _updateSubscription.Dispose();
     }
 
+    /// <summary>
+    /// 獲取當前波數
+    /// </summary>
+    /// <returns></returns>
+    private int GetCurrentWaveIndex()
+    {
+        List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
+        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
+        float timeLimit = _levelConfig.TimeLimit;
+
+        if (enemyList == null || enemyList.Count == 0) return 0;
+
+        float interval = timeLimit / enemyList.Count;
+        int targetIndex = Mathf.FloorToInt(elapsedTime / interval);
+
+        if (targetIndex >= enemyList.Count)
+        {
+            targetIndex = enemyList.Count - 1;
+        }
+
+        return targetIndex;
+    }
+
     #region 敵人模式1
 
     /// <summary>
@@ -124,10 +151,10 @@ public class EnemyController : MonoBehaviour
     private void UpdateAutoSpawn_Mode1()
     {
         float currentLevelTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
-        float initialInterval = _config.Mode1_InitialSpawnInterval;
-        float minInterval = _config.Mode1_MinSpawnInterval;
+        float initialInterval = _enemySystemConfig.Mode1_InitialSpawnInterval;
+        float minInterval = _enemySystemConfig.Mode1_MinSpawnInterval;
         float decreaseRate = _spawnDecreaseRate;
-        int maxEnemyCount = _config.Mode1_MaxEnemyCount;
+        int maxEnemyCount = _enemySystemConfig.Mode1_MaxEnemyCount;
 
         // 生成時間:公式：初始時間 - (當前秒數 * 遞減率)
         float currentInterval = Mathf.Max(minInterval, initialInterval - (currentLevelTime * decreaseRate));
@@ -143,7 +170,7 @@ public class EnemyController : MonoBehaviour
 
                 if (targetEnemyType != 0)
                 {
-                    AssetReferenceGameObject prefabRef = _config.GetEnemyPrefab(targetEnemyType);
+                    AssetReferenceGameObject prefabRef = _enemySystemConfig.GetEnemyPrefab(targetEnemyType);
                     if (prefabRef != null)
                     {
                         SpawnEnemy_Mode1(prefabRef, spawnPosition, EnemyMoveType.ChaseAndAttack);
@@ -186,6 +213,14 @@ public class EnemyController : MonoBehaviour
                 }
                 enemyView.ResetState();
 
+                // 目前波數
+                int currentWave = GetCurrentWaveIndex();
+                // 該關卡初始Hp
+                int initHp = Mathf.FloorToInt(_enemySystemConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
+                // 目前波數增加的Hp
+                int waveIncrease = Mathf.FloorToInt(_enemySystemConfig.InitHp * (_enemySystemConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
+                // 最終Hp
+                int currentHp = initHp + waveIncrease;
 
                 EnemyJobData data = new()
                 {
@@ -193,13 +228,13 @@ public class EnemyController : MonoBehaviour
                     MoveType = type,
 
                     // 移動速度
-                    MoveSpeed = _config.Mode1_MoveSpeed,
+                    MoveSpeed = _enemySystemConfig.Mode1_MoveSpeed,
                     // 推擠距離
                     Radius = enemyView != null ? enemyView.ColliderRadius : 0.5f,
                     // 攻擊距離
                     AttackRange = enemyView != null ? enemyView.AttackRange : 1.5f,
                     // Hp
-                    CurrentHp = _config.InitHp,
+                    CurrentHp = currentHp,
 
                     InitialDirection = math.normalize(_player.position - spawnPos),
                     ShouldDie = false,
@@ -220,19 +255,8 @@ public class EnemyController : MonoBehaviour
     /// <returns></returns>
     private ENEMY_TYPE GetEnemyTypeByCurrentTime_Mode1()
     {
-        List<ENEMY_TYPE> enemyList = GameStateData.SelectLevel.Mode1EnemyTypes;
-        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
-        float timeLimit = GameStateData.SelectLevel.TimeLimit;
-
-        if (enemyList == null || enemyList.Count == 0) return 0;
-
-        float interval = timeLimit / enemyList.Count;
-        int targetIndex = Mathf.FloorToInt(elapsedTime / interval);
-
-        if (targetIndex >= enemyList.Count)
-        {
-            targetIndex = enemyList.Count - 1;
-        }
+        List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
+        int targetIndex = GetCurrentWaveIndex();
 
         return enemyList[targetIndex];
     }
@@ -245,7 +269,7 @@ public class EnemyController : MonoBehaviour
     private Vector3 CalculateSpawnPosition()
     {
         // 計算玩家水平距離n的圓周座標
-        float spawnRadius = _config.SpawnRadius;
+        float spawnRadius = _enemySystemConfig.SpawnRadius;
 
         // 隨機角度
         float randomAngle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
@@ -267,7 +291,7 @@ public class EnemyController : MonoBehaviour
     private void RunJob()
     {
         // 推擠強度
-        float separationWeight = _config.SeparationWeight;
+        float separationWeight = _enemySystemConfig.SeparationWeight;
 
         // 收集當前所有怪物的位置，給 Job 做距離判斷
         int count = _activeGameObjects.Count;
@@ -313,7 +337,7 @@ public class EnemyController : MonoBehaviour
                 continue;
             }
 
-            // 2處理動畫
+            // 處理動畫
             if (enemyView != null)
             {
                 if (_enemyDataList[i].LastFrameStopped != latestData.LastFrameStopped)
@@ -340,7 +364,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="instanceID></param>
     /// <param name="damage"></param>
-    public void RegisterDamage(int instanceID, float damage)
+    public void RegisterDamage(int instanceID, int damage)
     {
         _frameDamageEvents.Add(new DamageEvent
         {
