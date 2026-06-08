@@ -63,7 +63,7 @@ public class Skill_RangeSlowController :IDisposable
             enemyView?.OnAttacked(hitData);
 
             SpawnSlowEffect(
-                target: enemyView.anchorPoint.bottom.transform,
+                target: enemyView.BottomPoint,
                 recycleTime: hitData.SpeedModifierTime);
         }        
 

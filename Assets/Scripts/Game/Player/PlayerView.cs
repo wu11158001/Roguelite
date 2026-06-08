@@ -9,30 +9,19 @@ using System.Linq;
 /// <summary>
 /// 玩家角色
 /// </summary>
-public class PlayerView : BaseGameObject
+public class PlayerView : BaseCharacter
 {
     private Vector2 _inputVector;
     private Vector2 _joystickInputVector;
 
-    // 受到攻擊顏色變化
-    private Renderer[] _renderers;
-    private MaterialPropertyBlock _propBlock;
-    private Coroutine _hitCoroutine;
-
-    public Transform HeadPoint { get; private set; }
-    public Transform ShotPoint { get; private set; }
-    public Transform MiddlePoint { get; private set; }
-    public Transform BottomPoint { get; private set; }
-    private SphereCollider _pickRange;
-
     // 動畫
-    private Animator _anim;
     private readonly int _isMovingParamId = Animator.StringToHash("IsMove");
     private readonly int _dieParamId = Animator.StringToHash("Die");
 
     private HpBarView _hpBarView;
     private CharacterConfigData _characterConfig;
 
+    private Coroutine _hitCoroutine;
     private PlayerController _controller;
 
     public override void OnDestroy()
@@ -47,25 +36,6 @@ public class PlayerView : BaseGameObject
     {
         _controller?.Deactivate();
         base.Remove();
-    }
-
-    private void Awake()
-    {
-        ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
-        HeadPoint = transform.Find("CharacterNecessary/HeadPoint");
-        MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
-        BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
-        _pickRange = transform.Find("CharacterNecessary/PickupRange").GetComponent<SphereCollider>();
-
-        _renderers = GetComponentsInChildren<Renderer>();
-        _propBlock = new();
-        _anim = GetComponentInChildren<Animator>();
-
-        // 模型是Humanoid就使用頭部物件
-        if (_anim != null && _anim.isHuman)
-        {
-            HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
-        }
     }
 
     public override void Setup(AssetReferenceGameObject myRef)
@@ -243,29 +213,6 @@ public class PlayerView : BaseGameObject
 
         SkillItemData skillItemData = GameStateData.AllSkillConfigData.GetActiveSkill(_characterConfig.InitSkill, 1);
         GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(newSkill: skillItemData);
-    }
-
-    /// <summary>
-    /// 受擊動畫
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator IGetHitAnim()
-    {
-        foreach (var renderer in _renderers)
-        {
-            if (renderer == null) continue;
-            renderer.GetPropertyBlock(_propBlock);
-            _propBlock.SetColor("_BaseColor", Color.red);
-            renderer.SetPropertyBlock(_propBlock);
-        }
-        yield return new WaitForSeconds(0.1f);
-        foreach (var renderer in _renderers)
-        {
-            if (renderer == null) continue;
-            renderer.GetPropertyBlock(_propBlock);
-            _propBlock.Clear();
-            renderer.SetPropertyBlock(_propBlock);
-        }
     }
 
     /// <summary>

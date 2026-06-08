@@ -1,7 +1,5 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine.AddressableAssets;
 
 public class GameLauncher : MonoBehaviour
 {
@@ -16,11 +14,10 @@ public class GameLauncher : MonoBehaviour
             CreateMainItems();
 
             ViewManager.Instance.OpenView<JoystickView>(viewType: VIEW_TYPE.JoystickView).Forget();
-            await ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
-
-            await SpawnPlayerAndMap();
-            await SpawnEnemyManager();
-            SpawnExpManager();
+            
+            var task1 = ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
+            var task2 = SpawnPlayerAndMap();
+            await UniTask.WhenAll(task1, task2);
 
             SceneLoader.Instance.CloseLoading();
         }
@@ -97,29 +94,4 @@ public class GameLauncher : MonoBehaviour
         _context.InfiniteMapController = infiniteMap;
         await infiniteMap.Setup(playerView.transform);
     }
-
-    /// <summary>
-    /// 產生控制敵人管理器
-    /// </summary>
-    private async UniTask SpawnEnemyManager()
-    {
-        EnemyManager manager = gameObject.AddComponent<EnemyManager>();
-        _context.EnemyManager = manager;
-
-        var handle = Addressables.LoadAssetsAsync<EnemyConfigData>("EnmeyConfigs", (config) => {
-            // 每加載完成一個 SO 就會跑一次這裡
-            Debug.Log($"成功加載: {config.name}");
-        });
-        await handle.Task;
-
-        List<EnemyConfigData> configs = new List<EnemyConfigData>(handle.Result);
-        Debug.Log($"成功加載了 {configs.Count} 個敵人設定！");
-        manager.SetUp(configs);
-    }
-    private void SpawnExpManager() { 
-        ExpManager manager = gameObject.AddComponent<ExpManager>();
-        _context.ExpManager = manager;
-       
-    }
-    
 }

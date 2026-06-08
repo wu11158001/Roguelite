@@ -79,7 +79,7 @@ public class GameController : MonoBehaviour
 
         // 產生效果
         EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.KillEnemy);
-        Transform effectPoint = enemyView.anchorPoint.midder.transform;
+        Transform effectPoint = enemyView.MiddlePoint;
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: "擊殺怪物效果",
             assetRef: data.PrefabReference,

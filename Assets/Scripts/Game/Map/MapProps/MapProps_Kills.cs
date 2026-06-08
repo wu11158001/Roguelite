@@ -18,7 +18,7 @@ public class MapProps_Kills : BaseMapProps
             };
 
             enemy?.OnAttacked(hitData);
-            SpawnPropsKillEffect(enemy.anchorPoint.midder.transform, 1);
+            SpawnPropsKillEffect(enemy.MiddlePoint, 1);
         }
     }
 

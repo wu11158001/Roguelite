@@ -15,10 +15,6 @@ public class GameplayContext
     public CharacterController CharacterController { get; set; }
     /// <summary> 當前使用的遊戲場景物件池 </summary>
     public GameScenePool GameScenePool { get; set; }
-    /// <summary> 當前使用的敵人管理器 </summary>
-    public EnemyManager EnemyManager { get; set; }
     /// <summary> 當前使用的無限地圖控制器 </summary>
     public InfiniteMapController InfiniteMapController { get; set; }
-    /// <summary> 經驗球管理器 </summary>
-    public ExpManager ExpManager { get; set; }
 }

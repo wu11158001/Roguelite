@@ -28,7 +28,7 @@ public class MapProps_MoveLimit : BaseMapProps
             enemy?.OnAttacked(hitData);
 
             SpawnSlowEffect(
-                target: enemy.anchorPoint.bottom.transform,
+                target: enemy.BottomPoint,
                 recycleTime: hitData.SpeedModifierTime);
         }
     }

@@ -289,8 +289,8 @@ public class SkillSpawner
         {
             if(target.TryGetComponent(out enemyView))
             {
-                if (isInBottom) target = enemyView.anchorPoint.bottom.transform;
-                else target = enemyView.anchorPoint.midder.transform;
+                if (isInBottom) target = enemyView.BottomPoint;
+                else target = enemyView.MiddlePoint;
             }
         }
 
