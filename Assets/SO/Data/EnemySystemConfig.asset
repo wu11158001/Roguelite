@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2472f04a2c498634885e99b41de6cc72, type: 3}
+  m_Name: EnemySystemConfig
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySystemConfig
+  InitHp: 30
+  SpawnRadius: 35
+  SeparationWeight: 20
+  SeparationRadius: 0.5
+  Mode1_InitialSpawnInterval: 5
+  Mode1_MinSpawnInterval: 0.2
+  Mode1_MaxEnemyCount: 100
+  Mode1_MoveSpeed: 4
+  Mode1_EnemyHpIncreaseMultiplier: 0.3
+  Mode2_MoveSpeed: 15
+  Mode2_WaveCount: 3
+  Mode2_WaveInterval: 5
+  EnemyDatas:
+  - EnemyType: 1
+    PrefabReference:
+      m_AssetGUID: 157d8456cffc13240b4e45a104785b4a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - EnemyType: 2
+    PrefabReference:
+      m_AssetGUID: b62f05aa989fa9b44909e70cf3429a39
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

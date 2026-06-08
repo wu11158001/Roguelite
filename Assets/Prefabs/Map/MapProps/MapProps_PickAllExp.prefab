@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9207107370753324669}
   - component: {fileID: 7061746796590198129}
   - component: {fileID: 3904693382076648276}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: luckyCat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 188716347071477761}
   - component: {fileID: 6384294204785503388}
   - component: {fileID: 583318915545705796}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GlowParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4936,9 +4936,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2357835157092081105}
   - component: {fileID: 4758259789745637355}
-  - component: {fileID: 7041736434902156297}
   - component: {fileID: 1381209410575202357}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MapProps_PickAllExp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4975,33 +4974,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapProps_PickAllExp
   _flyDuration: 0.5
   _flyEase: 26
---- !u!54 &7041736434902156297
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7479498391793192390}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  _isLocked: 0
+  LockedIcon: {fileID: 0}
 --- !u!65 &1381209410575202357
 BoxCollider:
   m_ObjectHideFlags: 0

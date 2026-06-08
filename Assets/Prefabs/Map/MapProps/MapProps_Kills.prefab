@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 4562115836231420648}
   - component: {fileID: 7464016782977059061}
   - component: {fileID: 2878328848259361090}
-  - component: {fileID: 574679206269333548}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MapProps_Kills
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapProps_Kills
   _flyDuration: 0.5
   _flyEase: 26
+  _isLocked: 0
+  LockedIcon: {fileID: 0}
 --- !u!65 &2878328848259361090
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -70,33 +71,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 5, z: 1}
   m_Center: {x: 0, y: 2.5, z: 0}
---- !u!54 &574679206269333548
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112188715214248353}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &3022376016393885431
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +82,7 @@ GameObject:
   - component: {fileID: 8002428301676636871}
   - component: {fileID: 7040655544454740677}
   - component: {fileID: 3799127910856672054}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GlowParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4921,7 +4895,7 @@ GameObject:
   - component: {fileID: 5127995733460982605}
   - component: {fileID: 5566898334472886061}
   - component: {fileID: 8505078309224164032}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CurvedSword
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -110,7 +110,7 @@ public class Skill_TrackingController
         // 擊中主要目標後停止追蹤
         _isTracking = false;
         _target = null;
-
+        
         // 攻擊敵人
         EnemyView enemyView = enemyObj.GetComponent<EnemyView>();
         enemyView?.OnAttacked(hitData);

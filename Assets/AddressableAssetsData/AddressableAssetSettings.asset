@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
-  m_DefaultGroup: 64d82d11a684d854cb522f9dfb5a6396
+  m_DefaultGroup: 0a05063ab4253794a8988b76e237e78c
   m_currentHash:
     serializedVersion: 2
-    Hash: 51c543e76350dbabdaee2ecec10f7e4c
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_CatalogRequestsTimeout: 0
@@ -67,11 +67,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 459c1e42af84ce54ca0a0a044ad7f185, type: 2}
   - {fileID: 11400000, guid: df1e3edfbaf2f6b4f9d352d7e0e2cf8a, type: 2}
   - {fileID: 11400000, guid: 6bc6b373e534dd54fb25389020dfa484, type: 2}
-  - {fileID: 11400000, guid: b66dbad6cea7aca4c83959bc3d07f716, type: 2}
   - {fileID: 11400000, guid: 01485056766abda46b8ed65597be507f, type: 2}
   - {fileID: 11400000, guid: 0fa19196dc06c89449eebd8cafece688, type: 2}
   - {fileID: 11400000, guid: 16a6db6fa1b3a39459c081eae66b1cf2, type: 2}
-  - {fileID: 11400000, guid: 72ef7803e8a33084aa98c42fee458bab, type: 2}
   - {fileID: 11400000, guid: e2430bfd9d206ee479b7190d93caeb00, type: 2}
   - {fileID: 11400000, guid: 5aad9200bf86d7e42bde7aa79b1064a9, type: 2}
   - {fileID: 11400000, guid: 06549f2bbda7b914ebed02bb1ff7beeb, type: 2}

@@ -29,6 +29,8 @@ public static class GameStateData
     public static UiViewConfigData UiViewConfigData { get; set; }
     /// <summary> 音樂音效配置檔 </summary>
     public static AudioConfigData AudioConfigData { get; set; }
+    /// <summary> 敵人系統配置檔 </summary>
+    public static EnemySystemConfig EnemySystemConfig { get; set; }
 
     [Header("遊戲狀態資料")]
     /// <summary> 搖桿輸入位置 </summary>

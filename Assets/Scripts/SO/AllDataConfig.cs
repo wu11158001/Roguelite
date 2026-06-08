@@ -25,5 +25,6 @@ public class AllDataConfig : ScriptableObject
     public UiViewConfigData UiViewConfigData;
     [Label("音樂音效配置檔")]
     public AudioConfigData AudioConfigData;
-
+    [Label("敵人系統配置檔")]
+    public EnemySystemConfig EnemySystemConfig;
 }

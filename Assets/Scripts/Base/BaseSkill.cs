@@ -78,7 +78,7 @@ public class BaseSkill : BaseGameObject
         // 爆擊機率:技能爆擊機率+被動爆擊機率
         int totalCritical = _data.SkillCriticalChance + characterConfig.AddCriticalChance.Value;
 
-        int chance = UnityEngine.Random.Range(0, 101);
+        int chance = UnityEngine.Random.Range(1, 101);
         bool isCritical = chance <= totalCritical;
         if (isCritical)
         {

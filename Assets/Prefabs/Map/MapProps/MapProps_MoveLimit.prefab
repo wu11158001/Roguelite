@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2276768503427743999}
   - component: {fileID: 8741537357618772179}
   - component: {fileID: 2722949715431881768}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GlowParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4821,7 +4821,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5957631212995405689}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4854,9 +4854,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4462146840246967954}
   - component: {fileID: 768323119032214549}
-  - component: {fileID: 1027225142057945415}
   - component: {fileID: 5140506366495373757}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MapProps_MoveLimit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4893,34 +4892,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapProps_MoveLimit
   _flyDuration: 0.5
   _flyEase: 26
+  _isLocked: 0
+  LockedIcon: {fileID: 0}
   _limitTime: 5
---- !u!54 &1027225142057945415
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5081478629708905437}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!65 &5140506366495373757
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4951,7 +4925,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2223952553835907229}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: bottle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4986,7 +4960,7 @@ GameObject:
   - component: {fileID: 2780348144026324825}
   - component: {fileID: 5681121731102755723}
   - component: {fileID: 6630305906964736265}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: bottle_blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}

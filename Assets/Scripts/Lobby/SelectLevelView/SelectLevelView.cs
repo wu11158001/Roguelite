@@ -111,7 +111,7 @@ public class SelectLevelView : BaseView
         int seconds = Mathf.FloorToInt(level.TimeLimit % 60);
         _text_TimeLimit.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
         _text_LevelName.text = level.LevelName;
-        _text_CoinBonus.text = $"{level.CoinBonus * 100}%";
-        _text_ExpBonus.text = $"{level.ExpBonus * 100}%";
+        _text_CoinBonus.text = level.CoinBonus == 0 ? "-" : $"{level.CoinBonus * 100}%";
+        _text_ExpBonus.text = level.ExpBonus == 0 ? "-" : $"{level.ExpBonus * 100}%";
     }
 }

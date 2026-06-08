@@ -4,21 +4,18 @@ using UnityEngine;
 public class BaseCharacter : BaseGameObject
 {
     public Transform HeadPoint { get; private set; }
-    public Transform ShotPoint { get; private set; }
     public Transform MiddlePoint { get; private set; }
     public Transform BottomPoint { get; private set; }
-    protected SphereCollider _pickRange;
+
     protected Animator _anim;
     protected Renderer[] _renderers;
     protected MaterialPropertyBlock _propBlock;
 
     protected virtual void Awake()
     {
-        ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
         HeadPoint = transform.Find("CharacterNecessary/HeadPoint");
         MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
         BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
-        _pickRange = transform.Find("CharacterNecessary/PickupRange").GetComponent<SphereCollider>();
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();

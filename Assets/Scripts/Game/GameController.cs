@@ -36,6 +36,8 @@ public class GameController : MonoBehaviour
     public void SetGameOver()
     {
         IsGameOver = true;
+
+        GameplayManager.CurrentContext.EnemyController.StopAutoSapawn();
         GameplayManager.CurrentContext.SkillController.Clear();
     }
 
@@ -44,14 +46,13 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void GameOverClear()
     {
-        AudioManager.Instance.PlayBgm(AUDIO_TYPE.GameOver).Forget();
-
-        GameplayManager.CurrentContext.ControlCharacter.Remove();
-        GameplayManager.CurrentContext.GameScenePool.ClearAllPools();
-        GameplayManager.CurrentContext.InfiniteMapController.ClearGround();
-        ViewManager.Instance.ClearAll();
-        GameInfoUIManager gameInfoUIManager = FindFirstObjectByType<GameInfoUIManager>();
-        gameInfoUIManager?.ClearAll();
+        AudioManager.Instance?.PlayBgm(AUDIO_TYPE.GameOver).Forget();
+        GameplayManager.CurrentContext.EnemyController?.ClearAll();
+        GameplayManager.CurrentContext.ControlCharacter?.Remove();
+        GameplayManager.CurrentContext.GameScenePool?.ClearAllPools();
+        GameplayManager.CurrentContext.InfiniteMapController?.ClearGround();
+        GameplayManager.CurrentContext.GameInfoUIManager?.ClearAll();
+        ViewManager.Instance?.ClearAll();
     }
 
     /// <summary>
@@ -68,30 +69,10 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// 怪物死亡
     /// </summary>
-    /// <param name="enemyView"></param>
-    public void OnEnemyDie(EnemyView enemyView)
+    public void OnEnemyDie()
     {
         // 擊殺數量增加
         KillEnemyCount++;
-
-        // 音效
-        AudioManager.Instance.PlaySFX(AUDIO_TYPE.Kill).Forget();
-
-        // 產生效果
-        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.KillEnemy);
-        Transform effectPoint = enemyView.MiddlePoint;
-        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
-            parentName: "擊殺怪物效果",
-            assetRef: data.PrefabReference,
-            position: effectPoint.position,
-            rotation: effectPoint.rotation,
-            callback: (obj) =>
-            {
-                if (obj.TryGetComponent(out EffectRecycle effectRecycle))
-                {
-                    effectRecycle.Setup(data.PrefabReference);
-                }
-            });
     }
 
     /// <summary>

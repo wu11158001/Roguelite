@@ -61,6 +61,10 @@ public class GameLauncher : MonoBehaviour
         // 產生遊戲內專用畫布
         obj = new("GameInfoUIManager");
         _context.GameInfoUIManager = obj.AddComponent<GameInfoUIManager>();
+
+        // 產生敵人控制中心
+        obj = new("EnemyController");
+        _context.EnemyController = obj.AddComponent<EnemyController>();
     }
 
     /// <summary>

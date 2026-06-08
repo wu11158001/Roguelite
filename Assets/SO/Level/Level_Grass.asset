@@ -18,3 +18,4 @@ MonoBehaviour:
   TimeLimit: 65
   CoinBonus: 0.1
   ExpBonus: 0.2
+  EnemyTypes: 0100000002000000

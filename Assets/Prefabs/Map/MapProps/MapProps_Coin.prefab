@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5379884705644886553}
   - component: {fileID: 8313162663976954112}
   - component: {fileID: 6471108403480318492}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GlowParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4822,7 +4822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4575042987324114228}
   - component: {fileID: 7149498828653805563}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4879,7 +4879,7 @@ GameObject:
   - component: {fileID: 5145141176318845721}
   - component: {fileID: 1622519128452809074}
   - component: {fileID: 8833878194500020616}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4992,8 +4992,7 @@ GameObject:
   - component: {fileID: 4056090992244959902}
   - component: {fileID: 8424535008314634659}
   - component: {fileID: 3283127194895732487}
-  - component: {fileID: 1178075760615596978}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MapProps_Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5054,33 +5053,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 5, z: 1}
   m_Center: {x: 0, y: 2.5, z: 0}
---- !u!54 &1178075760615596978
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4794329289418510346}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &4818222502357716892
 GameObject:
   m_ObjectHideFlags: 0
@@ -5090,7 +5062,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6823777000083953101}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

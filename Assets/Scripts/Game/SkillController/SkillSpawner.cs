@@ -12,6 +12,7 @@ public class SkillSpawner
     private readonly MonoBehaviour _coroutineRunner;
     private readonly Dictionary<string, OnlySkillData> _onlySkills = new();
     private Camera _mainCamera;
+    private readonly Plane[] _cameraPlanes = new Plane[6];
 
     // 技能未搜尋到敵人產生的虛擬位置
     private Transform _fallbackTarget;
@@ -20,15 +21,28 @@ public class SkillSpawner
     // 搜索畫面距離
     private const float _maxRadarDistance = 30.0f;
 
+    // 用來記錄搜尋敵人
+    private List<Transform> _tempTargets = new();
+
+    public Dictionary<string, OnlySkillData> OnlySkills => _onlySkills;
+
     public SkillSpawner(MonoBehaviour runner)
     {
         _coroutineRunner = runner;
-        _mainCamera ??= Camera.main;
-
         _enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
+
+        UpdatePlanes();
     }
 
-    public Dictionary<string, OnlySkillData> OnlySkills => _onlySkills;
+    private void UpdatePlanes()
+    {
+        _mainCamera ??= Camera.main;
+        if (_mainCamera != null)
+        {
+            // 將計算結果直接填入快取的陣列中，消除 GC Alloc
+            GeometryUtility.CalculateFrustumPlanes(_mainCamera, _cameraPlanes);
+        }
+    }
 
     /// <summary>
     /// 執行技能產生模式
@@ -373,59 +387,6 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 獲取隨機目標位置在攝影機視野內
-    /// </summary>
-    /// <returns></returns>
-    public Transform GetRandomTargetInCamera()
-    {
-        _mainCamera ??= Camera.main;
-
-        float maxRadarDistance = _maxRadarDistance;
-
-        Plane[] cameraPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
-        Collider[] hitColliders = Physics.OverlapSphere(_mainCamera.transform.position, maxRadarDistance, _enemyLayerMask);
-
-        List<Transform> visibleTargets = new();
-        foreach (var col in hitColliders)
-        {
-            if (GeometryUtility.TestPlanesAABB(cameraPlanes, col.bounds))
-            {
-                visibleTargets.Add(col.transform);
-            }
-        }
-
-        return visibleTargets.Count > 0 ? visibleTargets[UnityEngine.Random.Range(0, visibleTargets.Count)] : null;
-    }
-
-    /// <summary>
-    /// 獲取畫面中所有敵人
-    /// </summary>
-    /// <returns></returns>
-    public List<EnemyView> GetAllEnemyInCamera()
-    {
-        _mainCamera ??= Camera.main;
-
-        float maxRadarDistance = _maxRadarDistance;
-
-        Plane[] cameraPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
-        Collider[] hitColliders = Physics.OverlapSphere(_mainCamera.transform.position, maxRadarDistance, _enemyLayerMask);
-
-        List<EnemyView> visibleTargets = new();
-        foreach (var col in hitColliders)
-        {
-            if (GeometryUtility.TestPlanesAABB(cameraPlanes, col.bounds))
-            {
-                if(col.TryGetComponent(out EnemyView enemyView))
-                {
-                    visibleTargets.Add(enemyView);
-                }                
-            }
-        }
-
-        return visibleTargets;
-    }
-
-    /// <summary>
     /// 獲取角色周圍隨機點
     /// </summary>
     /// <returns></returns>
@@ -451,38 +412,92 @@ public class SkillSpawner
     }
 
     /// <summary>
+    /// 獲取畫面中所有敵人
+    /// </summary>
+    /// <returns></returns>
+    public List<EnemyView> GetAllEnemyInCamera()
+    {
+        UpdatePlanes();
+        List<EnemyView> visibleTargets = new();
+
+        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
+        int count = activeEnemies.Count;
+
+        for (int i = 0; i < count; i++)
+        {
+            EnemyView enemy = activeEnemies[i];
+            if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
+
+            if (GeometryUtility.TestPlanesAABB(_cameraPlanes, enemy.CachedBounds))
+            {
+                visibleTargets.Add(enemy);
+            }
+        }
+
+        return visibleTargets;
+    }
+
+    /// <summary>
+    /// 獲取隨機目標位置在攝影機視野內
+    /// </summary>
+    /// <returns></returns>
+    public Transform GetRandomTargetInCamera()
+    {
+        UpdatePlanes();
+        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
+        int count = activeEnemies.Count;
+
+        _tempTargets.Clear();
+
+        for (int i = 0; i < count; i++)
+        {
+            EnemyView enemy = activeEnemies[i];
+            if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
+
+            if (GeometryUtility.TestPlanesAABB(_cameraPlanes, enemy.CachedBounds))
+            {
+                _tempTargets.Add(enemy.transform);
+            }
+        }
+
+        return _tempTargets.Count > 0 ? _tempTargets[UnityEngine.Random.Range(0, _tempTargets.Count)] : null;
+    }
+
+    /// <summary>
     /// 獲取最近的目標位置
     /// </summary>
     /// <param name="origin">角色位置</param>
     /// <returns></returns>
     public Transform GetNearestTarget(Vector3 origin)
     {
-        _mainCamera ??= Camera.main;
-
-        float maxRadarDistance = 30.0f;
-
-        Plane[] cameraPlanes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
-        Collider[] hitColliders = Physics.OverlapSphere(_mainCamera.transform.position, maxRadarDistance, _enemyLayerMask);
+        UpdatePlanes();
+        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
+        int count = activeEnemies.Count;
 
         Transform nearestTarget = null;
-        float closestDistanceSqr = Mathf.Infinity;
-        foreach (var col in hitColliders)
-        {
-            // 檢查 Enemy 的包圍盒 (Bounds) 是否在攝影機的 6 個平面之內
-            if (GeometryUtility.TestPlanesAABB(cameraPlanes, col.bounds))
-            {
-                if (!col.gameObject.activeInHierarchy)
-                {
-                    continue;
-                }
 
-                Vector3 directionToTarget = col.transform.position - origin;
-                float dSqrToTarget = directionToTarget.sqrMagnitude;
-                if (dSqrToTarget < closestDistanceSqr)
-                {
-                    closestDistanceSqr = dSqrToTarget;
-                    nearestTarget = col.transform;
-                }
+        float closestDistanceSqr = Mathf.Infinity;
+
+        // 最大偵測半徑是平方值
+        float maxRadarDistanceSqr = 30.0f * 30.0f;
+
+        for (int i = 0; i < count; i++)
+        {
+            EnemyView enemy = activeEnemies[i];
+            if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
+
+            // 計算向量與距離平方
+            Vector3 directionToTarget = enemy.transform.position - origin;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
+
+            if (dSqrToTarget > maxRadarDistanceSqr) continue;
+            if (dSqrToTarget >= closestDistanceSqr) continue;
+
+            Bounds enemyBounds = enemy.CachedBounds;
+            if (GeometryUtility.TestPlanesAABB(_cameraPlanes, enemyBounds))
+            {
+                closestDistanceSqr = dSqrToTarget;
+                nearestTarget = enemy.transform;
             }
         }
 

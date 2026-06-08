@@ -21,6 +21,7 @@ public static class ConfigManager
         GameStateData.AllMapPropsConfig = allDataConfig.AllMapPropsConfigData;
         GameStateData.UiViewConfigData = allDataConfig.UiViewConfigData;
         GameStateData.AudioConfigData = allDataConfig.AudioConfigData;
+        GameStateData.EnemySystemConfig = allDataConfig.EnemySystemConfig;
 
         // 確保關卡資訊也載入完畢
         await LoadLevelConfigsAsync();
