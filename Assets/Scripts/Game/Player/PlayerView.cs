@@ -11,8 +11,8 @@ using System.Linq;
 /// </summary>
 public class PlayerView : BaseGameObject
 {
-    private PlayerInput _playerInput;
     private Vector2 _inputVector;
+    private Vector2 _joystickInputVector;
 
     // 受到攻擊顏色變化
     private Renderer[] _renderers;
@@ -38,13 +38,8 @@ public class PlayerView : BaseGameObject
     public override void OnDestroy()
     {
         StopAllCoroutines();
-        if (_playerInput != null)
-        {
-            var moveAction = _playerInput.actions["Move"];
-            moveAction.performed -= OnMoveInternal;
-            moveAction.canceled -= OnMoveInternal;
-        }
         _controller?.Dispose();
+
         base.OnDestroy();
     }
 
@@ -71,32 +66,6 @@ public class PlayerView : BaseGameObject
         {
             HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
         }
-
-        // 初始化輸入控制
-        InitInputSystem();
-    }
-
-    /// <summary>
-    /// 初始化輸入控制
-    /// </summary>
-    private void InitInputSystem()
-    {
-        GameConfigData gameConfigData = GameStateData.GameConfig;
-
-        if (!gameObject.TryGetComponent(out PlayerInput playerInput))
-        {
-            playerInput = gameObject.AddComponent<PlayerInput>();
-        }
-        playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
-        playerInput.actions = gameConfigData.InputAction;
-        playerInput.defaultActionMap = "Player";
-        playerInput.defaultControlScheme = "Keyboard&Mouse";
-
-        var moveAction = playerInput.actions["Move"];
-        moveAction.performed += OnMoveInternal;
-        moveAction.canceled += OnMoveInternal;
-
-        _playerInput = playerInput;
     }
 
     public override void Setup(AssetReferenceGameObject myRef)
@@ -122,10 +91,49 @@ public class PlayerView : BaseGameObject
         if (GameplayManager.CurrentContext.GameController.IsGamePause ||
             GameplayManager.CurrentContext.GameController.IsGameOver) return;
 
+        // 移動控制
+        Vector2 keyboardInput = GetKeyboardInput();
+        // 複合輸入處理：比較鍵盤與搖桿，誰的推力大就用誰
+        if (keyboardInput.sqrMagnitude > _joystickInputVector.sqrMagnitude)
+        {
+            _inputVector = keyboardInput;
+        }
+        else
+        {
+            _inputVector = _joystickInputVector;
+        }
+        // 執行移動
         _controller.ExecuteTick(_inputVector, Time.deltaTime);
 
         // 測試用鍵盤輸入監聽
         TestDebugInput();
+    }
+
+    /// <summary>
+    /// 鍵盤輸入控制移動
+    /// </summary>
+    /// <returns></returns>
+    private Vector2 GetKeyboardInput()
+    {
+        if (Keyboard.current == null) return Vector2.zero;
+
+        float x = 0;
+        float y = 0;
+
+        // WASD
+        if (Keyboard.current.wKey.isPressed) y += 1f;
+        if (Keyboard.current.sKey.isPressed) y -= 1f;
+        if (Keyboard.current.aKey.isPressed) x -= 1f;
+        if (Keyboard.current.dKey.isPressed) x += 1f;
+
+        // 方向鍵
+        if (Keyboard.current.upArrowKey.isPressed) y += 1f;
+        if (Keyboard.current.downArrowKey.isPressed) y -= 1f;
+        if (Keyboard.current.leftArrowKey.isPressed) x -= 1f;
+        if (Keyboard.current.rightArrowKey.isPressed) x += 1f;
+
+        // 回傳正規化後的向量(避免斜對角移動變快)
+        return new Vector2(x, y).normalized;
     }
 
     /// <summary>
@@ -216,11 +224,11 @@ public class PlayerView : BaseGameObject
 
         }).AddTo(this);
 
-        // 外部虛擬搖桿輸入監聽
+        // 監聽搖桿輸入
         GameStateData.JoystickInput
             .Subscribe(joystickValue =>
             {
-                _inputVector = joystickValue;
+                _joystickInputVector = joystickValue;
             })
             .AddTo(this);
     }
@@ -235,16 +243,6 @@ public class PlayerView : BaseGameObject
 
         SkillItemData skillItemData = GameStateData.AllSkillConfigData.GetActiveSkill(_characterConfig.InitSkill, 1);
         GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(newSkill: skillItemData);
-    }
-
-    private void OnMoveInternal(InputAction.CallbackContext context)
-    {
-        _inputVector = context.ReadValue<Vector2>();
-    }
-
-    public void OnMove(Vector2 value)
-    {
-        _inputVector = value;
     }
 
     /// <summary>
