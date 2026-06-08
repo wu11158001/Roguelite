@@ -15,9 +15,8 @@ public class GameLauncher : MonoBehaviour
 
             ViewManager.Instance.OpenView<JoystickView>(viewType: VIEW_TYPE.JoystickView).Forget();
             
-            var task1 = ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
-            var task2 = SpawnPlayerAndMap();
-            await UniTask.WhenAll(task1, task2);
+            await ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
+            await SpawnPlayerAndMap();
 
             SceneLoader.Instance.CloseLoading();
         }

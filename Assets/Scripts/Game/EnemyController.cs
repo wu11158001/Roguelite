@@ -78,7 +78,6 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        _player = GameplayManager.CurrentContext.ControlCharacter.transform;
         _transformArray = new TransformAccessArray(0);
 
         _updateSubscription =Observable.EveryUpdate()
@@ -94,8 +93,10 @@ public class EnemyController : MonoBehaviour
     /// <summary>
     /// 初始化與開始自動生成敵人
     /// </summary>
-    public void InitAndStartAutoSpawn()
+    public void InitAndStartAutoSpawn(Transform player)
     {
+        _player = player;
+
         _isLevelRunning = true;
         _config = GameStateData.EnemySystemConfig;
         _config.Initialize();
