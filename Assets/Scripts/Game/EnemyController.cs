@@ -303,10 +303,9 @@ public class EnemyController : MonoBehaviour
         for (int i = count - 1; i >= 0; i--)
         {
             EnemyView enemyView = ActiveEnemyViews[i];
-
-            // 從 NativeArray 撈出 Job 剛剛算完的最新資料
             EnemyJobData latestData = _dataArray[i];
 
+            // 處理死亡
             if (_shouldDieArray[i])
             {
                 if (enemyView != null) enemyView.OnDie();
@@ -314,15 +313,14 @@ public class EnemyController : MonoBehaviour
                 continue;
             }
 
+            // 2處理動畫
             if (enemyView != null)
             {
-                // 當「狀態改變時」才去更換動畫
-                if (_enemyDataList[i].LastFrameStopped != _isStoppedArray[i])
+                if (_enemyDataList[i].LastFrameStopped != latestData.LastFrameStopped)
                 {
-                    enemyView.AttackAnimContril(_isStoppedArray[i]);
+                    enemyView.AttackAnimContril(latestData.LastFrameStopped);
                 }
             }
-
             _enemyDataList[i] = latestData;
         }
 

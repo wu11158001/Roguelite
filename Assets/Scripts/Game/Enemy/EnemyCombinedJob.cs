@@ -157,25 +157,32 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
         }
 
+        // 處理扣Hp
         for (int i = 0; i < DamageEvents.Length; i++)
         {
             if (DamageEvents[i].InstanceID == data.InstanceID)
             {
-                // 扣除生命值
                 data.CurrentHp -= DamageEvents[i].Damage;
             }
         }
 
-        // 判斷生死
+        // 判斷生死狀態
+        if (OutShouldDie[index])
+        {
+            data.ShouldDie = true;
+        }
+
+        // 如果血量歸零，判定死亡
         if (data.CurrentHp <= 0)
         {
             data.ShouldDie = true;
         }
 
-        // 寫回資料
-        EnemyDatas[index] = data;
+        // 同步最新狀態回 data 結構體
+        data.LastFrameStopped = OutIsStopped[index];
 
-        OutIsStopped[index] = data.LastFrameStopped;
+        // 將最終確定好的結果，吐回給主執行緒的 NativeArray
         OutShouldDie[index] = data.ShouldDie;
+        EnemyDatas[index] = data;
     }
 }

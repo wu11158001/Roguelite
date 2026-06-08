@@ -29,7 +29,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.5
-    SkillAttack: 9
+    SkillAttack: 7
     SkillShotCount: 0
     SkillShotInterval: 0
     SkillPenetrate: 0
