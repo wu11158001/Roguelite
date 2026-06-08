@@ -45,7 +45,7 @@ MonoBehaviour:
   _basePickupRange: 5
   PickupRange:
     value: 0
-  _baseAddCriticalChance: 100
+  _baseAddCriticalChance: 0
   AddCriticalChance:
     value: 0
   _baseCriticalMultiplier: 150
