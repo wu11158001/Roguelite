@@ -32,7 +32,7 @@ public class Skill_FrontHitView : BaseSkill
     {
         if (!_isCanHit) return;
 
-        if (other.gameObject.layer == _targetLayer)
+        if (other.gameObject.layer == _enemyLayer)
         {
             _controller.HitEnemy(other.gameObject, CalculateAttack());
         }

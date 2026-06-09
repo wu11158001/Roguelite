@@ -137,7 +137,7 @@ public class PlayerView : BaseCharacter
     /// <param name="isMoving"></param>
     public void UpdateAnimation(bool isMoving)
     {
-        _anim.SetBool(_isMovingParamId, isMoving);
+        Anim.SetBool(_isMovingParamId, isMoving);
     }
 
     /// <summary>
@@ -236,7 +236,7 @@ public class PlayerView : BaseCharacter
     {
         GameplayManager.CurrentContext.GameController.SetGameOver();
 
-        _anim.SetTrigger(_dieParamId);
+        Anim.SetTrigger(_dieParamId);
         _hpBarView.gameObject.SetActive(false);
 
         StartCoroutine(IHandleDieRoutine());
@@ -249,13 +249,13 @@ public class PlayerView : BaseCharacter
     private IEnumerator IHandleDieRoutine()
     {
         // 等待動畫切換
-        while (_anim.IsInTransition(0) || !_anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+        while (Anim.IsInTransition(0) || !Anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
         {
             yield return null;
         }
 
         // 取得動畫的實際長度
-        AnimatorStateInfo stateInfo = _anim.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(0);
         float animationLength = stateInfo.length;
         yield return new WaitForSeconds(animationLength);
 

@@ -24,6 +24,8 @@ public class LevelConfigData : ScriptableObject
     public float ExpBonus;
     [Label("怪物Hp提升倍率(1 = 預設)")]
     public float EnemyHpIncreaseMultiplier = 1;
+    [Label("怪物攻擊提升倍率(1 = 預設)")]
+    public float EnemyAttackIncreaseMultiplier = 1;
 
     [HorizontalLine(color: EColor.Gray)]
     [Label("出現怪物類型:模式1")]

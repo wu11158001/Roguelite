@@ -22,15 +22,28 @@ public struct EnemyJobData
     public int InstanceID;
     public EnemyMoveType MoveType;
 
+    // 當前HP
     public int CurrentHp;
+    // 移動速度
     public float MoveSpeed;
+    // 攻擊距離(距離玩家多遠)
     public float AttackRange;
+    // 推擠半徑
     public float Radius;
+
+    // 紀錄當前攻擊動畫播到百分之幾(0.0 ~ 1.0)
+    public float AttackNormalizedTime;
+    // 攻擊觸發動畫百分比(0.0 ~ 1.0)
+    public float AttackTimeNormalized;
+
+    // 攻擊力
+    public int Attack;
+    // 這一輪攻擊是否已攻擊過(避免重複觸發)
+    public bool HasAttackedInCurrentCycle;
 
     // 模式2專用
     public float3 InitialDirection;
-
-    // 模式2是否該回收
+    // 模式2是否該回收(與角色碰撞後死亡)
     public bool ShouldDie;
 
     // 紀錄是否停止移動(狀態改變時才更換動畫)
@@ -40,7 +53,7 @@ public struct EnemyJobData
 /// <summary>
 /// 敵人Job任務
 /// </summary>
-[BurstCompile]
+//[BurstCompile]
 public struct EnemyCombinedJob : IJobParallelForTransform
 {
     [NativeDisableContainerSafetyRestriction]
@@ -52,11 +65,14 @@ public struct EnemyCombinedJob : IJobParallelForTransform
     public float DeltaTime;
     public float SeparationWeight;
 
-    // 這一影格的受擊名單
+    // 受擊名單
     [ReadOnly] public NativeArray<DamageEvent> DamageEvents;
 
     public NativeArray<bool> OutIsStopped;
     public NativeArray<bool> OutShouldDie;
+
+    // 執行攻擊名單
+    public NativeArray<bool> OutExecuteAttackHit;
 
     public void Execute(int index, TransformAccess transform)
     {
@@ -65,6 +81,8 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         float3 nextVelocity = float3.zero;
 
         float distToPlayer = math.distance(currentPos, PlayerPos);
+
+        OutExecuteAttackHit[index] = false;
 
         // 移動邏輯
         if (data.MoveType == EnemyMoveType.ChaseAndAttack)
@@ -136,7 +154,6 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                 // 實際位移
                 float3 finalMove = targetVelocity * data.MoveSpeed * DeltaTime;
                 transform.position += (Vector3)finalMove;
-
                 // 轉向：使用安全閾值，並且平滑插值
                 float3 targetDirection = math.normalize(targetVelocity);
                 quaternion targetRotation = quaternion.LookRotation(targetDirection, new float3(0, 1, 0));
@@ -150,11 +167,34 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             // 停下攻擊時，平滑面向玩家
             float3 facePlayerDir = math.normalize(PlayerPos - currentPos);
             facePlayerDir.y = 0;
+
             if (math.lengthsq(facePlayerDir) > 0.001f)
             {
                 quaternion targetRotation = quaternion.LookRotation(facePlayerDir, new float3(0, 1, 0));
                 transform.rotation = math.nlerp(transform.rotation, targetRotation, 5.0f * DeltaTime);
             }
+        }
+
+        // 攻擊邏輯
+        if (OutIsStopped[index])
+        {
+            // 讀取真實動畫進度
+            float currentProgress = data.AttackNormalizedTime;
+
+            // 判斷動畫百分比
+            if (!data.HasAttackedInCurrentCycle && currentProgress >= data.AttackTimeNormalized)
+            {
+                if (distToPlayer <= data.AttackRange)
+                {
+                    OutExecuteAttackHit[index] = true;
+                    data.HasAttackedInCurrentCycle = true;
+                }
+            }
+        }
+        else
+        {
+            // 如果玩家拉開距離，重置狀態
+            data.HasAttackedInCurrentCycle = false;
         }
 
         // 處理扣Hp
@@ -166,7 +206,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
         }
 
-        // 判斷生死狀態
+        // 判斷存活狀態
         if (OutShouldDie[index])
         {
             data.ShouldDie = true;

@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2472f04a2c498634885e99b41de6cc72, type: 3}
   m_Name: EnemySystemConfig
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystemConfig
-  InitHp: 30
+  InitHp: 300
+  InitAttack: 10
   SpawnRadius: 35
   SeparationWeight: 20
   SeparationRadius: 0.5
   Mode1_InitialSpawnInterval: 1.9
   Mode1_MinSpawnInterval: 0.2
-  Mode1_MaxEnemyCount: 100
+  Mode1_MaxEnemyCount: 1
   Mode1_MoveSpeed: 4
-  Mode1_EnemyHpIncreaseMultiplier: 0.3
+  Mode1_EnemyHpIncreaseMultiplier: 0.4
+  Mode1_EnemyAttackIncreaseMultiplier: 0.3
   Mode2_MoveSpeed: 15
   Mode2_WaveCount: 3
   Mode2_WaveInterval: 5
@@ -32,6 +34,8 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+    AttackCd: 0.5
+    AttackTime: 0.18
   - EnemyType: 2
     PrefabReference:
       m_AssetGUID: b62f05aa989fa9b44909e70cf3429a39
@@ -39,3 +43,5 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+    AttackCd: 0.5
+    AttackTime: 0.18

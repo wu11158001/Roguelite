@@ -26,6 +26,7 @@ public class SelectLevelView : BaseView
     [SerializeField] private TextMeshProUGUI _text_TimeLimit;
     [SerializeField] private TextMeshProUGUI _text_CoinBonus;
     [SerializeField] private TextMeshProUGUI _text_ExpBonus;
+    [SerializeField] private TextMeshProUGUI _text_EnemyHpIncrease;
 
     [HorizontalLine(color: EColor.Gray)]
     [Header("開始按鈕")]
@@ -113,5 +114,6 @@ public class SelectLevelView : BaseView
         _text_LevelName.text = level.LevelName;
         _text_CoinBonus.text = level.CoinBonus == 0 ? "-" : $"{level.CoinBonus * 100}%";
         _text_ExpBonus.text = level.ExpBonus == 0 ? "-" : $"{level.ExpBonus * 100}%";
+        _text_EnemyHpIncrease.text = level.EnemyHpIncreaseMultiplier == 1 ? "-" : $"+{(level.EnemyHpIncreaseMultiplier - 1) * 100}%";
     }
 }

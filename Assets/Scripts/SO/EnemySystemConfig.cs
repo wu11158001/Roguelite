@@ -28,6 +28,14 @@ public class EnemyData
     [AllowNesting]
     [Label("技能對應模型")]
     public AssetReferenceGameObject PrefabReference;
+
+    [AllowNesting]
+    [Label("攻擊動畫總時常")]
+    public float AttackCd;
+
+    [AllowNesting]
+    [Label("攻擊動畫時間點")]
+    public float AttackTime;
 }
 
 /// <summary>
@@ -38,6 +46,8 @@ public class EnemySystemConfig : ScriptableObject
 {
     [Label("敵人基礎生命")]
     public int InitHp = 30;
+    [Label("敵人基礎攻擊")]
+    public int InitAttack = 10;
     [Label("生成半徑")]
     public float SpawnRadius = 35.0f;
     [Label("推擠強度")]
@@ -65,7 +75,11 @@ public class EnemySystemConfig : ScriptableObject
 
     [BoxGroup("模式1配置")]
     [Label("模式1:每階段怪物Hp增加倍率(0.1 = 增加10%)")]
-    public float Mode1_EnemyHpIncreaseMultiplier = 0.3f;
+    public float Mode1_EnemyHpIncreaseMultiplier = 0.4f;
+
+    [BoxGroup("模式1配置")]
+    [Label("模式1:每階段怪物攻擊增加倍率(0.1 = 增加10%)")]
+    public float Mode1_EnemyAttackIncreaseMultiplier = 0.3f;
 
     // --------模式2 配置--------
     [HorizontalLine(color: EColor.Gray)]
@@ -86,7 +100,7 @@ public class EnemySystemConfig : ScriptableObject
     public List<EnemyData> EnemyDatas = new();
 
     // 用來查詢敵人資料
-    private Dictionary<ENEMY_TYPE, AssetReferenceGameObject> _enemyDatas = new();
+    private Dictionary<ENEMY_TYPE, EnemyData> _enemyDatas = new();
 
     public void Initialize()
     {
@@ -95,23 +109,23 @@ public class EnemySystemConfig : ScriptableObject
         {
             if (!_enemyDatas.ContainsKey(item.EnemyType))
             {
-                _enemyDatas.Add(item.EnemyType, item.PrefabReference);
+                _enemyDatas.Add(item.EnemyType, item);
             }
         }
     }
 
     /// <summary>
-    /// 獲取敵人物件
+    /// 獲取敵人資料
     /// </summary>
     /// <param name="enemyType"></param>
     /// <returns></returns>
-    public AssetReferenceGameObject GetEnemyPrefab(ENEMY_TYPE enemyType)
+    public EnemyData GetEnemyData(ENEMY_TYPE enemyType)
     {
         if (_enemyDatas.Count == 0) Initialize();
 
-        if (_enemyDatas.TryGetValue(enemyType, out var prefabRef))
+        if (_enemyDatas.TryGetValue(enemyType, out var data))
         {
-            return prefabRef;
+            return data;
         }
 
         Debug.LogError($"無法找到敵人資料: {enemyType}");

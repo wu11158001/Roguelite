@@ -34,9 +34,16 @@ public class Skill_TrackingView : BaseSkill
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == _targetLayer)
+        // 攻擊敵人
+        if (other.gameObject.layer == _enemyLayer)
         {
             _controller.HitEnemy(other.gameObject, CalculateAttack()); ;
+        }
+
+        // 碰到箱子
+        if (other.gameObject.layer == _boxLayer)
+        {
+            Recycle();
         }
     }
 }

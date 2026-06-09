@@ -170,10 +170,10 @@ public class EnemyController : MonoBehaviour
 
                 if (targetEnemyType != 0)
                 {
-                    AssetReferenceGameObject prefabRef = _enemySystemConfig.GetEnemyPrefab(targetEnemyType);
-                    if (prefabRef != null)
+                    EnemyData enemyData = _enemySystemConfig.GetEnemyData(targetEnemyType);
+                    if (enemyData != null)
                     {
-                        SpawnEnemy_Mode1(prefabRef, spawnPosition, EnemyMoveType.ChaseAndAttack);
+                        SpawnEnemy_Mode1(enemyData, spawnPosition, EnemyMoveType.ChaseAndAttack);
                     }
                 }
             }
@@ -183,14 +183,14 @@ public class EnemyController : MonoBehaviour
     /// <summary>
     /// 模式1:產生敵人
     /// </summary>
-    /// <param name="asset"></param>
+    /// <param name="enemyData"></param>
     /// <param name="spawnPos"></param>
     /// <param name="type"></param>
-    public void SpawnEnemy_Mode1(AssetReferenceGameObject asset, Vector3 spawnPos, EnemyMoveType type)
+    public void SpawnEnemy_Mode1(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType type)
     {
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: "敵人",
-            assetRef: asset,
+            assetRef: enemyData.PrefabReference,
             position: spawnPos,
             rotation: Quaternion.identity,
             callback: (obj) =>
@@ -202,6 +202,7 @@ public class EnemyController : MonoBehaviour
                     return;
                 }
 
+                // 敵人VIew
                 EnemyView enemyView = null;
                 if (obj.TryGetComponent(out EnemyView view))
                 {
@@ -215,13 +216,27 @@ public class EnemyController : MonoBehaviour
 
                 // 目前波數
                 int currentWave = GetCurrentWaveIndex();
-                // 該關卡初始Hp
-                int initHp = Mathf.FloorToInt(_enemySystemConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
-                // 目前波數增加的Hp
-                int waveIncrease = Mathf.FloorToInt(_enemySystemConfig.InitHp * (_enemySystemConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
-                // 最終Hp
-                int currentHp = initHp + waveIncrease;
 
+                // 該關卡初始Hp
+                int initHp = (int)(_enemySystemConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
+                // 目前波數增加的Hp
+                int waveIncreaseHp = (int)(_enemySystemConfig.InitHp * (_enemySystemConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
+                // 最終Hp
+                int currentHp = initHp + waveIncreaseHp;
+
+                int intiAttack = (int)(_enemySystemConfig.InitAttack * _levelConfig.EnemyAttackIncreaseMultiplier);
+                // 目前波數增加的攻擊力
+                int waveIncreaseAttack = (int)(_enemySystemConfig.InitAttack * (_enemySystemConfig.Mode1_EnemyAttackIncreaseMultiplier * currentWave));
+                // 最終攻擊力
+                int finalAttack = intiAttack + waveIncreaseAttack;
+                // 計算執行動畫的百分比
+                float calculatedNormalizedTime = 0f;
+                if (enemyData.AttackCd > 0f) // 防止除以 0 崩潰
+                {
+                    calculatedNormalizedTime = math.clamp(enemyData.AttackTime / enemyData.AttackCd, 0f, 1f);
+                }
+
+                // Job資料
                 EnemyJobData data = new()
                 {
                     InstanceID = obj.GetInstanceID(),
@@ -235,6 +250,13 @@ public class EnemyController : MonoBehaviour
                     AttackRange = enemyView != null ? enemyView.AttackRange : 1.5f,
                     // Hp
                     CurrentHp = currentHp,
+
+                    // 攻擊力
+                    Attack = finalAttack,
+                    // 當前動畫進度
+                    AttackNormalizedTime = 0f,
+                    // 攻擊傷害判定點
+                    AttackTimeNormalized = calculatedNormalizedTime,
 
                     InitialDirection = math.normalize(_player.position - spawnPos),
                     ShouldDie = false,
@@ -301,6 +323,31 @@ public class EnemyController : MonoBehaviour
             positions[i] = _activeGameObjects[i].transform.position;
         }
 
+        for (int i = 0; i < count; i++)
+        {
+            EnemyView enemyView = ActiveEnemyViews[i];
+
+            // 只有當怪物已經停下來進入攻擊狀態時，我們才去撈取與同步動畫時間
+            if (enemyView != null && _enemyDataList[i].LastFrameStopped)
+            {
+                AnimatorStateInfo stateInfo = enemyView.Anim.GetCurrentAnimatorStateInfo(0);
+
+                // 取百分比進度 (0.0 ~ 1.0)
+                float currentProgress = stateInfo.normalizedTime % 1.0f;
+                EnemyJobData tempData = _enemyDataList[i];
+
+                // 如果進度重新倒帶歸零（代表播完一輪了），解鎖下一輪的傷害判定
+                if (currentProgress < tempData.AttackNormalizedTime)
+                {
+                    tempData.HasAttackedInCurrentCycle = false;
+                }
+
+                tempData.AttackNormalizedTime = currentProgress;
+                _enemyDataList[i] = tempData;
+            }
+        }
+
+        NativeArray<bool> executeAttackHitArray = new NativeArray<bool>(count, Allocator.TempJob);
         NativeArray<DamageEvent> damageArray = new NativeArray<DamageEvent>(_frameDamageEvents.ToArray(), Allocator.TempJob);
         _dataArray = new NativeArray<EnemyJobData>(_enemyDataList.ToArray(), Allocator.TempJob);
         _positionArray = new NativeArray<float3>(positions, Allocator.TempJob);
@@ -318,7 +365,8 @@ public class EnemyController : MonoBehaviour
             DamageEvents = damageArray,
 
             OutIsStopped = _isStoppedArray,
-            OutShouldDie = _shouldDieArray
+            OutShouldDie = _shouldDieArray,
+            OutExecuteAttackHit = executeAttackHitArray,
         };
 
         JobHandle handle = job.Schedule(_transformArray);
@@ -337,14 +385,26 @@ public class EnemyController : MonoBehaviour
                 continue;
             }
 
-            // 處理動畫
+            // 處理動畫切換與傷害觸發
             if (enemyView != null)
             {
-                if (_enemyDataList[i].LastFrameStopped != latestData.LastFrameStopped)
+                // 執行攻擊動畫狀態切換
+                if (i < _enemyDataList.Count && _enemyDataList[i].LastFrameStopped != latestData.LastFrameStopped)
                 {
                     enemyView.AttackAnimContril(latestData.LastFrameStopped);
                 }
+
+                AnimatorStateInfo stateInfo = enemyView.Anim.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("Attack") && latestData.AttackNormalizedTime > 0.01f)
+                {
+                    // 執行攻擊角色
+                    if (executeAttackHitArray[i])
+                    {
+                        GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(latestData.Attack);
+                    }
+                }
             }
+
             _enemyDataList[i] = latestData;
         }
 
@@ -354,6 +414,7 @@ public class EnemyController : MonoBehaviour
         _isStoppedArray.Dispose();
         _shouldDieArray.Dispose();
         damageArray.Dispose();
+        executeAttackHitArray.Dispose();
 
         // 當影格計算完畢，清空緩衝區，等待下一幀
         _frameDamageEvents.Clear();

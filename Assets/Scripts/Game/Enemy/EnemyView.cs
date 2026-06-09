@@ -47,12 +47,7 @@ public class EnemyView : BaseCharacter, ITargetable
     public void ResetState()
     {
         if (_capsuleCollider != null) _capsuleCollider.enabled = true;
-
-        if (_anim != null)
-        {
-            // 重置 Animator 的所有變數與狀態
-            _anim.Rebind(); 
-        }
+        if (Anim != null) Anim.Rebind();
     }
 
     /// <summary>
@@ -77,7 +72,7 @@ public class EnemyView : BaseCharacter, ITargetable
     /// <param name="value"></param>
     public void AttackAnimContril(bool value)
     {
-        if (_anim != null) _anim.SetBool(_isAttackParamId, value);
+        if (Anim != null) Anim.SetBool(_isAttackParamId, value);
     }
 
     /// <summary>

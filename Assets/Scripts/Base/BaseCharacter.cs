@@ -7,7 +7,7 @@ public class BaseCharacter : BaseGameObject
     public Transform MiddlePoint { get; private set; }
     public Transform BottomPoint { get; private set; }
 
-    protected Animator _anim;
+    public Animator Anim { get; private set; }
     protected Renderer[] _renderers;
     protected MaterialPropertyBlock _propBlock;
 
@@ -19,12 +19,12 @@ public class BaseCharacter : BaseGameObject
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();
-        _anim = GetComponentInChildren<Animator>();
+        Anim = GetComponentInChildren<Animator>();
 
         // 模型是Humanoid就使用頭部物件
-        if (_anim != null && _anim.isHuman)
+        if (Anim != null && Anim.isHuman)
         {
-            HeadPoint = _anim.GetBoneTransform(HumanBodyBones.Head);
+            HeadPoint = Anim.GetBoneTransform(HumanBodyBones.Head);
         }
     }
 

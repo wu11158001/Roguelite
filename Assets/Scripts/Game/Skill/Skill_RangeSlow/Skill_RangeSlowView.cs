@@ -36,7 +36,7 @@ public class Skill_RangeSlowView : BaseSkill
     {
         if (_controller == null) return;
 
-        if (other.gameObject.layer == _targetLayer)
+        if (other.gameObject.layer == _enemyLayer)
         {
             _controller.HitEnemy(other.gameObject, CalculateAttack());
         }

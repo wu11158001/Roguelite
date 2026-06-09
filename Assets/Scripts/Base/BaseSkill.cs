@@ -11,7 +11,9 @@ public class BaseSkill : BaseGameObject
 
     protected CompositeDisposable _disposables = new();
 
-    protected int _targetLayer;
+    protected int _enemyLayer;
+    protected int _boxLayer;
+
     protected EnemyView _targetEnemy;
 
     public override void OnDestroy()
@@ -22,7 +24,8 @@ public class BaseSkill : BaseGameObject
 
     protected virtual void Awake()
     {
-        _targetLayer = LayerMask.NameToLayer("Enemy");
+        _enemyLayer = LayerMask.NameToLayer("Enemy");
+        _boxLayer = LayerMask.NameToLayer("Box");
     }
 
     public virtual void Setup(SkillItemData data, EnemyView targetEnemy = null)
