@@ -22,6 +22,9 @@ public struct EnemyJobData
     public int InstanceID;
     public EnemyMoveType MoveType;
 
+    // 內部安全隨機運算用的種子
+    public uint RandomSeed;
+
     // 當前HP
     public int CurrentHp;
     // 移動速度
@@ -63,7 +66,10 @@ public struct EnemyCombinedJob : IJobParallelForTransform
     [ReadOnly] public float3 PlayerPos;
 
     public float DeltaTime;
+    // 推擠分離強度
     public float SeparationWeight;
+    // 生成半徑傳進,用在來回遠端的怪物
+    public float SpawnRadius;
 
     // 受擊名單
     [ReadOnly] public NativeArray<DamageEvent> DamageEvents;
@@ -84,7 +90,37 @@ public struct EnemyCombinedJob : IJobParallelForTransform
 
         OutExecuteAttackHit[index] = false;
 
-        // 移動邏輯
+        // 模式1:拉回距離遠的敵人
+        if (data.MoveType == EnemyMoveType.ChaseAndAttack)
+        {
+            // 遠離距離出生距離的倍數拉回
+            float maxAllowedDistance = SpawnRadius * 2.0f;
+
+            if (distToPlayer > maxAllowedDistance)
+            {
+                // 初始化 Job 專用的隨機工具
+                Unity.Mathematics.Random random = new Unity.Mathematics.Random(data.RandomSeed);
+
+                float randomAngle = random.NextFloat(0f, math.PI * 2f);
+                float offsetX = math.cos(randomAngle) * SpawnRadius;
+                float offsetZ = math.sin(randomAngle) * SpawnRadius;
+
+                float3 teleportPos = new float3(PlayerPos.x + offsetX, PlayerPos.y, PlayerPos.z + offsetZ);
+                transform.position = (Vector3)teleportPos;
+                currentPos = teleportPos;
+                distToPlayer = SpawnRadius;
+
+                // 為了防止拉回時殘留舊的攻擊判定或抽搐狀態，徹底洗白狀態
+                data.HasAttackedInCurrentCycle = false;
+                data.AttackNormalizedTime = 0f;
+                OutIsStopped[index] = false;
+
+                // 更新隨機種子，確保下一次被拉回時角度會是全新的
+                data.RandomSeed = random.NextUInt(1, uint.MaxValue);
+            }
+        }
+
+        // 模式1:移動邏輯
         if (data.MoveType == EnemyMoveType.ChaseAndAttack)
         {
             if (distToPlayer > data.AttackRange)

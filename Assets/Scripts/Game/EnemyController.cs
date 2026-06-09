@@ -242,6 +242,9 @@ public class EnemyController : MonoBehaviour
                     InstanceID = obj.GetInstanceID(),
                     MoveType = type,
 
+                    // 用 InstanceID 加上時間戳當作獨一無二的隨機種子
+                    RandomSeed = (uint)(obj.GetInstanceID() + System.DateTime.Now.Ticks),
+
                     // 移動速度
                     MoveSpeed = _enemySystemConfig.Mode1_MoveSpeed,
                     // 推擠距離
@@ -356,6 +359,8 @@ public class EnemyController : MonoBehaviour
 
         var job = new EnemyCombinedJob
         {
+            SpawnRadius = _enemySystemConfig.SpawnRadius,
+
             EnemyDatas = _dataArray,
             AllPositions = _positionArray,
             PlayerPos = _player.position,
