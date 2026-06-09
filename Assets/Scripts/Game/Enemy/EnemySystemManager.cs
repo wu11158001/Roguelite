@@ -1,7 +1,6 @@
 using UniRx;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Jobs;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -31,9 +30,9 @@ public struct DamageEvent
 }
 
 /// <summary>
-/// 敵人控制器
+/// 敵人系統中心
 /// </summary>
-public class EnemyController : MonoBehaviour
+public class EnemySystemManager : MonoBehaviour
 {
     private Transform _player;
 
@@ -41,63 +40,94 @@ public class EnemyController : MonoBehaviour
     private List<EnemyJobData> _enemyDataList = new();
     public List<EnemyView> ActiveEnemyViews { get; private set; } = new();
 
+    // 檢查目前數量的公開屬性
+    public int ActiveEnemyCount => _activeGameObjects.Count;
+
     private TransformAccessArray _transformArray;
     private NativeArray<EnemyJobData> _dataArray;
     private NativeArray<float3> _positionArray;
     private NativeArray<bool> _isStoppedArray;
     private NativeArray<bool> _shouldDieArray;
+    private NativeArray<bool> _shouldAttackAndDieArray;
+    private NativeArray<bool> _shouldRecycleArray;
 
-    // UniRx 的 Update
     private IDisposable _updateSubscription;
-
-    // 用來判斷Update是否執行
     private bool _isLevelRunning;
-    // 用來判斷自動生成是否執行
-    private bool _isAutoSpawnRunning;
-    // 模式1:每秒生成遞減率
-    private float _spawnDecreaseRate;
-    // 模式1:累加生成計時器
-    private float _model1_spawnTimer;
 
-    // 這一影格所有怪物吃到的傷害清單
+    // 模式1生成器組件
+    private EnemySystem_Mode1 _spawnerMode1;
+    // 模式2生成器組件
+    private EnemySystem_Mode2 _spawnerMode2;
+
     private List<DamageEvent> _frameDamageEvents = new();
-
-    private EnemySystemConfig _enemySystemConfig;
+    private EnemySystemConfig _enemyConfig;
     private LevelConfigData _levelConfig;
 
     private void OnDestroy()
     {
-        ClearAll();
+        ClearAll(isDestroying: true);
     }
 
-    public void ClearAll()
+    /// <summary>
+    /// 清除所有敵人
+    /// </summary>
+    /// <param name="isDestroying">是否是因為 OnDestroy 觸發的清除</param>
+    public void ClearAll(bool isDestroying = false)
     {
-        // 如果清除時畫面上還有怪，先丟回物件池再清空
+        // 檢查物件池是否還在,不在代表遊戲以關閉或切換場景了
+        bool isPoolAvailable = GameplayManager.CurrentContext != null &&
+                               GameplayManager.CurrentContext.GameScenePool != null;
+
         for (int i = 0; i < _activeGameObjects.Count; i++)
         {
-            if (_activeGameObjects[i] != null)
+            GameObject enemyGo = _activeGameObjects[i];
+            if (enemyGo != null)
             {
-                GameplayManager.CurrentContext.GameScenePool.ReturnToPool(_activeGameObjects[i]);
+                // 如果物件池還在，回收至物件池
+                if (isPoolAvailable)
+                {
+                    GameplayManager.CurrentContext.GameScenePool.ReturnToPool(enemyGo);
+                }
+                else
+                {
+                    // 如果物件池已經死了，就直接 Destroy
+                    if (!isDestroying)
+                    {
+                        Destroy(enemyGo);
+                    }
+                }
             }
         }
 
-        if (_transformArray.isCreated) _transformArray.Dispose();
+        // 釋放 NativeArray 記憶體
+        if (_transformArray.isCreated)
+        {
+            _transformArray.Dispose();
+        }
+
         _updateSubscription?.Dispose();
 
+        // 清空託管容器
         _activeGameObjects.Clear();
         _enemyDataList.Clear();
         ActiveEnemyViews.Clear();
+
+        // 清除生成器
+        if (!isDestroying)
+        {
+            if (_spawnerMode1 != null) Destroy(_spawnerMode1);
+            if (_spawnerMode2 != null) Destroy(_spawnerMode2);
+        }
     }
 
     void Start()
     {
         _transformArray = new TransformAccessArray(0);
 
-        _updateSubscription =Observable.EveryUpdate()
+        _updateSubscription = Observable.EveryUpdate()
             .Where(_ => _isLevelRunning)
             .Subscribe(_ =>
             {
-                if(_isAutoSpawnRunning) UpdateAutoSpawn_Mode1();
                 if (_activeGameObjects.Count > 0) RunJob();
             })
             .AddTo(this);
@@ -109,19 +139,19 @@ public class EnemyController : MonoBehaviour
     public void InitAndStartAutoSpawn(Transform player)
     {
         _player = player;
-
         _isLevelRunning = true;
-        _isAutoSpawnRunning = true;
 
-        _enemySystemConfig = GameStateData.EnemySystemConfig;
-        _enemySystemConfig.Initialize();
-
+        _enemyConfig = GameStateData.EnemySystemConfig;
+        _enemyConfig.Initialize();
         _levelConfig = GameStateData.SelectLevel;
 
-        // 讓第0秒就開始產第一隻敵人
-        _model1_spawnTimer = _enemySystemConfig.Mode1_InitialSpawnInterval;
-        // 計算:每秒生成遞減率
-        _spawnDecreaseRate = (_enemySystemConfig.Mode1_InitialSpawnInterval - _enemySystemConfig.Mode1_MinSpawnInterval) / GameStateData.SelectLevel.TimeLimit;
+        // 掛載模式1與初始化
+        _spawnerMode1 = gameObject.AddComponent<EnemySystem_Mode1>();
+        _spawnerMode1.Initialize(this, _player, _enemyConfig, _levelConfig);
+
+        // 掛載模式2與初始化
+        _spawnerMode2 = gameObject.AddComponent<EnemySystem_Mode2>();
+        _spawnerMode2.Initialize(this, _player, _enemyConfig, _levelConfig);
     }
 
     /// <summary>
@@ -131,163 +161,87 @@ public class EnemyController : MonoBehaviour
     {
         _isLevelRunning = false;
         _updateSubscription.Dispose();
+        StopSpawn();
     }
 
     /// <summary>
-    /// 停止自動生成敵人
+    /// 停止生成敵人
     /// </summary>
-    public void StopAutoSapawn()
+    public void StopSpawn()
     {
-        _isAutoSpawnRunning = false;
+        if (_spawnerMode1 != null) _spawnerMode1.StopSpawn();
+        if (_spawnerMode2 != null) _spawnerMode2.StopSpawn();
     }
 
     /// <summary>
-    /// 獲取當前波數
+    /// 生成敵人
     /// </summary>
-    /// <returns></returns>
-    private int GetCurrentWaveIndex()
-    {
-        List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
-        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
-        float timeLimit = _levelConfig.TimeLimit;
-
-        if (enemyList == null || enemyList.Count == 0) return 0;
-
-        float interval = timeLimit / enemyList.Count;
-        int targetIndex = Mathf.FloorToInt(elapsedTime / interval);
-
-        if (targetIndex >= enemyList.Count)
-        {
-            targetIndex = enemyList.Count - 1;
-        }
-
-        return targetIndex;
-    }
-
-    #region 敵人模式1
-
-    /// <summary>
-    /// 模式1:持續產生敵人
-    /// </summary>
-    private void UpdateAutoSpawn_Mode1()
-    {
-        float currentLevelTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
-        float initialInterval = _enemySystemConfig.Mode1_InitialSpawnInterval;
-        float minInterval = _enemySystemConfig.Mode1_MinSpawnInterval;
-        float decreaseRate = _spawnDecreaseRate;
-        int maxEnemyCount = _enemySystemConfig.Mode1_MaxEnemyCount;
-
-        // 生成時間:公式：初始時間 - (當前秒數 * 遞減率)
-        float currentInterval = Mathf.Max(minInterval, initialInterval - (currentLevelTime * decreaseRate));
-        _model1_spawnTimer += Time.deltaTime;
-        if (_model1_spawnTimer >= currentInterval)
-        {
-            _model1_spawnTimer = 0f;
-
-            if (_activeGameObjects.Count < maxEnemyCount)
-            {
-                Vector3 spawnPosition = CalculateSpawnPosition();
-                ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode1();
-
-                if (targetEnemyType != 0)
-                {
-                    EnemyData enemyData = _enemySystemConfig.GetEnemyData(targetEnemyType);
-                    if (enemyData != null)
-                    {
-                        SpawnEnemy_Mode1(enemyData, spawnPosition, EnemyMoveType.ChaseAndAttack);
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 模式1:產生敵人
-    /// </summary>
-    /// <param name="enemyData"></param>
-    /// <param name="spawnPos"></param>
-    /// <param name="type"></param>
-    public void SpawnEnemy_Mode1(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType type)
+    /// <param name="enemyData">敵人資料</param>
+    /// <param name="spawnPos">產生位置</param>
+    /// <param name="moveType">敵人類型</param>
+    /// <param name="currentWave">波數影響敵人數值</param>
+    public void SpawnEnemy(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType moveType, int currentWave)
     {
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
-            parentName: "敵人",
+            parentName: $"敵人_{moveType}",
             assetRef: enemyData.PrefabReference,
             position: spawnPos,
             rotation: Quaternion.identity,
             callback: (obj) =>
             {
-                // 如果在生成中途關卡被關閉了，直接退回物件池，防止非同步回傳產生的殘留 Bug
                 if (!_isLevelRunning)
                 {
                     GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
                     return;
                 }
 
-                // 敵人VIew
-                EnemyView enemyView = null;
-                if (obj.TryGetComponent(out EnemyView view))
-                {
-                    enemyView = view;
-                }
-                else
-                {
-                    enemyView = obj.AddComponent<EnemyView>();
-                }
+                EnemyView enemyView = obj.TryGetComponent(out EnemyView view) ? view : obj.AddComponent<EnemyView>();
                 enemyView.ResetState();
 
-                // 目前波數
-                int currentWave = GetCurrentWaveIndex();
-
-                // 該關卡初始Hp
-                int initHp = Mathf.RoundToInt(_enemySystemConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
-                // 目前波數增加的Hp
-                int waveIncreaseHp = Mathf.RoundToInt(_enemySystemConfig.InitHp * (_enemySystemConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
-                // 最終Hp
+                // Hp計算 
+                int initHp = Mathf.RoundToInt(_enemyConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
+                int waveIncreaseHp = Mathf.RoundToInt(_enemyConfig.InitHp * (_enemyConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
                 int currentHp = initHp + waveIncreaseHp;
 
-                int intiAttack = Mathf.RoundToInt(_enemySystemConfig.InitAttack * _levelConfig.EnemyAttackIncreaseMultiplier);
-                // 目前波數增加的攻擊力
-                int waveIncreaseAttack = Mathf.RoundToInt(_enemySystemConfig.InitAttack * (_enemySystemConfig.Mode1_EnemyAttackIncreaseMultiplier * currentWave));
-                // 最終攻擊力
-                int finalAttack = intiAttack + waveIncreaseAttack;
-                // 計算執行動畫的百分比
+                // 攻擊力計算
+                int initAttack = Mathf.RoundToInt(_enemyConfig.InitAttack * _levelConfig.EnemyAttackIncreaseMultiplier);
+                int waveIncreaseAttack = Mathf.RoundToInt(_enemyConfig.InitAttack * (_enemyConfig.Mode1_EnemyAttackIncreaseMultiplier * currentWave));
+                int finalAttack = initAttack + waveIncreaseAttack;
+
+                // 移動速度
+                float moveSpeed = _enemyConfig.Mode1_MoveSpeed;
+
+                // 預設數值以模式1
+                switch (moveType)
+                {
+                    // 模式2:襲擊_初始朝玩家方向移動,碰撞後死亡
+                    case EnemyMoveType.StraightAndDie:
+                        currentHp = Mathf.RoundToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
+                        finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode2_AttackWeaken);
+                        moveSpeed = _enemyConfig.Mode2_MoveSpeed;
+                        break;
+                }
+
                 float calculatedNormalizedTime = 0f;
-                if (enemyData.AttackCd > 0f) // 防止除以 0 崩潰
+                if (enemyData.AttackCd > 0f)
                 {
                     calculatedNormalizedTime = math.clamp(enemyData.AttackTime / enemyData.AttackCd, 0f, 1f);
                 }
 
-                // Job資料
                 EnemyJobData data = new()
                 {
                     InstanceID = obj.GetInstanceID(),
-                    MoveType = type,
-
-                    // 用 InstanceID 加上時間戳當作獨一無二的隨機種子
+                    MoveType = moveType,
                     RandomSeed = (uint)(obj.GetInstanceID() + System.DateTime.Now.Ticks),
-
-                    // 移動速度
-                    MoveSpeed = _enemySystemConfig.Mode1_MoveSpeed,
-                    // 推擠距離
+                    MoveSpeed = moveSpeed,
                     Radius = enemyView != null ? enemyView.ColliderRadius : 0.5f,
-                    // 攻擊距離
                     AttackRange = enemyView != null ? enemyView.AttackRange : 1.5f,
-                    // Hp
                     CurrentHp = currentHp,
-
-                    // 攻擊力
                     Attack = finalAttack,
-                    // 當前動畫進度
                     AttackNormalizedTime = 0f,
-                    // 攻擊傷害判定點
                     AttackTimeNormalized = calculatedNormalizedTime,
-
-                    // 模式2的移動方向
                     InitialDirection = math.normalize(_player.position - spawnPos),
-
-                    // 是否死亡
                     ShouldDie = false,
-                    // 用來判斷是否當前fram是停止狀態,用於避免多次呼叫動畫
                     LastFrameStopped = false,
                 };
 
@@ -299,53 +253,14 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-    /// 模式1:根據當前時間，平均分配並撈出對應區間的怪物
-    /// </summary>
-    /// <param name="enemyList"></param>
-    /// <returns></returns>
-    private ENEMY_TYPE GetEnemyTypeByCurrentTime_Mode1()
-    {
-        List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
-        int targetIndex = GetCurrentWaveIndex();
-
-        return enemyList[targetIndex];
-    }
-
-    #endregion
-
-    /// <summary>
-    /// 計算產生位置
-    /// </summary>
-    private Vector3 CalculateSpawnPosition()
-    {
-        // 計算玩家水平距離n的圓周座標
-        float spawnRadius = _enemySystemConfig.SpawnRadius;
-
-        // 隨機角度
-        float randomAngle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
-
-        // 計算圓周上的 X 與 Z 偏移量(水平面)
-        float offsetX = Mathf.Cos(randomAngle) * spawnRadius;
-        float offsetZ = Mathf.Sin(randomAngle) * spawnRadius;
-
-        // 以玩家當前位置為基準點疊加偏移
-        Vector3 playerPos = _player.position;
-        Vector3 spawnPos = new(playerPos.x + offsetX, playerPos.y, playerPos.z + offsetZ);
-
-        return spawnPos;
-    }
-
-    /// <summary>
-    /// 執行Job
+    /// Job執行
     /// </summary>
     private void RunJob()
     {
-        // 推擠強度
-        float separationWeight = _enemySystemConfig.SeparationWeight;
-
-        // 收集當前所有怪物的位置，給 Job 做距離判斷
+        float separationWeight = _enemyConfig.SeparationWeight;
         int count = _activeGameObjects.Count;
         float3[] positions = new float3[count];
+
         for (int i = 0; i < count; i++)
         {
             positions[i] = _activeGameObjects[i].transform.position;
@@ -354,17 +269,12 @@ public class EnemyController : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             EnemyView enemyView = ActiveEnemyViews[i];
-
-            // 只有當怪物已經停下來進入攻擊狀態時，我們才去撈取與同步動畫時間
             if (enemyView != null && _enemyDataList[i].LastFrameStopped)
             {
                 AnimatorStateInfo stateInfo = enemyView.Anim.GetCurrentAnimatorStateInfo(0);
-
-                // 取百分比進度 (0.0 ~ 1.0)
                 float currentProgress = stateInfo.normalizedTime % 1.0f;
                 EnemyJobData tempData = _enemyDataList[i];
 
-                // 如果進度重新倒帶歸零（代表播完一輪了），解鎖下一輪的傷害判定
                 if (currentProgress < tempData.AttackNormalizedTime)
                 {
                     tempData.HasAttackedInCurrentCycle = false;
@@ -381,24 +291,25 @@ public class EnemyController : MonoBehaviour
         _positionArray = new NativeArray<float3>(positions, Allocator.TempJob);
         _isStoppedArray = new NativeArray<bool>(count, Allocator.TempJob);
         _shouldDieArray = new NativeArray<bool>(count, Allocator.TempJob);
+        _shouldAttackAndDieArray = new NativeArray<bool>(count, Allocator.TempJob);
+        _shouldRecycleArray = new NativeArray<bool>(count, Allocator.TempJob);
 
         bool isGameOver = GameplayManager.CurrentContext.GameController.IsGameOver;
 
         var job = new EnemyCombinedJob
         {
-            SpawnRadius = _enemySystemConfig.SpawnRadius,
-
+            SpawnRadius = _enemyConfig.SpawnRadius,
             EnemyDatas = _dataArray,
             AllPositions = _positionArray,
             PlayerPos = _player.position,
             DeltaTime = Time.deltaTime,
             SeparationWeight = separationWeight,
-
-            DamageEvents = damageArray,            
+            DamageEvents = damageArray,
             IsGameOver = isGameOver,
-
             OutIsStopped = _isStoppedArray,
             OutShouldDie = _shouldDieArray,
+            OutShouldAttackAndDie = _shouldAttackAndDieArray,
+            OutShouldRecycle = _shouldRecycleArray,
             OutExecuteAttackHit = executeAttackHitArray,
         };
 
@@ -410,27 +321,42 @@ public class EnemyController : MonoBehaviour
             EnemyView enemyView = ActiveEnemyViews[i];
             EnemyJobData latestData = _dataArray[i];
 
-            // 處理死亡
+            // 敵人死亡
             if (_shouldDieArray[i])
             {
-                if (enemyView != null) enemyView.OnDie();
+                if (enemyView != null) enemyView.OnDie(true);
                 RemoveEnemy(i);
                 continue;
             }
 
-            // 處理動畫切換與傷害觸發
+            // 攻擊且死亡(自殺式攻擊)
+            if(_shouldAttackAndDieArray[i])
+            {
+                if (enemyView != null) enemyView.OnDie(false);
+                GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(latestData.Attack);
+                RemoveEnemy(i);
+                continue;
+            }
+
+            // 遠離回收
+            if(_shouldRecycleArray[i])
+            {
+                RemoveEnemy(i);
+                continue;
+            }
+
             if (enemyView != null)
             {
-                // 執行攻擊動畫狀態切換
+                // 切換動畫
                 if (i < _enemyDataList.Count && _enemyDataList[i].LastFrameStopped != latestData.LastFrameStopped)
                 {
                     enemyView.AttackAnimContril(latestData.LastFrameStopped);
                 }
 
+                // 執行攻擊角色
                 AnimatorStateInfo stateInfo = enemyView.Anim.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("Attack") && latestData.AttackNormalizedTime > 0.01f)
                 {
-                    // 執行攻擊角色
                     if (executeAttackHitArray[i])
                     {
                         GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(latestData.Attack);
@@ -441,23 +367,23 @@ public class EnemyController : MonoBehaviour
             _enemyDataList[i] = latestData;
         }
 
-        // 釋放記憶體
         _dataArray.Dispose();
         _positionArray.Dispose();
         _isStoppedArray.Dispose();
         _shouldDieArray.Dispose();
+        _shouldAttackAndDieArray.Dispose();
+        _shouldRecycleArray.Dispose();
         damageArray.Dispose();
         executeAttackHitArray.Dispose();
 
-        // 當影格計算完畢，清空緩衝區，等待下一幀
         _frameDamageEvents.Clear();
     }
 
     /// <summary>
-    /// 註冊角色造成的傷害
+    /// 註冊對敵人遭成傷害
     /// </summary>
-    /// <param name="instanceID">物件Id</param>
-    /// <param name="hitData">攻擊資料</param>
+    /// <param name="instanceID"></param>
+    /// <param name="hitData"></param>
     public void RegisterDamage(int instanceID, HitData hitData)
     {
         _frameDamageEvents.Add(new DamageEvent
@@ -496,5 +422,27 @@ public class EnemyController : MonoBehaviour
         {
             GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
         }
+    }
+
+    /// <summary>
+    /// 獲取當前波數(以模式1作為波數,波數影響數值)
+    /// </summary>
+    public int GetCurrentWaveIndex()
+    {
+        List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
+        if (enemyList == null || enemyList.Count == 0) return 0;
+
+        float elapsedTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
+        float timeLimit = _levelConfig.TimeLimit;
+
+        float interval = timeLimit / enemyList.Count;
+        int targetIndex = Mathf.FloorToInt(elapsedTime / interval);
+
+        if (targetIndex >= enemyList.Count)
+        {
+            targetIndex = enemyList.Count - 1;
+        }
+
+        return targetIndex;
     }
 }

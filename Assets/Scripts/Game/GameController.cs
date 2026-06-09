@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
     {
         IsGameOver = true;
 
-        GameplayManager.CurrentContext.EnemyController.StopAutoSapawn();
+        GameplayManager.CurrentContext.EnemyController.StopSpawn();
         GameplayManager.CurrentContext.SkillController.Clear();
     }
 

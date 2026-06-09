@@ -63,7 +63,7 @@ public class Common_BtnSkillDescribe : MonoBehaviour
             _newSkillTextObj.DOScale(0.8f, 0.5f)
                 .SetEase(Ease.InOutQuad)
                 .SetLoops(-1, LoopType.Yoyo)
-                .SetLink(gameObject)
+                .SetLink(gameObject, LinkBehaviour.KillOnDisable)
                 .SetUpdate(true);
         }
 

@@ -164,6 +164,13 @@ public class PlayerView : BaseCharacter
                 int previousHp = pair.Previous;
                 int currentHp = pair.Current;
 
+                // 死亡
+                if (currentHp <= 0)
+                {
+                    OnDie();
+                    return;
+                }
+
                 if (currentHp > previousHp)
                 {
                     // 回復生命
@@ -179,12 +186,6 @@ public class PlayerView : BaseCharacter
                     // 減少生命
                     if (_hitCoroutine != null) StopCoroutine(_hitCoroutine);
                     _hitCoroutine = StartCoroutine(IGetHitAnim());
-                }
-
-                // 死亡
-                if(currentHp <= 0)
-                {
-                    OnDie();
                 }
 
                 // 更新血條 UI

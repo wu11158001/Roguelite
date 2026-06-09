@@ -112,7 +112,7 @@ public abstract class BaseMapProps : BaseGameObject
 
         DOTween.To(() => timer, x => timer = x, 1f, _flyDuration)
             .SetEase(_flyEase)
-            .SetLink(gameObject)
+            .SetLink(gameObject, LinkBehaviour.KillOnDisable)
             .OnUpdate(() =>
             {
                 if (GameplayManager.CurrentContext.GameController.IsGameOver) return;

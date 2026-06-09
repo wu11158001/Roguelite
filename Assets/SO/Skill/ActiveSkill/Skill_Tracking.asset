@@ -29,7 +29,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.2
-    SkillAttack: 10
+    SkillAttack: 1
     SkillShotCount: 1
     SkillShotInterval: 0.1
     SkillPenetrate: 0
@@ -39,8 +39,8 @@ MonoBehaviour:
     SkillCriticalMultiplier: 0
     SkillEffectRange: 0
     SkillKeepTime: 0
-    SpeedModifier: 0
-    SpeedModifierTime: 0
+    SpeedModifier: 0.5
+    SpeedModifierTime: 2
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0

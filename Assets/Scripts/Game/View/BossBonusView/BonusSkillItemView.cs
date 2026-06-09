@@ -27,6 +27,6 @@ public class BonusSkillItemView : MonoBehaviour
         _img_Mask.DOFade(0, 0.5f)
             .From(1)
             .SetUpdate(true)
-            .SetLink(gameObject);
+            .SetLink(gameObject, LinkBehaviour.KillOnDisable);
     }
 }

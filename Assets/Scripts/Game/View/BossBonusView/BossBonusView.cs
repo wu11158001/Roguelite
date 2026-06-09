@@ -131,7 +131,7 @@ public class BossBonusView : BaseView
             .From(1.0f)
             .SetLoops(-1, LoopType.Yoyo)
             .SetUpdate(true)
-            .SetLink(gameObject);
+            .SetLink(gameObject, LinkBehaviour.KillOnDisable);
     }
 
     /// <summary>

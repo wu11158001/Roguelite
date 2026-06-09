@@ -18,5 +18,5 @@ public class GameplayContext
     /// <summary> 無限地圖控制器 </summary>
     public InfiniteMapController InfiniteMapController { get; set; }
     /// <summary> 敵人控制器 </summary>
-    public EnemyController EnemyController { get; set; }
+    public EnemySystemManager EnemyController { get; set; }
 }

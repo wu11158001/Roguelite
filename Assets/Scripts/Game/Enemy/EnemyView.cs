@@ -16,7 +16,7 @@ public class EnemyView : BaseCharacter, ITargetable
     public float ColliderRadius => _capsuleCollider != null ? _capsuleCollider.radius * transform.localScale.x : 0.5f;
 
     // 攻擊範圍
-    public float AttackRange => ColliderRadius * 2.5f;
+    public float AttackRange => ColliderRadius * GameStateData.EnemySystemConfig.AttackRange;
 
     private readonly int _isAttackParamId = Animator.StringToHash("IsAttack");
 
@@ -57,7 +57,7 @@ public class EnemyView : BaseCharacter, ITargetable
     public void OnAttacked(HitData hitData)
     {
         int myID = gameObject.GetInstanceID();
-        EnemyController controller = GameplayManager.CurrentContext.EnemyController;
+        EnemySystemManager controller = GameplayManager.CurrentContext.EnemyController;
 
         controller.RegisterDamage(myID, hitData);
 
@@ -113,31 +113,42 @@ public class EnemyView : BaseCharacter, ITargetable
     /// <summary>
     /// 死亡
     /// </summary>
-    public void OnDie()
+    /// <param name="isCharacterKill">是否是角色擊殺</param>
+    public void OnDie(bool isCharacterKill)
     {
-        // 立即關閉碰撞，防止在被 Remove 的瞬間還參與當影格的 Job 計算
-        if (_capsuleCollider != null) _capsuleCollider.enabled = false;
+        try
+        {
+            // 立即關閉碰撞，防止在被 Remove 的瞬間還參與當影格的 Job 計算
+            if (_capsuleCollider != null) _capsuleCollider.enabled = false;
 
-        // 音效
-        AudioManager.Instance.PlaySFX(AUDIO_TYPE.Kill).Forget();
+            // 音效
+            AudioManager.Instance.PlaySFX(AUDIO_TYPE.Kill).Forget();
 
-        // 產生效果
-        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.KillEnemy);
-        Transform effectPoint = MiddlePoint;
-        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
-            parentName: "擊殺敵人效果",
-            assetRef: data.PrefabReference,
-            position: effectPoint.position,
-            rotation: effectPoint.rotation,
-            callback: (obj) =>
-            {
-                if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+            // 產生效果
+            EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.KillEnemy);
+            Transform effectPoint = MiddlePoint;
+            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+                parentName: "擊殺敵人效果",
+                assetRef: data.PrefabReference,
+                position: effectPoint.position,
+                rotation: effectPoint.rotation,
+                callback: (obj) =>
                 {
-                    effectRecycle.Setup(data.PrefabReference);
-                }
-            });
+                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+                    {
+                        effectRecycle.Setup(data.PrefabReference);
+                    }
+                });
 
-        // 通知控制中心
-        GameplayManager.CurrentContext.GameController.OnEnemyDie();
+            // 角色擊殺才累積擊殺數
+            if (isCharacterKill)
+            {
+                GameplayManager.CurrentContext.GameController.OnEnemyDie();
+            }            
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"產生擊殺敵人效果錯誤: {e}");
+        }        
     }
 }

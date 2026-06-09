@@ -9,6 +9,8 @@ using UnityEngine.AddressableAssets;
 /// </summary>
 public enum ENEMY_TYPE
 {
+    None,
+
     /// <summary> 史萊姆 </summary>
     Slime = 1,
     /// <summary> 烏龜 </summary>
@@ -48,6 +50,8 @@ public class EnemySystemConfig : ScriptableObject
     public int InitHp = 30;
     [Label("敵人基礎攻擊")]
     public int InitAttack = 10;
+    [Label("敵人攻擊範圍(碰裝框大小乘上的值)")]
+    public float AttackRange = 2.8f;
     [Label("生成半徑")]
     public float SpawnRadius = 35.0f;
     [Label("推擠強度")]
@@ -55,45 +59,65 @@ public class EnemySystemConfig : ScriptableObject
     [Label("推擠半徑")]
     public float SeparationRadius = 0.5f;
 
-    // --------模式1 配置--------
+    // --------模式1 (自動生成_持續朝玩家移動)--------
     [HorizontalLine(color: EColor.Gray)]
-    [BoxGroup("模式1配置")]
+    [BoxGroup("模式1:追隨")]
     [Label("模式1:初始怪物生成間隔")]
     public float Mode1_InitialSpawnInterval = 3.5f;
 
-    [BoxGroup("模式1配置")]
+    [BoxGroup("模式1:追隨")]
     [Label("模式1:最小怪物生成間隔")]
     public float Mode1_MinSpawnInterval = 0.5f;
 
-    [BoxGroup("模式1配置")]
+    [BoxGroup("模式1:追隨")]
     [Label("模式1:怪物最大數量")]
     public int Mode1_MaxEnemyCount = 100;
 
-    [BoxGroup("模式1配置")]
+    [BoxGroup("模式1:追隨")]
     [Label("模式1:怪物移動速度")]
     public float Mode1_MoveSpeed = 4.0f;
 
-    [BoxGroup("模式1配置")]
+    [BoxGroup("模式1:追隨")]
     [Label("模式1:每階段怪物Hp增加倍率(0.1 = 增加10%)")]
     public float Mode1_EnemyHpIncreaseMultiplier = 0.4f;
 
-    [BoxGroup("模式1配置")]
+    [BoxGroup("模式1:追隨")]
     [Label("模式1:每階段怪物攻擊增加倍率(0.1 = 增加10%)")]
     public float Mode1_EnemyAttackIncreaseMultiplier = 0.3f;
 
-    // --------模式2 配置--------
+    // --------模式2 (襲擊_初始朝玩家方向移動,碰撞後死亡)--------
     [HorizontalLine(color: EColor.Gray)]
-    [BoxGroup("模式2配置")]
-    [Label("模式2:怪物移動速度")]
-    public float Mode2_MoveSpeed = 15.0f;
+    [BoxGroup("模式2:襲擊")]
+    [Label("模式2:時間內總次數")]
+    public int Mode2_TotalCount = 5;
 
-    [BoxGroup("模式2配置")]
+    [BoxGroup("模式2:襲擊")]
     [Label("模式2:每次生成波數")]
     public int Mode2_WaveCount = 3;
 
-    [BoxGroup("模式2配置")]
+    [BoxGroup("模式2:襲擊")]
     [Label("模式2:每波間隔時間(秒)")]
     public int Mode2_WaveInterval = 5;
+
+    [BoxGroup("模式2:襲擊")]
+    [Label("模式2:每波敵人數量")]
+    public int Mode2_WaveSpawnCount = 20;
+
+    [BoxGroup("模式2:襲擊")]
+    [Label("模式2:生成半徑(越大越散)")]
+    public int Mode2_GroupRadius = 5;
+
+    [BoxGroup("模式2:襲擊")]
+    [Label("模式2:怪物移動速度")]
+    public float Mode2_MoveSpeed = 15.0f;
+
+    [BoxGroup("模式2:襲擊")]
+    [Label("模式2:怪物Hp弱化值(0.1 = 基礎Hp的10%)")]
+    public float Mode2_HpWeaken = 0.1f;
+
+    [BoxGroup("模式2:襲擊")]
+    [Label("模式2:怪物攻擊力弱化值(0.1 = 基礎攻擊力的10%)")]
+    public float Mode2_AttackWeaken = 0.1f;
 
     // --------敵人資料列表--------
     [BoxGroup("敵人資料列表")]

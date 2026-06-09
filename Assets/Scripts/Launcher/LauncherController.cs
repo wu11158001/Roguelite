@@ -7,6 +7,7 @@ using UniRx;
 using TMPro;
 using Cysharp.Threading.Tasks;
 using System;
+using DG.Tweening;
 
 public class LauncherController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class LauncherController : MonoBehaviour
 
     void Start()
     {
+        DOTween.SetTweensCapacity(1000, 300);
         _sli_ProgressBar.value = 0;
         DownloadAssets().Forget();
     }
