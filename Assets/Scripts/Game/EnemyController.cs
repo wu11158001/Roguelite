@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 
 /// <summary>
-/// 傷害事件資料
+/// 怪物傷害事件資料
 /// </summary>
 public struct DamageEvent
 {
@@ -18,6 +18,16 @@ public struct DamageEvent
     public int InstanceID;
     /// <summary> 受到的傷害 </summary>
     public int Damage;
+
+    // 擊退力道
+    public float KnockbackForce;
+    // 造成傷害的來源位置，用來計算「反方向」
+    public float3 DamageSourcePosition;
+
+    // 減速持續時間
+    public float SlowDuration;
+    // 速度變更 (0~1)
+    public float SlowSpeedMultiplier;
 }
 
 /// <summary>
@@ -42,6 +52,8 @@ public class EnemyController : MonoBehaviour
 
     // 用來判斷Update是否執行
     private bool _isLevelRunning;
+    // 用來判斷自動生成是否執行
+    private bool _isAutoSpawnRunning;
     // 模式1:每秒生成遞減率
     private float _spawnDecreaseRate;
     // 模式1:累加生成計時器
@@ -60,9 +72,6 @@ public class EnemyController : MonoBehaviour
 
     public void ClearAll()
     {
-        if (_transformArray.isCreated) _transformArray.Dispose();
-        _updateSubscription?.Dispose();
-
         // 如果清除時畫面上還有怪，先丟回物件池再清空
         for (int i = 0; i < _activeGameObjects.Count; i++)
         {
@@ -71,6 +80,9 @@ public class EnemyController : MonoBehaviour
                 GameplayManager.CurrentContext.GameScenePool.ReturnToPool(_activeGameObjects[i]);
             }
         }
+
+        if (_transformArray.isCreated) _transformArray.Dispose();
+        _updateSubscription?.Dispose();
 
         _activeGameObjects.Clear();
         _enemyDataList.Clear();
@@ -85,7 +97,7 @@ public class EnemyController : MonoBehaviour
             .Where(_ => _isLevelRunning)
             .Subscribe(_ =>
             {
-                UpdateAutoSpawn_Mode1();
+                if(_isAutoSpawnRunning) UpdateAutoSpawn_Mode1();
                 if (_activeGameObjects.Count > 0) RunJob();
             })
             .AddTo(this);
@@ -99,7 +111,8 @@ public class EnemyController : MonoBehaviour
         _player = player;
 
         _isLevelRunning = true;
-        
+        _isAutoSpawnRunning = true;
+
         _enemySystemConfig = GameStateData.EnemySystemConfig;
         _enemySystemConfig.Initialize();
 
@@ -112,12 +125,20 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
+    /// 停止執行Job
+    /// </summary>
+    public void StopRunJob()
+    {
+        _isLevelRunning = false;
+        _updateSubscription.Dispose();
+    }
+
+    /// <summary>
     /// 停止自動生成敵人
     /// </summary>
     public void StopAutoSapawn()
     {
-        _isLevelRunning = false;
-        _updateSubscription.Dispose();
+        _isAutoSpawnRunning = false;
     }
 
     /// <summary>
@@ -218,15 +239,15 @@ public class EnemyController : MonoBehaviour
                 int currentWave = GetCurrentWaveIndex();
 
                 // 該關卡初始Hp
-                int initHp = (int)(_enemySystemConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
+                int initHp = Mathf.RoundToInt(_enemySystemConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
                 // 目前波數增加的Hp
-                int waveIncreaseHp = (int)(_enemySystemConfig.InitHp * (_enemySystemConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
+                int waveIncreaseHp = Mathf.RoundToInt(_enemySystemConfig.InitHp * (_enemySystemConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
                 // 最終Hp
                 int currentHp = initHp + waveIncreaseHp;
 
-                int intiAttack = (int)(_enemySystemConfig.InitAttack * _levelConfig.EnemyAttackIncreaseMultiplier);
+                int intiAttack = Mathf.RoundToInt(_enemySystemConfig.InitAttack * _levelConfig.EnemyAttackIncreaseMultiplier);
                 // 目前波數增加的攻擊力
-                int waveIncreaseAttack = (int)(_enemySystemConfig.InitAttack * (_enemySystemConfig.Mode1_EnemyAttackIncreaseMultiplier * currentWave));
+                int waveIncreaseAttack = Mathf.RoundToInt(_enemySystemConfig.InitAttack * (_enemySystemConfig.Mode1_EnemyAttackIncreaseMultiplier * currentWave));
                 // 最終攻擊力
                 int finalAttack = intiAttack + waveIncreaseAttack;
                 // 計算執行動畫的百分比
@@ -261,8 +282,12 @@ public class EnemyController : MonoBehaviour
                     // 攻擊傷害判定點
                     AttackTimeNormalized = calculatedNormalizedTime,
 
+                    // 模式2的移動方向
                     InitialDirection = math.normalize(_player.position - spawnPos),
+
+                    // 是否死亡
                     ShouldDie = false,
+                    // 用來判斷是否當前fram是停止狀態,用於避免多次呼叫動畫
                     LastFrameStopped = false,
                 };
 
@@ -357,6 +382,8 @@ public class EnemyController : MonoBehaviour
         _isStoppedArray = new NativeArray<bool>(count, Allocator.TempJob);
         _shouldDieArray = new NativeArray<bool>(count, Allocator.TempJob);
 
+        bool isGameOver = GameplayManager.CurrentContext.GameController.IsGameOver;
+
         var job = new EnemyCombinedJob
         {
             SpawnRadius = _enemySystemConfig.SpawnRadius,
@@ -367,7 +394,8 @@ public class EnemyController : MonoBehaviour
             DeltaTime = Time.deltaTime,
             SeparationWeight = separationWeight,
 
-            DamageEvents = damageArray,
+            DamageEvents = damageArray,            
+            IsGameOver = isGameOver,
 
             OutIsStopped = _isStoppedArray,
             OutShouldDie = _shouldDieArray,
@@ -426,16 +454,20 @@ public class EnemyController : MonoBehaviour
     }
 
     /// <summary>
-    /// 註冊造成的傷害
+    /// 註冊角色造成的傷害
     /// </summary>
-    /// <param name="instanceID></param>
-    /// <param name="damage"></param>
-    public void RegisterDamage(int instanceID, int damage)
+    /// <param name="instanceID">物件Id</param>
+    /// <param name="hitData">攻擊資料</param>
+    public void RegisterDamage(int instanceID, HitData hitData)
     {
         _frameDamageEvents.Add(new DamageEvent
         {
             InstanceID = instanceID,
-            Damage = damage
+            Damage = hitData.Attack,
+            KnockbackForce = hitData.Knockback,
+            DamageSourcePosition = GameplayManager.CurrentContext.ControlCharacter.transform.position,
+            SlowDuration = hitData.SpeedModifierTime,
+            SlowSpeedMultiplier = hitData.SpeedModifier,
         });
     }
 

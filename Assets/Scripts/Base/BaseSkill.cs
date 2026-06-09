@@ -90,12 +90,19 @@ public class BaseSkill : BaseGameObject
             totalAttack = (int)(totalAttack * (totalCriticalMultiplier / 100));
         }
 
+        // 減速值
+        float speedModifier = 1 - (1 * _data.SpeedModifier);
+        // 減速持續時間
+        float speedModifierTime = _data.SpeedModifierTime;
+
         HitData hitData = new()
         {
             SkillType = _data.SkillType,
             Attack = totalAttack,
             IsCritical = isCritical,
-            Knockback = _data.SkillKnockback
+            Knockback = _data.SkillKnockback,
+            SpeedModifier = speedModifier,
+            SpeedModifierTime = speedModifierTime,
         };
 
         return hitData;

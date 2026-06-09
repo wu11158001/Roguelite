@@ -59,11 +59,46 @@ public class EnemyView : BaseCharacter, ITargetable
         int myID = gameObject.GetInstanceID();
         EnemyController controller = GameplayManager.CurrentContext.EnemyController;
 
-        controller.RegisterDamage(myID, hitData.Attack);
+        controller.RegisterDamage(myID, hitData);
 
         // 產生傷害數字
         GameInfoUIManager gameInfoUIManager = GameplayManager.CurrentContext.GameInfoUIManager;
         gameInfoUIManager.CreateDamageText(target: HeadPoint, hitData: hitData);
+
+        // 產生減速效果
+        if(hitData.SpeedModifier < 1 && hitData.SpeedModifierTime > 0)
+        {
+            SpawnSlowEffect(
+                target: BottomPoint,
+                recycleTime: hitData.SpeedModifierTime);
+        }
+    }
+
+    /// <summary>
+    /// 產生減速效果
+    /// </summary>
+    /// <param name="target"></param>
+    private void SpawnSlowEffect(Transform target, float recycleTime)
+    {
+        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.SlowDown);
+        if (data != null)
+        {
+            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+                parentName: "減速效果",
+                assetRef: data.PrefabReference,
+                position: target.position,
+                rotation: target.rotation,
+                callback: (obj) =>
+                {
+                    obj.transform.SetParent(target);
+                    obj.transform.position = target.position;
+
+                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+                    {
+                        effectRecycle.Setup(data.PrefabReference, recycleTime);
+                    }
+                });
+        }
     }
 
     /// <summary>

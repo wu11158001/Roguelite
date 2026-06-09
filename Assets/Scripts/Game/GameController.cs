@@ -46,6 +46,7 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void GameOverClear()
     {
+        GameplayManager.CurrentContext.EnemyController.StopRunJob();
         AudioManager.Instance?.PlayBgm(AUDIO_TYPE.GameOver).Forget();
         GameplayManager.CurrentContext.EnemyController?.ClearAll();
         GameplayManager.CurrentContext.ControlCharacter?.Remove();

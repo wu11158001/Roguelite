@@ -54,48 +54,14 @@ public class Skill_RangeSlowController :IDisposable
         if (enemyObj == null || !enemyObj.activeInHierarchy) return;
         if (hitData == null) return;
 
-        hitData.SpeedModifier = 1 - (1 * _model.SpeedModifier);
-        hitData.SpeedModifierTime = _model.SpeedModifierTime;
-
         // 攻擊敵人
         if(enemyObj.TryGetComponent(out EnemyView enemyView))
         {
             enemyView?.OnAttacked(hitData);
-
-            SpawnSlowEffect(
-                target: enemyView.BottomPoint,
-                recycleTime: hitData.SpeedModifierTime);
         }        
 
         // 技能追蹤傷害
         GameplayManager.CurrentContext.SkillController.UpdateTrackDamageData(hitData.SkillType, hitData.Attack);
-    }
-
-    /// <summary>
-    /// 產生減速效果
-    /// </summary>
-    /// <param name="target"></param>
-    private void SpawnSlowEffect(Transform target, float recycleTime)
-    {
-        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.SlowDown);
-        if (data != null)
-        {
-            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
-                parentName: "減速效果",
-                assetRef: data.PrefabReference,
-                position: target.position,
-                rotation: target.rotation,
-                callback: (obj) =>
-                {
-                    obj.transform.SetParent(target);
-                    obj.transform.position = target.position;
-
-                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
-                    {
-                        effectRecycle.Setup(data.PrefabReference, recycleTime);
-                    }
-                });
-        }
     }
 
     public void Dispose()

@@ -27,12 +27,17 @@ public struct EnemyJobData
 
     // 當前HP
     public int CurrentHp;
-    // 移動速度
-    public float MoveSpeed;
     // 攻擊距離(距離玩家多遠)
     public float AttackRange;
     // 推擠半徑
     public float Radius;
+
+    // 移動速度
+    public float MoveSpeed;
+    // 減速剩餘持續時間(秒)
+    public float SlowDuration;
+    // 減速後的速度倍率(0 = 無法移動, 1=正常移動)
+    public float SlowSpeedMultiplier;
 
     // 紀錄當前攻擊動畫播到百分之幾(0.0 ~ 1.0)
     public float AttackNormalizedTime;
@@ -43,6 +48,8 @@ public struct EnemyJobData
     public int Attack;
     // 這一輪攻擊是否已攻擊過(避免重複觸發)
     public bool HasAttackedInCurrentCycle;
+    // 擊退速度向量 (包含方向與當前強度)
+    public float3 KnockbackVelocity;
 
     // 模式2專用
     public float3 InitialDirection;
@@ -56,7 +63,7 @@ public struct EnemyJobData
 /// <summary>
 /// 敵人Job任務
 /// </summary>
-//[BurstCompile]
+[BurstCompile]
 public struct EnemyCombinedJob : IJobParallelForTransform
 {
     [NativeDisableContainerSafetyRestriction]
@@ -66,18 +73,14 @@ public struct EnemyCombinedJob : IJobParallelForTransform
     [ReadOnly] public float3 PlayerPos;
 
     public float DeltaTime;
-    // 推擠分離強度
     public float SeparationWeight;
-    // 生成半徑傳進,用在來回遠端的怪物
     public float SpawnRadius;
+    public bool IsGameOver;
 
-    // 受擊名單
     [ReadOnly] public NativeArray<DamageEvent> DamageEvents;
 
     public NativeArray<bool> OutIsStopped;
     public NativeArray<bool> OutShouldDie;
-
-    // 執行攻擊名單
     public NativeArray<bool> OutExecuteAttackHit;
 
     public void Execute(int index, TransformAccess transform)
@@ -85,42 +88,127 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         EnemyJobData data = EnemyDatas[index];
         float3 currentPos = transform.position;
         float3 nextVelocity = float3.zero;
-
         float distToPlayer = math.distance(currentPos, PlayerPos);
 
         OutExecuteAttackHit[index] = false;
 
-        // 模式1:拉回距離遠的敵人
-        if (data.MoveType == EnemyMoveType.ChaseAndAttack)
+        // 檢查並處理遠距離拉回機制
+        HandleTeleportCheck(index, transform, ref data, ref currentPos, ref distToPlayer);
+
+        // 處理受擊傷害與擊退向量疊加
+        ProcessDamageAndKnockback(index, currentPos, ref data);
+
+        // 判斷怪物的移動意圖
+        CalculateMovementIntent(index, distToPlayer, currentPos, data, ref nextVelocity);
+
+        // 計算分離、結合擊退力並執行實際位移與轉向
+        ApplyPhysicsAndMovement(index, transform, currentPos, nextVelocity, distToPlayer, ref data);
+
+        // 處理攻擊動畫、攻擊執行、死亡
+        HandleAttackAndCalculatedFlags(index, distToPlayer, ref data);
+    }
+
+    /// <summary>
+    /// 處理遠距離拉回
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="transform"></param>
+    /// <param name="data"></param>
+    /// <param name="currentPos"></param>
+    /// <param name="distToPlayer"></param>
+    private void HandleTeleportCheck(int index, TransformAccess transform, ref EnemyJobData data, ref float3 currentPos, ref float distToPlayer)
+    {
+        // 模式1才拉回
+        if (data.MoveType == EnemyMoveType.ChaseAndAttack && distToPlayer > SpawnRadius * 1.5f)
         {
-            // 遠離距離出生距離的倍數拉回
-            float maxAllowedDistance = SpawnRadius * 2.0f;
+            Unity.Mathematics.Random random = new Unity.Mathematics.Random(data.RandomSeed);
+            float randomAngle = random.NextFloat(0f, math.PI * 2f);
+            float offsetX = math.cos(randomAngle) * SpawnRadius;
+            float offsetZ = math.sin(randomAngle) * SpawnRadius;
+            float3 teleportPos = new float3(PlayerPos.x + offsetX, PlayerPos.y, PlayerPos.z + offsetZ);
 
-            if (distToPlayer > maxAllowedDistance)
+            transform.position = (Vector3)teleportPos;
+            currentPos = teleportPos;
+            distToPlayer = SpawnRadius;
+
+            data.HasAttackedInCurrentCycle = false;
+            data.AttackNormalizedTime = 0f;
+            data.KnockbackVelocity = float3.zero;
+            OutIsStopped[index] = false;
+            data.RandomSeed = random.NextUInt(1, uint.MaxValue);
+        }
+    }
+
+    /// <summary>
+    /// 處理受擊傷害、擊退向量疊加、減速
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="currentPos"></param>
+    /// <param name="data"></param>
+    private void ProcessDamageAndKnockback(int index, float3 currentPos, ref EnemyJobData data)
+    {
+        for (int i = 0; i < DamageEvents.Length; i++)
+        {
+            if (DamageEvents[i].InstanceID == data.InstanceID)
             {
-                // 初始化 Job 專用的隨機工具
-                Unity.Mathematics.Random random = new Unity.Mathematics.Random(data.RandomSeed);
+                data.CurrentHp -= DamageEvents[i].Damage;
 
-                float randomAngle = random.NextFloat(0f, math.PI * 2f);
-                float offsetX = math.cos(randomAngle) * SpawnRadius;
-                float offsetZ = math.sin(randomAngle) * SpawnRadius;
+                // 擊退
+                if (DamageEvents[i].KnockbackForce > 0.01f)
+                {
+                    float3 knockbackDir = currentPos - DamageEvents[i].DamageSourcePosition;
+                    knockbackDir.y = 0;
 
-                float3 teleportPos = new float3(PlayerPos.x + offsetX, PlayerPos.y, PlayerPos.z + offsetZ);
-                transform.position = (Vector3)teleportPos;
-                currentPos = teleportPos;
-                distToPlayer = SpawnRadius;
+                    if (math.lengthsq(knockbackDir) > 0.001f)
+                    {
+                        knockbackDir = math.normalize(knockbackDir);
+                    }
+                    else
+                    {
+                        knockbackDir = data.InitialDirection * -1f;
+                    }
 
-                // 為了防止拉回時殘留舊的攻擊判定或抽搐狀態，徹底洗白狀態
-                data.HasAttackedInCurrentCycle = false;
-                data.AttackNormalizedTime = 0f;
-                OutIsStopped[index] = false;
+                    data.KnockbackVelocity += knockbackDir * DamageEvents[i].KnockbackForce;
+                }
 
-                // 更新隨機種子，確保下一次被拉回時角度會是全新的
-                data.RandomSeed = random.NextUInt(1, uint.MaxValue);
+                // 減速
+                if (DamageEvents[i].SlowDuration > 0f)
+                {
+                    // 為了避免重複受擊時被弱減速蓋掉強減速，可以做個取最小值防呆
+                    data.SlowDuration = math.max(data.SlowDuration, DamageEvents[i].SlowDuration);
+                    data.SlowSpeedMultiplier = DamageEvents[i].SlowSpeedMultiplier;
+                }
             }
         }
+    }
 
-        // 模式1:移動邏輯
+    /// <summary>
+    /// 計算移動
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="distToPlayer"></param>
+    /// <param name="currentPos"></param>
+    /// <param name="data"></param>
+    /// <param name="nextVelocity"></param>
+    private void CalculateMovementIntent(int index, float distToPlayer, float3 currentPos, EnemyJobData data, ref float3 nextVelocity)
+    {
+        // 遊戲結束
+        if (IsGameOver)
+        {
+            nextVelocity = math.normalize(PlayerPos - currentPos);
+            OutIsStopped[index] = false;
+            return;
+        }
+
+        // 擊退時硬直
+        if (math.lengthsq(data.KnockbackVelocity) > 1.0f)
+        {
+            nextVelocity = float3.zero;
+            OutIsStopped[index] = false;
+            return;
+        }
+
+        // --- 2. 以下為原本正常的移動/停止判定邏輯 ---
         if (data.MoveType == EnemyMoveType.ChaseAndAttack)
         {
             if (distToPlayer > data.AttackRange)
@@ -130,80 +218,92 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
             else
             {
+                // 只有在完全沒有被擊退、安穩黏在玩家身邊時，才允許停下出刀
                 OutIsStopped[index] = true;
             }
         }
         else if (data.MoveType == EnemyMoveType.StraightAndDie)
         {
             nextVelocity = data.InitialDirection;
-            if (distToPlayer < 1.0f)
-            {
-                OutShouldDie[index] = true;
-            }
+            if (distToPlayer < 1.0f) OutShouldDie[index] = true;
         }
+    }
 
-        // 分離邏輯
+    /// <summary>
+    /// 計算群聚分離推擠、結合擊退速度，並套用位移與轉向
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="transform"></param>
+    /// <param name="currentPos"></param>
+    /// <param name="nextVelocity"></param>
+    /// <param name="distToPlayer"></param>
+    /// <param name="data"></param>
+    private void ApplyPhysicsAndMovement(int index, TransformAccess transform, float3 currentPos, float3 nextVelocity, float distToPlayer, ref EnemyJobData data)
+    {
+        // 計算鄰近怪物的分離力
         float3 separationForce = float3.zero;
         int neighborCount = 0;
-
         for (int i = 0; i < AllPositions.Length; i++)
         {
             if (i == index) continue;
-
             float3 otherPos = AllPositions[i];
             float dist = math.distance(currentPos, otherPos);
             float minSafeDist = data.Radius + EnemyDatas[i].Radius;
-
-            if (dist < minSafeDist && dist > 0.01f) // 提高最小距離限制，防止分母過小導致推力變無限大
+            if (dist < minSafeDist && dist > 0.01f)
             {
                 float3 pushDir = math.normalize(currentPos - otherPos);
-
-                // 線性推力：越重疊，推力越線性增加，最大就是 1
                 float overlapPercent = 1.0f - (dist / minSafeDist);
                 separationForce += pushDir * overlapPercent;
-
                 neighborCount++;
             }
         }
-
         if (neighborCount > 0)
         {
             separationForce /= neighborCount;
+            if (math.lengthsq(separationForce) > 1.0f) separationForce = math.normalize(separationForce);
+        }
 
-            // 限制分離力的最大強度
-            if (math.lengthsq(separationForce) > 1.0f)
+        // 結合傳統移動速度
+        float3 finalVelocity = float3.zero;
+        if (!OutIsStopped[index])
+        {
+            finalVelocity = nextVelocity + separationForce * SeparationWeight;
+            finalVelocity.y = 0;
+            if (math.lengthsq(finalVelocity) > 0.01f)
             {
-                separationForce = math.normalize(separationForce);
+                // 套用減速倍率
+                float currentMoveSpeed = data.MoveSpeed;
+                if (data.SlowDuration > 0f)
+                {
+                    // 乘上速度變更倍率 
+                    currentMoveSpeed *= data.SlowSpeedMultiplier;
+                }
+
+                finalVelocity = math.normalize(finalVelocity) * currentMoveSpeed;
             }
         }
 
-        // 位移與旋轉邏輯
-        if (!OutIsStopped[index])
+        // 強制疊加擊退速度向量 (擊退力屬於物理衝量，不受減速魔法影響，依然可以正常飛得很快)
+        finalVelocity += data.KnockbackVelocity;
+
+        // 執行 Transform 寫入與面向旋轉
+        if (math.lengthsq(finalVelocity) > 0.01f)
         {
-            // 混合速度
-            float3 targetVelocity = nextVelocity + separationForce * SeparationWeight;
-            targetVelocity.y = 0;
+            transform.position += (Vector3)(finalVelocity * DeltaTime);
 
-            // 移動限制, 如果推力和移動力抵消，導致速度極小，就完全不移動(防止原地微幅抽搐)
-            if (math.lengthsq(targetVelocity) > 0.01f)
+            if (math.lengthsq(data.KnockbackVelocity) < 1.0f && !OutIsStopped[index])
             {
-                // 實際位移
-                float3 finalMove = targetVelocity * data.MoveSpeed * DeltaTime;
-                transform.position += (Vector3)finalMove;
-                // 轉向：使用安全閾值，並且平滑插值
-                float3 targetDirection = math.normalize(targetVelocity);
+                float3 targetDirection = math.normalize(finalVelocity);
                 quaternion targetRotation = quaternion.LookRotation(targetDirection, new float3(0, 1, 0));
-
-                // 降低轉彎速度(例如改為 5.0f)，讓牠更重、更不容易因為微調而亂轉
                 transform.rotation = math.nlerp(transform.rotation, targetRotation, 5.0f * DeltaTime);
             }
         }
-        else
+
+        // 停止時面向玩家
+        if (OutIsStopped[index])
         {
-            // 停下攻擊時，平滑面向玩家
             float3 facePlayerDir = math.normalize(PlayerPos - currentPos);
             facePlayerDir.y = 0;
-
             if (math.lengthsq(facePlayerDir) > 0.001f)
             {
                 quaternion targetRotation = quaternion.LookRotation(facePlayerDir, new float3(0, 1, 0));
@@ -211,13 +311,50 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
         }
 
-        // 攻擊邏輯
+        // 擊退力道平滑衰減
+        data.KnockbackVelocity = math.lerp(data.KnockbackVelocity, float3.zero, 10.0f * DeltaTime);
+        if (math.lengthsq(data.KnockbackVelocity) < 0.05f)
+        {
+            data.KnockbackVelocity = float3.zero;
+        }
+
+        // 減速到計時
+        if (data.SlowDuration > 0f)
+        {
+            data.SlowDuration -= DeltaTime;
+            if (data.SlowDuration < 0f)
+            {
+                data.SlowDuration = 0f;
+                data.SlowSpeedMultiplier = 1.0f; // 時間到，恢復原速
+            }
+        }
+    }
+
+    /// <summary>
+    /// 處理攻擊動畫、攻擊執行、死亡
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="distToPlayer"></param>
+    /// <param name="data"></param>
+    private void HandleAttackAndCalculatedFlags(int index, float distToPlayer, ref EnemyJobData data)
+    {
+        // 如果遊戲結束了，強制重置與跳過所有攻擊判定
+        if (IsGameOver)
+        {
+            data.HasAttackedInCurrentCycle = false;
+            data.AttackNormalizedTime = 0f;
+            data.LastFrameStopped = false;
+            OutIsStopped[index] = false;
+            OutExecuteAttackHit[index] = false;
+
+            if (data.CurrentHp <= 0) OutShouldDie[index] = true;
+            EnemyDatas[index] = data;
+            return;
+        }
+
         if (OutIsStopped[index])
         {
-            // 讀取真實動畫進度
             float currentProgress = data.AttackNormalizedTime;
-
-            // 判斷動畫百分比
             if (!data.HasAttackedInCurrentCycle && currentProgress >= data.AttackTimeNormalized)
             {
                 if (distToPlayer <= data.AttackRange)
@@ -229,35 +366,12 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         }
         else
         {
-            // 如果玩家拉開距離，重置狀態
             data.HasAttackedInCurrentCycle = false;
         }
 
-        // 處理扣Hp
-        for (int i = 0; i < DamageEvents.Length; i++)
-        {
-            if (DamageEvents[i].InstanceID == data.InstanceID)
-            {
-                data.CurrentHp -= DamageEvents[i].Damage;
-            }
-        }
+        if (OutShouldDie[index] || data.CurrentHp <= 0) data.ShouldDie = true;
 
-        // 判斷存活狀態
-        if (OutShouldDie[index])
-        {
-            data.ShouldDie = true;
-        }
-
-        // 如果血量歸零，判定死亡
-        if (data.CurrentHp <= 0)
-        {
-            data.ShouldDie = true;
-        }
-
-        // 同步最新狀態回 data 結構體
         data.LastFrameStopped = OutIsStopped[index];
-
-        // 將最終確定好的結果，吐回給主執行緒的 NativeArray
         OutShouldDie[index] = data.ShouldDie;
         EnemyDatas[index] = data;
     }
