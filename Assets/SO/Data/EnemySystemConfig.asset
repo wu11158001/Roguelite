@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2472f04a2c498634885e99b41de6cc72, type: 3}
   m_Name: EnemySystemConfig
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystemConfig
-  InitHp: 30
-  InitAttack: 10
+  InitHp: 1
+  InitAttack: 1
   AttackRange: 2.2
   SpawnRadius: 35
   SeparationWeight: 20
@@ -21,12 +21,12 @@ MonoBehaviour:
   CharacterSeparationRadius: 7.5
   Mode1_InitialSpawnInterval: 0.5
   Mode1_MinSpawnInterval: 0.2
-  Mode1_MaxEnemyCount: 200
+  Mode1_MaxEnemyCount: 1
   Mode1_MoveSpeed: 4
   Mode1_EnemyHpIncreaseMultiplier: 0.4
   Mode1_EnemyAttackIncreaseMultiplier: 0.3
-  Mode2_TotalCount: 5
-  Mode2_WaveCount: 3
+  Mode2_TotalCount: 3
+  Mode2_WaveCount: 0
   Mode2_WaveInterval: 5
   Mode2_WaveSpawnCount: 30
   Mode2_GroupRadius: 5.5

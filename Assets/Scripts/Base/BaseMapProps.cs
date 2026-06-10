@@ -28,11 +28,11 @@ public abstract class BaseMapProps : BaseGameObject
     [Label("噴發時間")]
     [SerializeField] private float _popDuration = 0.6f;
     [Label("噴發高度")]
-    [SerializeField] private float _popPower = 2.0f;
+    [SerializeField] private float _popPower = 1.5f;
     [Label("噴發隨機半徑")]
-    [SerializeField] private float _popRadius = 1.5f;
+    [SerializeField] private float _popRadius = 1.0f;
     [Label("噴發移動模式")]
-    [SerializeField] private Ease _popEase = Ease.InOutQuad;
+    [SerializeField] private Ease _popEase = Ease.OutQuad;
 
     [HorizontalLine(color: EColor.Gray)]
     [Header("追蹤位置")]
@@ -47,7 +47,7 @@ public abstract class BaseMapProps : BaseGameObject
     private bool _isTriggered = false;
 
     // 綁定地板道具資料
-    public MapPropsData AssignedData { get; private set; }
+    public MapPropsInGroundData AssignedData { get; private set; }
 
     public override void OnDestroy()
     {
@@ -80,7 +80,6 @@ public abstract class BaseMapProps : BaseGameObject
 
         if (other.gameObject.layer == _targetLayer)
         {
-            _isTriggered = true;
             FlyToPlayer(other.transform);
 
             MessageBroker.Default.Publish(new MapPropsTriggerMessage
@@ -107,7 +106,7 @@ public abstract class BaseMapProps : BaseGameObject
     /// 綁定身分
     /// </summary>
     /// <param name="data"></param>
-    public void LinkData(MapPropsData data)
+    public virtual void LinkData(MapPropsInGroundData data)
     {
         AssignedData = data;
         _isTriggered = false;
@@ -146,14 +145,21 @@ public abstract class BaseMapProps : BaseGameObject
     /// 飛向玩家
     /// </summary>
     /// <param name="playerObj"></param>
-    protected virtual void FlyToPlayer(Transform playerObj)
+    /// <param name="flyDuration">飛行時間</param>
+    public virtual void FlyToPlayer(Transform playerObj, float flyDuration = 0)
     {
+        if (_isTriggered) return;
+        _isTriggered = true;
+
+        // 有設的話使用指定的飛行時間
+        flyDuration = flyDuration > 0 ? flyDuration : _flyDuration;
+
         transform.DOKill();
 
         float timer = 0f;
         Vector3 startPos = transform.position;
 
-        DOTween.To(() => timer, x => timer = x, 1f, _flyDuration)
+        DOTween.To(() => timer, x => timer = x, 1f, flyDuration)
             .SetEase(_flyEase)
             .SetLink(gameObject, LinkBehaviour.KillOnDisable)
             .OnUpdate(() =>

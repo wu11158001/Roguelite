@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
     {
         IsGameOver = true;
 
-        GameplayManager.CurrentContext.EnemyController.StopSpawn();
+        GameplayManager.CurrentContext.EnemySystemManager.StopSpawn();
         GameplayManager.CurrentContext.SkillController.Clear();
     }
 
@@ -46,9 +46,9 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void GameOverClear()
     {
-        GameplayManager.CurrentContext.EnemyController.StopRunJob();
+        GameplayManager.CurrentContext.EnemySystemManager.StopRunJob();
         AudioManager.Instance?.PlayBgm(AUDIO_TYPE.GameOver).Forget();
-        GameplayManager.CurrentContext.EnemyController?.ClearAll();
+        GameplayManager.CurrentContext.EnemySystemManager?.ClearAll();
         GameplayManager.CurrentContext.ControlCharacter?.Remove();
         GameplayManager.CurrentContext.GameScenePool?.ClearAllPools();
         GameplayManager.CurrentContext.InfiniteMapController?.ClearGround();

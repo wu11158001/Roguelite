@@ -19,7 +19,7 @@ public class GameScenePool : MonoBehaviour
 {
     // 儲存池子的資料夾：Key 是 PoolKey(GUID), Value 是對應的空物件 Parent
     private Dictionary<string, Transform> _poolParents = new();
-    // 儲存不同物件的池子：Key是GUID
+    // 儲存不同物件的池子：Key是 GUID
     private Dictionary<string, Queue<GameObject>> _poolDictionary = new();
     // 記錄目前在畫面上的物件
     private HashSet<GameObject> _activeObjects = new();

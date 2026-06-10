@@ -63,7 +63,7 @@ public class GameLauncher : MonoBehaviour
 
         // 產生敵人系統中心
         obj = new("EnemySystemManager");
-        _context.EnemyController = obj.AddComponent<EnemySystemManager>();
+        _context.EnemySystemManager = obj.AddComponent<EnemySystemManager>();
     }
 
     /// <summary>

@@ -3,27 +3,29 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 /// <summary>
-/// 箱子資料
+/// 在地圖上箱子資料
 /// </summary>
-public class BoxData
+public class BoxInGroundData
 {
     /// <summary> 唯一ID </summary>
     public string Id { get; set; } = System.Guid.NewGuid().ToString();
-    /// <summary> 紀錄箱子位置 </summary>
+    /// <summary> 紀錄位置 </summary>
     public Vector3 LocalPosition { get; set; }
 }
 
 /// <summary>
-/// 地圖道具資料
+/// 在地圖上道具資料
 /// </summary>
-public class MapPropsData
+public class MapPropsInGroundData
 {
     /// <summary> 唯一ID </summary>
     public string Id { get; set; } = System.Guid.NewGuid().ToString();
     /// <summary> 紀錄道具物件 </summary>
     public AssetReferenceGameObject PrefabRef;
-    /// <summary> 紀錄箱子位置 </summary>
+    /// <summary> 紀錄位置 </summary>
     public Vector3 LocalPosition { get; set; }
+    /// <summary> 紀錄產生時的敵人波數(當下關卡進度) </summary>
+    public int WaveAtThatTime { get; set; }
 }
 
 /// <summary>
@@ -34,9 +36,9 @@ public class InfiniteMapModel
     // 紀錄哪些地塊已經被探索過
     private HashSet<string> _exploredGrids = new();
     // 紀錄每個地塊 ID 對應的箱子數據清單
-    private Dictionary<string, List<BoxData>> _mapBoxesData = new();
+    private Dictionary<string, List<BoxInGroundData>> _mapBoxesData = new();
     // 紀錄每個地塊 ID 對應的地圖道具數據清單
-    private Dictionary<string, List<MapPropsData>> _mapPropsData = new();
+    private Dictionary<string, List<MapPropsInGroundData>> _mapPropsData = new();
 
     #region 地板
 
@@ -65,7 +67,7 @@ public class InfiniteMapModel
     /// <param name="groundSize"></param>
     public void CreateBoxesDataForGrid(string gridId, int count, float groundSize)
     {
-        var boxList = new List<BoxData>();
+        var boxList = new List<BoxInGroundData>();
 
         // 範圍設在地板大小的20%內縮作為邊界
         float safetyPadding = groundSize * 0.2f;
@@ -77,7 +79,7 @@ public class InfiniteMapModel
             float randomX = Random.Range(minRange, maxRange);
             float randomZ = Random.Range(minRange, maxRange);
 
-            boxList.Add(new BoxData
+            boxList.Add(new BoxInGroundData
             {
                 LocalPosition = new Vector3(randomX, 0.5f, randomZ),
             });
@@ -90,7 +92,7 @@ public class InfiniteMapModel
     /// </summary>
     /// <param name="gridId"></param>
     /// <param name="targetData"></param>
-    public void RemoveBoxData(string gridId, BoxData targetData)
+    public void RemoveBoxData(string gridId, BoxInGroundData targetData)
     {
         if (_mapBoxesData.TryGetValue(gridId, out var list))
         {
@@ -107,7 +109,7 @@ public class InfiniteMapModel
     /// </summary>
     /// <param name="gridId"></param>
     /// <returns></returns>
-    public List<BoxData> GetBoxesData(string gridId)
+    public List<BoxInGroundData> GetBoxesData(string gridId)
     {
         if (_mapBoxesData.TryGetValue(gridId, out var data)) return data;
         return null;
@@ -122,11 +124,11 @@ public class InfiniteMapModel
     /// </summary>
     /// <param name="gridId"></param>
     /// <param name="data"></param>
-    public void AddPropsData(string gridId, MapPropsData data)
+    public void AddPropsData(string gridId, MapPropsInGroundData data)
     {
         if (!_mapPropsData.ContainsKey(gridId))
         {
-            _mapPropsData[gridId] = new List<MapPropsData>();
+            _mapPropsData[gridId] = new List<MapPropsInGroundData>();
         }
         _mapPropsData[gridId].Add(data);
     }
@@ -136,7 +138,7 @@ public class InfiniteMapModel
     /// </summary>
     /// <param name="gridId"></param>
     /// <param name="mapPropsData"></param>
-    public void RemovePropsData(string gridId, MapPropsData mapPropsData)
+    public void RemovePropsData(string gridId, MapPropsInGroundData mapPropsData)
     {
         if (mapPropsData == null) return;
 
@@ -155,10 +157,41 @@ public class InfiniteMapModel
     /// </summary>
     /// <param name="gridId"></param>
     /// <returns></returns>
-    public List<MapPropsData> GetMapPropsData(string gridId)
+    public List<MapPropsInGroundData> GetMapPropsData(string gridId)
     {
         if (_mapPropsData.TryGetValue(gridId, out var data)) return data;
         return null;
+    }
+
+    /// <summary>
+    /// 提取指定 AssetGUID 的道具資料，並從原本的地塊資料中清除
+    /// </summary>
+    public List<(string gridId, MapPropsInGroundData data)> PullMapPropsDataByGuid(string targetGuid)
+    {
+        var allProps = new List<(string gridId, MapPropsInGroundData data)>();
+        var keys = new List<string>(_mapPropsData.Keys);
+
+        foreach (var gridId in keys)
+        {
+            if (_mapPropsData.TryGetValue(gridId, out var list) && list != null)
+            {
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (list[i].PrefabRef != null && list[i].PrefabRef.AssetGUID == targetGuid)
+                    {
+                        allProps.Add((gridId, list[i]));
+                        list.RemoveAt(i); // 從地塊資料中移除
+                    }
+                }
+
+                if (list.Count == 0)
+                {
+                    _mapPropsData.Remove(gridId);
+                }
+            }
+        }
+
+        return allProps;
     }
 
     #endregion

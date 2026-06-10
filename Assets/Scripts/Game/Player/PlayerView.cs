@@ -67,7 +67,7 @@ public class PlayerView : BaseCharacter
         _controller.Activate();
 
         // 開始自動產生敵人
-        GameplayManager.CurrentContext.EnemyController.InitAndStartAutoSpawn(transform);
+        GameplayManager.CurrentContext.EnemySystemManager.InitAndStartAutoSpawn(transform);
     }
 
     private void Update()

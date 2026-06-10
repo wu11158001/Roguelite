@@ -17,6 +17,6 @@ public class GameplayContext
     public GameScenePool GameScenePool { get; set; }
     /// <summary> 無限地圖控制器 </summary>
     public InfiniteMapController InfiniteMapController { get; set; }
-    /// <summary> 敵人控制器 </summary>
-    public EnemySystemManager EnemyController { get; set; }
+    /// <summary> 敵人系統控制中心 </summary>
+    public EnemySystemManager EnemySystemManager { get; set; }
 }

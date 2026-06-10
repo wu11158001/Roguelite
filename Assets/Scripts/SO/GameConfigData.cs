@@ -6,6 +6,18 @@ using System.Collections.Generic;
 using System;
 
 /// <summary>
+/// 經驗球資料
+/// </summary>
+[Serializable]
+public class ExpBallData
+{
+    /// <summary> 經驗球顏色 </summary>
+    public Color color;
+    /// <summary> 拾取所獲取的經驗值 </summary>
+    public int GainExp;
+}
+
+/// <summary>
 /// 遊戲配置資料
 /// </summary>
 [CreateAssetMenu(fileName = "GameConfig", menuName = "SO Config/Game Config")]
@@ -31,6 +43,12 @@ public class GameConfigData : ScriptableObject
     public int MaxBoxCountInGround;
     [Label("箱子產生機率(0~1)")]
     public float SpawnBoxRate;
+
+    [HorizontalLine(color: EColor.Gray)]
+    [Label("經驗球物件")]
+    public AssetReferenceGameObject ExpBallPrefabReference;
+    [Label("各等級經驗球資料")]
+    public List<ExpBallData> ExpBallDatas = new();
 
     [HorizontalLine(color: EColor.Gray)]
     [Label("最大等級上限")]

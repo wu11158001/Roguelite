@@ -58,7 +58,7 @@ public class EnemyView : BaseCharacter, ITargetable
     public void OnAttacked(HitData hitData)
     {
         int myID = gameObject.GetInstanceID();
-        EnemySystemManager controller = GameplayManager.CurrentContext.EnemyController;
+        EnemySystemManager controller = GameplayManager.CurrentContext.EnemySystemManager;
 
         controller.RegisterDamage(myID, hitData);
 
@@ -142,10 +142,17 @@ public class EnemyView : BaseCharacter, ITargetable
                     }
                 });
 
-            // 角色擊殺才累積擊殺數
+            // 角色擊殺
             if (isCharacterKill)
             {
+                // 累積擊殺數
                 GameplayManager.CurrentContext.GameController.OnEnemyDie();
+
+                // 掉落經驗球
+                AssetReferenceGameObject expBallRef = GameStateData.GameConfig.ExpBallPrefabReference;
+                GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
+                    worldPos: transform.position,
+                    prefabRef: expBallRef);
             }
 
             // 掉落Boss獎勵

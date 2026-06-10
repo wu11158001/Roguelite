@@ -10,7 +10,7 @@ using UniRx;
 public class MapPropsTriggerMessage
 {
     public BaseMapProps BaseMapProps;
-    public MapPropsData MapPropsData;
+    public MapPropsInGroundData MapPropsData;
 }
 
 /// <summary>
@@ -228,7 +228,7 @@ public class InfiniteMapController : MonoBehaviour
             }
         }
 
-        List<BoxData> boxesData = _model.GetBoxesData(gridId);
+        List<BoxInGroundData> boxesData = _model.GetBoxesData(gridId);
         if (boxesData == null || boxesData.Count == 0) return;
 
         if (!ActiveBoxViews.ContainsKey(gridId))
@@ -245,7 +245,7 @@ public class InfiniteMapController : MonoBehaviour
             Vector3 worldPos = groundPos + data.LocalPosition;
             worldPos.y = 0;
 
-            BoxData currentBoxData = data;
+            BoxInGroundData currentBoxData = data;
 
             GameplayManager.CurrentContext.GameScenePool.SpawnObject(
                 parentName: "箱子",
@@ -306,7 +306,7 @@ public class InfiniteMapController : MonoBehaviour
     #region 地圖道具
 
     /// <summary>
-    /// 產生道具公開方法
+    /// 產生道具
     /// </summary>
     /// <param name="worldPos"></param>
     /// <param name="prefabRef"></param>
@@ -328,10 +328,11 @@ public class InfiniteMapController : MonoBehaviour
         Vector3 groundCenterPos = currentGround != null ? currentGround.transform.position : worldPos;
         Vector3 localPos = worldPos - groundCenterPos;
 
-        MapPropsData data = new()
+        MapPropsInGroundData data = new()
         {
             PrefabRef = prefabRef,
-            LocalPosition = localPos
+            LocalPosition = localPos,
+            WaveAtThatTime = GameplayManager.CurrentContext.EnemySystemManager.GetCurrentWaveIndex(),
         };
 
         if(!isLocked)
@@ -341,11 +342,12 @@ public class InfiniteMapController : MonoBehaviour
 
         if (isLocked)
         {
+            // 不會回收的道具
             SpawnPersistentPropsEntity(data, worldPos);
         }
         else if (currentGround != null)
         {
-            // 沒鎖定的普通道具，維持原樣
+            // 會回收的道具
             CreatePropsViewEntity(gridId, data, groundCenterPos);
         }
     }
@@ -356,7 +358,7 @@ public class InfiniteMapController : MonoBehaviour
     /// <param name="gridId"></param>
     /// <param name="data"></param>
     /// <param name="groundCenterPos"></param>
-    private void CreatePropsViewEntity(string gridId, MapPropsData data, Vector3 groundCenterPos)
+    private void CreatePropsViewEntity(string gridId, MapPropsInGroundData data, Vector3 groundCenterPos)
     {
         Vector3 currentWorldPos = groundCenterPos + data.LocalPosition;
 
@@ -408,7 +410,7 @@ public class InfiniteMapController : MonoBehaviour
     /// </summary>
     /// <param name="data"></param>
     /// <param name="worldPos"></param>
-    private void SpawnPersistentPropsEntity(MapPropsData data, Vector3 worldPos)
+    private void SpawnPersistentPropsEntity(MapPropsInGroundData data, Vector3 worldPos)
     {
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: "特殊留存道具",
@@ -448,7 +450,7 @@ public class InfiniteMapController : MonoBehaviour
     /// <param name="gridId"></param>
     private void UpdatePropsForGrid(string gridId)
     {
-        List<MapPropsData> propsData = _model.GetMapPropsData(gridId);
+        List<MapPropsInGroundData> propsData = _model.GetMapPropsData(gridId);
         if (propsData == null || propsData.Count == 0) return;
 
         Vector3 groundCenterPos = Vector3.zero;
@@ -480,6 +482,77 @@ public class InfiniteMapController : MonoBehaviour
                 if (propView != null) propView.Recycle();
             }
             _activePropsViews.Remove(gridId);
+        }
+    }
+
+    /// <summary>
+    /// 吸取所有經驗球(含已回收的資料)
+    /// </summary>
+    public void AbsorbAllExpBalls()
+    {
+        // 吸取經驗球的飛行時間
+        float flyDuration = 1;
+
+        Transform playerTransform = GameplayManager.CurrentContext.ControlCharacter.transform;
+        string assetGUID = GameStateData.GameConfig?.ExpBallPrefabReference?.AssetGUID;
+
+        if (playerTransform == null || string.IsNullOrEmpty(assetGUID)) return;
+
+        // 處理當前畫面上「已經存在實體」的經驗球
+        List<BaseMapProps> activeProps = new List<BaseMapProps>();
+        foreach (var kvp in _activePropsViews)
+        {
+            if (kvp.Value != null)
+            {
+                activeProps.AddRange(kvp.Value);
+            }
+        }
+
+        foreach (var prop in activeProps)
+        {
+            if (prop is MapProps_ExpBall expBall)
+            {
+                prop.FlyToPlayer(playerTransform, flyDuration);
+            }
+        }
+
+
+        // 處理「已被關閉回收」的道具資料
+        var movementDataList = _model.PullMapPropsDataByGuid(assetGUID);
+
+        foreach (var item in movementDataList)
+        {
+            MapPropsInGroundData propData = item.data;
+            string originalGridId = item.gridId;
+
+            // 在玩家平面周圍半徑 X 的位置隨機產生(已怪物產生半徑的值)
+            float radius = GameStateData.EnemySystemConfig.SpawnRadius;
+            Vector2 randomCircle = Random.insideUnitCircle.normalized * radius;
+            Vector3 spawnWorldPos = new Vector3(
+                playerTransform.position.x + randomCircle.x,
+                0f,
+                playerTransform.position.z + randomCircle.y
+            );
+
+            string newGridId = GetGridId(spawnWorldPos);
+
+            // 從物件池生成實體
+            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+                parentName: "吸取重組_經驗球",
+                assetRef: propData.PrefabRef,
+                position: spawnWorldPos,
+                rotation: Quaternion.identity,
+                callback: (obj) =>
+                {
+                    if (obj != null && obj.TryGetComponent<MapProps_ExpBall>(out var expBallView))
+                    {
+                        // 重新初始化與綁定資料
+                        expBallView.Setup(propData.PrefabRef);
+                        expBallView.LinkData(propData);
+                        expBallView.FlyToPlayer(playerTransform, flyDuration);
+                    }
+                }
+            );
         }
     }
 

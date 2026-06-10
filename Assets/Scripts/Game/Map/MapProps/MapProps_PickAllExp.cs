@@ -7,6 +7,6 @@ public class MapProps_PickAllExp : BaseMapProps
 {
     public override void OnPickUpDo()
     {
-        
+        GameplayManager.CurrentContext.InfiniteMapController.AbsorbAllExpBalls();
     }
 }

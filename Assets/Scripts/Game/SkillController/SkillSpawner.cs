@@ -381,7 +381,7 @@ public class SkillSpawner
         _combinedTargets.Clear();
 
         // 所有活耀敵人
-        var activeEnemies = GameplayManager.CurrentContext.EnemyController.ActiveEnemyViews;
+        var activeEnemies = GameplayManager.CurrentContext.EnemySystemManager.ActiveEnemyViews;
         int enemyCount = activeEnemies.Count;
         for (int i = 0; i < enemyCount; i++)
         {
