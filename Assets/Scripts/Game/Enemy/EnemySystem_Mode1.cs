@@ -72,7 +72,7 @@ public class EnemySystem_Mode1 : MonoBehaviour
             // 檢查當前畫面上的怪物總數
             if (_manager.ActiveEnemyCount < maxEnemyCount)
             {
-                Vector3 spawnPosition = CalculateSpawnPosition();
+                Vector3 spawnPosition = _manager.CalculateSpawnPosition();
                 ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode1();
 
                 if (targetEnemyType != 0)
@@ -83,8 +83,7 @@ public class EnemySystem_Mode1 : MonoBehaviour
                         _manager.SpawnEnemy(
                             enemyData: enemyData,
                             spawnPos: spawnPosition,
-                            moveType: EnemyMoveType.ChaseAndAttack,
-                            currentWave: _manager.GetCurrentWaveIndex());
+                            moveType: EnemyMoveType.ChaseAndAttack);
                     }
                 }
             }
@@ -100,20 +99,5 @@ public class EnemySystem_Mode1 : MonoBehaviour
         List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
         int targetIndex = _manager.GetCurrentWaveIndex();
         return enemyList[targetIndex];
-    }
-
-    /// <summary>
-    /// 計算產生位置
-    /// </summary>
-    private Vector3 CalculateSpawnPosition()
-    {
-        float spawnRadius = _enemyConfig.SpawnRadius;
-        float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-
-        float offsetX = Mathf.Cos(randomAngle) * spawnRadius;
-        float offsetZ = Mathf.Sin(randomAngle) * spawnRadius;
-
-        Vector3 playerPos = _player.position;
-        return new Vector3(playerPos.x + offsetX, playerPos.y, playerPos.z + offsetZ);
     }
 }

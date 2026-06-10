@@ -120,14 +120,13 @@ public class EnemySystem_Mode2 : MonoBehaviour
             playerPos.z + Mathf.Sin(randomAngle) * spawnRadius
         );
 
-        // 計算初始移動方向 (朝向玩家)
-        Vector3 spawnTargetDir = (playerPos - groupCenterPos).normalized;
-        float3 initDir = new float3(spawnTargetDir.x, 0, spawnTargetDir.z);
-
         // 生成數量
         int spawnCount = _enemyConfig.Mode2_WaveSpawnCount;
         // 生成半徑(越大越散)
         float groupRadius = _enemyConfig.Mode2_GroupRadius;
+        // 與衝鋒目標的擴散半徑 
+        float targetSpreadRadius = _enemyConfig.Mode2_TargetSpreadRadius;
+
         // 當前生成敵人類型
         ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode2();
 
@@ -136,6 +135,14 @@ public class EnemySystem_Mode2 : MonoBehaviour
             // 在半徑 X 內隨機分佈
             Vector2 randomInCircle = UnityEngine.Random.insideUnitCircle * groupRadius;
             Vector3 finalSpawnPos = groupCenterPos + new Vector3(randomInCircle.x, 0, randomInCircle.y);
+
+            // 在角色腳下隨機挑一個點作為這隻怪的「專屬終點」
+            Vector2 randomTargetOffset = UnityEngine.Random.insideUnitCircle * targetSpreadRadius;
+            Vector3 individualTargetPos = playerPos + new Vector3(randomTargetOffset.x, 0, randomTargetOffset.y);
+
+            // 計算這隻怪物的專屬初始移動方向
+            Vector3 spawnTargetDir = (individualTargetPos - finalSpawnPos).normalized;
+            float3 initDir = new float3(spawnTargetDir.x, 0, spawnTargetDir.z);
 
             if (targetEnemyType != 0)
             {
@@ -146,7 +153,7 @@ public class EnemySystem_Mode2 : MonoBehaviour
                         enemyData: enemyData,
                         spawnPos: finalSpawnPos,
                         moveType: EnemyMoveType.StraightAndDie,
-                        currentWave: _manager.GetCurrentWaveIndex());
+                        initDir: initDir);
                 }
             }
         }

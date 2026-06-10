@@ -37,7 +37,7 @@ public class Skill_TrackingView : BaseSkill
         // 攻擊敵人
         if (other.gameObject.layer == _enemyLayer)
         {
-            _controller.HitEnemy(other.gameObject, CalculateAttack()); ;
+            _controller.HitEnemy(other.gameObject, CalculateAttack());
         }
 
         // 碰到箱子

@@ -32,7 +32,7 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   MaxBoxCountInGround: 4
   SpawnBoxRate: 0.7
-  MaxLevel: 1
+  MaxLevel: 120
   BaseUpgradeExp: 3
   UpgradeExpMultiplier:
   - LevelRange: 5

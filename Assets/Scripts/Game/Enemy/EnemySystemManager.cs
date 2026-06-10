@@ -58,6 +58,8 @@ public class EnemySystemManager : MonoBehaviour
     private EnemySystem_Mode1 _spawnerMode1;
     // 模式2生成器組件
     private EnemySystem_Mode2 _spawnerMode2;
+    // Boss生成器組件
+    private EnemySystem_Boss _spawnerBoss;
 
     private List<DamageEvent> _frameDamageEvents = new();
     private EnemySystemConfig _enemyConfig;
@@ -117,6 +119,7 @@ public class EnemySystemManager : MonoBehaviour
         {
             if (_spawnerMode1 != null) Destroy(_spawnerMode1);
             if (_spawnerMode2 != null) Destroy(_spawnerMode2);
+            if (_spawnerBoss != null) Destroy(_spawnerBoss);
         }
     }
 
@@ -145,13 +148,17 @@ public class EnemySystemManager : MonoBehaviour
         _enemyConfig.Initialize();
         _levelConfig = GameStateData.SelectLevel;
 
-        // 掛載模式1與初始化
+        // 掛載模式1生成與初始化
         _spawnerMode1 = gameObject.AddComponent<EnemySystem_Mode1>();
         _spawnerMode1.Initialize(this, _player, _enemyConfig, _levelConfig);
 
-        // 掛載模式2與初始化
+        // 掛載模式2生成與初始化
         _spawnerMode2 = gameObject.AddComponent<EnemySystem_Mode2>();
         _spawnerMode2.Initialize(this, _player, _enemyConfig, _levelConfig);
+
+        // 掛載Boss生成與初始化
+        _spawnerBoss = gameObject.AddComponent<EnemySystem_Boss>();
+        _spawnerBoss.Initialize(this, _player, _enemyConfig, _levelConfig);
     }
 
     /// <summary>
@@ -171,6 +178,7 @@ public class EnemySystemManager : MonoBehaviour
     {
         if (_spawnerMode1 != null) _spawnerMode1.StopSpawn();
         if (_spawnerMode2 != null) _spawnerMode2.StopSpawn();
+        if (_spawnerBoss != null) _spawnerBoss.StopSpawn();
     }
 
     /// <summary>
@@ -179,9 +187,13 @@ public class EnemySystemManager : MonoBehaviour
     /// <param name="enemyData">敵人資料</param>
     /// <param name="spawnPos">產生位置</param>
     /// <param name="moveType">敵人類型</param>
-    /// <param name="currentWave">波數影響敵人數值</param>
-    public void SpawnEnemy(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType moveType, int currentWave)
+    /// <param name="isBoss">是否是Boss</param>
+    /// <param name="initDir">模式2專屬:衝鋒方向</param>
+    public void SpawnEnemy(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType moveType, bool isBoss = false, float3 initDir = new())
     {
+        // 當前波數影響敵人數值
+        int currentWave = GetCurrentWaveIndex();
+
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: $"敵人_{moveType}",
             assetRef: enemyData.PrefabReference,
@@ -198,6 +210,13 @@ public class EnemySystemManager : MonoBehaviour
                 EnemyView enemyView = obj.TryGetComponent(out EnemyView view) ? view : obj.AddComponent<EnemyView>();
                 enemyView.ResetState();
 
+                // 計算攻擊觸發動畫百分比
+                float calculatedNormalizedTime = 0f;
+                if (enemyData.AttackCd > 0f)
+                {
+                    calculatedNormalizedTime = math.clamp(enemyData.AttackTime / enemyData.AttackCd, 0f, 1f);
+                }
+
                 // Hp計算 
                 int initHp = Mathf.RoundToInt(_enemyConfig.InitHp * _levelConfig.EnemyHpIncreaseMultiplier);
                 int waveIncreaseHp = Mathf.RoundToInt(_enemyConfig.InitHp * (_enemyConfig.Mode1_EnemyHpIncreaseMultiplier * currentWave));
@@ -211,36 +230,43 @@ public class EnemySystemManager : MonoBehaviour
                 // 移動速度
                 float moveSpeed = _enemyConfig.Mode1_MoveSpeed;
 
-                // 預設數值以模式1
-                switch (moveType)
-                {
-                    // 模式2:襲擊_初始朝玩家方向移動,碰撞後死亡
-                    case EnemyMoveType.StraightAndDie:
-                        currentHp = Mathf.RoundToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
-                        finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode2_AttackWeaken);
-                        moveSpeed = _enemyConfig.Mode2_MoveSpeed;
-                        break;
-                }
+                // 敵人之間的推擠半徑
+                float enemySeparationRadius = _enemyConfig.EnemySeparationRadius;
 
-                float calculatedNormalizedTime = 0f;
-                if (enemyData.AttackCd > 0f)
+                // 預設數值以模式1
+                // 模式2:襲擊_初始朝玩家方向移動,碰撞後死亡
+                if (moveType == EnemyMoveType.StraightAndDie)
                 {
-                    calculatedNormalizedTime = math.clamp(enemyData.AttackTime / enemyData.AttackCd, 0f, 1f);
+                    currentHp = Mathf.RoundToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
+                    finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode2_AttackWeaken);
+                    moveSpeed = _enemyConfig.Mode2_MoveSpeed;
+                }
+                else if(isBoss)
+                {
+                    currentHp = Mathf.RoundToInt(currentHp * _enemyConfig.Boss_HpMultiplier);
+                    finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Boss_AttackMultiplier);
+                    moveSpeed = _enemyConfig.Mode1_MoveSpeed * _enemyConfig.Boss_MoveMultiplier;
+                    enemySeparationRadius = _enemyConfig.EnemySeparationRadius * _enemyConfig.Boss_SizeMultiplier;
+
+                    // 設置Boss外觀
+                    HandleBossObj(ref obj);
                 }
 
                 EnemyJobData data = new()
                 {
                     InstanceID = obj.GetInstanceID(),
+                    IsBoss = isBoss,
                     MoveType = moveType,
                     RandomSeed = (uint)(obj.GetInstanceID() + System.DateTime.Now.Ticks),
                     MoveSpeed = moveSpeed,
-                    Radius = enemyView != null ? enemyView.ColliderRadius : 0.5f,
+                    EnemySeparationRadius = enemySeparationRadius,
+                    CharacterSeparationRadius = _enemyConfig.CharacterSeparationRadius,
                     AttackRange = enemyView != null ? enemyView.AttackRange : 1.5f,
                     CurrentHp = currentHp,
                     Attack = finalAttack,
                     AttackNormalizedTime = 0f,
                     AttackTimeNormalized = calculatedNormalizedTime,
-                    InitialDirection = math.normalize(_player.position - spawnPos),
+                    InitialDirection = initDir,
                     ShouldDie = false,
                     LastFrameStopped = false,
                 };
@@ -250,6 +276,33 @@ public class EnemySystemManager : MonoBehaviour
                 _enemyDataList.Add(data);
                 _transformArray.Add(obj.transform);
             });
+    }
+
+    /// <summary>
+    /// 處理Boss外觀
+    /// </summary>
+    /// <param name="obj"></param>
+    private void HandleBossObj(ref GameObject obj)
+    {
+        // 體積變化
+        float bossSizeMultiplier = _enemyConfig.Boss_SizeMultiplier;
+        obj.transform.localScale = Vector3.one * bossSizeMultiplier;
+
+        // 添加外框材質球
+        Material outlineMaterial = _enemyConfig.Boss_OutlineMaterial;
+        Renderer renderer = obj.GetComponentInChildren<Renderer>();
+        if (renderer != null && outlineMaterial != null)
+        {
+            // 疊加外框材質球
+            Material[] currentSharedMaterials = renderer.sharedMaterials;
+            Material[] newMaterials = new Material[currentSharedMaterials.Length + 1];
+            for (int i = 0; i < currentSharedMaterials.Length; i++)
+            {
+                newMaterials[i] = currentSharedMaterials[i];
+            }
+            newMaterials[newMaterials.Length - 1] = outlineMaterial;
+            renderer.materials = newMaterials;
+        }
     }
 
     /// <summary>
@@ -325,7 +378,7 @@ public class EnemySystemManager : MonoBehaviour
             if (_shouldDieArray[i])
             {
                 if (enemyView != null) enemyView.OnDie(true);
-                RemoveEnemy(i);
+                RemoveEnemy(i, latestData.IsBoss);
                 continue;
             }
 
@@ -334,14 +387,14 @@ public class EnemySystemManager : MonoBehaviour
             {
                 if (enemyView != null) enemyView.OnDie(false);
                 GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(latestData.Attack);
-                RemoveEnemy(i);
+                RemoveEnemy(i, latestData.IsBoss);
                 continue;
             }
 
             // 遠離回收
             if(_shouldRecycleArray[i])
             {
-                RemoveEnemy(i);
+                RemoveEnemy(i, latestData.IsBoss);
                 continue;
             }
 
@@ -401,7 +454,7 @@ public class EnemySystemManager : MonoBehaviour
     /// 移除敵人
     /// </summary>
     /// <param name="index"></param>
-    private void RemoveEnemy(int index)
+    private void RemoveEnemy(int index, bool isBoss)
     {
         GameObject obj = _activeGameObjects[index];
         int lastIndex = _activeGameObjects.Count - 1;
@@ -417,6 +470,11 @@ public class EnemySystemManager : MonoBehaviour
         _enemyDataList.RemoveAt(lastIndex);
         ActiveEnemyViews.RemoveAt(lastIndex);
         _transformArray.RemoveAtSwapBack(index);
+
+        if(isBoss)
+        {
+            ResetEnemyVisualForPool(obj);
+        }
 
         if (obj != null)
         {
@@ -444,5 +502,44 @@ public class EnemySystemManager : MonoBehaviour
         }
 
         return targetIndex;
+    }
+
+    /// <summary>
+    /// 計算產生位置_隨機
+    /// </summary>
+    public Vector3 CalculateSpawnPosition()
+    {
+        float spawnRadius = _enemyConfig.SpawnRadius;
+        float randomAngle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
+
+        float offsetX = Mathf.Cos(randomAngle) * spawnRadius;
+        float offsetZ = Mathf.Sin(randomAngle) * spawnRadius;
+
+        Vector3 playerPos = _player.position;
+        return new Vector3(playerPos.x + offsetX, playerPos.y, playerPos.z + offsetZ);
+    }
+
+    /// <summary>
+    /// Boss回收前還原外觀
+    /// </summary>
+    /// <param name="enemyGo"></param>
+    public void ResetEnemyVisualForPool(GameObject enemyGo)
+    {
+        // 還原縮放
+        enemyGo.transform.localScale = Vector3.one;
+
+        // 還原材質球
+        Renderer renderer = enemyGo.GetComponentInChildren<Renderer>();
+        if (renderer != null)
+        {
+            Material[] currentMaterials = renderer.materials;
+            if (currentMaterials.Length > 1)
+            {
+                // 重新給予一個乾淨的、只包含原本基礎材質的陣列
+                Material[] originalMaterials = new Material[1];
+                originalMaterials[0] = currentMaterials[0];
+                renderer.materials = originalMaterials;
+            }
+        }
     }
 }

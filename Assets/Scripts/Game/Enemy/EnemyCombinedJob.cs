@@ -25,12 +25,17 @@ public struct EnemyJobData
     // 內部安全隨機運算用的種子
     public uint RandomSeed;
 
+    // 是否是Boss,Boss回收前需重製外觀
+    public bool IsBoss;
+
     // 當前HP
     public int CurrentHp;
     // 攻擊距離(距離玩家多遠)
     public float AttackRange;
-    // 推擠半徑
-    public float Radius;
+    // 敵人之間的推擠半徑
+    public float EnemySeparationRadius;
+    // 角色與敵人之間的推擠半徑
+    public float CharacterSeparationRadius;
 
     // 移動速度
     public float MoveSpeed;
@@ -51,7 +56,7 @@ public struct EnemyJobData
     // 擊退速度向量 (包含方向與當前強度)
     public float3 KnockbackVelocity;
 
-    // 模式2專用
+    // 模式2專用(襲擊方向)
     public float3 InitialDirection;
     // 模式2是否該回收(與角色碰撞後死亡)
     public bool ShouldDie;
@@ -189,15 +194,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
     /// </summary>
     private void CalculateMovementIntent(int index, float distToPlayer, float3 currentPos, EnemyJobData data, ref float3 nextVelocity)
     {
-        // 遊戲結束
-        if (IsGameOver)
-        {
-            nextVelocity = math.normalize(PlayerPos - currentPos);
-            OutIsStopped[index] = false;
-            return;
-        }
-
-        // 擊退時硬直 (維持你之前優化的擊退中斷)
+        // 擊退時硬直
         if (math.lengthsq(data.KnockbackVelocity) > 1.0f)
         {
             nextVelocity = float3.zero;
@@ -208,8 +205,16 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         // 移動邏輯:模式1_追隨
         if (data.MoveType == EnemyMoveType.ChaseAndAttack)
         {
-            // 如果上一幀已經是停止攻擊狀態，，允許被排斥力推開一點點而不切換回走路。
-            // 這裡加上 0.4f 的緩衝距離
+            // 遊戲結束時，模式 1 怪物強行朝角色靠攏
+            if (IsGameOver)
+            {
+                nextVelocity = math.normalize(PlayerPos - currentPos);
+                OutIsStopped[index] = false;
+                return;
+            }
+
+            // 如果上一幀已經是停止攻擊狀態，允許被排斥力推開一點點而不切換回走路。
+            // 加上 0.4f 的緩衝距離
             float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + 0.4f) : data.AttackRange;
 
             if (distToPlayer > currentAttackRangeThreshold)
@@ -219,16 +224,30 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
             else
             {
-                // 進入此處代表進入攻擊範圍，或者在緩衝範圍內，維持站立出刀
+                // 進入攻擊範圍，或者在緩衝範圍內，維持攻擊
                 OutIsStopped[index] = true;
             }
         }
         // 移動邏輯:模式2_襲擊
         else if (data.MoveType == EnemyMoveType.StraightAndDie)
         {
+            // 無視 IsGameOver，永遠保持初始方向直線衝鋒
             nextVelocity = data.InitialDirection;
 
-            // 靠近角色攻擊且死亡
+            // 如果遊戲已經結束，跳過傷害判定，只留「超出範圍回收」的機制
+            if (IsGameOver)
+            {
+                OutIsStopped[index] = false;
+
+                // 超出範圍回收，避免造成記憶體殘留
+                if (distToPlayer > SpawnRadius * 2)
+                {
+                    OutShouldRecycle[index] = true;
+                }
+                return;
+            }
+
+            // 模式2靠近角色攻擊且死亡
             if (distToPlayer < 1.0f)
             {
                 OutShouldAttackAndDie[index] = true;
@@ -263,7 +282,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
 
             float3 otherPos = AllPositions[i];
             float dist = math.distance(currentPos, otherPos);
-            float minSafeDist = data.Radius + EnemyDatas[i].Radius;
+            float minSafeDist = data.EnemySeparationRadius + EnemyDatas[i].EnemySeparationRadius;
 
             if (dist < minSafeDist && dist > 0.01f)
             {
@@ -279,7 +298,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         {
             // 設定角色的物理半徑
             float playerRadius = 0.75f;
-            float minDistToPlayer = data.Radius + playerRadius;
+            float minDistToPlayer = data.EnemySeparationRadius + playerRadius;
 
             // 如果怪物擠進了玩家的身體範圍內
             if (distToPlayer < minDistToPlayer && distToPlayer > 0.01f)
@@ -289,7 +308,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                 float playerOverlapPercent = 1.0f - (distToPlayer / minDistToPlayer);
 
                 // 將玩家的推擠力疊加進分離力中
-                separationForce += pushFromPlayerDir * playerOverlapPercent * 5.5f;
+                separationForce += pushFromPlayerDir * playerOverlapPercent * data.CharacterSeparationRadius;
                 neighborCount++;
             }
         }

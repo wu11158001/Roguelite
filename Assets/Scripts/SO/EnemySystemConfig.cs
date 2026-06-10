@@ -56,8 +56,10 @@ public class EnemySystemConfig : ScriptableObject
     public float SpawnRadius = 35.0f;
     [Label("推擠強度")]
     public float SeparationWeight = 20.0f;
-    [Label("推擠半徑")]
-    public float SeparationRadius = 0.5f;
+    [Label("敵人之間的推擠半徑")]
+    public float EnemySeparationRadius = 0.5f;
+    [Label("角色與敵人之間的推擠半徑")]
+    public float CharacterSeparationRadius = 7.5f;
 
     // --------模式1 (自動生成_持續朝玩家移動)--------
     [HorizontalLine(color: EColor.Gray)]
@@ -108,6 +110,10 @@ public class EnemySystemConfig : ScriptableObject
     public int Mode2_GroupRadius = 5;
 
     [BoxGroup("模式2:襲擊")]
+    [Label("模式2:與衝鋒目標的擴散半徑")]
+    public float Mode2_TargetSpreadRadius = 1.5f;
+
+    [BoxGroup("模式2:襲擊")]
     [Label("模式2:怪物移動速度")]
     public float Mode2_MoveSpeed = 15.0f;
 
@@ -118,6 +124,27 @@ public class EnemySystemConfig : ScriptableObject
     [BoxGroup("模式2:襲擊")]
     [Label("模式2:怪物攻擊力弱化值(0.1 = 基礎攻擊力的10%)")]
     public float Mode2_AttackWeaken = 0.1f;
+
+    // --------Boss (持續朝玩家移動)--------
+    [BoxGroup("Boss")]
+    [Label("Boss:Hp強化值(基礎Hp乘上的倍率)")]
+    public float Boss_HpMultiplier = 3.0f;
+
+    [BoxGroup("Boss")]
+    [Label("Boss:攻擊力強化值(基礎攻擊力乘上的倍率)")]
+    public float Boss_AttackMultiplier = 2.0f;
+
+    [BoxGroup("Boss")]
+    [Label("Boss:移動速度變化值(基礎移動速度乘上的倍率)")]
+    public float Boss_MoveMultiplier = 0.8f;
+
+    [BoxGroup("Boss")]
+    [Label("Boss:體積放大倍率")]
+    public float Boss_SizeMultiplier = 2.0f;
+
+    [BoxGroup("Boss")]
+    [Label("Boss:外框材質球")]
+    public Material Boss_OutlineMaterial;
 
     // --------敵人資料列表--------
     [BoxGroup("敵人資料列表")]
