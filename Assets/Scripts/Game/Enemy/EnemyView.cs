@@ -123,28 +123,28 @@ public class EnemyView : BaseCharacter, ITargetable
             // 立即關閉碰撞，防止在被 Remove 的瞬間還參與當影格的 Job 計算
             if (_capsuleCollider != null) _capsuleCollider.enabled = false;
 
-            // 音效
-            AudioManager.Instance.PlaySFX(AUDIO_TYPE.Kill).Forget();
-
-            // 產生效果
-            EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.KillEnemy);
-            Transform effectPoint = MiddlePoint;
-            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
-                parentName: "擊殺敵人效果",
-                assetRef: data.PrefabReference,
-                position: effectPoint.position,
-                rotation: effectPoint.rotation,
-                callback: (obj) =>
-                {
-                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
-                    {
-                        effectRecycle.Setup(data.PrefabReference);
-                    }
-                });
-
             // 角色擊殺
             if (isCharacterKill)
             {
+                // 音效
+                AudioManager.Instance.PlaySFX(AUDIO_TYPE.Kill).Forget();
+
+                // 產生效果
+                EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.KillEnemy);
+                Transform effectPoint = MiddlePoint;
+                GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+                    parentName: "擊殺敵人效果",
+                    assetRef: data.PrefabReference,
+                    position: effectPoint.position,
+                    rotation: effectPoint.rotation,
+                    callback: (obj) =>
+                    {
+                        if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+                        {
+                            effectRecycle.Setup(data.PrefabReference);
+                        }
+                    });
+
                 // 累積擊殺數
                 GameplayManager.CurrentContext.GameController.OnEnemyDie();
 
