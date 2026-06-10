@@ -13,6 +13,8 @@ public class Skill_TrackingController
     // 穿透值
     private float _penetrate;
 
+    private float _spawnY;
+
     // 穿透使用，紀錄已擊中的目標
     private List<GameObject> _hitTargets = new();
 
@@ -33,6 +35,8 @@ public class Skill_TrackingController
 
         _model = model;
         _penetrate = model.SkillPenetrate;
+
+        _spawnY = _view.gameObject.transform.position.y;
 
         // 尋找目標
         _target = GameplayManager.CurrentContext.SkillController.GetNearestTarget(playerObject.transform.position);
@@ -55,22 +59,30 @@ public class Skill_TrackingController
         // 計算旋轉
         if (_isTracking && _target != null && _target.gameObject.activeInHierarchy)
         {
-            Vector3 targetDir = (_target.position - position).normalized;
+            // 將目標與自身投影到同一個水平面上計算方向
+            Vector3 currentPosSameHeight = new Vector3(position.x, _spawnY, position.z);
+            Vector3 targetPosSameHeight = new Vector3(_target.position.x, _spawnY, _target.position.z);
+
+            Vector3 targetDir = (targetPosSameHeight - currentPosSameHeight).normalized;
+
             if (targetDir != Vector3.zero)
             {
-                float angle = Vector3.Angle(rotation * Vector3.forward, targetDir);
+                // 計算當前前方與目標方向的角度
+                Vector3 currentForward = rotation * Vector3.forward;
+                currentForward.y = 0; 
+                currentForward.Normalize();
 
-                Vector3 offset = _target.position - position;
-                float distance = offset.magnitude;
+                float angle = Vector3.Angle(currentForward, targetDir);
+                float distance = Vector3.Distance(currentPosSameHeight, targetPosSameHeight);
 
                 // 距離如果很近，直接轉向目標
-                if (_isTracking && distance < 1.5f)
+                if (distance < 1.5f)
                 {
                     rotation = Quaternion.LookRotation(targetDir);
                 }
                 else
                 {
-                    // 角度在範圍內停止追蹤
+                    // 角度在範圍內停止追蹤，直接鎖定最後方向
                     if (angle <= 10f)
                     {
                         _isTracking = false;
@@ -80,14 +92,14 @@ public class Skill_TrackingController
                     else
                     {
                         Quaternion targetRot = Quaternion.LookRotation(targetDir);
-                        rotation = Quaternion.Slerp(rotation, targetRot, (1.0f / 0.07f) * deltaTime);
+                        rotation = Quaternion.Slerp(rotation, targetRot, (1.0f / 0.05f) * deltaTime);
                     }
-                }                
+                }
             }
         }
 
-        // 計算位移
         position += (rotation * Vector3.forward) * _model.SkillFlightSpeed * deltaTime;
+        position.y = _spawnY;
 
         _view.gameObject.transform.position = position;
         _view.gameObject.transform.rotation = rotation;

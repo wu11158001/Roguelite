@@ -17,9 +17,6 @@ public class Skill_TrackingView : BaseSkill
         // 音效
         AudioManager.Instance.PlaySFX(_soundType, 2).Forget();
 
-        // 尋找目標
-        Transform target = GameplayManager.CurrentContext.SkillController.GetNearestTarget(_playerObject.transform.position);
-
         _controller ??= new Skill_TrackingController(this);
         _controller.Activate(data, _playerObject);
 

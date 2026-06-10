@@ -158,7 +158,7 @@ public class EnemySystemManager : MonoBehaviour
 
         // 掛載Boss生成與初始化
         _spawnerBoss = gameObject.AddComponent<EnemySystem_Boss>();
-        _spawnerBoss.Initialize(this, _player, _enemyConfig, _levelConfig);
+        _spawnerBoss.Initialize(this, _enemyConfig, _levelConfig);
     }
 
     /// <summary>
@@ -483,7 +483,7 @@ public class EnemySystemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 獲取當前波數(以模式1作為波數,波數影響數值)
+    /// 獲取當前波數(以模式1設置敵人類型數量作為波數,波數影響數值)
     /// </summary>
     public int GetCurrentWaveIndex()
     {
