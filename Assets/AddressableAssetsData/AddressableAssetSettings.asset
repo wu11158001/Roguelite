@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 0a05063ab4253794a8988b76e237e78c
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: ea14766e4ef37c1b479cd51839300b7d
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_CatalogRequestsTimeout: 0
@@ -113,10 +113,7 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - PreLoad
-    - EnmeyConfigs
-    - ExpConfigs
     - LevelConfigs
-    - EXP
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 7408d3b9f08bb344198d8af90a57639f, type: 2}

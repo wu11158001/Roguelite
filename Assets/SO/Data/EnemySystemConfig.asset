@@ -21,7 +21,7 @@ MonoBehaviour:
   CharacterSeparationRadius: 7.5
   Mode1_InitialSpawnInterval: 0.5
   Mode1_MinSpawnInterval: 0.2
-  Mode1_MaxEnemyCount: 1
+  Mode1_MaxEnemyCount: 200
   Mode1_MoveSpeed: 4
   Mode1_EnemyHpIncreaseMultiplier: 0.4
   Mode1_EnemyAttackIncreaseMultiplier: 0.3

@@ -39,14 +39,14 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   ExpBallDatas:
-  - color: {r: 1, g: 0.08614111, b: 0, a: 1}
-    GainExp: 13
   - color: {r: 0.023584902, g: 1, b: 0.060398716, a: 1}
     GainExp: 1
   - color: {r: 1, g: 0.70399964, b: 0.033018887, a: 1}
-    GainExp: 7
-  - color: {r: 0, g: 0.88068175, b: 1, a: 1}
     GainExp: 3
+  - color: {r: 0, g: 0.44120836, b: 1, a: 1}
+    GainExp: 7
+  - color: {r: 1, g: 0.08614111, b: 0, a: 1}
+    GainExp: 13
   - color: {r: 1, g: 0, b: 0.9882353, a: 1}
     GainExp: 22
   - color: {r: 1, g: 0.9345746, b: 0, a: 1}
