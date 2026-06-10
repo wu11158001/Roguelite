@@ -25,6 +25,11 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
     // 記錄「正在加載中」的任務
     private Dictionary<AUDIO_TYPE, UniTaskCompletionSource<AudioClip>> _loadingTasks = new();
 
+    // 紀錄每首 BGM 的播放進度(秒)
+    private Dictionary<AUDIO_TYPE, float> _bgmPlaybackProgress = new();
+    // 目前正在播放的 BGM 類型
+    private AUDIO_TYPE _currentBgmType = AUDIO_TYPE.None;
+
     // 用來控制淡入淡出的中斷 Token
     private CancellationTokenSource _fadeCts;
 
@@ -66,6 +71,10 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         }
         _sfxPool.Clear();
         _allSfxSources.Clear();
+
+        // 清除進度紀錄
+        _bgmPlaybackProgress.Clear();
+        _currentBgmType = AUDIO_TYPE.None;
     }
 
     protected override void Awake()
@@ -116,8 +125,15 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
     /// <summary>
     /// 撥放BGM
     /// </summary>
-    public async UniTask PlayBgm(AUDIO_TYPE audioType, float pitch = 1.0f)
+    /// <param name="audioType"></param>
+    /// <param name="pitch"></param>
+    /// <param name="isRecord">是否要記錄切換前的撥放進度, 切回時繼續</param>
+    /// <returns></returns>
+    public async UniTask PlayBgm(AUDIO_TYPE audioType, float pitch = 1.0f, bool isRecord = false)
     {
+        // 如果切換的是同一首 BGM 且正在播放，直接無視
+        if (_currentBgmType == audioType && _main_AudioSource.isPlaying) return;
+
         // 取消上一次還在進行的淡入淡出
         _fadeCts?.Cancel();
         _fadeCts?.Dispose();
@@ -132,17 +148,38 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
             AudioClip clip = await GetAudioClip(audioType);
             if (clip == null) return;
 
-            // 目前已有撥放音樂,執行淡出
-            if (_main_AudioSource.isPlaying)
+            // 目前已有撥放音樂，執行淡出並「記錄進度」
+            if (_main_AudioSource.isPlaying && _currentBgmType != AUDIO_TYPE.None)
             {
+                if(isRecord)
+                {
+                    // 記錄當前這首歌的播放進度
+                    _bgmPlaybackProgress[_currentBgmType] = _main_AudioSource.time;
+                }
+
+                // 執行淡出
                 await FadeVolumeAsync(0f, token);
                 _main_AudioSource.Stop();
             }
+
+            // 更新當前 BGM 紀錄
+            _currentBgmType = audioType;
 
             _main_AudioSource.clip = clip;
             _main_AudioSource.pitch = pitch;
             _main_AudioSource.volume = 0f;
             _main_AudioSource.loop = true;
+
+            // 檢查是否有上一次的播放進度紀錄,有的話繼續從進度位置撥放
+            if (_bgmPlaybackProgress.TryGetValue(audioType, out float savedTime))
+            {
+                // 防呆：確保儲存的時間沒有超出歌曲總長度（避免換歌曲檔案後出錯）
+                _main_AudioSource.time = savedTime < clip.length ? savedTime : 0f;
+            }
+            else
+            {
+                _main_AudioSource.time = 0f;
+            }
 
             if (_isMusicOn)
             {
@@ -153,7 +190,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         }
         catch (System.OperationCanceledException)
         {
-            Debug.Log("由於新的背景音樂請求，背景音樂淡出中斷。");
+           
         }
     }
 
@@ -270,7 +307,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 
         if (_configLookUp.TryGetValue(audioType, out var audioData))
         {
-            // 建立一個新的傳輸控制源 (Promise)
+            // 建立一個新的傳輸控制源 
             var newTcs = new UniTaskCompletionSource<AudioClip>();
             _loadingTasks[audioType] = newTcs;
 
@@ -347,7 +384,12 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 
             if (!_isMusicOn)
             {
-                //停止目前的 BGM
+                // 停止目前的 BGM 時，也可以順便記錄當前進度，這樣下次打開音樂時能接下去
+                if (_currentBgmType != AUDIO_TYPE.None && _main_AudioSource.isPlaying)
+                {
+                    _bgmPlaybackProgress[_currentBgmType] = _main_AudioSource.time;
+                }
+
                 _fadeCts?.Cancel();
                 _main_AudioSource.Stop();
             }
@@ -357,6 +399,13 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
                 if (_main_AudioSource.clip != null && !_main_AudioSource.isPlaying)
                 {
                     _main_AudioSource.volume = GetConfigVolumeByClip(_main_AudioSource.clip);
+
+                    // 還原時間點
+                    if (_currentBgmType != AUDIO_TYPE.None && _bgmPlaybackProgress.TryGetValue(_currentBgmType, out float savedTime))
+                    {
+                        _main_AudioSource.time = savedTime < _main_AudioSource.clip.length ? savedTime : 0f;
+                    }
+
                     _main_AudioSource.Play();
                 }
             }
@@ -366,8 +415,6 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
     /// <summary>
     /// 獲取設定檔音量
     /// </summary>
-    /// <param name="clip"></param>
-    /// <returns></returns>
     private float GetConfigVolumeByClip(AudioClip clip)
     {
         foreach (var data in _configLookUp.Values)

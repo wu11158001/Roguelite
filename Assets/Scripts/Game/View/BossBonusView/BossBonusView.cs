@@ -100,7 +100,7 @@ public class BossBonusView : BaseView
     {
         base.Setup(myRef);
 
-        AudioManager.Instance.PlayBgm(AUDIO_TYPE.BossBonusBGM).Forget();
+        AudioManager.Instance.PlayBgm(audioType: AUDIO_TYPE.BossBonusBGM, isRecord: true).Forget();
 
         // 隨機獲得技能數量
         int randomPoint = Random.Range(1, 7);
