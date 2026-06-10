@@ -15,7 +15,7 @@ MonoBehaviour:
   LevelName: "\u6C99\u6F20"
   LevelIcon: {fileID: 21300000, guid: 869064bab52788141b1bcf1d6575fc54, type: 3}
   LevelIndex: 0
-  TimeLimit: 300
+  TimeLimit: 60
   CoinBonus: 0
   ExpBonus: 0
   EnemyHpIncreaseMultiplier: 1

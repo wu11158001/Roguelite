@@ -107,11 +107,7 @@ public class EnemySystemConfig : ScriptableObject
 
     [BoxGroup("模式2:襲擊")]
     [Label("模式2:生成半徑(越大越散)")]
-    public int Mode2_GroupRadius = 5;
-
-    [BoxGroup("模式2:襲擊")]
-    [Label("模式2:與衝鋒目標的擴散半徑")]
-    public float Mode2_TargetSpreadRadius = 1.5f;
+    public float Mode2_GroupRadius = 5;
 
     [BoxGroup("模式2:襲擊")]
     [Label("模式2:怪物移動速度")]
@@ -146,12 +142,16 @@ public class EnemySystemConfig : ScriptableObject
     [Label("Boss:外框材質球")]
     public Material Boss_OutlineMaterial;
 
+    [BoxGroup("Boss")]
+    [Label("Boss:獎勵道具物件")]
+    public AssetReferenceGameObject Boss_BonusPrefabReference;
+
     // --------敵人資料列表--------
     [BoxGroup("敵人資料列表")]
     public List<EnemyData> EnemyDatas = new();
 
     // 用來查詢敵人資料
-    private Dictionary<ENEMY_TYPE, EnemyData> _enemyDatas = new();
+    private readonly Dictionary<ENEMY_TYPE, EnemyData> _enemyDatas = new();
 
     public void Initialize()
     {

@@ -24,6 +24,17 @@ public abstract class BaseMapProps : BaseGameObject
     [SerializeField] private Ease _flyEase = Ease.InBack;
 
     [HorizontalLine(color: EColor.Gray)]
+    [Header("噴發效果設定")]
+    [Label("噴發時間")]
+    [SerializeField] private float _popDuration = 0.6f;
+    [Label("噴發高度")]
+    [SerializeField] private float _popPower = 2.0f;
+    [Label("噴發隨機半徑")]
+    [SerializeField] private float _popRadius = 1.5f;
+    [Label("噴發移動模式")]
+    [SerializeField] private Ease _popEase = Ease.InOutQuad;
+
+    [HorizontalLine(color: EColor.Gray)]
     [Header("追蹤位置")]
     [Label("是否需追蹤位置")]
     [SerializeField] private bool _isLocked;
@@ -46,13 +57,16 @@ public abstract class BaseMapProps : BaseGameObject
 
     private void OnEnable()
     {
-        _isTriggered = false;
+        // 噴發期間還不可被撿走
+        _isTriggered = true;
 
         // 需要雷達追蹤註冊
         if(_isLocked && LockedIcon != null)
         {
             RegisterToRadar();
         }
+
+        PlayPopAnimation();
     }
 
     protected virtual void Start()
@@ -60,7 +74,7 @@ public abstract class BaseMapProps : BaseGameObject
         _targetLayer = LayerMask.NameToLayer("PickRange");
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerStay(Collider other)
     {
         if (_isTriggered) return;
 
@@ -97,6 +111,35 @@ public abstract class BaseMapProps : BaseGameObject
     {
         AssignedData = data;
         _isTriggered = false;
+    }
+
+    /// <summary>
+    /// 噴發動畫
+    /// </summary>
+    private void PlayPopAnimation()
+    {
+        transform.DOKill();
+
+        // 記錄當前的初始世界座標
+        Vector3 startPosition = transform.position;
+        // 計算隨機偏移量
+        Vector2 randomCircle = Random.insideUnitCircle * _popRadius;
+
+        // 目標點為：原本的位置 + 偏移量
+        Vector3 targetPosition = new Vector3(
+            startPosition.x + randomCircle.x,
+            0,
+            startPosition.z + randomCircle.y
+        );
+
+        transform.DOJump(targetPosition, _popPower, 1, _popDuration)
+            .SetEase(_popEase)
+            .SetLink(gameObject, LinkBehaviour.KillOnDisable)
+            .OnComplete(() =>
+            {
+                // 落地後才可以拾取
+                _isTriggered = false;
+            });
     }
 
     /// <summary>

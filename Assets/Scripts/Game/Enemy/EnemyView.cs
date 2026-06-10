@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 /// <summary>
 /// 敵人
@@ -114,7 +115,8 @@ public class EnemyView : BaseCharacter, ITargetable
     /// 死亡
     /// </summary>
     /// <param name="isCharacterKill">是否是角色擊殺</param>
-    public void OnDie(bool isCharacterKill)
+    /// <param name="isCharacterKill">是否是Boss</param>
+    public void OnDie(bool isCharacterKill, bool isBoss)
     {
         try
         {
@@ -144,7 +146,17 @@ public class EnemyView : BaseCharacter, ITargetable
             if (isCharacterKill)
             {
                 GameplayManager.CurrentContext.GameController.OnEnemyDie();
-            }            
+            }
+
+            // 掉落Boss獎勵
+            if(isBoss)
+            {
+                AssetReferenceGameObject bonusRef = GameStateData.EnemySystemConfig.Boss_BonusPrefabReference;
+                GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
+                    worldPos: transform.position,
+                    prefabRef: bonusRef,
+                    isLocked: true);
+            }
         }
         catch (System.Exception e)
         {

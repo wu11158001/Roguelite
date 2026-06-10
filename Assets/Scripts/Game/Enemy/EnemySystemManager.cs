@@ -237,7 +237,7 @@ public class EnemySystemManager : MonoBehaviour
                 // 模式2:襲擊_初始朝玩家方向移動,碰撞後死亡
                 if (moveType == EnemyMoveType.StraightAndDie)
                 {
-                    currentHp = Mathf.RoundToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
+                    currentHp = Mathf.CeilToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
                     finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode2_AttackWeaken);
                     moveSpeed = _enemyConfig.Mode2_MoveSpeed;
                 }
@@ -377,7 +377,7 @@ public class EnemySystemManager : MonoBehaviour
             // 敵人死亡
             if (_shouldDieArray[i])
             {
-                if (enemyView != null) enemyView.OnDie(true);
+                if (enemyView != null) enemyView.OnDie(isCharacterKill: true, isBoss: latestData.IsBoss);
                 RemoveEnemy(i, latestData.IsBoss);
                 continue;
             }
@@ -385,7 +385,7 @@ public class EnemySystemManager : MonoBehaviour
             // 攻擊且死亡(自殺式攻擊)
             if(_shouldAttackAndDieArray[i])
             {
-                if (enemyView != null) enemyView.OnDie(false);
+                if (enemyView != null) enemyView.OnDie(isCharacterKill: false, isBoss: false);
                 GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(latestData.Attack);
                 RemoveEnemy(i, latestData.IsBoss);
                 continue;

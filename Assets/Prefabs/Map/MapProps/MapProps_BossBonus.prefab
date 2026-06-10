@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3566279208025611543}
   - component: {fileID: 6489722304099829269}
   - component: {fileID: 7831722262483695488}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GlowParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4823,7 +4823,7 @@ GameObject:
   - component: {fileID: 928206123505051994}
   - component: {fileID: 8043533560430595559}
   - component: {fileID: 206711173486693950}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MapProps_BossBonus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4860,7 +4860,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapProps_BossBonus
   _flyDuration: 0.5
-  _flyEase: 26
+  _flyEase: 3
+  _popDuration: 0.6
+  _popPower: 1.5
+  _popRadius: 1
+  _popEase: 6
   _isLocked: 1
   LockedIcon: {fileID: 21300000, guid: 2ea57f91912c96f4d8ecbe62a63895dd, type: 3}
 --- !u!65 &206711173486693950
@@ -4897,7 +4901,7 @@ GameObject:
   - component: {fileID: 3027474122582360987}
   - component: {fileID: 7747214703989755040}
   - component: {fileID: 4194870420507810282}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dice
   m_TagString: Untagged
   m_Icon: {fileID: 0}

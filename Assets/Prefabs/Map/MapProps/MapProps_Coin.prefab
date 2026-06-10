@@ -5029,6 +5029,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapProps_Coin
   _flyDuration: 0.5
   _flyEase: 26
+  _popDuration: 0.6
+  _popPower: 1.5
+  _popRadius: 1
+  _popEase: 6
   _isLocked: 0
   LockedIcon: {fileID: 0}
   _addCoinValue: 10
