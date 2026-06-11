@@ -32,12 +32,12 @@ MonoBehaviour:
     Volume: 1
   - AudioType: 1
     AudioClip:
-      m_AssetGUID: ea3bd13b16d135f40b6494e888bd9bc5
+      m_AssetGUID: 7fab6bd3bdb41c34cbaf86715e25a7d0
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    Volume: 0.2
+    Volume: 0.4
   - AudioType: 10
     AudioClip:
       m_AssetGUID: 05db31a0fd4aef048a1470bf26622d10
@@ -45,7 +45,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    Volume: 0.15
+    Volume: 0.25
   - AudioType: 80
     AudioClip:
       m_AssetGUID: 713737a3d2f528642aac372b2faef208
@@ -53,7 +53,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    Volume: 0.5
+    Volume: 0.6
   - AudioType: 11
     AudioClip:
       m_AssetGUID: 6711b8f588795ee48ab59f19159e7e3b
