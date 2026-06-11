@@ -22,4 +22,4 @@ MonoBehaviour:
   EnemyAttackIncreaseMultiplier: 1
   Mode1EnemyTypes: 010000000200000001000000
   Mode2EnemyTypes: 0200000001000000
-  Mode3EnemyTypes: 0100000002000000
+  Mode3EnemyTypes: 0200000001000000

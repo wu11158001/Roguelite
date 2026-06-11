@@ -53,7 +53,7 @@ MonoBehaviour:
   - color: {r: 1, g: 0.9345746, b: 0, a: 1}
     GainExp: 31
   MaxLevel: 120
-  BaseUpgradeExp: 100
+  BaseUpgradeExp: 5
   UpgradeExpMultiplier:
   - LevelRange: 5
     AddNeedValue: 2

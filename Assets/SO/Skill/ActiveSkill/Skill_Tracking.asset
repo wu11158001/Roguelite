@@ -34,7 +34,7 @@ MonoBehaviour:
     SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillFlightSpeed: 40
-    SkillKnockback: 4
+    SkillKnockback: 3
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 0

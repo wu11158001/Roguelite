@@ -91,7 +91,7 @@ public class CharacterConfigData : ScriptableObject
     [HideInInspector] public ReactiveProperty<float> AddKeepTime;
 
     /// <summary> 當前HP </summary>
-    public ReactiveProperty<int> Hp;
+    [HideInInspector] public ReactiveProperty<int> Hp;
 
     public void Initialize()
     {
