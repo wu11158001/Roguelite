@@ -311,7 +311,8 @@ public class InfiniteMapController : MonoBehaviour
     /// <param name="worldPos"></param>
     /// <param name="prefabRef"></param>
     /// <param name="isLocked">是否不隨地圖刷新而回收</param>
-    public void SpawnPropsAtWorld(Vector3 worldPos, AssetReferenceGameObject prefabRef, bool isLocked = false)
+    /// <param name="levelOnSpawnTime">產生時的波等級(判別經驗球等級或其他)</param>
+    public void SpawnPropsAtWorld(Vector3 worldPos, AssetReferenceGameObject prefabRef, bool isLocked = false, int levelOnSpawnTime = 0)
     {
         string gridId = GetGridId(worldPos);
 
@@ -332,7 +333,7 @@ public class InfiniteMapController : MonoBehaviour
         {
             PrefabRef = prefabRef,
             LocalPosition = localPos,
-            WaveAtThatTime = GameplayManager.CurrentContext.EnemySystemManager.GetCurrentWaveIndex(),
+            WaveAtThatTime = levelOnSpawnTime,
         };
 
         if(!isLocked)

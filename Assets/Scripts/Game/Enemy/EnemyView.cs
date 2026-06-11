@@ -8,9 +8,7 @@ using UnityEngine.AddressableAssets;
 public class EnemyView : BaseCharacter, ITargetable
 {
     private CapsuleCollider _capsuleCollider;
-    private Bounds _cachedBounds;
     public Transform TargetTransform => transform;
-    public Bounds TargetBounds => _cachedBounds;
     public bool IsActive => gameObject.activeInHierarchy;
 
     // 膠囊的半徑作為「推擠半徑」
@@ -18,6 +16,19 @@ public class EnemyView : BaseCharacter, ITargetable
 
     // 攻擊範圍
     public float AttackRange => ColliderRadius * GameStateData.EnemySystemConfig.AttackRange;
+
+    // 獲取對齊包圍盒
+    public Bounds TargetBounds
+    {
+        get
+        {
+            if (_capsuleCollider != null)
+            {
+                return _capsuleCollider.bounds;
+            }
+            return default;
+        }
+    }
 
     private readonly int _isAttackParamId = Animator.StringToHash("IsAttack");
 
@@ -30,15 +41,6 @@ public class EnemyView : BaseCharacter, ITargetable
         if (_capsuleCollider != null)
         {
             _capsuleCollider.isTrigger = true;
-        }
-    }
-
-    private void Update()
-    {
-        // 每幀全權由自己向 C++ 底層要一次 Bounds
-        if (_capsuleCollider != null)
-        {
-            _cachedBounds = _capsuleCollider.bounds;
         }
     }
 
@@ -114,9 +116,10 @@ public class EnemyView : BaseCharacter, ITargetable
     /// <summary>
     /// 死亡
     /// </summary>
+    /// <param name="levelOnSpawnTime">產生時的波等級(判別經驗球等級或其他)</param>
     /// <param name="isCharacterKill">是否是角色擊殺</param>
     /// <param name="isCharacterKill">是否是Boss</param>
-    public void OnDie(bool isCharacterKill, bool isBoss)
+    public void OnDie(int levelOnSpawnTime, bool isCharacterKill, bool isBoss)
     {
         try
         {
@@ -155,7 +158,8 @@ public class EnemyView : BaseCharacter, ITargetable
                     AssetReferenceGameObject expBallRef = GameStateData.GameConfig.ExpBallPrefabReference;
                     GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
                         worldPos: transform.position,
-                        prefabRef: expBallRef);
+                        prefabRef: expBallRef,
+                        levelOnSpawnTime: levelOnSpawnTime);
                 }
                 
             }

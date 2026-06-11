@@ -32,7 +32,7 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   MaxBoxCountInGround: 4
   SpawnBoxRate: 0.7
-  ExpBallRate: 0.7
+  ExpBallRate: 1
   ExpBallPrefabReference:
     m_AssetGUID: 85a224a8259e48840b29faa30437ddbc
     m_SubObjectName: 
@@ -40,12 +40,12 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   ExpBallDatas:
-  - color: {r: 0.023584902, g: 1, b: 0.060398716, a: 1}
+  - color: {r: 0, g: 0.5638194, b: 1, a: 1}
     GainExp: 1
   - color: {r: 1, g: 0.70399964, b: 0.033018887, a: 1}
-    GainExp: 3
-  - color: {r: 0, g: 0.44120836, b: 1, a: 1}
     GainExp: 7
+  - color: {r: 0.023584902, g: 1, b: 0.060398716, a: 1}
+    GainExp: 3
   - color: {r: 1, g: 0.08614111, b: 0, a: 1}
     GainExp: 13
   - color: {r: 1, g: 0, b: 0.9882353, a: 1}
@@ -53,19 +53,19 @@ MonoBehaviour:
   - color: {r: 1, g: 0.9345746, b: 0, a: 1}
     GainExp: 31
   MaxLevel: 120
-  BaseUpgradeExp: 5
+  BaseUpgradeExp: 3
   UpgradeExpMultiplier:
   - LevelRange: 5
-    AddNeedValue: 2
+    AddNeedValue: 4
   - LevelRange: 10
-    AddNeedValue: 5
-  - LevelRange: 15
     AddNeedValue: 8
-  - LevelRange: 20
+  - LevelRange: 15
     AddNeedValue: 12
+  - LevelRange: 20
+    AddNeedValue: 18
   - LevelRange: 30
-    AddNeedValue: 20
+    AddNeedValue: 24
   - LevelRange: 50
-    AddNeedValue: 30
+    AddNeedValue: 35
   - LevelRange: 65
-    AddNeedValue: 40
+    AddNeedValue: 48

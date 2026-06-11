@@ -30,6 +30,9 @@ public struct EnemyJobData
     // 是否是Boss,Boss回收前需重製外觀
     public bool IsBoss;
 
+    // 產生時的波等級(判別經驗球等級或其他)
+    public int LevelOnSpawnTime;
+
     // 當前HP
     public int CurrentHp;
     // 攻擊距離(距離玩家多遠)

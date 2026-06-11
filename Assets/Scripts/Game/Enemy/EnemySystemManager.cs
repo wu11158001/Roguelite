@@ -266,6 +266,7 @@ public class EnemySystemManager : MonoBehaviour
                 {
                     InstanceID = obj.GetInstanceID(),
                     IsBoss = isBoss,
+                    LevelOnSpawnTime = GetCurrentWaveIndex(),
                     MoveType = moveType,
                     RandomSeed = (uint)(obj.GetInstanceID() + System.DateTime.Now.Ticks),
                     MoveSpeed = moveSpeed,
@@ -389,7 +390,14 @@ public class EnemySystemManager : MonoBehaviour
             // 敵人死亡
             if (_shouldDieArray[i])
             {
-                if (enemyView != null) enemyView.OnDie(isCharacterKill: true, isBoss: latestData.IsBoss);
+                if (enemyView != null)
+                {
+                    enemyView.OnDie(
+                        levelOnSpawnTime: latestData.LevelOnSpawnTime, 
+                        isCharacterKill: true, 
+                        isBoss: latestData.IsBoss);
+                }
+
                 RemoveEnemy(i, latestData.IsBoss);
                 continue;
             }
@@ -397,7 +405,14 @@ public class EnemySystemManager : MonoBehaviour
             // 攻擊且死亡(自殺式攻擊)
             if(_shouldAttackAndDieArray[i])
             {
-                if (enemyView != null) enemyView.OnDie(isCharacterKill: false, isBoss: false);
+                if (enemyView != null)
+                {
+                    enemyView.OnDie(
+                        levelOnSpawnTime: latestData.LevelOnSpawnTime, 
+                        isCharacterKill: false, 
+                        isBoss: false);
+                }
+
                 GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(latestData.Attack);
                 RemoveEnemy(i, latestData.IsBoss);
                 continue;

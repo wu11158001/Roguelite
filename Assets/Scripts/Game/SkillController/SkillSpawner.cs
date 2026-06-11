@@ -462,7 +462,6 @@ public class SkillSpawner
             ITargetable target = _combinedTargets[i];
             if (target == null || !target.IsActive) continue;
 
-            // 檢查是否為指定的型別 T (例如 EnemyView 或 MapProps_BoxView)
             if (target is T)
             {
                 // 畫面檢查
@@ -517,9 +516,6 @@ public class SkillSpawner
 
     /// <summary>
     /// 獲取隨機目標位置在攝影機視野內
-    /// 使用範例：
-    /// Transform randomAny = GetRandomTargetInCamera<ITargetable>(); // 隨機敵人或箱子
-    /// Transform randomEnemy = GetRandomTargetInCamera<EnemyView>(); // 隨機只要敵人
     /// </summary>
     public Transform GetRandomTargetInCamera<T>() where T : class, ITargetable
     {
@@ -534,7 +530,6 @@ public class SkillSpawner
             ITargetable target = _combinedTargets[i];
             if (target == null || !target.IsActive) continue;
 
-            // 型別檢查
             if (target is T)
             {
                 if (GeometryUtility.TestPlanesAABB(_cameraPlanes, target.TargetBounds))
@@ -548,14 +543,8 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 獲取最近的目標位置（支援泛型過濾）
-    /// 使用範例：
-    /// Transform nearestAny = GetNearestTarget<ITargetable>(playerPos);      // 最近的敵人或箱子
-    /// Transform nearestEnemy = GetNearestTarget<EnemyView>(playerPos);      // 最近的敵人
-    /// Transform nearestBox = GetNearestTarget<MapProps_BoxView>(playerPos); // 最近的箱子
+    /// 獲取最近的目標位置
     /// </summary>
-    /// <param name="origin">角色位置</param>
-    /// <returns>符合型別且最近目標的 Transform</returns>
     public Transform GetNearestTarget<T>(Vector3 origin) where T : class, ITargetable
     {
         UpdatePlanes();
@@ -570,20 +559,15 @@ public class SkillSpawner
         {
             ITargetable target = _combinedTargets[i];
 
-            // 1. 基本安全檢查
             if (target == null || !target.IsActive) continue;
-
-            // 2. 【型別過濾】非指定型別直接跳過（這是泛型版本關鍵）
             if (target is not T) continue;
 
-            // 3. 距離平方過濾（最省效能的數學計算放最前面）
             Vector3 directionToTarget = target.TargetTransform.position - origin;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
 
             if (dSqrToTarget > maxRadarDistanceSqr) continue;
             if (dSqrToTarget >= closestDistanceSqr) continue;
 
-            // 4. 視錐體裁剪（只有擠進前幾名、且夠近的目標才執行這個 C++ 運算）
             if (GeometryUtility.TestPlanesAABB(_cameraPlanes, target.TargetBounds))
             {
                 closestDistanceSqr = dSqrToTarget;
