@@ -204,6 +204,12 @@ public class PlayerView : BaseCharacter
             int timeLimit = GameStateData.SelectLevel.TimeLimit;
             if(timeLimit - t <= 0 && !GameplayManager.CurrentContext.GameController.IsGameOver)
             {
+                // 紀錄通關資料
+                PlayerInfoData infoData = PlayerInfoStateData.PlayerInfo.Value;
+                infoData.PassLevel = GameStateData.SelectLevel.LevelIndex + 1;
+                PlayerInfoStateData.PlayerInfo.Value = infoData;
+
+                // 角色死亡
                 _characterConfig.Hp.Value = 0;
             }
 

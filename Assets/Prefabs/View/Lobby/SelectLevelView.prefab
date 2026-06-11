@@ -2400,6 +2400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelItemView
   _mainTog: {fileID: 9046333080216066803}
   _img_LevelIcon: {fileID: 2332637436925945095}
+  _lockObj: {fileID: 454051449037344399}
 --- !u!114 &8018316021020724036
 MonoBehaviour:
   m_ObjectHideFlags: 0

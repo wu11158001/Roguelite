@@ -36,6 +36,8 @@ public class Skill_Around_AttackObjView : BaseSkill
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!_isSetupComplete) return;
+
         if (other.gameObject.layer == _enemyLayer)
         {
             _controller.HitEnemy(

@@ -14,6 +14,8 @@ public class BaseSkill : BaseGameObject
     protected int _enemyLayer;
     protected int _boxLayer;
 
+    protected bool _isSetupComplete;
+
     protected EnemyView _targetEnemy;
 
     public override void OnDestroy()
@@ -37,6 +39,8 @@ public class BaseSkill : BaseGameObject
         _disposables.Clear();
 
         _playerObject = GameplayManager.CurrentContext.ControlCharacter.gameObject;
+
+        _isSetupComplete = true;
     }
 
     /// <summary>

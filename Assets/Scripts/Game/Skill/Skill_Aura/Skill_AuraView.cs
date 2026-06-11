@@ -31,6 +31,8 @@ public class Skill_AuraView : BaseSkill
 
     private void OnTriggerStay(Collider other)
     {
+        if (!_isSetupComplete) return;
+
         if (other.gameObject.layer == _enemyLayer && !_currentInAreaEnemies.Contains(other.gameObject))
         {
             _currentInAreaEnemies.Add(other.gameObject);

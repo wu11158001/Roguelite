@@ -31,6 +31,7 @@ public class Skill_FrontHitView : BaseSkill
     private void OnTriggerEnter(Collider other)
     {
         if (!_isCanHit) return;
+        if (!_isSetupComplete) return;
 
         if (other.gameObject.layer == _enemyLayer)
         {

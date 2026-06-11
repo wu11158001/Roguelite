@@ -16,6 +16,8 @@ public struct PlayerInfoData
     public int Coin;
     /// <summary> 持有角色 </summary>
     public string[] Characters;
+    /// <summary> 已通過最高關卡 </summary>
+    public int PassLevel;
 
     /// <summary>
     /// 設置擁有角色

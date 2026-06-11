@@ -104,7 +104,7 @@ public class MapProps_BoxView : BaseGameObject, ITargetable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_isTriggered) return;
+        if (_isTriggered || OnBoxTriggered == null) return;
 
         if (_targetLayer.Contains(other.gameObject.layer))
         {

@@ -72,18 +72,23 @@ public class SelectLevelView : BaseView
         List<Toggle> togs = new();
         List<LevelConfigData> levelConfigDatas = GameStateData.AllLevelConfig;
 
+        PlayerInfoData infoData = PlayerInfoStateData.PlayerInfo.Value;
+
         _levelItemView.gameObject.SetActive(false);
         foreach (var level in levelConfigDatas)
         {
+            bool isLock = level.LevelIndex > infoData.PassLevel;
+
             GameObject obj = Instantiate(_levelItemView.gameObject, _levelTogParent);
             obj.SetActive(true);
             if(obj.TryGetComponent(out LevelItemView levelItemView))
             {
                 levelItemView.Setup(
                     data: level,
+                    isLock: isLock,
                     selectCallback: (level) =>
                     {
-                        OnSelectLevel(level);
+                        OnSelectLevel(level, isLock);
                     });
             }
 
@@ -104,7 +109,7 @@ public class SelectLevelView : BaseView
     /// 選擇關卡
     /// </summary>
     /// <param name="level"></param>
-    private void OnSelectLevel(LevelConfigData level)
+    private void OnSelectLevel(LevelConfigData level, bool isLock)
     {
         GameStateData.SelectLevel = level;
 
@@ -115,5 +120,7 @@ public class SelectLevelView : BaseView
         _text_CoinBonus.text = level.CoinBonus == 0 ? "-" : $"{level.CoinBonus * 100}%";
         _text_ExpBonus.text = level.ExpBonus == 0 ? "-" : $"{level.ExpBonus * 100}%";
         _text_EnemyHpIncrease.text = level.EnemyHpIncreaseMultiplier == 1 ? "-" : $"+{(level.EnemyHpIncreaseMultiplier - 1) * 100}%";
+
+        _btn_Start.interactable = !isLock;
     }
 }

@@ -31,6 +31,8 @@ public class Skill_TrackingView : BaseSkill
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!_isSetupComplete) return;
+
         // 攻擊敵人
         if (other.gameObject.layer == _enemyLayer)
         {

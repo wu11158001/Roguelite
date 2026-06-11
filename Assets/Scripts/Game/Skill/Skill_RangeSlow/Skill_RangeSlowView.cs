@@ -35,6 +35,7 @@ public class Skill_RangeSlowView : BaseSkill
     private void OnTriggerEnter(Collider other)
     {
         if (_controller == null) return;
+        if (!_isSetupComplete) return;
 
         if (other.gameObject.layer == _enemyLayer)
         {
