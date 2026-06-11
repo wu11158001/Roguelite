@@ -88,6 +88,8 @@ public class EnemySystem_Mode3
 
         // 取得當前波次的敵人類型
         ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode3();
+        if (targetEnemyType == ENEMY_TYPE.None) return;
+
         EnemyData enemyData = _enemyConfig.GetEnemyData(targetEnemyType);
 
         if (enemyData == null)

@@ -19,6 +19,10 @@ public enum ENEMY_TYPE
     Ghost,
     /// <summary> 蜜蜂 </summary>
     Bee,
+    /// <summary> 海星 </summary>
+    StarFish,
+    /// <summary> 多眼怪 </summary>
+    EyedMonster,
 }
 
 /// <summary>
