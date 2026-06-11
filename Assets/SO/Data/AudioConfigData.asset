@@ -40,7 +40,7 @@ MonoBehaviour:
     Volume: 0.2
   - AudioType: 10
     AudioClip:
-      m_AssetGUID: c685e90749271af4383ccc824368b645
+      m_AssetGUID: 05db31a0fd4aef048a1470bf26622d10
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
@@ -93,7 +93,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    Volume: 0.3
+    Volume: 0.2
   - AudioType: 151
     AudioClip:
       m_AssetGUID: 77adc8804c0fb0e46a45aeb94dc32edb

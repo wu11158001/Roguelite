@@ -1,12 +1,13 @@
 using UnityEngine;
-using System.Collections;
-using Unity.Mathematics;
+using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using UniRx;
 
 /// <summary>
-///  敵人系統_模式2:襲擊_初始朝玩家方向移動,碰撞後死亡
+/// 敵人系統_模式2:襲擊_初始朝玩家方向移動,碰撞後死亡
 /// </summary>
-public class EnemySystem_Mode2 : MonoBehaviour
+public class EnemySystem_Mode2
 {
     private EnemySystemManager _manager;
     private EnemySystemConfig _enemyConfig;
@@ -15,22 +16,15 @@ public class EnemySystem_Mode2 : MonoBehaviour
 
     // 大突襲間隔時間
     private float _raidInterval;
-    // 大突襲計時器
-    private float _raidTimer;
-    // 大突襲已執行次數
-    private int _raidsTriggered = 0;
 
-    // 遊戲限制時間總長
-    private float _totalGameTime;
     // 當前產生的敵人類型(輪著上)
     private int _currentEnemyTypeIndex;
 
     private bool _isStopSpawn;
 
-    /// <summary>
-    /// 初始化
-    /// </summary>
-    public void Initialize(EnemySystemManager manager, Transform player, EnemySystemConfig enemyConfig, LevelConfigData levelConfig)
+    private readonly CompositeDisposable _disposables = new();
+
+    public EnemySystem_Mode2(EnemySystemManager manager, Transform player, EnemySystemConfig enemyConfig, LevelConfigData levelConfig)
     {
         _manager = manager;
         _player = player;
@@ -40,66 +34,58 @@ public class EnemySystem_Mode2 : MonoBehaviour
         _currentEnemyTypeIndex = 0;
         _isStopSpawn = false;
 
-        // 遊戲限制時間總長
-        _totalGameTime = _levelConfig.TimeLimit;
-        // 共有幾次大襲擊
         int totalRaidCount = _enemyConfig.Mode2_TotalCount;
+        float totalGameTime = _levelConfig.TimeLimit;
 
         // 計算平均大波次生成間隔
         if (totalRaidCount > 0)
         {
-            _raidInterval = _totalGameTime / totalRaidCount;
+            _raidInterval = totalGameTime / totalRaidCount;
         }
-        _raidTimer = _raidInterval;
-    }
 
-    private void Update()
-    {
-        // 如果遊戲結束了就不再倒數
-        if (_isStopSpawn || _player == null) return;
-
-        // 大波次計時器倒數
-        if (_raidsTriggered < _totalGameTime)
-        {
-            _raidTimer -= Time.deltaTime;
-            if (_raidTimer <= 0f)
+        // 大波次主計時器
+        Observable.Interval(TimeSpan.FromSeconds(_raidInterval))
+            .Where(_ => !_isStopSpawn && _player != null)
+            .Take(totalRaidCount)
+            .Subscribe(_ =>
             {
-                _raidTimer = _raidInterval;
-                _raidsTriggered++;
-
-                // 觸發一次大突襲
-                StartCoroutine(TriggerRaidRoutine());
-            }
-        }
+                TriggerRaid();
+            })
+            .AddTo(_disposables);
     }
 
+
+    public void ClrarAll()
+    {
+        _disposables.Dispose();
+
+    }
     /// <summary>
     /// 停止生成
     /// </summary>
     public void StopSpawn()
     {
         _isStopSpawn = true;
+        _disposables.Clear();
     }
 
     /// <summary>
-    /// 處理單次大突襲中的「多波次間隔生成」
+    /// 觸發襲擊
     /// </summary>
-    private IEnumerator TriggerRaidRoutine()
+    private void TriggerRaid()
     {
-        // 小波次執行次數
         int totalWaves = _enemyConfig.Mode2_WaveCount;
-        // 小波次執行間隔
         float waveInterval = _enemyConfig.Mode2_WaveInterval;
 
-        for (int w = 0; w < totalWaves; w++)
-        {
-            SpawnGroupMode2();
-
-            if (w < totalWaves - 1)
+        // 小波次定時生成
+        Observable.Interval(TimeSpan.FromSeconds(waveInterval))
+            .Where(_ => !_isStopSpawn && _player != null)
+            .Take(totalWaves)
+            .Subscribe(_ =>
             {
-                yield return new WaitForSeconds(waveInterval);
-            }
-        }
+                SpawnGroupMode2();
+            })
+            .AddTo(_disposables);
     }
 
     /// <summary>
@@ -112,7 +98,6 @@ public class EnemySystem_Mode2 : MonoBehaviour
         Vector3 playerPos = _player.position;
         float spawnRadius = _enemyConfig.SpawnRadius;
 
-        // 在大圓周（SpawnRadius）上隨機挑選一個角度作為「集團中心點」
         float randomAngle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         Vector3 groupCenterPos = new Vector3(
             playerPos.x + Mathf.Cos(randomAngle) * spawnRadius,
@@ -120,15 +105,12 @@ public class EnemySystem_Mode2 : MonoBehaviour
             playerPos.z + Mathf.Sin(randomAngle) * spawnRadius
         );
 
-        // 生成數量
         int spawnCount = _enemyConfig.Mode2_WaveSpawnCount;
-        // 生成半徑(越大越散)
         float groupRadius = _enemyConfig.Mode2_GroupRadius;
 
         Vector3 armyForwardDir = (playerPos - groupCenterPos).normalized;
         float3 unifiedDirection = new float3(armyForwardDir.x, 0, armyForwardDir.z);
 
-        // 當前生成敵人類型
         ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode2();
 
         for (int i = 0; i < spawnCount; i++)
@@ -144,7 +126,7 @@ public class EnemySystem_Mode2 : MonoBehaviour
                     _manager.SpawnEnemy(
                         enemyData: enemyData,
                         spawnPos: finalSpawnPos,
-                        moveType: EnemyMoveType.StraightAndDie,
+                        moveType: EnemyMoveType.Mode2_StraightAndDie,
                         initDir: unifiedDirection);
                 }
             }
@@ -154,12 +136,12 @@ public class EnemySystem_Mode2 : MonoBehaviour
     /// <summary>
     /// 獲取敵人類型(輪著上)
     /// </summary>
-    /// <returns></returns>
     private ENEMY_TYPE GetEnemyTypeByCurrentTime_Mode2()
     {
-        List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
-        int targetIndex = _currentEnemyTypeIndex;
+        List<ENEMY_TYPE> enemyList = _levelConfig.Mode2EnemyTypes;
+        if (enemyList == null || enemyList.Count == 0) return 0;
 
+        int targetIndex = _currentEnemyTypeIndex;
         _currentEnemyTypeIndex = (_currentEnemyTypeIndex + 1) % enemyList.Count;
 
         return enemyList[targetIndex];

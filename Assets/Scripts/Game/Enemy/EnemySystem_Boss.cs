@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using System;
 
-public class EnemySystem_Boss : MonoBehaviour
+public class EnemySystem_Boss
 {
     private EnemySystemManager _manager;
     private EnemySystemConfig _enemyConfig;
@@ -12,16 +12,9 @@ public class EnemySystem_Boss : MonoBehaviour
     private int _lastWaveIndex = 0;
 
     private IDisposable _updateSubscription;
+    private readonly CompositeDisposable _disposables = new();
 
-    private void OnDestroy()
-    {
-        _updateSubscription?.Dispose();
-    }
-
-    /// <summary>
-    /// 初始化
-    /// </summary>
-    public void Initialize(EnemySystemManager manager, EnemySystemConfig enemyConfig, LevelConfigData levelConfig)
+    public EnemySystem_Boss(EnemySystemManager manager, EnemySystemConfig enemyConfig, LevelConfigData levelConfig)
     {
         _manager = manager;
         _enemyConfig = enemyConfig;
@@ -42,7 +35,13 @@ public class EnemySystem_Boss : MonoBehaviour
                     _lastWaveIndex = currentWaveIndex;
                 }
             })
-            .AddTo(this);
+            .AddTo(_disposables);
+    }
+
+    public void ClearAll()
+    {
+        _updateSubscription?.Dispose();
+        _disposables.Dispose();
     }
 
     /// <summary>
@@ -72,7 +71,7 @@ public class EnemySystem_Boss : MonoBehaviour
                 _manager.SpawnEnemy(
                     enemyData: enemyData,
                     spawnPos: spawnPosition,
-                    moveType: EnemyMoveType.ChaseAndAttack,
+                    moveType: EnemyMoveType.Mode1_ChaseAndAttack,
                     isBoss: true);
             }
         }

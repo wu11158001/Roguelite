@@ -22,14 +22,16 @@ public class LevelConfigData : ScriptableObject
     public float CoinBonus;
     [Label("經驗加成(0~1)(%)")]
     public float ExpBonus;
-    [Label("怪物Hp提升倍率(1 = 預設)")]
+    [Label("敵人Hp提升倍率(1 = 預設)")]
     public float EnemyHpIncreaseMultiplier = 1;
-    [Label("怪物攻擊提升倍率(1 = 預設)")]
+    [Label("敵人攻擊提升倍率(1 = 預設)")]
     public float EnemyAttackIncreaseMultiplier = 1;
 
     [HorizontalLine(color: EColor.Gray)]
-    [Label("出現怪物類型:模式1")]
+    [Label("出現敵人類型:模式1_追隨(敵人類型將平均分配到遊戲時間內)")]
     public List<ENEMY_TYPE> Mode1EnemyTypes = new();
-    [Label("出現怪物類型:模式2")]
+    [Label("出現敵人類型:模式2_襲擊(輪著上場)")]
     public List<ENEMY_TYPE> Mode2EnemyTypes = new();
+    [Label("出現敵人類型:模式3_包圍(輪著上場)")]
+    public List<ENEMY_TYPE> Mode3EnemyTypes = new();
 }

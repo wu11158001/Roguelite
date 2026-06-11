@@ -54,11 +54,9 @@ public class EnemySystemManager : MonoBehaviour
     private IDisposable _updateSubscription;
     private bool _isLevelRunning;
 
-    // 模式1生成器組件
     private EnemySystem_Mode1 _spawnerMode1;
-    // 模式2生成器組件
     private EnemySystem_Mode2 _spawnerMode2;
-    // Boss生成器組件
+    private EnemySystem_Mode3 _spawnerMode3;
     private EnemySystem_Boss _spawnerBoss;
 
     private List<DamageEvent> _frameDamageEvents = new();
@@ -117,9 +115,10 @@ public class EnemySystemManager : MonoBehaviour
         // 清除生成器
         if (!isDestroying)
         {
-            if (_spawnerMode1 != null) Destroy(_spawnerMode1);
-            if (_spawnerMode2 != null) Destroy(_spawnerMode2);
-            if (_spawnerBoss != null) Destroy(_spawnerBoss);
+            _spawnerMode1?.ClearAll();
+            _spawnerMode2?.ClrarAll();
+            _spawnerMode3?.ClrarAll();
+            _spawnerBoss?.ClearAll();
         }
     }
 
@@ -149,16 +148,10 @@ public class EnemySystemManager : MonoBehaviour
         _levelConfig = GameStateData.SelectLevel;
 
         // 掛載模式1生成與初始化
-        _spawnerMode1 = gameObject.AddComponent<EnemySystem_Mode1>();
-        _spawnerMode1.Initialize(this, _player, _enemyConfig, _levelConfig);
-
-        // 掛載模式2生成與初始化
-        _spawnerMode2 = gameObject.AddComponent<EnemySystem_Mode2>();
-        _spawnerMode2.Initialize(this, _player, _enemyConfig, _levelConfig);
-
-        // 掛載Boss生成與初始化
-        _spawnerBoss = gameObject.AddComponent<EnemySystem_Boss>();
-        _spawnerBoss.Initialize(this, _enemyConfig, _levelConfig);
+        _spawnerMode1 = new EnemySystem_Mode1(this, _player, _enemyConfig, _levelConfig);
+        _spawnerMode2 = new EnemySystem_Mode2(this, _player, _enemyConfig, _levelConfig);
+        _spawnerMode3 = new EnemySystem_Mode3(this, _player, _enemyConfig, _levelConfig);
+        _spawnerBoss = new EnemySystem_Boss(this, _enemyConfig, _levelConfig);
     }
 
     /// <summary>
@@ -176,10 +169,17 @@ public class EnemySystemManager : MonoBehaviour
     /// </summary>
     public void StopSpawn()
     {
-        if (_spawnerMode1 != null) _spawnerMode1.StopSpawn();
-        if (_spawnerMode2 != null) _spawnerMode2.StopSpawn();
-        if (_spawnerBoss != null) _spawnerBoss.StopSpawn();
+        _spawnerMode1?.SetAutoSpawnActive(false);
+        _spawnerMode2?.StopSpawn();
+        _spawnerMode3?.StopSpawn();
+        _spawnerBoss?.StopSpawn();
     }
+
+    /// <summary>
+    /// 控制模式1自動生成開關
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void SetMode1AutoSpawnActive(bool isActive) => _spawnerMode1.SetAutoSpawnActive(isActive);
 
     /// <summary>
     /// 生成敵人
@@ -187,9 +187,11 @@ public class EnemySystemManager : MonoBehaviour
     /// <param name="enemyData">敵人資料</param>
     /// <param name="spawnPos">產生位置</param>
     /// <param name="moveType">敵人類型</param>
+    /// <param name="callback"></param>
     /// <param name="isBoss">是否是Boss</param>
     /// <param name="initDir">模式2專屬:衝鋒方向</param>
-    public void SpawnEnemy(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType moveType, bool isBoss = false, float3 initDir = new())
+    public void SpawnEnemy(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType moveType, 
+        Action<GameObject> callback = null, bool isBoss = false, float3 initDir = new())
     {
         // 當前波數影響敵人數值
         int currentWave = GetCurrentWaveIndex();
@@ -233,14 +235,22 @@ public class EnemySystemManager : MonoBehaviour
                 // 敵人之間的推擠半徑
                 float enemySeparationRadius = _enemyConfig.EnemySeparationRadius;
 
-                // 預設數值以模式1
-                // 模式2:襲擊_初始朝玩家方向移動,碰撞後死亡
-                if (moveType == EnemyMoveType.StraightAndDie)
+                // 「預設數值以模式1」
+                // 模式2:襲擊_朝玩家方向移動,中途不會變更方向,碰撞後死亡
+                if (moveType == EnemyMoveType.Mode2_StraightAndDie)
                 {
                     currentHp = Mathf.CeilToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
                     finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode2_AttackWeaken);
                     moveSpeed = _enemyConfig.Mode2_MoveSpeed;
                 }
+                //  模式3:包圍_朝玩家方向移動,中途不會變更方向,不追擊,與玩家接觸停止移動並攻擊,分離後繼續筆直前進
+                else if (moveType == EnemyMoveType.Mode3_Straight)
+                {
+                    currentHp = Mathf.CeilToInt(currentHp * _enemyConfig.Mode3_HpEnhance);
+                    finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode3_HpMultiplier);
+                    moveSpeed = _enemyConfig.Mode3_MoveSpeed;
+                }
+                // Boss
                 else if(isBoss)
                 {
                     currentHp = Mathf.RoundToInt(currentHp * _enemyConfig.Boss_HpMultiplier);
@@ -275,6 +285,8 @@ public class EnemySystemManager : MonoBehaviour
                 ActiveEnemyViews.Add(enemyView);
                 _enemyDataList.Add(data);
                 _transformArray.Add(obj.transform);
+
+                callback?.Invoke(obj);
             });
     }
 
@@ -451,7 +463,7 @@ public class EnemySystemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 移除敵人
+    /// 移除敵人(Job內運作)
     /// </summary>
     /// <param name="index"></param>
     private void RemoveEnemy(int index, bool isBoss)
@@ -480,6 +492,21 @@ public class EnemySystemManager : MonoBehaviour
         {
             GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
         }
+    }
+
+    /// <summary>
+    /// 移除敵人(外部移除)
+    /// </summary>
+    /// <param name="targetGo"></param>
+    public void RemoveEnemyByGameObject(GameObject targetGo)
+    {
+        if (targetGo == null) return;
+
+        int index = _activeGameObjects.IndexOf(targetGo);
+        if (index == -1) return;
+
+        bool isBoss = _enemyDataList[index].IsBoss;
+        RemoveEnemy(index, isBoss);
     }
 
     /// <summary>

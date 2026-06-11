@@ -45,6 +45,8 @@ public class GameConfigData : ScriptableObject
     public float SpawnBoxRate;
 
     [HorizontalLine(color: EColor.Gray)]
+    [Label("經驗球掉落機率(0~1)")]
+    public float ExpBallRate;
     [Label("經驗球物件")]
     public AssetReferenceGameObject ExpBallPrefabReference;
     [Label("各等級經驗球資料")]

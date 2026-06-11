@@ -148,11 +148,16 @@ public class EnemyView : BaseCharacter, ITargetable
                 // 累積擊殺數
                 GameplayManager.CurrentContext.GameController.OnEnemyDie();
 
-                // 掉落經驗球
-                AssetReferenceGameObject expBallRef = GameStateData.GameConfig.ExpBallPrefabReference;
-                GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
-                    worldPos: transform.position,
-                    prefabRef: expBallRef);
+                // 判斷經驗球掉落機率
+                if(Random.value < GameStateData.GameConfig.ExpBallRate)
+                {
+                    // 掉落經驗球
+                    AssetReferenceGameObject expBallRef = GameStateData.GameConfig.ExpBallPrefabReference;
+                    GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
+                        worldPos: transform.position,
+                        prefabRef: expBallRef);
+                }
+                
             }
 
             // 掉落Boss獎勵

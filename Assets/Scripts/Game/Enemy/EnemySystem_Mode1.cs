@@ -1,10 +1,12 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UniRx;
 
 /// <summary>
 /// 敵人系統_模式1:自動生成_持續朝玩家移動
 /// </summary>
-public class EnemySystem_Mode1 : MonoBehaviour
+public class EnemySystem_Mode1
 {
     private EnemySystemManager _manager;
     private Transform _player;
@@ -15,15 +17,18 @@ public class EnemySystem_Mode1 : MonoBehaviour
     private float _spawnDecreaseRate;
     private float _model1_spawnTimer;
 
-    /// <summary>
-    /// 初始化
-    /// </summary>
-    public void Initialize(EnemySystemManager manager, Transform player, EnemySystemConfig enemyConfig, LevelConfigData levelConfig)
+    // 使用 CompositeDisposable 統一管理訂閱，中途 StopSpawn 或 OnDestroy 時一鍵清空
+    private readonly CompositeDisposable _disposables = new CompositeDisposable();
+
+    public EnemySystem_Mode1(EnemySystemManager manager, Transform player, EnemySystemConfig enemyConfig, LevelConfigData levelConfig)
     {
         _manager = manager;
         _player = player;
         _enemyConfig = enemyConfig;
         _levelConfig = levelConfig;
+
+        _disposables.Clear();
+        _isAutoSpawnRunning = false;
 
         // 讓第0秒就開始產第一隻敵人
         _model1_spawnTimer = _enemyConfig.Mode1_InitialSpawnInterval;
@@ -31,61 +36,79 @@ public class EnemySystem_Mode1 : MonoBehaviour
         // 計算:每秒生成遞減率
         _spawnDecreaseRate = (_enemyConfig.Mode1_InitialSpawnInterval - _enemyConfig.Mode1_MinSpawnInterval) / _levelConfig.TimeLimit;
 
-        _isAutoSpawnRunning = true;
+        // 開始自動生成
+        SetAutoSpawnActive(true);
+    }
+
+    public void ClearAll()
+    {
+        _disposables.Dispose();
     }
 
     /// <summary>
-    /// 停止自動生成
+    /// 控制模式1自動生成的開關
     /// </summary>
-    public void StopSpawn()
+    public void SetAutoSpawnActive(bool isActive)
     {
-        _isAutoSpawnRunning = false;
-        enabled = false; // 關閉此 Component 的 Update
-    }
+        _isAutoSpawnRunning = isActive;
+        _disposables.Clear();
 
-    private void Update()
-    {
-        if (!_isAutoSpawnRunning || _player == null) return;
+        if (_isAutoSpawnRunning)
+        {
+            Observable.EveryUpdate()
+                .Where(_ => _player != null)
+                .Subscribe(_ => HandleAutoSpawn())
+                .AddTo(_disposables);
 
-        UpdateAutoSpawn_Mode1();
+            _model1_spawnTimer = _enemyConfig.Mode1_InitialSpawnInterval;
+        }
     }
 
     /// <summary>
-    /// 模式1:持續產生敵人
+    /// 處理自動生成
     /// </summary>
-    private void UpdateAutoSpawn_Mode1()
+    private void HandleAutoSpawn()
     {
         float currentLevelTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
         float initialInterval = _enemyConfig.Mode1_InitialSpawnInterval;
         float minInterval = _enemyConfig.Mode1_MinSpawnInterval;
         float decreaseRate = _spawnDecreaseRate;
-        int maxEnemyCount = _enemyConfig.Mode1_MaxEnemyCount;
+        int maxEnemyCount = _enemyConfig.MaxEnemyCount;
 
-        // 生成時間:公式：初始時間 - (當前秒數 * 遞減率)
+        // 生成時間公式：初始時間 - (當前秒數 * 遞減率)
         float currentInterval = Mathf.Max(minInterval, initialInterval - (currentLevelTime * decreaseRate));
+
         _model1_spawnTimer += Time.deltaTime;
 
         if (_model1_spawnTimer >= currentInterval)
         {
             _model1_spawnTimer = 0f;
 
-            // 檢查當前畫面上的怪物總數
+            // 檢查當前畫面上敵人總數
             if (_manager.ActiveEnemyCount < maxEnemyCount)
             {
-                Vector3 spawnPosition = _manager.CalculateSpawnPosition();
-                ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode1();
+                ExecuteSpawn();
+            }
+        }
+    }
 
-                if (targetEnemyType != 0)
-                {
-                    EnemyData enemyData = _enemyConfig.GetEnemyData(targetEnemyType);
-                    if (enemyData != null)
-                    {
-                        _manager.SpawnEnemy(
-                            enemyData: enemyData,
-                            spawnPos: spawnPosition,
-                            moveType: EnemyMoveType.ChaseAndAttack);
-                    }
-                }
+    /// <summary>
+    /// 執行生產怪物
+    /// </summary>
+    private void ExecuteSpawn()
+    {
+        Vector3 spawnPosition = _manager.CalculateSpawnPosition();
+        ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode1();
+
+        if (targetEnemyType != 0)
+        {
+            EnemyData enemyData = _enemyConfig.GetEnemyData(targetEnemyType);
+            if (enemyData != null)
+            {
+                _manager.SpawnEnemy(
+                    enemyData: enemyData,
+                    spawnPos: spawnPosition,
+                    moveType: EnemyMoveType.Mode1_ChaseAndAttack);
             }
         }
     }
@@ -93,11 +116,15 @@ public class EnemySystem_Mode1 : MonoBehaviour
     /// <summary>
     /// 獲取當前時間點的敵人
     /// </summary>
-    /// <returns></returns>
     private ENEMY_TYPE GetEnemyTypeByCurrentTime_Mode1()
     {
         List<ENEMY_TYPE> enemyList = _levelConfig.Mode1EnemyTypes;
+        if (enemyList == null || enemyList.Count == 0) return 0;
+
         int targetIndex = _manager.GetCurrentWaveIndex();
+
+        if (targetIndex < 0 || targetIndex >= enemyList.Count) return 0;
+
         return enemyList[targetIndex];
     }
 }

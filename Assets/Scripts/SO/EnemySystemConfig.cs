@@ -46,6 +46,8 @@ public class EnemyData
 [CreateAssetMenu(fileName = "EnemySystemConfig", menuName = "SO Config/EnemySystemConfig")]
 public class EnemySystemConfig : ScriptableObject
 {
+    [Label("敵人最大數量(通常只限制模式1)")]
+    public int MaxEnemyCount = 100;
     [Label("敵人基礎生命")]
     public int InitHp = 30;
     [Label("敵人基礎攻擊")]
@@ -61,33 +63,33 @@ public class EnemySystemConfig : ScriptableObject
     [Label("角色與敵人之間的推擠半徑")]
     public float CharacterSeparationRadius = 7.5f;
 
-    // --------模式1 (自動生成_持續朝玩家移動)--------
+
+
+    // ------------------------ 模式1 (自動生成_持續朝玩家移動) ------------------------
     [HorizontalLine(color: EColor.Gray)]
     [BoxGroup("模式1:追隨")]
-    [Label("模式1:初始怪物生成間隔")]
+    [Label("模式1:初始敵人生成間隔")]
     public float Mode1_InitialSpawnInterval = 3.5f;
 
     [BoxGroup("模式1:追隨")]
-    [Label("模式1:最小怪物生成間隔")]
+    [Label("模式1:最小敵人生成間隔")]
     public float Mode1_MinSpawnInterval = 0.5f;
 
     [BoxGroup("模式1:追隨")]
-    [Label("模式1:怪物最大數量")]
-    public int Mode1_MaxEnemyCount = 100;
-
-    [BoxGroup("模式1:追隨")]
-    [Label("模式1:怪物移動速度")]
+    [Label("模式1:敵人移動速度")]
     public float Mode1_MoveSpeed = 4.0f;
 
     [BoxGroup("模式1:追隨")]
-    [Label("模式1:每階段怪物Hp增加倍率(0.1 = 增加10%)")]
+    [Label("模式1:每階段敵人Hp增加倍率(0.1 = 增加10%)")]
     public float Mode1_EnemyHpIncreaseMultiplier = 0.4f;
 
     [BoxGroup("模式1:追隨")]
-    [Label("模式1:每階段怪物攻擊增加倍率(0.1 = 增加10%)")]
+    [Label("模式1:每階段敵人攻擊增加倍率(0.1 = 增加10%)")]
     public float Mode1_EnemyAttackIncreaseMultiplier = 0.3f;
 
-    // --------模式2 (襲擊_初始朝玩家方向移動,碰撞後死亡)--------
+
+
+    // ------------------------ 模式2 (襲擊_初始朝玩家方向移動,碰撞後死亡) ------------------------
     [HorizontalLine(color: EColor.Gray)]
     [BoxGroup("模式2:襲擊")]
     [Label("模式2:時間內總次數")]
@@ -110,18 +112,51 @@ public class EnemySystemConfig : ScriptableObject
     public float Mode2_GroupRadius = 5;
 
     [BoxGroup("模式2:襲擊")]
-    [Label("模式2:怪物移動速度")]
+    [Label("模式2:敵人移動速度")]
     public float Mode2_MoveSpeed = 15.0f;
 
     [BoxGroup("模式2:襲擊")]
-    [Label("模式2:怪物Hp弱化值(0.1 = 基礎Hp的10%)")]
+    [Label("模式2:敵人Hp弱化值(0.1 = 基礎Hp的10%)")]
     public float Mode2_HpWeaken = 0.1f;
 
     [BoxGroup("模式2:襲擊")]
-    [Label("模式2:怪物攻擊力弱化值(0.1 = 基礎攻擊力的10%)")]
+    [Label("模式2:敵人攻擊力弱化值(0.1 = 基礎攻擊力的10%)")]
     public float Mode2_AttackWeaken = 0.1f;
 
-    // --------Boss (持續朝玩家移動)--------
+
+
+    // ------------------------ 模式3 (包圍_圓形包圍角色, 持續一段時間後消失, 包圍期間暫停模式1自動生成) ------------------------
+    [BoxGroup("模式3:包圍")]
+    [Label("模式3:時間內總次數)")]
+    public int Mode3_TotalCount = 3;
+
+    [BoxGroup("模式3:包圍")]
+    [Label("模式3:包圍半徑)")]
+    public int Mode3_Radius = 28;
+
+    [BoxGroup("模式3:包圍")]
+    [Label("模式3:包圍敵人數量)")]
+    public int Mode3_EnemyCount = 30;
+
+    [BoxGroup("模式3:包圍")]
+    [Label("模式3:持續時間)")]
+    public int Mode3_During = 28;
+
+    [BoxGroup("模式3:包圍")]
+    [Label("模式3:敵人移動速度")]
+    public float Mode3_MoveSpeed = 1.0f;
+
+    [BoxGroup("模式3:包圍")]
+    [Label("模式3:敵人Hp強化值(1.1 = 基礎Hp+10%)")]
+    public float Mode3_HpEnhance = 1.5f;
+
+    [BoxGroup("模式3:包圍")]
+    [Label("模式3:敵人攻擊力變化倍率(1 = 預設")]
+    public float Mode3_HpMultiplier = 1.1f;
+
+
+
+    // ------------------------ Boss (持續朝玩家移動) ------------------------
     [BoxGroup("Boss")]
     [Label("Boss:Hp強化值(基礎Hp乘上的倍率)")]
     public float Boss_HpMultiplier = 3.0f;
@@ -146,7 +181,7 @@ public class EnemySystemConfig : ScriptableObject
     [Label("Boss:獎勵道具物件")]
     public AssetReferenceGameObject Boss_BonusPrefabReference;
 
-    // --------敵人資料列表--------
+    // ------------------------ 敵人資料列表 ------------------------
     [BoxGroup("敵人資料列表")]
     public List<EnemyData> EnemyDatas = new();
 
