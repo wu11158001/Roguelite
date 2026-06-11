@@ -195,6 +195,11 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             return;
         }
 
+        // 檢查目前是否正處於攻擊動作中
+        bool isMidWayThroughAttack = data.LastFrameStopped &&
+                                     data.AttackNormalizedTime > 0.01f &&
+                                     data.AttackNormalizedTime < 1.0f;
+
         // ------------------ 模式 1: 追隨 ------------------
         if (data.MoveType == EnemyMoveType.Mode1_ChaseAndAttack)
         {
@@ -202,6 +207,21 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             {
                 nextVelocity = math.normalize(PlayerPos - currentPos);
                 OutIsStopped[index] = false;
+
+                // 遊戲結束時強制回寫，避免卡死
+                data.LastFrameStopped = false;
+                EnemyDatas[index] = data;
+                return;
+            }
+
+            if (isMidWayThroughAttack)
+            {
+                // 必定揮完此拳：無視玩家是否遠離，強制留原地完成攻擊
+                OutIsStopped[index] = true;
+
+                // 更新狀態並寫回 NativeArray
+                data.LastFrameStopped = true;
+                EnemyDatas[index] = data;
                 return;
             }
 
@@ -242,7 +262,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         // ------------------ 模式 3: 包圍筆直推進 ------------------
         else if (data.MoveType == EnemyMoveType.Mode3_Straight)
         {
-            // 永遠保持初始方向（包圍圈往內縮的方向），中途不會變更方向、不追擊
+            // 永遠保持初始方向（包圍圈往內縮的方向）
             nextVelocity = data.InitialDirection;
 
             if (IsGameOver)
@@ -251,17 +271,28 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                 return;
             }
 
-            // 判斷是否與玩家接觸（進入攻擊範圍）
+            if (isMidWayThroughAttack)
+            {
+                // 必定揮完此拳：無視玩家是否遠離，強制留原地完成攻擊
+                OutIsStopped[index] = true;
+
+                // 更新狀態並寫回 NativeArray
+                data.LastFrameStopped = true;
+                EnemyDatas[index] = data;
+                return;
+            }
+
+            // 攻擊完成或尚未觸發攻擊時，才依據距離決定是否停下
             float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + 0.2f) : data.AttackRange;
 
             if (distToPlayer <= currentAttackRangeThreshold)
             {
-                // 與玩家接觸：停止移動，觸發攻擊
+                // 與玩家接觸：停止移動，準備觸發攻擊
                 OutIsStopped[index] = true;
             }
             else
             {
-                // 未接觸，或是與角色分離了：繼續筆直前進
+                // 未接觸，或攻擊播完且玩家已不在範圍內：繼續筆直前進
                 OutIsStopped[index] = false;
             }
         }
@@ -428,11 +459,8 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             float currentProgress = data.AttackNormalizedTime;
             if (!data.HasAttackedInCurrentCycle && currentProgress >= data.AttackTimeNormalized)
             {
-                if (distToPlayer <= data.AttackRange)
-                {
-                    OutExecuteAttackHit[index] = true;
-                    data.HasAttackedInCurrentCycle = true;
-                }
+                OutExecuteAttackHit[index] = true;
+                data.HasAttackedInCurrentCycle = true;
             }
         }
         else
