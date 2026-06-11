@@ -21,6 +21,6 @@ MonoBehaviour:
   ExpBonus: 0
   EnemyHpIncreaseMultiplier: 1
   EnemyAttackIncreaseMultiplier: 1
-  Mode1EnemyTypes: 060000000500000003000000040000000200000001000000
+  Mode1EnemyTypes: 070000000800000003000000040000000200000001000000
   Mode2EnemyTypes: 
   Mode3EnemyTypes: 

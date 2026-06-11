@@ -23,6 +23,10 @@ public enum ENEMY_TYPE
     StarFish,
     /// <summary> 多眼怪 </summary>
     EyedMonster,
+    /// <summary> 蘑菇 </summary>
+    Mushroom,
+    /// <summary> 仙人掌 </summary>
+    Cactus,
 }
 
 /// <summary>
