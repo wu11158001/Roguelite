@@ -17,6 +17,8 @@ public enum ENEMY_TYPE
     Trutle,
     /// <summary> 鬼魂 </summary>
     Ghost,
+    /// <summary> 蜜蜂 </summary>
+    Bee,
 }
 
 /// <summary>
