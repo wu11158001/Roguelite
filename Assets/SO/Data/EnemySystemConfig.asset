@@ -70,3 +70,12 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
     AttackCd: 0.5
     AttackTime: 0.18
+  - EnemyType: 3
+    PrefabReference:
+      m_AssetGUID: 9a603d08eabf4fe40905874e0997d40f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    AttackCd: 0.5
+    AttackTime: 0.05

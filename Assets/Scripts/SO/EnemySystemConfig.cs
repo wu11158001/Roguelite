@@ -15,6 +15,8 @@ public enum ENEMY_TYPE
     Slime = 1,
     /// <summary> 烏龜 </summary>
     Trutle,
+    /// <summary> 鬼魂 </summary>
+    Ghost,
 }
 
 /// <summary>
