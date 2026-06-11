@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0de19618692c9ab4b8485e8ad466dd13, type: 3}
+  m_Name: CharacterConfig_Grapefruit
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  CharacterName: "\u67DA\u5B50"
+  PrefabReference:
+    m_AssetGUID: 58f2888f2327eb64b910967e7d68d546
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Icon: {fileID: 21300000, guid: fb1e3bcfa195145479d12e0969eeb9b8, type: 3}
+  Price: 400
+  HpBarHight: 3.3
+  RotationSpeed: 10
+  InitSkill: 1
+  _baseMoveSpeed: 10
+  MoveSpeed:
+    value: 0
+  _baseAddAttack: 0
+  AddAttack:
+    value: 0
+  _baseMaxHp: 300
+  MaxHp:
+    value: 0
+  _baseDefense: 0
+  Defense:
+    value: 0
+  _baseLifeRecover: 0
+  HpRecover:
+    value: 0
+  _baseCdReduce: 0
+  CdReduce:
+    value: 0
+  _basePickupRange: 5
+  PickupRange:
+    value: 0
+  _baseAddCriticalChance: 0
+  AddCriticalChance:
+    value: 0
+  _baseCriticalMultiplier: 150
+  CriticalMultiplier:
+    value: 0
+  _baseAddProjectileCount: 0
+  AddProjectileCount:
+    value: 0
+  _baseAddEffectRange: 0
+  AddEffectRange:
+    value: 0
+  _baseAddKeepTime: 0
+  AddKeepTime:
+    value: 0
+  Hp:
+    value: 0
