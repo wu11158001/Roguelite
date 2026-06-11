@@ -27,6 +27,8 @@ public enum ENEMY_TYPE
     Mushroom,
     /// <summary> 仙人掌 </summary>
     Cactus,
+    /// <summary> 大眼魚 </summary>
+    BigEyedFish,
 }
 
 /// <summary>
