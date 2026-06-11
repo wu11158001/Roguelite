@@ -10,6 +10,8 @@ public class LevelConfigData : ScriptableObject
 {
     [Label("關卡名稱")]
     public string LevelName;
+    [Label("地形圖片")]
+    public Texture GroundTexture;
     [Label("關卡圖片")]
     public Sprite LevelIcon;
     [Label("關卡Index")]

@@ -33,8 +33,6 @@ public class GameConfigData : ScriptableObject
     public float GroundSize = 50;
     [Label("排列數量3 = (3*3)")]
     public int GridSize = 3;
-    [Label("地形圖片")]
-    public List<Texture> GroundTexture;
 
     [HorizontalLine(color: EColor.Gray)]
     [Label("箱子模型")]

@@ -185,10 +185,10 @@ public class InfiniteMapController : MonoBehaviour
             }
         }
 
-        if (_grounds.Length > 0 && _grounds[0] != null && GameStateData.GameConfig.GroundTexture?.Count > 0)
+        if (_grounds.Length > 0 && _grounds[0] != null && GameStateData.SelectLevel.GroundTexture != null)
         {
             int currentLevel = GameStateData.SelectLevel.LevelIndex;
-            Texture groundTexture = GameStateData.GameConfig.GroundTexture[currentLevel];
+            Texture groundTexture = GameStateData.SelectLevel.GroundTexture;
 
             if (_grounds[0].TryGetComponent<MeshRenderer>(out var firstRenderer))
             {
