@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4290206761
-  m_fontColor: {r: 0.16078432, g: 0.3596926, b: 0.7176471, a: 1}
+    rgba: 4282449890
+  m_fontColor: {r: 0.88655627, g: 1, b: 0.25, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9c0f291092ae16549a6eae1ce9b9e325, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61cd7d48f300ead4f814c5c8cf930961, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
