@@ -348,7 +348,7 @@ public class SkillController : MonoBehaviour
                     characterConfig.AddProjectileCount.Value += (int)data.PassiveAddValue;
                     break;
 
-                // 增加的攻擊範圍(%)
+                // 增加的效果範圍(%)
                 case PASSIVE_SKILL_TYPE.EffectRange:
                     characterConfig.AddEffectRange.Value += data.PassiveAddValue;
                     break;

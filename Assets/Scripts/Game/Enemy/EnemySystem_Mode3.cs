@@ -16,9 +16,6 @@ public class EnemySystem_Mode3
     private int _currentEnemyTypeIndex = 0;
     private bool _isStopSpawn;
 
-    // 包圍執行間隔時間
-    private float _surroundInterval;
-
     // 用來記錄這一次包圍事件中，所有存活的包圍敵人
     private readonly List<GameObject> _currentSurroundEnemies = new();
 
@@ -39,17 +36,19 @@ public class EnemySystem_Mode3
 
         _isStopSpawn = false;
 
-        int totalRaidCount = _enemyConfig.Mode3_TotalCount;
+        int totalRaidCount = _levelConfig.Mode3EnemyTypes.Count;
         float totalGameTime = _levelConfig.TimeLimit;
 
+
         // 計算平均包圍執行間隔
+        float surroundInterval = 0;
         if (totalRaidCount > 0)
         {
-            _surroundInterval = totalGameTime / totalRaidCount;
+            surroundInterval = totalGameTime / (totalRaidCount + 1);
         }
 
         // 包圍執行主計時器
-        Observable.Interval(TimeSpan.FromSeconds(_surroundInterval))
+        Observable.Interval(TimeSpan.FromSeconds(surroundInterval))
             .Where(_ => !_isStopSpawn && _player != null)
             .Take(totalRaidCount)
             .Subscribe(_ =>
@@ -73,10 +72,10 @@ public class EnemySystem_Mode3
     /// </summary>
     private void TriggerSurround()
     {
-        if (_player == null || _isStopSpawn) return;
-
-        // 暫停模式1的自動生成
-        _manager.SetMode1AutoSpawnActive(false);
+        if (_player == null || _isStopSpawn || GameplayManager.CurrentContext.GameController.IsGameOver)
+        {
+            return;
+        }
 
         // 清除前一次敵人
         ReleaseAllSurroundEnemies();
@@ -160,13 +159,10 @@ public class EnemySystem_Mode3
     private void OnSurroundComplete()
     {
         if (_isStopSpawn) return;
-
-        // 恢復模式 1 的自動生成
-        _manager.SetMode1AutoSpawnActive(true);
     }
 
     /// <summary>
-    /// 獲取敵人類型(輪著上)
+    /// 獲取敵人類型
     /// </summary>
     private ENEMY_TYPE GetEnemyTypeByCurrentTime_Mode3()
     {

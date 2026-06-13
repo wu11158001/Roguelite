@@ -96,7 +96,7 @@ public class BaseSkill : BaseGameObject
 
         // 減速值
         float speedModifier = 1 - (1 * _data.SpeedModifier);
-        // 減速持續時間
+        // 減速持續時間(秒)
         float speedModifierTime = _data.SpeedModifierTime;
 
         HitData hitData = new()

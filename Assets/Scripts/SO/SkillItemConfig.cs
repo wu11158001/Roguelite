@@ -249,11 +249,11 @@ public class SkillItemData
     public float SkillKeepTime;
 
     [AllowNesting]
-    [BoxGroup("主動技能數值")][Label("敵人移動速度變更(1=正常速度, 小於1減速, 大於1加速)")]
+    [BoxGroup("主動技能數值")][Label("敵人移動速度變更(0 = 正常, 0.1 = 減速10%)")]
     [ShowIf(nameof(_isShowSkill))]
     public float SpeedModifier;
     [AllowNesting]
-    [BoxGroup("主動技能數值")][Label("敵人移動速度變更持續時間")]
+    [BoxGroup("主動技能數值")][Label("敵人移動速度變更持續時間(秒)")]
     [ShowIf(nameof(_isShowSkill))]
     public float SpeedModifierTime;
 

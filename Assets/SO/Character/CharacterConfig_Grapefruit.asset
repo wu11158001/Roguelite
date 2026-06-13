@@ -20,11 +20,11 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Icon: {fileID: 21300000, guid: fb1e3bcfa195145479d12e0969eeb9b8, type: 3}
-  Price: 400
+  Price: 2000
   HpBarHight: 3.3
   RotationSpeed: 10
   InitSkill: 1
-  _baseMoveSpeed: 10
+  _baseMoveSpeed: 9
   MoveSpeed:
     value: 0
   _baseAddAttack: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
   _baseAddCriticalChance: 0
   AddCriticalChance:
     value: 0
-  _baseCriticalMultiplier: 150
+  _baseCriticalMultiplier: 180
   CriticalMultiplier:
     value: 0
   _baseAddProjectileCount: 0

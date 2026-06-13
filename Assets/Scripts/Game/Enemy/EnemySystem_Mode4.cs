@@ -14,9 +14,6 @@ public class EnemySystem_Mode4
     private Transform _player;
     private LevelConfigData _levelConfig;
 
-    // 模式4波次間隔時間
-    private float _intervalTime;
-
     // 當前產生的敵人類型(輪著上)
     private int _currentEnemyTypeIndex;
 
@@ -33,17 +30,18 @@ public class EnemySystem_Mode4
 
         _isStopSpawn = false;
 
-        int totalRaidCount = _enemyConfig.Mode4_TotalCount;
+        int totalRaidCount = _levelConfig.Mode4EnemyTypes.Count;
         float totalGameTime = _levelConfig.TimeLimit;
 
         // 計算平均大波次生成間隔
+        float intervalTime = 0;
         if (totalRaidCount > 0)
         {
-            _intervalTime = totalGameTime / totalRaidCount;
+            intervalTime = totalGameTime / (totalRaidCount + 1);
         }
 
         // 大波次主計時器
-        Observable.Interval(TimeSpan.FromSeconds(_intervalTime))
+        Observable.Interval(TimeSpan.FromSeconds(intervalTime))
             .Where(_ => !_isStopSpawn && _player != null)
             .Take(totalRaidCount)
             .Subscribe(_ =>
@@ -93,6 +91,11 @@ public class EnemySystem_Mode4
     /// </summary>
     private void ExecuteSpawn()
     {
+        if (_player == null || _isStopSpawn || GameplayManager.CurrentContext.GameController.IsGameOver)
+        {
+            return;
+        }
+
         Vector3 spawnPosition = _manager.CalculateSpawnPosition();
         ENEMY_TYPE targetEnemyType = GetEnemyTypeByCurrentTime_Mode4();
 
@@ -110,7 +113,7 @@ public class EnemySystem_Mode4
     }
 
     /// <summary>
-    /// 獲取敵人類型(輪著上)
+    /// 獲取敵人類型
     /// </summary>
     private ENEMY_TYPE GetEnemyTypeByCurrentTime_Mode4()
     {

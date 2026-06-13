@@ -20,17 +20,17 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Icon: {fileID: 21300000, guid: f71a6a1a412feb74bbfab67bcecd95dc, type: 3}
-  Price: 400
+  Price: 2000
   HpBarHight: 4.1
   RotationSpeed: 10
   InitSkill: 2
-  _baseMoveSpeed: 10
+  _baseMoveSpeed: 11
   MoveSpeed:
     value: 0
-  _baseAddAttack: 0
+  _baseAddAttack: 2
   AddAttack:
     value: 0
-  _baseMaxHp: 300
+  _baseMaxHp: 250
   MaxHp:
     value: 0
   _baseDefense: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   _basePickupRange: 5
   PickupRange:
     value: 0
-  _baseAddCriticalChance: 0
+  _baseAddCriticalChance: 5
   AddCriticalChance:
     value: 0
   _baseCriticalMultiplier: 150

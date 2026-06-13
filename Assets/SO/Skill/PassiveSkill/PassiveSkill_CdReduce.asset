@@ -115,3 +115,71 @@ MonoBehaviour:
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
+  - SkillName: "CD\u6E1B\u5C11"
+    SkillIcon: {fileID: 828782831, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 4
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    IsPassive: 1
+    _passiveType: 6
+    PassiveAddValue: 0.1
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "CD\u6E1B\u5C11"
+    SkillIcon: {fileID: 828782831, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6280\u80FDCD\u6642\u9593\u6E1B\u5C110.1\u79D2"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 5
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    IsPassive: 1
+    _passiveType: 6
+    PassiveAddValue: 0.1
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0

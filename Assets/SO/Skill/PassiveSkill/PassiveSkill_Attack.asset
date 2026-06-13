@@ -15,7 +15,7 @@ MonoBehaviour:
   SkillItems:
   - SkillName: "\u653B\u64CA"
     SkillIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+10"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+4"
     NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 0
@@ -43,13 +43,13 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 1
-    PassiveAddValue: 10
+    PassiveAddValue: 4
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u653B\u64CA"
     SkillIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
-    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+10"
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+4"
     NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 0
@@ -77,7 +77,109 @@ MonoBehaviour:
     SpeedModifierTime: 0
     IsPassive: 1
     _passiveType: 1
-    PassiveAddValue: 10
+    PassiveAddValue: 4
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u653B\u64CA"
+    SkillIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+4"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 3
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    IsPassive: 1
+    _passiveType: 1
+    PassiveAddValue: 4
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u653B\u64CA"
+    SkillIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+4"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 4
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    IsPassive: 1
+    _passiveType: 1
+    PassiveAddValue: 4
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u653B\u64CA"
+    SkillIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6240\u6709\u50B7\u5BB3+4"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 5
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    IsPassive: 1
+    _passiveType: 1
+    PassiveAddValue: 4
     IsProps: 0
     _propsSkillType: 0
     PropsAddValue: 0

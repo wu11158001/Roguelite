@@ -28,6 +28,8 @@ public struct EnemyJobData
 
     // 內部安全隨機運算用的種子
     public uint RandomSeed;
+    // 攻擊緩衝範圍(避免攻擊與移動來回切換)
+    public float AttackHysteresis;
 
     // 是否是Boss,Boss回收前需重製外觀
     public bool IsBoss;
@@ -221,7 +223,8 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         // 檢查目前是否正處於攻擊動作中
         bool isMidWayThroughAttack = data.LastFrameStopped &&
                                      data.AttackNormalizedTime > 0.01f &&
-                                     data.AttackNormalizedTime < 1.0f;
+                                     data.AttackNormalizedTime < 0.95f &&
+                                     !data.HasAttackedInCurrentCycle;
 
         // ------------------ 模式 1: 追隨 ------------------
         if (data.MoveType == EnemyMoveType.Mode1_ChaseAndAttack)
@@ -248,7 +251,8 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                 return;
             }
 
-            float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + 0.4f) : data.AttackRange;
+            // 0.4=防止「追擊」與「攻擊」之間瘋狂切換
+            float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + data.AttackHysteresis) : data.AttackRange;
 
             if (distToPlayer > currentAttackRangeThreshold)
             {
@@ -272,7 +276,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                 return;
             }
 
-            if (distToPlayer < 1.0f)
+            if (distToPlayer <= data.AttackRange)
             {
                 OutShouldAttackAndDie[index] = true;
             }
@@ -305,7 +309,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
 
             // 攻擊完成或尚未觸發攻擊時，才依據距離決定是否停下
-            float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + 0.2f) : data.AttackRange;
+            float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + data.AttackHysteresis) : data.AttackRange;
 
             if (distToPlayer <= currentAttackRangeThreshold)
             {
@@ -341,7 +345,8 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                     return;
                 }
 
-                float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + 0.4f) : data.AttackRange;
+                // 0.4=防止「追擊」與「攻擊」之間瘋狂切換
+                float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + data.AttackHysteresis) : data.AttackRange;
 
                 if (distToPlayer > currentAttackRangeThreshold)
                 {
@@ -572,6 +577,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         else
         {
             data.HasAttackedInCurrentCycle = false;
+            data.AttackNormalizedTime = 0f;
         }
 
         if (OutShouldDie[index] || data.CurrentHp <= 0) data.ShouldDie = true;

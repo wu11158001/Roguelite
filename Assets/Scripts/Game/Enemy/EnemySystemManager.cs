@@ -280,6 +280,10 @@ public class EnemySystemManager : MonoBehaviour
                     HandleBossObj(ref obj);
                 }
 
+                // Hp/攻擊力至少有1
+                finalAttack = Mathf.Max(1, finalAttack);
+                currentHp = Mathf.Max(1, currentHp);
+
                 EnemyJobData data = new()
                 {
                     InstanceID = obj.GetInstanceID(),
@@ -300,6 +304,7 @@ public class EnemySystemManager : MonoBehaviour
                     LastFrameStopped = false,
                     Mode4_ShootTriggerRange = shotDistance,
                     Mode4_HasShot = false,
+                    AttackHysteresis = _enemyConfig.AttackHysteresis,
                 };
 
                 _activeGameObjects.Add(obj);

@@ -14,10 +14,7 @@ public class EnemySystem_Mode2
     private Transform _player;
     private LevelConfigData _levelConfig;
 
-    // 大突襲間隔時間
-    private float _raidInterval;
-
-    // 當前產生的敵人類型(輪著上)
+    // 當前產生的敵人類型
     private int _currentEnemyTypeIndex;
 
     private bool _isStopSpawn;
@@ -34,31 +31,30 @@ public class EnemySystem_Mode2
         _currentEnemyTypeIndex = 0;
         _isStopSpawn = false;
 
-        int totalRaidCount = _enemyConfig.Mode2_TotalCount;
+        int totalRaidCount = _levelConfig.Mode2EnemyTypes.Count;
         float totalGameTime = _levelConfig.TimeLimit;
 
         // 計算平均大波次生成間隔
+        float _raidInterval = 0;
         if (totalRaidCount > 0)
         {
-            _raidInterval = totalGameTime / totalRaidCount;
+            _raidInterval = totalGameTime / (totalRaidCount + 1);
+
+            // 大波次主計時器
+            Observable.Interval(TimeSpan.FromSeconds(_raidInterval))
+                .Where(_ => !_isStopSpawn && _player != null)
+                .Take(totalRaidCount)
+                .Subscribe(_ =>
+                {
+                    TriggerRaid();
+                })
+                .AddTo(_disposables);
         }
-
-        // 大波次主計時器
-        Observable.Interval(TimeSpan.FromSeconds(_raidInterval))
-            .Where(_ => !_isStopSpawn && _player != null)
-            .Take(totalRaidCount)
-            .Subscribe(_ =>
-            {
-                TriggerRaid();
-            })
-            .AddTo(_disposables);
     }
-
 
     public void ClrarAll()
     {
         _disposables.Dispose();
-
     }
 
     /// <summary>
@@ -75,6 +71,11 @@ public class EnemySystem_Mode2
     /// </summary>
     private void TriggerRaid()
     {
+        if (_player == null || _isStopSpawn || GameplayManager.CurrentContext.GameController.IsGameOver)
+        {
+            return;
+        }
+
         int totalWaves = _enemyConfig.Mode2_WaveCount;
         float waveInterval = _enemyConfig.Mode2_WaveInterval;
 
@@ -135,7 +136,7 @@ public class EnemySystem_Mode2
     }
 
     /// <summary>
-    /// 獲取敵人類型(輪著上)
+    /// 獲取敵人類型
     /// </summary>
     private ENEMY_TYPE GetEnemyTypeByCurrentTime_Mode2()
     {

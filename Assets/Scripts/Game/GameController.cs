@@ -46,13 +46,13 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void GameOverClear()
     {
-        GameplayManager.CurrentContext.EnemySystemManager.StopRunJob();
         AudioManager.Instance?.PlayBgm(AUDIO_TYPE.GameOver).Forget();
+        GameplayManager.CurrentContext.EnemySystemManager.StopRunJob();
         GameplayManager.CurrentContext.EnemySystemManager?.ClearAll();
         GameplayManager.CurrentContext.ControlCharacter?.Remove();
-        GameplayManager.CurrentContext.GameScenePool?.ClearAllPools();
         GameplayManager.CurrentContext.InfiniteMapController?.ClearGround();
         GameplayManager.CurrentContext.GameInfoUIManager?.ClearAll();
+        GameplayManager.CurrentContext.GameScenePool?.ClearAllPools();
         ViewManager.Instance?.ClearAll();
     }
 

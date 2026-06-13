@@ -12,39 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2472f04a2c498634885e99b41de6cc72, type: 3}
   m_Name: EnemySystemConfig
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystemConfig
-  MaxEnemyCount: 0
-  InitHp: 30
-  InitAttack: 10
+  MaxEnemyCount: 500
+  InitHp: 35
+  InitAttack: 20
   AttackRange: 2.4
   SpawnRadius: 35
   SeparationWeight: 20
   EnemySeparationRadius: 0.8
   CharacterSeparationRadius: 7.5
-  Mode1_InitialSpawnInterval: 2
-  Mode1_MinSpawnInterval: 0.2
+  AttackHysteresis: 0.5
+  Mode1_InitialSpawnInterval: 2.5
+  Mode1_MinSpawnInterval: 0.1
   Mode1_MoveSpeed: 4
-  Mode1_EnemyHpIncreaseMultiplier: 0.4
-  Mode1_EnemyAttackIncreaseMultiplier: 0.3
-  Mode2_TotalCount: 3
-  Mode2_WaveCount: 3
-  Mode2_WaveInterval: 5
-  Mode2_WaveSpawnCount: 30
-  Mode2_GroupRadius: 5.5
+  Mode1_EnemyHpIncreaseMultiplier: 0.7
+  Mode1_EnemyAttackIncreaseMultiplier: 0.4
+  Mode2_WaveCount: 4
+  Mode2_WaveInterval: 8
+  Mode2_WaveSpawnCount: 40
+  Mode2_GroupRadius: 5.8
   Mode2_MoveSpeed: 16
-  Mode2_HpWeaken: 0.1
-  Mode2_AttackWeaken: 0.1
-  Mode3_TotalCount: 3
-  Mode3_Radius: 35
-  Mode3_EnemyCount: 90
-  Mode3_During: 15
+  Mode2_HpWeaken: 0.2
+  Mode2_AttackWeaken: 0.5
+  Mode3_Radius: 33
+  Mode3_EnemyCount: 80
+  Mode3_During: 30
   Mode3_MoveSpeed: 0.5
   Mode3_HpEnhance: 1.5
   Mode3_HpMultiplier: 2
-  Mode4_TotalCount: 5
-  Mode4_TotalSpawnCount: 1
+  Mode4_TotalSpawnCount: 40
   Mode4_BulletSpeed: 4.5
-  Mode4_ShotDistance: 23
-  Boss_HpMultiplier: 3
+  Mode4_ShotDistance: 28
+  Boss_HpMultiplier: 5
   Boss_AttackMultiplier: 2
   Boss_MoveMultiplier: 0.8
   Boss_SizeMultiplier: 2
@@ -55,6 +53,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  Boss_BonusGainCoin: {x: 30, y: 500}
   EnemyDatas:
   - EnemyType: 1
     PrefabReference:
@@ -64,7 +63,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     AttackCd: 0.5
-    AttackTime: 0.1
+    AttackTime: 0.05
   - EnemyType: 50
     PrefabReference:
       m_AssetGUID: 157d8456cffc13240b4e45a104785b4a
@@ -91,7 +90,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     AttackCd: 0.5
-    AttackTime: 0.05
+    AttackTime: 0.1
   - EnemyType: 53
     PrefabReference:
       m_AssetGUID: d8c857c1c7decc74ab5ef7200a826efd

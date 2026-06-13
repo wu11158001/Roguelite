@@ -56,9 +56,9 @@ public class CharacterController : MonoBehaviour
     {
         CharacterConfigData characterConfigData = GameStateData.SelectedCharacter;
 
-        // 計算減少傷害
+        // 計算減少傷害(至少1點傷害)
         int defance = characterConfigData.Defense.Value;
-        int lostHp = Mathf.Max(0, attack - defance);
+        int lostHp = Mathf.Max(1, attack - defance);
         int currentHp = characterConfigData.Hp.Value;
 
         characterConfigData.Hp.Value = Mathf.Max(0, currentHp - lostHp);

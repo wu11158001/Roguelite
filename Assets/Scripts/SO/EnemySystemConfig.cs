@@ -79,7 +79,8 @@ public class EnemySystemConfig : ScriptableObject
     public float EnemySeparationRadius = 0.5f;
     [Label("角色與敵人之間的推擠半徑")]
     public float CharacterSeparationRadius = 7.5f;
-
+    [Label("攻擊緩衝範圍(避免攻擊與移動來回切換)")]
+    public float AttackHysteresis = 0.5f;
 
 
     // ------------------------ 模式 1:一般模式 (自動生成,持續朝玩家移動) ------------------------
@@ -106,10 +107,6 @@ public class EnemySystemConfig : ScriptableObject
 
 
     // ------------------------ 模式 2:襲擊 (初始朝玩家方向移動,碰撞後死亡) ------------------------
-    [BoxGroup("模式2:襲擊")]
-    [Label("模式2:時間內總次數")]
-    public int Mode2_TotalCount = 5;
-
     [BoxGroup("模式2:襲擊")]
     [Label("模式2:每次生成波數")]
     public int Mode2_WaveCount = 3;
@@ -142,10 +139,6 @@ public class EnemySystemConfig : ScriptableObject
 
     // ------------------------ 模式 3:包圍 (圓形包圍角色, 持續一段時間後消失, 包圍期間暫停模式1自動生成) ------------------------
     [BoxGroup("模式3:包圍")]
-    [Label("模式3:時間內總次數)")]
-    public int Mode3_TotalCount = 3;
-
-    [BoxGroup("模式3:包圍")]
     [Label("模式3:包圍半徑)")]
     public int Mode3_Radius = 28;
 
@@ -172,10 +165,6 @@ public class EnemySystemConfig : ScriptableObject
 
 
     // ------------------------ 模式 4: 具有射擊能力 (首次接近時遠程射擊一次，之後轉為模式1行為) ------------------------
-    [BoxGroup("模式4:具有射擊能力")]
-    [Label("模式4:時間內總次數")]
-    public int Mode4_TotalCount = 3;
-
     [BoxGroup("模式4:具有射擊能力")]
     [Label("模式4:每次產生敵人數量")]
     public int Mode4_TotalSpawnCount = 15;
@@ -212,6 +201,11 @@ public class EnemySystemConfig : ScriptableObject
     [BoxGroup("Boss")]
     [Label("Boss:獎勵道具物件")]
     public AssetReferenceGameObject Boss_BonusPrefabReference;
+
+    [BoxGroup("Boss")]
+    [Label("Boss:獎勵金幣數量(x=最小值,y=最大值)")]
+    public Vector2 Boss_BonusGainCoin = new(30, 500);
+
 
     // ------------------------ 敵人資料列表 ------------------------
     [BoxGroup("敵人資料列表")]

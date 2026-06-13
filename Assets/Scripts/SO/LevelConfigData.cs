@@ -32,10 +32,10 @@ public class LevelConfigData : ScriptableObject
     [HorizontalLine(color: EColor.Gray)]
     [Label("出現敵人類型:模式1_追隨(敵人類型將平均分配到遊戲時間內)")]
     public List<ENEMY_TYPE> Mode1EnemyTypes = new();
-    [Label("出現敵人類型:模式2_襲擊(輪著上場)")]
+    [Label("出現敵人類型:模式2_襲擊")]
     public List<ENEMY_TYPE> Mode2EnemyTypes = new();
-    [Label("出現敵人類型:模式3_包圍(輪著上場)")]
+    [Label("出現敵人類型:模式3_包圍")]
     public List<ENEMY_TYPE> Mode3EnemyTypes = new();
-    [Label("出現敵人類型:模式4_具有射擊能力(輪著上場)")]
+    [Label("出現敵人類型:模式4_具有射擊能力")]
     public List<ENEMY_TYPE> Mode4EnemyTypes = new();
 }

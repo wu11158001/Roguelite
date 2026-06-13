@@ -75,8 +75,13 @@ public class EnemySystem_Mode1
         float decreaseRate = _spawnDecreaseRate;
         int maxEnemyCount = _enemyConfig.MaxEnemyCount;
 
-        // 生成時間公式：初始時間 - (當前秒數 * 遞減率)
-        float currentInterval = Mathf.Max(minInterval, initialInterval - (currentLevelTime * decreaseRate));
+
+
+        // 使用平方曲線，時間越往後，加速越劇烈
+        float timeLimit = _levelConfig.TimeLimit - 180; // 讓遊戲最最後3分鐘就達到最高生產頻率
+        float progress = currentLevelTime / timeLimit;
+        float speedCurve = Mathf.Pow(progress, 2f);
+        float currentInterval = Mathf.Lerp(initialInterval, minInterval, speedCurve);
 
         _model1_spawnTimer += Time.deltaTime;
 
@@ -87,6 +92,7 @@ public class EnemySystem_Mode1
             // 檢查當前畫面上敵人總數
             if (_manager.ActiveEnemyCount < maxEnemyCount)
             {
+                // 執行生產敵人
                 ExecuteSpawn();
             }
         }

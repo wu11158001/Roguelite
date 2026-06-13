@@ -105,7 +105,8 @@ public class BossBonusView : BaseView
         // 隨機獲得技能數量
         int randomPoint = Random.Range(1, 7);
         // 隨機獲得金幣數量
-        _totalCoinTarget = Random.Range(50, 777);
+        Vector2 coinBonus = GameStateData.EnemySystemConfig.Boss_BonusGainCoin;
+        _totalCoinTarget = Mathf.RoundToInt(Random.Range(coinBonus.x, coinBonus.y));
         GameplayManager.CurrentContext.GameController.GainCoin(_totalCoinTarget);
 
         TIpBlinking();
