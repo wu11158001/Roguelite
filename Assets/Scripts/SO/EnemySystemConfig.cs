@@ -11,8 +11,11 @@ public enum ENEMY_TYPE
 {
     None,
 
+    /// <summary> 敵人射擊的子彈 </summary>
+    ShotBullet = 1,
+
     /// <summary> 史萊姆 </summary>
-    Slime = 1,
+    Slime = 50,
     /// <summary> 烏龜 </summary>
     Trutle,
     /// <summary> 鬼魂 </summary>
@@ -79,8 +82,7 @@ public class EnemySystemConfig : ScriptableObject
 
 
 
-    // ------------------------ 模式1 (自動生成_持續朝玩家移動) ------------------------
-    [HorizontalLine(color: EColor.Gray)]
+    // ------------------------ 模式 1:一般模式 (自動生成,持續朝玩家移動) ------------------------
     [BoxGroup("模式1:追隨")]
     [Label("模式1:初始敵人生成間隔")]
     public float Mode1_InitialSpawnInterval = 3.5f;
@@ -103,8 +105,7 @@ public class EnemySystemConfig : ScriptableObject
 
 
 
-    // ------------------------ 模式2 (襲擊_初始朝玩家方向移動,碰撞後死亡) ------------------------
-    [HorizontalLine(color: EColor.Gray)]
+    // ------------------------ 模式 2:襲擊 (初始朝玩家方向移動,碰撞後死亡) ------------------------
     [BoxGroup("模式2:襲擊")]
     [Label("模式2:時間內總次數")]
     public int Mode2_TotalCount = 5;
@@ -139,7 +140,7 @@ public class EnemySystemConfig : ScriptableObject
 
 
 
-    // ------------------------ 模式3 (包圍_圓形包圍角色, 持續一段時間後消失, 包圍期間暫停模式1自動生成) ------------------------
+    // ------------------------ 模式 3:包圍 (圓形包圍角色, 持續一段時間後消失, 包圍期間暫停模式1自動生成) ------------------------
     [BoxGroup("模式3:包圍")]
     [Label("模式3:時間內總次數)")]
     public int Mode3_TotalCount = 3;
@@ -169,6 +170,23 @@ public class EnemySystemConfig : ScriptableObject
     public float Mode3_HpMultiplier = 1.1f;
 
 
+
+    // ------------------------ 模式 4: 具有射擊能力 (首次接近時遠程射擊一次，之後轉為模式1行為) ------------------------
+    [BoxGroup("模式4:具有射擊能力")]
+    [Label("模式4:時間內總次數")]
+    public int Mode4_TotalCount = 3;
+
+    [BoxGroup("模式4:具有射擊能力")]
+    [Label("模式4:每次產生敵人數量")]
+    public int Mode4_TotalSpawnCount = 15;
+
+    [BoxGroup("模式4:具有射擊能力")]
+    [Label("模式4:子彈速度")]
+    public float Mode4_BulletSpeed = 5;
+
+    [BoxGroup("模式4:具有射擊能力")]
+    [Label("模式4:開始發射子彈距離(與玩家距離)")]
+    public float Mode4_ShotDistance = 25;
 
     // ------------------------ Boss (持續朝玩家移動) ------------------------
     [BoxGroup("Boss")]

@@ -18,7 +18,6 @@ public class PlayerView : BaseCharacter
     private readonly int _isMovingParamId = Animator.StringToHash("IsMove");
     private readonly int _dieParamId = Animator.StringToHash("Die");
 
-    public Transform ShotPoint { get; private set; }
     protected SphereCollider _pickRange;
 
     private HpBarView _hpBarView;
@@ -45,7 +44,6 @@ public class PlayerView : BaseCharacter
     {
         base.Awake();
 
-        ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
         _pickRange = transform.Find("CharacterNecessary/PickupRange").GetComponent<SphereCollider>();
     }
 
@@ -67,7 +65,7 @@ public class PlayerView : BaseCharacter
         _controller.Activate();
 
         // 開始自動產生敵人
-        GameplayManager.CurrentContext.EnemySystemManager.InitAndStartAutoSpawn(transform);
+        GameplayManager.CurrentContext.EnemySystemManager.InitAndStartAutoSpawn(MiddlePoint);
     }
 
     private void Update()

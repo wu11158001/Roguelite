@@ -6,6 +6,7 @@ public class BaseCharacter : BaseGameObject
     public Transform HeadPoint { get; private set; }
     public Transform MiddlePoint { get; private set; }
     public Transform BottomPoint { get; private set; }
+    public Transform ShotPoint { get; private set; }
 
     public Animator Anim { get; private set; }
     protected Renderer[] _renderers;
@@ -16,6 +17,7 @@ public class BaseCharacter : BaseGameObject
         HeadPoint = transform.Find("CharacterNecessary/HeadPoint");
         MiddlePoint = transform.Find("CharacterNecessary/MiddlePoint");
         BottomPoint = transform.Find("CharacterNecessary/BottomPoint");
+        ShotPoint = transform.Find("CharacterNecessary/ShotPoint");
 
         _renderers = GetComponentsInChildren<Renderer>();
         _propBlock = new();

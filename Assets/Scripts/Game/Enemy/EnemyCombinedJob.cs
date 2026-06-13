@@ -14,6 +14,8 @@ public enum EnemyMoveType
     Mode2_StraightAndDie = 2,
     /// <summary> 模式3:包圍_朝玩家方向移動,中途不會變更方向,不追擊,與玩家接觸停止移動並攻擊,與角色分離後繼續朝初始方向前進 </summary>
     Mode3_Straight = 3,
+    /// <summary> 模式4:首次接近時遠程射擊一次，之後轉為模式1行為</summary>
+    Mode4_ShootOnceAndChase = 4,
 }
 
 /// <summary>
@@ -68,6 +70,11 @@ public struct EnemyJobData
 
     // 紀錄是否停止移動(狀態改變時才更換動畫)
     public bool LastFrameStopped;
+
+    // 模式4專用:遠程停下射擊的觸發距離
+    public float Mode4_ShootTriggerRange;
+    // 模式4專用:是否已經執行過首次射擊
+    public bool Mode4_HasShot;
 }
 
 /// <summary>
@@ -79,21 +86,33 @@ public struct EnemyCombinedJob : IJobParallelForTransform
     [NativeDisableContainerSafetyRestriction]
     public NativeArray<EnemyJobData> EnemyDatas;
 
+    // 所有敵人位置
     [ReadOnly] public NativeArray<float3> AllPositions;
+    // 角色位置
     [ReadOnly] public float3 PlayerPos;
-
-    public float DeltaTime;
-    public float SeparationWeight;
-    public float SpawnRadius;
-    public bool IsGameOver;
-
+    // 敵人攻擊事件
     [ReadOnly] public NativeArray<DamageEvent> DamageEvents;
 
+    public float DeltaTime;
+    public bool IsGameOver;
+    // 推擠力道
+    public float SeparationWeight;
+    // 產生位置半徑
+    public float SpawnRadius;
+
+    // 是否停止移動(切換攻擊動畫與執行攻擊)
     public NativeArray<bool> OutIsStopped;
+    // 是否死亡
     public NativeArray<bool> OutShouldDie;
-    public NativeArray<bool> OutShouldAttackAndDie;
+    // 是否物件回收
     public NativeArray<bool> OutShouldRecycle;
+    // 是否執行攻擊
     public NativeArray<bool> OutExecuteAttackHit;
+
+    // 模式2專用:是否攻擊並死亡
+    public NativeArray<bool> OutShouldAttackAndDie;
+    // 模式4專用：通知主執行緒在該怪物的當前位置產生一枚子彈
+    public NativeArray<bool> OutExecuteSpawnProjectile;
 
     public void Execute(int index, TransformAccess transform)
     {
@@ -102,6 +121,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         float3 nextVelocity = float3.zero;
         float distToPlayer = math.distance(currentPos, PlayerPos);
 
+        OutExecuteSpawnProjectile[index] = false;
         OutExecuteAttackHit[index] = false;
 
         // 檢查並處理遠距離拉回機制
@@ -110,7 +130,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         // 處理受擊傷害與擊退向量疊加
         ProcessDamageAndKnockback(index, currentPos, ref data);
 
-        // 判斷怪物的移動意圖
+        // 判斷怪物的移動
         CalculateMovementIntent(index, distToPlayer, currentPos, data, ref nextVelocity);
 
         // 計算分離、結合擊退力並執行實際位移與轉向
@@ -276,10 +296,9 @@ public struct EnemyCombinedJob : IJobParallelForTransform
 
             if (isMidWayThroughAttack)
             {
-                // 必定揮完此拳：無視玩家是否遠離，強制留原地完成攻擊
+                // 強制留原地完成攻擊
                 OutIsStopped[index] = true;
 
-                // 更新狀態並寫回 NativeArray
                 data.LastFrameStopped = true;
                 EnemyDatas[index] = data;
                 return;
@@ -299,6 +318,65 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                 OutIsStopped[index] = false;
             }
         }
+        // ------------------ 模式 4: 遠程射一次後轉模式1 ------------------
+        else if (data.MoveType == EnemyMoveType.Mode4_ShootOnceAndChase)
+        {
+            if (IsGameOver)
+            {
+                nextVelocity = math.normalize(PlayerPos - currentPos);
+                OutIsStopped[index] = false;
+                data.LastFrameStopped = false;
+                EnemyDatas[index] = data;
+                return;
+            }
+
+            // 如果已經完成射擊，行為完全複製模式 1
+            if (data.Mode4_HasShot)
+            {
+                if (isMidWayThroughAttack)
+                {
+                    OutIsStopped[index] = true;
+                    data.LastFrameStopped = true;
+                    EnemyDatas[index] = data;
+                    return;
+                }
+
+                float currentAttackRangeThreshold = data.LastFrameStopped ? (data.AttackRange + 0.4f) : data.AttackRange;
+
+                if (distToPlayer > currentAttackRangeThreshold)
+                {
+                    nextVelocity = math.normalize(PlayerPos - currentPos);
+                    OutIsStopped[index] = false;
+                }
+                else
+                {
+                    OutIsStopped[index] = true;
+                }
+            }
+            // 如果還沒射過擊，檢查是否首次進入「遠程射擊距離」
+            else
+            {
+                // 如果已經在射擊定點（播動畫中），強制維持站立，直到子彈噴出去為止
+                if (data.LastFrameStopped)
+                {
+                    OutIsStopped[index] = true;
+                }
+                else
+                {
+                    if (distToPlayer <= data.Mode4_ShootTriggerRange)
+                    {
+                        // 首次踏入射擊範圍,產生子彈
+                        OutIsStopped[index] = true;
+                    }
+                    else
+                    {
+                        // 還未到達射擊範圍,繼續追擊角色
+                        nextVelocity = math.normalize(PlayerPos - currentPos);
+                        OutIsStopped[index] = false;
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -313,9 +391,16 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         {
             if (i == index) continue;
 
-            // 不同模式互相無視
-            if (data.MoveType != EnemyDatas[i].MoveType)
+            bool isDataMode1Or4 = data.MoveType == EnemyMoveType.Mode1_ChaseAndAttack || data.MoveType == EnemyMoveType.Mode4_ShootOnceAndChase;
+            bool isOtherMode1Or4 = EnemyDatas[i].MoveType == EnemyMoveType.Mode1_ChaseAndAttack || EnemyDatas[i].MoveType == EnemyMoveType.Mode4_ShootOnceAndChase;
+
+            if (isDataMode1Or4 && isOtherMode1Or4)
             {
+                // 允許模式 1 與模式 4 互相推擠
+            }
+            else if (data.MoveType != EnemyDatas[i].MoveType)
+            {
+                // 其餘與其它移動類型不互相推擠
                 continue;
             }
 
@@ -332,9 +417,9 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
         }
 
-        // 只有模式 1 會跟玩家做卡位推擠排斥
+        // 模式1與模式4 : 會跟玩家做卡位推擠排斥
         // 模式3不套用與玩家的物理半徑推擠
-        if (data.MoveType == EnemyMoveType.Mode1_ChaseAndAttack)
+        if (data.MoveType == EnemyMoveType.Mode1_ChaseAndAttack || data.MoveType == EnemyMoveType.Mode4_ShootOnceAndChase)
         {
             float playerRadius = 0.75f;
             float minDistToPlayer = data.EnemySeparationRadius + playerRadius;
@@ -460,10 +545,28 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         if (OutIsStopped[index])
         {
             float currentProgress = data.AttackNormalizedTime;
-            if (!data.HasAttackedInCurrentCycle && currentProgress >= data.AttackTimeNormalized)
+
+            // 處理模式4的首次射擊觸發
+            if (data.MoveType == EnemyMoveType.Mode4_ShootOnceAndChase && !data.Mode4_HasShot)
             {
-                OutExecuteAttackHit[index] = true;
-                data.HasAttackedInCurrentCycle = true;
+                if (!data.HasAttackedInCurrentCycle && currentProgress >= data.AttackTimeNormalized)
+                {
+                    OutExecuteSpawnProjectile[index] = true;
+                    data.HasAttackedInCurrentCycle = true;
+                    data.Mode4_HasShot = true;
+                }
+            }
+            // 常規近戰攻擊觸發
+            else
+            {
+                if (!data.HasAttackedInCurrentCycle && currentProgress >= data.AttackTimeNormalized)
+                {
+                    if (distToPlayer <= data.AttackRange)
+                    {
+                        OutExecuteAttackHit[index] = true;
+                        data.HasAttackedInCurrentCycle = true;
+                    }
+                }
             }
         }
         else

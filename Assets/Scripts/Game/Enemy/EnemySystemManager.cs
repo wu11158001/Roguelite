@@ -50,6 +50,7 @@ public class EnemySystemManager : MonoBehaviour
     private NativeArray<bool> _shouldDieArray;
     private NativeArray<bool> _shouldAttackAndDieArray;
     private NativeArray<bool> _shouldRecycleArray;
+    private NativeArray<bool> _outExecuteSpawnBullet;
 
     private IDisposable _updateSubscription;
     private bool _isLevelRunning;
@@ -57,6 +58,7 @@ public class EnemySystemManager : MonoBehaviour
     private EnemySystem_Mode1 _spawnerMode1;
     private EnemySystem_Mode2 _spawnerMode2;
     private EnemySystem_Mode3 _spawnerMode3;
+    private EnemySystem_Mode4 _spawnerMode4;
     private EnemySystem_Boss _spawnerBoss;
 
     private List<DamageEvent> _frameDamageEvents = new();
@@ -118,6 +120,7 @@ public class EnemySystemManager : MonoBehaviour
             _spawnerMode1?.ClearAll();
             _spawnerMode2?.ClrarAll();
             _spawnerMode3?.ClrarAll();
+            _spawnerMode4?.ClrarAll();
             _spawnerBoss?.ClearAll();
         }
     }
@@ -151,6 +154,7 @@ public class EnemySystemManager : MonoBehaviour
         _spawnerMode1 = new EnemySystem_Mode1(this, _player, _enemyConfig, _levelConfig);
         _spawnerMode2 = new EnemySystem_Mode2(this, _player, _enemyConfig, _levelConfig);
         _spawnerMode3 = new EnemySystem_Mode3(this, _player, _enemyConfig, _levelConfig);
+        _spawnerMode4 = new EnemySystem_Mode4(this, _player, _enemyConfig, _levelConfig);
         _spawnerBoss = new EnemySystem_Boss(this, _enemyConfig, _levelConfig);
     }
 
@@ -189,9 +193,10 @@ public class EnemySystemManager : MonoBehaviour
     /// <param name="moveType">敵人類型</param>
     /// <param name="callback"></param>
     /// <param name="isBoss">是否是Boss</param>
+    /// <param name="isBullet">是否是子彈</param>
     /// <param name="initDir">模式2專屬:衝鋒方向</param>
     public void SpawnEnemy(EnemyData enemyData, Vector3 spawnPos, EnemyMoveType moveType, 
-        Action<GameObject> callback = null, bool isBoss = false, float3 initDir = new())
+        Action<GameObject> callback = null, bool isBoss = false, bool isBullet = false, float3 initDir = new())
     {
         // 當前波數影響敵人數值
         int currentWave = GetCurrentWaveIndex();
@@ -235,13 +240,26 @@ public class EnemySystemManager : MonoBehaviour
                 // 敵人之間的推擠半徑
                 float enemySeparationRadius = _enemyConfig.EnemySeparationRadius;
 
+                // 模式4專屬:射擊距離
+                float shotDistance = _enemyConfig.Mode4_ShotDistance;
+
                 // 「預設數值以模式1」
                 // 模式2:襲擊_朝玩家方向移動,中途不會變更方向,碰撞後死亡
                 if (moveType == EnemyMoveType.Mode2_StraightAndDie)
                 {
-                    currentHp = Mathf.CeilToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
-                    finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode2_AttackWeaken);
-                    moveSpeed = _enemyConfig.Mode2_MoveSpeed;
+                    if(isBullet)
+                    {
+                        // 子彈以模式2行為,攻擊力以當前模式1
+                        currentHp = 1;
+                        moveSpeed = _enemyConfig.Mode4_BulletSpeed;
+                        enemySeparationRadius = 0;
+                    }
+                    else
+                    {
+                        currentHp = Mathf.CeilToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
+                        finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Mode2_AttackWeaken);
+                        moveSpeed = _enemyConfig.Mode2_MoveSpeed;
+                    }
                 }
                 //  模式3:包圍_朝玩家方向移動,中途不會變更方向,不追擊,與玩家接觸停止移動並攻擊,分離後繼續筆直前進
                 else if (moveType == EnemyMoveType.Mode3_Straight)
@@ -280,6 +298,8 @@ public class EnemySystemManager : MonoBehaviour
                     InitialDirection = initDir,
                     ShouldDie = false,
                     LastFrameStopped = false,
+                    Mode4_ShootTriggerRange = shotDistance,
+                    Mode4_HasShot = false,
                 };
 
                 _activeGameObjects.Add(obj);
@@ -351,14 +371,15 @@ public class EnemySystemManager : MonoBehaviour
             }
         }
 
-        NativeArray<bool> executeAttackHitArray = new NativeArray<bool>(count, Allocator.TempJob);
+        NativeArray<bool> executeAttackHitArray = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
         NativeArray<DamageEvent> damageArray = new NativeArray<DamageEvent>(_frameDamageEvents.ToArray(), Allocator.TempJob);
         _dataArray = new NativeArray<EnemyJobData>(_enemyDataList.ToArray(), Allocator.TempJob);
         _positionArray = new NativeArray<float3>(positions, Allocator.TempJob);
-        _isStoppedArray = new NativeArray<bool>(count, Allocator.TempJob);
-        _shouldDieArray = new NativeArray<bool>(count, Allocator.TempJob);
-        _shouldAttackAndDieArray = new NativeArray<bool>(count, Allocator.TempJob);
-        _shouldRecycleArray = new NativeArray<bool>(count, Allocator.TempJob);
+        _isStoppedArray = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+        _shouldDieArray = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+        _shouldAttackAndDieArray = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+        _shouldRecycleArray = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+        _outExecuteSpawnBullet = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
 
         bool isGameOver = GameplayManager.CurrentContext.GameController.IsGameOver;
 
@@ -377,10 +398,14 @@ public class EnemySystemManager : MonoBehaviour
             OutShouldAttackAndDie = _shouldAttackAndDieArray,
             OutShouldRecycle = _shouldRecycleArray,
             OutExecuteAttackHit = executeAttackHitArray,
+            OutExecuteSpawnProjectile = _outExecuteSpawnBullet,
         };
 
         JobHandle handle = job.Schedule(_transformArray);
         handle.Complete();
+
+        _positionArray.Dispose();
+        damageArray.Dispose();
 
         for (int i = count - 1; i >= 0; i--)
         {
@@ -402,7 +427,7 @@ public class EnemySystemManager : MonoBehaviour
                 continue;
             }
 
-            // 攻擊且死亡(自殺式攻擊)
+            // 模式 2: 攻擊且死亡(自殺式攻擊)
             if(_shouldAttackAndDieArray[i])
             {
                 if (enemyView != null)
@@ -418,8 +443,15 @@ public class EnemySystemManager : MonoBehaviour
                 continue;
             }
 
+            // 模式 4: 產生子彈
+            if (_outExecuteSpawnBullet[i])
+            {
+                Vector3 enemySpawnPos = enemyView.ShotPoint.position;
+                _spawnerMode4.SpawnEnemyShotBullet(enemySpawnPos);
+            }
+
             // 遠離回收
-            if(_shouldRecycleArray[i])
+            if (_shouldRecycleArray[i])
             {
                 RemoveEnemy(i, latestData.IsBoss);
                 continue;
@@ -433,7 +465,6 @@ public class EnemySystemManager : MonoBehaviour
                     enemyView.AttackAnimContril(latestData.LastFrameStopped);
                 }
 
-                // 執行攻擊角色
                 AnimatorStateInfo stateInfo = enemyView.Anim.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("Attack") && latestData.AttackNormalizedTime > 0.01f)
                 {
@@ -448,12 +479,11 @@ public class EnemySystemManager : MonoBehaviour
         }
 
         _dataArray.Dispose();
-        _positionArray.Dispose();
         _isStoppedArray.Dispose();
         _shouldDieArray.Dispose();
         _shouldAttackAndDieArray.Dispose();
         _shouldRecycleArray.Dispose();
-        damageArray.Dispose();
+        _outExecuteSpawnBullet.Dispose();
         executeAttackHitArray.Dispose();
 
         _frameDamageEvents.Clear();

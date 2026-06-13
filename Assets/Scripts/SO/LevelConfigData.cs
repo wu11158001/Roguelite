@@ -36,4 +36,6 @@ public class LevelConfigData : ScriptableObject
     public List<ENEMY_TYPE> Mode2EnemyTypes = new();
     [Label("出現敵人類型:模式3_包圍(輪著上場)")]
     public List<ENEMY_TYPE> Mode3EnemyTypes = new();
+    [Label("出現敵人類型:模式4_具有射擊能力(輪著上場)")]
+    public List<ENEMY_TYPE> Mode4EnemyTypes = new();
 }

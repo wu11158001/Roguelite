@@ -112,5 +112,5 @@ AssetOrigin:
   productId: 190627
   packageName: 'Monster: Watcher'
   packageVersion: 1.0
-  assetPath: Assets/Hatogame_new/Watcher/Mesh/Watcher_skin.FBX
+  assetPath: Assets/ProjectAssets/Enemy/BigEyedFish/Model/Watcher_skin.FBX
   uploadId: 626874

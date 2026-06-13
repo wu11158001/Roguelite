@@ -60,6 +60,7 @@ public class EnemySystem_Mode2
         _disposables.Dispose();
 
     }
+
     /// <summary>
     /// 停止生成
     /// </summary>

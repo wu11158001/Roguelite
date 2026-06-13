@@ -93,7 +93,7 @@ public class EnemySystem_Mode1
     }
 
     /// <summary>
-    /// 執行生產怪物
+    /// 執行生產敵人
     /// </summary>
     private void ExecuteSpawn()
     {
