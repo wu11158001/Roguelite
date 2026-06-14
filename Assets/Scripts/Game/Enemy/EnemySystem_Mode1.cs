@@ -78,7 +78,7 @@ public class EnemySystem_Mode1
 
 
         // 使用平方曲線，時間越往後，加速越劇烈
-        float timeLimit = _levelConfig.TimeLimit - 180; // 讓遊戲最最後3分鐘就達到最高生產頻率
+        float timeLimit = _levelConfig.TimeLimit - 300; // 讓遊戲最後5分鐘就達到最高生產頻率
         float progress = currentLevelTime / timeLimit;
         float speedCurve = Mathf.Pow(progress, 2f);
         float currentInterval = Mathf.Lerp(initialInterval, minInterval, speedCurve);

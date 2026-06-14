@@ -19,9 +19,8 @@ MonoBehaviour:
   SpawnRadius: 35
   SeparationWeight: 20
   EnemySeparationRadius: 0.8
-  CharacterSeparationRadius: 7.5
   AttackHysteresis: 0.5
-  Mode1_InitialSpawnInterval: 2.5
+  Mode1_InitialSpawnInterval: 1.9
   Mode1_MinSpawnInterval: 0.1
   Mode1_MoveSpeed: 4
   Mode1_EnemyHpIncreaseMultiplier: 0.7

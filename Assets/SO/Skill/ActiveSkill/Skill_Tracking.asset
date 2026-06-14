@@ -29,7 +29,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.2
-    SkillAttack: 0
+    SkillAttack: 13
     SkillShotCount: 1
     SkillShotInterval: 0.1
     SkillPenetrate: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.2
-    SkillAttack: 10
+    SkillAttack: 13
     SkillShotCount: 2
     SkillShotInterval: 0.1
     SkillPenetrate: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.2
-    SkillAttack: 15
+    SkillAttack: 19
     SkillShotCount: 2
     SkillShotInterval: 0.1
     SkillPenetrate: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.2
-    SkillAttack: 18
+    SkillAttack: 23
     SkillShotCount: 3
     SkillShotInterval: 0.1
     SkillPenetrate: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.1
-    SkillAttack: 21
+    SkillAttack: 27
     SkillShotCount: 3
     SkillShotInterval: 0.1
     SkillPenetrate: 0
@@ -199,7 +199,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.1
-    SkillAttack: 21
+    SkillAttack: 27
     SkillShotCount: 4
     SkillShotInterval: 0.1
     SkillPenetrate: 1
@@ -233,7 +233,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1.1
-    SkillAttack: 26
+    SkillAttack: 33
     SkillShotCount: 4
     SkillShotInterval: 0.1
     SkillPenetrate: 1
@@ -267,7 +267,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 1
-    SkillAttack: 26
+    SkillAttack: 33
     SkillShotCount: 5
     SkillShotInterval: 0.1
     SkillPenetrate: 1

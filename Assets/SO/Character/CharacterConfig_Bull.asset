@@ -42,7 +42,7 @@ MonoBehaviour:
   _baseCdReduce: 0
   CdReduce:
     value: 0
-  _basePickupRange: 5.5
+  _basePickupRange: 5
   PickupRange:
     value: 0
   _baseAddCriticalChance: 0
