@@ -77,8 +77,6 @@ public class EnemySystemConfig : ScriptableObject
     public float SeparationWeight = 20.0f;
     [Label("敵人之間的推擠半徑")]
     public float EnemySeparationRadius = 0.5f;
-    [Label("角色與敵人之間的推擠半徑")]
-    public float CharacterSeparationRadius = 7.5f;
     [Label("攻擊緩衝範圍(避免攻擊與移動來回切換)")]
     public float AttackHysteresis = 0.5f;
 

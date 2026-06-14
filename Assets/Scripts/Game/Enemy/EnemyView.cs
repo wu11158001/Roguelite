@@ -6,12 +6,8 @@ using UnityEngine.AddressableAssets;
 /// </summary>
 public class EnemyView : BaseCharacter, ITargetable
 {
-    private CapsuleCollider _capsuleCollider;
     public Transform TargetTransform => transform;
     public bool IsActive => gameObject.activeInHierarchy;
-
-    // 膠囊的半徑作為「推擠半徑」
-    public float ColliderRadius => _capsuleCollider != null ? _capsuleCollider.radius * transform.localScale.x : 0.5f;
 
     // 攻擊範圍
     public float AttackRange => ColliderRadius * GameStateData.EnemySystemConfig.AttackRange;

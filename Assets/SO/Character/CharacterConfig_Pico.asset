@@ -30,7 +30,7 @@ MonoBehaviour:
   _baseAddAttack: 0
   AddAttack:
     value: 0
-  _baseMaxHp: 300
+  _baseMaxHp: 30000
   MaxHp:
     value: 0
   _baseDefense: 0

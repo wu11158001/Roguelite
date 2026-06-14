@@ -8,6 +8,10 @@ public class BaseCharacter : BaseGameObject
     public Transform BottomPoint { get; private set; }
     public Transform ShotPoint { get; private set; }
 
+    protected CapsuleCollider _capsuleCollider;
+    // 膠囊的半徑作為「推擠半徑」
+    public float ColliderRadius => _capsuleCollider != null ? _capsuleCollider.radius * transform.localScale.x : 0.5f;
+
     public Animator Anim { get; private set; }
     protected Renderer[] _renderers;
     protected MaterialPropertyBlock _propBlock;

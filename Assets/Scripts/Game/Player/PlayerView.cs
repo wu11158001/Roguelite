@@ -11,7 +11,7 @@ using System.Linq;
 /// </summary>
 public class PlayerView : BaseCharacter
 {
-    private Vector2 _inputVector;
+    public Vector2 InputVector { get; set; }
     private Vector2 _joystickInputVector;
 
     // 動畫
@@ -65,7 +65,7 @@ public class PlayerView : BaseCharacter
         _controller.Activate();
 
         // 開始自動產生敵人
-        GameplayManager.CurrentContext.EnemySystemManager.InitAndStartAutoSpawn(MiddlePoint);
+        GameplayManager.CurrentContext.EnemySystemManager.InitAndStartAutoSpawn(this);
     }
 
     private void Update()
@@ -78,14 +78,14 @@ public class PlayerView : BaseCharacter
         // 複合輸入處理：比較鍵盤與搖桿，誰的推力大就用誰
         if (keyboardInput.sqrMagnitude > _joystickInputVector.sqrMagnitude)
         {
-            _inputVector = keyboardInput;
+            InputVector = keyboardInput;
         }
         else
         {
-            _inputVector = _joystickInputVector;
+            InputVector = _joystickInputVector;
         }
         // 執行移動
-        _controller.ExecuteTick(_inputVector, Time.deltaTime);
+        _controller.ExecuteTick(InputVector, Time.deltaTime);
 
         // 測試用鍵盤輸入監聽
         TestDebugInput();
@@ -127,6 +127,15 @@ public class PlayerView : BaseCharacter
     {
         transform.Translate(translation, Space.World);
         transform.rotation = rotation;
+    }
+
+    /// <summary>
+    /// 設置阻擋力
+    /// </summary>
+    /// <param name="blockForce"></param>
+    public void SetBlockForce(Vector3 blockForce)
+    {
+        _controller.CurrentBlockForce = blockForce;
     }
 
     /// <summary>
@@ -278,7 +287,7 @@ public class PlayerView : BaseCharacter
         if (Keyboard.current.numpad1Key.wasPressedThisFrame) _controller.GainExp(5);
         if (Keyboard.current.numpad2Key.wasPressedThisFrame) _controller.GainExp(3);
         if (Keyboard.current.numpad4Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(10);
-        if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(10);
+        if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(1000);
 
         if (Keyboard.current.numpad9Key.wasPressedThisFrame)
         {

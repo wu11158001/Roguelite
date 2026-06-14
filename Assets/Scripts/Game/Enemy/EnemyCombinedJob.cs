@@ -31,6 +31,11 @@ public struct EnemyJobData
     // 攻擊緩衝範圍(避免攻擊與移動來回切換)
     public float AttackHysteresis;
 
+    // 角色碰撞半徑
+    public float PlayerRadius;
+    // 敵人阻擋角色的力道
+    public float PlayerBlockForce;
+
     // 是否是Boss,Boss回收前需重製外觀
     public bool IsBoss;
 
@@ -94,6 +99,8 @@ public struct EnemyCombinedJob : IJobParallelForTransform
     [ReadOnly] public float3 PlayerPos;
     // 敵人攻擊事件
     [ReadOnly] public NativeArray<DamageEvent> DamageEvents;
+    // 角色這一幀的原始移動意圖速度，用來計算絕對反方向
+    [ReadOnly] public float3 RawPlayerVelocity;
 
     public float DeltaTime;
     public bool IsGameOver;
@@ -111,6 +118,9 @@ public struct EnemyCombinedJob : IJobParallelForTransform
     // 是否執行攻擊
     public NativeArray<bool> OutExecuteAttackHit;
 
+    // 阻擋角色的力
+    public NativeArray<float3> OutPlayerBlockForce;
+
     // 模式2專用:是否攻擊並死亡
     public NativeArray<bool> OutShouldAttackAndDie;
     // 模式4專用：通知主執行緒在該怪物的當前位置產生一枚子彈
@@ -123,6 +133,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
         float3 nextVelocity = float3.zero;
         float distToPlayer = math.distance(currentPos, PlayerPos);
 
+        OutPlayerBlockForce[index] = float3.zero;
         OutExecuteSpawnProjectile[index] = false;
         OutExecuteAttackHit[index] = false;
 
@@ -261,6 +272,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
             else
             {
+                nextVelocity = float3.zero;
                 OutIsStopped[index] = true;
             }
         }
@@ -314,6 +326,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             if (distToPlayer <= currentAttackRangeThreshold)
             {
                 // 與玩家接觸：停止移動，準備觸發攻擊
+                nextVelocity = float3.zero;
                 OutIsStopped[index] = true;
             }
             else
@@ -422,50 +435,84 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             }
         }
 
-        // 模式1與模式4 : 會跟玩家做卡位推擠排斥
-        // 模式3不套用與玩家的物理半徑推擠
-        if (data.MoveType == EnemyMoveType.Mode1_ChaseAndAttack || data.MoveType == EnemyMoveType.Mode4_ShootOnceAndChase)
+        // 敵人與角色之間的卡位、阻擋排斥(模式2:襲擊排除)
+        if (data.MoveType != EnemyMoveType.Mode2_StraightAndDie)
         {
-            float playerRadius = 0.75f;
-            float minDistToPlayer = data.EnemySeparationRadius + playerRadius;
+            float playerRadius = data.PlayerRadius > 0.01f ? data.PlayerRadius : 0.75f;
+
+            // 阻力距離
+            float minDistToPlayer = 
+                data.MoveType == EnemyMoveType.Mode3_Straight ?
+                data.AttackRange + playerRadius :
+                data.AttackRange / 3;
 
             if (distToPlayer < minDistToPlayer && distToPlayer > 0.01f)
             {
                 float3 pushFromPlayerDir = math.normalize(currentPos - PlayerPos);
                 float playerOverlapPercent = 1.0f - (distToPlayer / minDistToPlayer);
 
+                // 怪物自己被角色推開的外力
                 separationForce += pushFromPlayerDir * playerOverlapPercent * data.CharacterSeparationRadius;
-                neighborCount++;
+
+                // 計算對角色產生的阻擋力
+                if (data.MoveType == EnemyMoveType.Mode3_Straight)
+                {
+                    // 模式3:如果角色有移動意圖（RawPlayerVelocity 有值），阻擋方向直接設為角色移動方向的反方向！
+                    if (math.lengthsq(RawPlayerVelocity) > 0.01f)
+                    {
+                        float3 playerMoveDir = math.normalize(RawPlayerVelocity);
+                        OutPlayerBlockForce[index] = (-playerMoveDir) * playerOverlapPercent * data.PlayerBlockForce;
+                    }
+                    else
+                    {
+                        // 如果角色站在原地沒動，就使用常規的推開方向
+                        float3 blockDir = -pushFromPlayerDir;
+                        blockDir.y = 0;
+                        if (math.lengthsq(blockDir) > 0.001f) blockDir = math.normalize(blockDir);
+                        OutPlayerBlockForce[index] = blockDir * playerOverlapPercent * data.PlayerBlockForce;
+                    }
+                }
+                else
+                {
+                    float3 blockDir = -pushFromPlayerDir;
+                    blockDir.y = 0;
+                    if (math.lengthsq(blockDir) > 0.001f) blockDir = math.normalize(blockDir);
+                    OutPlayerBlockForce[index] = blockDir * playerOverlapPercent * data.PlayerBlockForce;
+                }
             }
         }
 
-        if (neighborCount > 0)
-        {
-            separationForce /= neighborCount;
-            if (math.lengthsq(separationForce) > 1.0f) separationForce = math.normalize(separationForce);
-        }
-
+        // 獨立合成速度：不讓物理推擠與主動前進互相稀釋
         float3 finalVelocity = float3.zero;
 
         if (!OutIsStopped[index])
         {
-            // 移動狀態：前進方向加上同類之間的群聚分離力
-            finalVelocity = nextVelocity + separationForce * SeparationWeight;
-            finalVelocity.y = 0;
-            if (math.lengthsq(finalVelocity) > 0.01f)
+            // 移動狀態下：主動速度獨立計算，不受推擠向量干擾
+            float currentMoveSpeed = data.MoveSpeed;
+            if (data.SlowDuration > 0f) currentMoveSpeed *= data.SlowSpeedMultiplier;
+
+            // 模式 3 的物理剛性疊加
+            if (data.MoveType == EnemyMoveType.Mode3_Straight)
             {
-                float currentMoveSpeed = data.MoveSpeed;
-                if (data.SlowDuration > 0f)
+                // 模式 3：主動方向全速前進 + 外部物理推擠（不進行合體 normalize，避免抹平側向力）
+                finalVelocity = nextVelocity * currentMoveSpeed + separationForce * SeparationWeight;
+            }
+            else
+            {
+                // 其他模式維持常規
+                finalVelocity = nextVelocity + separationForce * SeparationWeight;
+                finalVelocity.y = 0;
+                if (math.lengthsq(finalVelocity) > 0.01f)
                 {
-                    currentMoveSpeed *= data.SlowSpeedMultiplier;
+                    finalVelocity = math.normalize(finalVelocity) * currentMoveSpeed;
                 }
-                finalVelocity = math.normalize(finalVelocity) * currentMoveSpeed;
             }
         }
         else
         {
-            // 停止攻擊狀態
-            finalVelocity = separationForce * (SeparationWeight * 0.5f);
+            // 停止狀態：只承受外部物理推擠與卡位力，且給予模式 3 更強大的原地剛性
+            float weightMultiplier = (data.MoveType == EnemyMoveType.Mode3_Straight) ? 1.5f : 0.5f;
+            finalVelocity = separationForce * (SeparationWeight * weightMultiplier);
             finalVelocity.y = 0;
         }
 

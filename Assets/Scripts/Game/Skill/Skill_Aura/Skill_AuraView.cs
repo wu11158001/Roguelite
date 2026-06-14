@@ -58,11 +58,11 @@ public class Skill_AuraView : BaseSkill
     /// <param name="isEnable"></param>
     public async UniTaskVoid ColliderEnable()
     {
-        _capsuleCollider.enabled = true;
+        if (_capsuleCollider) _capsuleCollider.enabled = true;
 
         await UniTask.Yield(PlayerLoopTiming.FixedUpdate);
         await UniTask.Yield(PlayerLoopTiming.FixedUpdate);
 
-        _capsuleCollider.enabled = false;
+        if(_capsuleCollider) _capsuleCollider.enabled = false;
     }
 }

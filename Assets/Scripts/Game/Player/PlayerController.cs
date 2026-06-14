@@ -16,6 +16,9 @@ public class PlayerController : IDisposable
     public float MoveSpeed { get; private set; }
     public float RotationSpeed { get; private set; }
 
+    // 敵人的阻擋力
+    public Vector3 CurrentBlockForce { get; set; }
+
     // 累積的生命回復
     private float _accumulatedHp;
 
@@ -36,7 +39,7 @@ public class PlayerController : IDisposable
     }
 
     /// <summary>
-    /// 當玩家 View 準備就緒、正式啟用時呼叫
+    /// 啟用時呼叫
     /// </summary>
     public void Activate()
     {
@@ -52,17 +55,26 @@ public class PlayerController : IDisposable
     /// </summary>
     public void ExecuteTick(Vector2 input, float deltaTime)
     {
-        // 將 2D 輸入轉換為 3D 平面移動向量
+        // 1. 玩家原始的輸入向量
         MoveDirection = new Vector3(input.x, 0, input.y).normalized;
-
         bool isMove = MoveDirection != Vector3.zero;
-        if (isMove)
-        {
-            // 計算平滑轉向的目標旋轉值
-            TargetRotation = Quaternion.LookRotation(MoveDirection);
 
-            // 計算下一幀的位置與旋轉
-            Vector3 translation = MoveDirection * MoveSpeed * deltaTime;
+        // 2. 計算最終位移：玩家想去的方向 + 怪物給的反作用力
+        // 假設 _currentBlockForce 是從 _playerView.SetBlockForce() 傳進來的 Vector3
+        Vector3 finalVelocity = MoveDirection * MoveSpeed + CurrentBlockForce;
+
+        if (isMove || finalVelocity != Vector3.zero)
+        {
+            // 3. 轉向依然只看玩家的輸入意圖（這樣被怪物卡住時才不會瘋狂亂轉）
+            if (isMove)
+            {
+                TargetRotation = Quaternion.LookRotation(MoveDirection);
+            }
+
+            // 4. 計算下一幀的位置與旋轉
+            Vector3 translation = finalVelocity * deltaTime;
+            translation.y = 0; // 確保平面移動
+
             Quaternion nextRotation = Quaternion.Slerp(_view.transform.rotation, TargetRotation, deltaTime * RotationSpeed);
 
             _view.UpdateMovement(translation, nextRotation);

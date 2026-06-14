@@ -34,7 +34,8 @@ public struct DamageEvent
 /// </summary>
 public class EnemySystemManager : MonoBehaviour
 {
-    private Transform _player;
+    private PlayerView _playerView;
+    private Transform _playerObj;
 
     private List<GameObject> _activeGameObjects = new();
     private List<EnemyJobData> _enemyDataList = new();
@@ -51,6 +52,7 @@ public class EnemySystemManager : MonoBehaviour
     private NativeArray<bool> _shouldAttackAndDieArray;
     private NativeArray<bool> _shouldRecycleArray;
     private NativeArray<bool> _outExecuteSpawnBullet;
+    private NativeArray<float3> _outPlayerBlockForce;
 
     private IDisposable _updateSubscription;
     private bool _isLevelRunning;
@@ -141,9 +143,11 @@ public class EnemySystemManager : MonoBehaviour
     /// <summary>
     /// 初始化與開始自動生成敵人
     /// </summary>
-    public void InitAndStartAutoSpawn(Transform player)
+    public void InitAndStartAutoSpawn(PlayerView playerView)
     {
-        _player = player;
+        _playerView = playerView;
+        _playerObj = playerView.MiddlePoint;
+
         _isLevelRunning = true;
 
         _enemyConfig = GameStateData.EnemySystemConfig;
@@ -151,10 +155,10 @@ public class EnemySystemManager : MonoBehaviour
         _levelConfig = GameStateData.SelectLevel;
 
         // 掛載模式1生成與初始化
-        _spawnerMode1 = new EnemySystem_Mode1(this, _player, _enemyConfig, _levelConfig);
-        _spawnerMode2 = new EnemySystem_Mode2(this, _player, _enemyConfig, _levelConfig);
-        _spawnerMode3 = new EnemySystem_Mode3(this, _player, _enemyConfig, _levelConfig);
-        _spawnerMode4 = new EnemySystem_Mode4(this, _player, _enemyConfig, _levelConfig);
+        _spawnerMode1 = new EnemySystem_Mode1(this, _playerObj, _enemyConfig, _levelConfig);
+        _spawnerMode2 = new EnemySystem_Mode2(this, _playerObj, _enemyConfig, _levelConfig);
+        _spawnerMode3 = new EnemySystem_Mode3(this, _playerObj, _enemyConfig, _levelConfig);
+        _spawnerMode4 = new EnemySystem_Mode4(this, _playerObj, _enemyConfig, _levelConfig);
         _spawnerBoss = new EnemySystem_Boss(this, _enemyConfig, _levelConfig);
     }
 
@@ -293,7 +297,6 @@ public class EnemySystemManager : MonoBehaviour
                     RandomSeed = (uint)(obj.GetInstanceID() + System.DateTime.Now.Ticks),
                     MoveSpeed = moveSpeed,
                     EnemySeparationRadius = enemySeparationRadius,
-                    CharacterSeparationRadius = _enemyConfig.CharacterSeparationRadius,
                     AttackRange = enemyView != null ? enemyView.AttackRange : 1.5f,
                     CurrentHp = currentHp,
                     Attack = finalAttack,
@@ -305,6 +308,8 @@ public class EnemySystemManager : MonoBehaviour
                     Mode4_ShootTriggerRange = shotDistance,
                     Mode4_HasShot = false,
                     AttackHysteresis = _enemyConfig.AttackHysteresis,
+                    PlayerRadius = _playerView.ColliderRadius,
+                    PlayerBlockForce = GameStateData.SelectedCharacter.MoveSpeed.Value,
                 };
 
                 _activeGameObjects.Add(obj);
@@ -385,6 +390,7 @@ public class EnemySystemManager : MonoBehaviour
         _shouldAttackAndDieArray = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
         _shouldRecycleArray = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
         _outExecuteSpawnBullet = new NativeArray<bool>(count, Allocator.TempJob, NativeArrayOptions.ClearMemory);
+        _outPlayerBlockForce = new NativeArray<float3>(count, Allocator.TempJob);
 
         bool isGameOver = GameplayManager.CurrentContext.GameController.IsGameOver;
 
@@ -393,7 +399,8 @@ public class EnemySystemManager : MonoBehaviour
             SpawnRadius = _enemyConfig.SpawnRadius,
             EnemyDatas = _dataArray,
             AllPositions = _positionArray,
-            PlayerPos = _player.position,
+            PlayerPos = _playerObj.position,
+            RawPlayerVelocity = (Vector3)(_playerView.InputVector * GameStateData.SelectedCharacter.MoveSpeed.Value),
             DeltaTime = Time.deltaTime,
             SeparationWeight = separationWeight,
             DamageEvents = damageArray,
@@ -404,6 +411,7 @@ public class EnemySystemManager : MonoBehaviour
             OutShouldRecycle = _shouldRecycleArray,
             OutExecuteAttackHit = executeAttackHitArray,
             OutExecuteSpawnProjectile = _outExecuteSpawnBullet,
+            OutPlayerBlockForce = _outPlayerBlockForce,
         };
 
         JobHandle handle = job.Schedule(_transformArray);
@@ -412,10 +420,15 @@ public class EnemySystemManager : MonoBehaviour
         _positionArray.Dispose();
         damageArray.Dispose();
 
+        // 所有阻擋力
+        Vector3 totalBlockForce = Vector3.zero;
+
         for (int i = count - 1; i >= 0; i--)
         {
             EnemyView enemyView = ActiveEnemyViews[i];
             EnemyJobData latestData = _dataArray[i];
+
+            totalBlockForce += (Vector3)_outPlayerBlockForce[i];
 
             // 敵人死亡
             if (_shouldDieArray[i])
@@ -483,6 +496,15 @@ public class EnemySystemManager : MonoBehaviour
             _enemyDataList[i] = latestData;
         }
 
+        // 限制最大阻擋力，避免怪物太多時產生巨大的推力把玩家彈飛
+        float maxPushLimit = GameStateData.SelectedCharacter.MoveSpeed.Value * 2.0f;
+        if (totalBlockForce.magnitude > maxPushLimit)
+        {
+            totalBlockForce = totalBlockForce.normalized * maxPushLimit;
+        }
+
+        _playerView.SetBlockForce(totalBlockForce);
+
         _dataArray.Dispose();
         _isStoppedArray.Dispose();
         _shouldDieArray.Dispose();
@@ -490,6 +512,7 @@ public class EnemySystemManager : MonoBehaviour
         _shouldRecycleArray.Dispose();
         _outExecuteSpawnBullet.Dispose();
         executeAttackHitArray.Dispose();
+        _outPlayerBlockForce.Dispose();
 
         _frameDamageEvents.Clear();
     }
@@ -592,7 +615,7 @@ public class EnemySystemManager : MonoBehaviour
         float offsetX = Mathf.Cos(randomAngle) * spawnRadius;
         float offsetZ = Mathf.Sin(randomAngle) * spawnRadius;
 
-        Vector3 playerPos = _player.position;
+        Vector3 playerPos = _playerObj.position;
         return new Vector3(playerPos.x + offsetX, playerPos.y, playerPos.z + offsetZ);
     }
 
