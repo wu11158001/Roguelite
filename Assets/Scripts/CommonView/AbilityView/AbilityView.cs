@@ -155,6 +155,14 @@ public class AbilityView : MonoBehaviour
             case PASSIVE_SKILL_TYPE.KeepTime:
                 abilityValue = _characterConfigData.AddKeepTime.Value == 0 ? "-" : $"{_characterConfigData.AddKeepTime.Value}秒";
                 break;
+
+            case PASSIVE_SKILL_TYPE.Lucky:
+                abilityValue = _characterConfigData.AddLucky.Value == 0 ? "-" : $"{_characterConfigData.AddLucky.Value}";
+                break;
+
+            case PASSIVE_SKILL_TYPE.ReselectCount:
+                abilityValue = _characterConfigData.ReselectCount.Value == 0 ? "-" : $"{_characterConfigData.ReselectCount.Value}";
+                break;
         }
 
         return abilityValue;

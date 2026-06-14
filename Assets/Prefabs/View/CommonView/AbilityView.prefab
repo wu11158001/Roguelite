@@ -347,53 +347,61 @@ MonoBehaviour:
   _itemSample: {fileID: 7628042243267409358}
   _itemParent: {fileID: 8998241228169182809}
   _abilityConfigDatas:
-  - AbilityIcon: {fileID: -1596805310, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 2141605885, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 3
     AbilityName: "\u79FB\u52D5\u901F\u5EA6"
     AbilityValue: 0
-  - AbilityIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: -600826575, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 1
     AbilityName: "\u653B\u64CA\u529B\u589E\u52A0"
     AbilityValue: 0
-  - AbilityIcon: {fileID: -244588363, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 770164545, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 2
     AbilityName: "\u6700\u5927\u751F\u547D\u503C"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 1787706319, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 1665722022, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 4
     AbilityName: "\u6E1B\u5C11\u50B7\u5BB3"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 1543525236, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 2040085341, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 5
     AbilityName: "\u6BCF\u79D2\u751F\u547D\u56DE\u5FA9"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 828782831, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: -2007085582, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 6
     AbilityName: "CD\u6E1B\u5C11"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 1638775749, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 1106281703, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 7
     AbilityName: "\u62FE\u53D6\u7BC4\u570D"
     AbilityValue: 0
-  - AbilityIcon: {fileID: -1984016468, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 1006146165, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 8
     AbilityName: "\u7206\u64CA\u6A5F\u7387"
     AbilityValue: 0
-  - AbilityIcon: {fileID: -1378960612, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 1480022662, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 9
-    AbilityName: "\u7206\u64CA\u653B\u64CA\u529B"
+    AbilityName: "\u7206\u64CA\u50B7\u5BB3\u52A0\u6210"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 300482850, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 2031120073, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 10
     AbilityName: "\u589E\u52A0\u6280\u80FD\u6578\u91CF"
     AbilityValue: 0
-  - AbilityIcon: {fileID: -892878142, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: 351534398, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 11
     AbilityName: "\u6548\u679C\u7BC4\u570D"
     AbilityValue: 0
-  - AbilityIcon: {fileID: 645026409, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+  - AbilityIcon: {fileID: -1567012253, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     AbilityType: 12
     AbilityName: "\u6301\u7E8C\u6642\u9593"
+    AbilityValue: 0
+  - AbilityIcon: {fileID: 1814854009, guid: 6161b681664f3274982601c37666ac8c, type: 3}
+    AbilityType: 13
+    AbilityName: "\u5E78\u904B\u503C"
+    AbilityValue: 0
+  - AbilityIcon: {fileID: 18366314, guid: 6161b681664f3274982601c37666ac8c, type: 3}
+    AbilityType: 14
+    AbilityName: "\u91CD\u9078\u6280\u80FD\u6B21\u6578"
     AbilityValue: 0
 --- !u!1 &7701387869816928203
 GameObject:

@@ -78,6 +78,10 @@ public enum PASSIVE_SKILL_TYPE
     EffectRange,
     /// <summary> 持續時間增加(秒) </summary>
     KeepTime,
+    /// <summary> 幸運值(0~1) </summary>
+    Lucky,
+    /// <summary> 重選次數 </summary>
+    ReselectCount,
 }
 
 /// <summary>

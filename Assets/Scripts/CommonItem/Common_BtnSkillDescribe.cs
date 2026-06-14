@@ -17,6 +17,7 @@ public class Common_BtnSkillDescribe : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _text_SkillLevel;
     [SerializeField] private TextMeshProUGUI _text_SkillDescribe;
     [SerializeField] private Transform _newSkillTextObj;
+    [SerializeField] private GameObject _LockObj;
 
     private IDisposable _mainBtnSub;
 
@@ -37,9 +38,10 @@ public class Common_BtnSkillDescribe : MonoBehaviour
     /// <param name="isNewSkill">是否是新技能</param>
     /// <param name="isShowOtherLevel">是否顯示其他等級</param>
     /// <param name="isShowCurrentLevel">是否顯示當前等級資訊</param>
+    /// <param name="isLock">是否無法選擇</param>
     /// <param name="clickCallback"></param>
     public void Setup(SkillItemData data, 
-        bool isNewSkill = false, bool isShowOtherLevel = false, bool isShowCurrentLevel = false,
+        bool isNewSkill = false, bool isShowOtherLevel = false, bool isShowCurrentLevel = false, bool isLock = false,
         Action<SkillItemData> clickCallback = null)
     {
         // 只顯示1級資訊
@@ -55,6 +57,8 @@ public class Common_BtnSkillDescribe : MonoBehaviour
         _text_SkillLevel.text = $"Lv:{data.SkillLevel}";
         _text_SkillDescribe.text = data.SkillDescribe;
         _img_SkillBg.color = GameStateData.UiViewConfigData.GetSkillBgColor(data);
+        _LockObj.SetActive(isLock);
+        _mainBtn.interactable = !isLock;
 
         _newSkillTextObj.gameObject.SetActive(isNewSkill && clickCallback != null);
         if(isNewSkill && clickCallback != null)

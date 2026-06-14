@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7251df901e12b9942957afa5369a5fdd
+guid: 6161b681664f3274982601c37666ac8c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Passive_Attack
+      name: "\u653B\u64CA\u529B"
       rect:
         serializedVersion: 2
-        x: 19
-        y: 300
-        width: 107
-        height: 107
+        x: 37
+        y: 274
+        width: 97
+        height: 98
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,20 +138,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f700fb4700b891b4697d9f3418e00485
-      internalID: -166154676
+      spriteID: 58575e66f3aa60841ae6879daabbd54e
+      internalID: -600826575
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_CdReduce
+      name: "\u6280\u80FDCD\u6642\u9593\u6E1B\u5C11"
       rect:
         serializedVersion: 2
-        x: 154
-        y: 300
-        width: 113
-        height: 107
+        x: 161
+        y: 274
+        width: 104
+        height: 98
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9a3ea32c4cfba5742b91b19ac82c28bf
-      internalID: 828782831
+      spriteID: 3da07f021407a344d89005395a151146
+      internalID: -2007085582
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_CriticalChance
+      name: "\u7206\u64CA\u6A5F\u7387"
       rect:
         serializedVersion: 2
-        x: 295
-        y: 300
-        width: 107
-        height: 107
+        x: 291
+        y: 274
+        width: 99
+        height: 98
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,20 +182,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e0ba58a3140438409813904ef78b11b
-      internalID: -1984016468
+      spriteID: 26181353050f7694ba69758708450cc9
+      internalID: 1006146165
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_CiticalMulitiplier
+      name: "\u7206\u64CA\u50B7\u5BB3"
       rect:
         serializedVersion: 2
-        x: 434
-        y: 300
-        width: 106
-        height: 107
+        x: 418
+        y: 273
+        width: 98
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -204,20 +204,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bcf804611713754eb04bc5f39933f2c
-      internalID: -1378960612
+      spriteID: 7f26e46f506887243a6b088771c194f0
+      internalID: 1480022662
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_Defense
+      name: "\u50B7\u5BB3\u6E1B\u5C11"
       rect:
         serializedVersion: 2
-        x: 18
-        y: 164
-        width: 107
-        height: 108
+        x: 37
+        y: 149
+        width: 97
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -226,20 +226,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f51f259b413463347a99d60034451104
-      internalID: 1787706319
+      spriteID: 5817c8134b67f614196c99e5648111f7
+      internalID: 1665722022
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_EffectRange
+      name: "\u6548\u679C\u7BC4\u570D"
       rect:
         serializedVersion: 2
-        x: 156
-        y: 164
-        width: 108
-        height: 109
+        x: 164
+        y: 149
+        width: 98
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -248,20 +248,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cfa25fd7d6f30ef40ab75ea0be5a9ef4
-      internalID: -892878142
+      spriteID: bf9563818fa26f04c85a321959d1b480
+      internalID: 351534398
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_HpRecover
+      name: "\u6BCF\u79D2\u751F\u547D\u56DE\u5FA9"
       rect:
         serializedVersion: 2
-        x: 295
-        y: 164
-        width: 108
-        height: 109
+        x: 291
+        y: 149
+        width: 99
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -270,20 +270,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dd6933f0c0865114983cbdf7ca2a784e
-      internalID: 1543525236
+      spriteID: 1d4ba6c3f5f0a8140ad2e54dfe423d5f
+      internalID: 2040085341
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_KeepTime
+      name: "\u6301\u7E8C\u6642\u9593"
       rect:
         serializedVersion: 2
-        x: 434
-        y: 164
-        width: 107
-        height: 108
+        x: 418
+        y: 149
+        width: 99
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -292,20 +292,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1bc0ee9cc0c9e314a8fc42652abc5466
-      internalID: 645026409
+      spriteID: cf9bcceefdb39a041bb34015d6b11452
+      internalID: -1567012253
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_MaxHp
+      name: "\u5E78\u904B\u503C"
       rect:
         serializedVersion: 2
-        x: 18
-        y: 25
-        width: 107
-        height: 109
+        x: 533
+        y: 149
+        width: 96
+        height: 99
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -314,20 +314,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d4279924636c42468a11d4a583893a8
-      internalID: -244588363
+      spriteID: 000002f90488bba47971b086210885be
+      internalID: 1814854009
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_MoveSpeed
+      name: "\u6700\u5927\u751F\u547D"
       rect:
         serializedVersion: 2
-        x: 156
-        y: 25
-        width: 108
-        height: 109
+        x: 35
+        y: 21
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -336,20 +336,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3727d36e616c38f47aa45d5d02f302bb
-      internalID: -1596805310
+      spriteID: 3dd50092e60e23a41bee5ef156c055f0
+      internalID: 770164545
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_PickupRange
+      name: "\u79FB\u52D5\u901F\u5EA6"
       rect:
         serializedVersion: 2
-        x: 295
-        y: 24
-        width: 108
-        height: 110
+        x: 163
+        y: 21
+        width: 99
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -358,20 +358,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a6ba087cae4763b44ad7911991ed95d4
-      internalID: 1638775749
+      spriteID: b5d5314f3b4d37c4d91bd46c0db727c0
+      internalID: 2141605885
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Passive_ProjectileCount
+      name: "\u62FE\u53D6\u7BC4\u570D"
       rect:
         serializedVersion: 2
-        x: 433
-        y: 24
-        width: 108
-        height: 110
+        x: 291
+        y: 21
+        width: 99
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -380,8 +380,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9865e3f7b43b744fa682c05991ed445
-      internalID: 300482850
+      spriteID: 604c47396f28d81438c28b6687bd2bda
+      internalID: 1106281703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u6280\u80FD\u6578\u91CF"
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 21
+        width: 99
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b0f657ccb434d54495b22fbc42506a4
+      internalID: 2031120073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\u91CD\u9078\u6B21\u6578"
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 21
+        width: 97
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3b0404041571a04b83852767e258605
+      internalID: 18366314
       vertices: []
       indices: 
       edges: []
@@ -390,7 +434,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 1e2ccd30f6e9d2140b30c4add4d081a1
+    spriteID: cc2c5a4824ee3ed499910e4466e4a09b
     internalID: 0
     vertices: []
     indices: 
@@ -402,18 +446,21 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Passive_Attack: -166154676
-      Passive_CdReduce: 828782831
-      Passive_CiticalMulitiplier: -1378960612
-      Passive_CriticalChance: -1984016468
-      Passive_Defense: 1787706319
-      Passive_EffectRange: -892878142
-      Passive_HpRecover: 1543525236
-      Passive_KeepTime: 645026409
-      Passive_MaxHp: -244588363
-      Passive_MoveSpeed: -1596805310
-      Passive_PickupRange: 1638775749
-      Passive_ProjectileCount: 300482850
+      PassiveSkillIcon_0: -1498561460
+      "\u50B7\u5BB3\u6E1B\u5C11": 1665722022
+      "\u5E78\u904B\u503C": 1814854009
+      "\u6280\u80FDCD\u6642\u9593\u6E1B\u5C11": -2007085582
+      "\u6280\u80FD\u6578\u91CF": 2031120073
+      "\u62FE\u53D6\u7BC4\u570D": 1106281703
+      "\u6301\u7E8C\u6642\u9593": -1567012253
+      "\u653B\u64CA\u529B": -600826575
+      "\u6548\u679C\u7BC4\u570D": 351534398
+      "\u6700\u5927\u751F\u547D": 770164545
+      "\u6BCF\u79D2\u751F\u547D\u56DE\u5FA9": 2040085341
+      "\u7206\u64CA\u50B7\u5BB3": 1480022662
+      "\u7206\u64CA\u6A5F\u7387": 1006146165
+      "\u79FB\u52D5\u901F\u5EA6": 2141605885
+      "\u91CD\u9078\u6B21\u6578": 18366314
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

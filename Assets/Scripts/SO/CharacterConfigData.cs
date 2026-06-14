@@ -90,11 +90,22 @@ public class CharacterConfigData : ScriptableObject
     [SerializeField] private float _baseAddKeepTime = 0;
     [HideInInspector] public ReactiveProperty<float> AddKeepTime;
 
+    [BoxGroup("角色可動態變更數值")]
+    [Label("幸運值")]
+    [SerializeField] private int _baseAddLucky = 0;
+    [HideInInspector] public ReactiveProperty<int> AddLucky;
+
+    [BoxGroup("角色可動態變更數值")]
+    [Label("重選次數")]
+    [SerializeField] private int _baseReselectCount = 0;
+    [HideInInspector] public ReactiveProperty<int> ReselectCount;
+
     /// <summary> 當前HP </summary>
     [HideInInspector] public ReactiveProperty<int> Hp;
 
     public void Initialize()
     {
+        Hp = new ReactiveProperty<int>(MaxHp.Value);
         MoveSpeed = new ReactiveProperty<float>(_baseMoveSpeed);
         AddAttack = new ReactiveProperty<int>(_baseAddAttack);
         MaxHp = new ReactiveProperty<int>(_baseMaxHp);
@@ -107,8 +118,8 @@ public class CharacterConfigData : ScriptableObject
         AddProjectileCount = new ReactiveProperty<int>(_baseAddProjectileCount);
         AddEffectRange = new ReactiveProperty<float>(_baseAddEffectRange);
         AddKeepTime = new ReactiveProperty<float>(_baseAddKeepTime);
-
-        Hp = new ReactiveProperty<int>(MaxHp.Value);
+        AddLucky = new ReactiveProperty<int>(_baseAddLucky);
+        ReselectCount = new ReactiveProperty<int>(_baseReselectCount);
     }
 
     public CharacterConfigData Clone()

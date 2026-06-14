@@ -215,7 +215,7 @@ public class SkillController : MonoBehaviour
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
-    public List<SkillItemData> GetRandomSkillDatas(int count = 3) => _inventory.GetRandomSkillDatas(count);
+    public List<SkillItemData> GetRandomSkillDatas(int count = 4) => _inventory.GetRandomSkillDatas(count);
 
     /// <summary>
     /// 獲取技能
@@ -343,7 +343,7 @@ public class SkillController : MonoBehaviour
                     characterConfig.CriticalMultiplier.Value += (int)data.PassiveAddValue;
                     break;
 
-                // 投射物數量
+                // 技能數量
                 case PASSIVE_SKILL_TYPE.ProjectileCount:
                     characterConfig.AddProjectileCount.Value += (int)data.PassiveAddValue;
                     break;
@@ -356,6 +356,16 @@ public class SkillController : MonoBehaviour
                 // 增加的持續時間(秒)
                 case PASSIVE_SKILL_TYPE.KeepTime:
                     characterConfig.AddKeepTime.Value += data.PassiveAddValue;
+                    break;
+
+                // 幸運值
+                case PASSIVE_SKILL_TYPE.Lucky:
+                    characterConfig.AddLucky.Value += (int)data.PassiveAddValue;
+                    break;
+
+                // 重選次數
+                case PASSIVE_SKILL_TYPE.ReselectCount:
+                    characterConfig.ReselectCount.Value += (int)data.PassiveAddValue;
                     break;
             }
         }

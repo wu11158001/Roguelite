@@ -148,6 +148,14 @@ public class SelectCharacterViewModel
                 case PASSIVE_SKILL_TYPE.KeepTime:
                     character.AddKeepTime.Value += upgradeValue;
                     break;
+
+                case PASSIVE_SKILL_TYPE.Lucky:
+                    character.AddLucky.Value += (int)upgradeValue;
+                    break;
+
+                case PASSIVE_SKILL_TYPE.ReselectCount:
+                    character.ReselectCount.Value += (int)upgradeValue;
+                    break;
             }
         }
 
