@@ -171,13 +171,6 @@ public class PlayerView : BaseCharacter
                 int previousHp = pair.Previous;
                 int currentHp = pair.Current;
 
-                // 死亡
-                if (currentHp <= 0)
-                {
-                    OnDie();
-                    return;
-                }
-
                 if (currentHp > previousHp)
                 {
                     // 回復生命
@@ -198,6 +191,13 @@ public class PlayerView : BaseCharacter
                 // 更新血條 UI
                 float hpRatio = (float)currentHp / _characterConfig.MaxHp.Value;
                 if (_hpBarView != null) _hpBarView.SetHpBar(hpRatio);
+
+                // 死亡
+                if (currentHp <= 0)
+                {
+                    OnDie();
+                    return;
+                }
             })
             .AddTo(this);
 

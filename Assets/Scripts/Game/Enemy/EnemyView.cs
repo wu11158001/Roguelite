@@ -9,6 +9,8 @@ public class EnemyView : BaseCharacter, ITargetable
     public Transform TargetTransform => transform;
     public bool IsActive => gameObject.activeInHierarchy;
 
+    private bool _isBoss;
+
     // 攻擊範圍
     public float AttackRange => ColliderRadius * GameStateData.EnemySystemConfig.AttackRange;
 
@@ -42,8 +44,9 @@ public class EnemyView : BaseCharacter, ITargetable
     /// <summary>
     /// 每次從物件池取出時呼叫，重置狀態
     /// </summary>
-    public void ResetState()
+    public void ResetState(bool isBoss)
     {
+        _isBoss = isBoss;
         if (_capsuleCollider != null) _capsuleCollider.enabled = true;
         if (Anim != null) Anim.Rebind();
     }
@@ -54,6 +57,12 @@ public class EnemyView : BaseCharacter, ITargetable
     /// <param name="hitData"></param>
     public void OnAttacked(HitData hitData)
     {
+        // Boss不受道具全頻擊殺
+        if(_isBoss && hitData.SkillType == SKILL_TYPE.None && hitData.Attack == 9999)
+        {
+            return;
+        }
+
         int myID = gameObject.GetInstanceID();
         EnemySystemManager controller = GameplayManager.CurrentContext.EnemySystemManager;
 

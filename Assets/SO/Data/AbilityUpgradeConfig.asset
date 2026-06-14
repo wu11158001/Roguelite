@@ -15,77 +15,90 @@ MonoBehaviour:
   AbilityUpgradeItemDatas:
   - UpgradeItemType: 1
     UpgradeItemName: "\u653B\u64CA\u529B"
-    UpgradeItemIcon: {fileID: -166154676, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: -600826575, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 5
     UpgradeItemPrice: c80000005802000020030000e8030000c4090000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u50B7\u5BB3\u63D0\u9AD83, \u6700\u591A15"
   - UpgradeItemType: 2
     UpgradeItemName: "\u6700\u5927\u751F\u547D\u529B"
-    UpgradeItemIcon: {fileID: -244588363, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: 770164545, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 20
     UpgradeItemPrice: c8000000900100005802000020030000e8030000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u6700\u5927\u751F\u547D\u529B\u63D0\u9AD820,
       \u6700\u591A100"
   - UpgradeItemType: 3
     UpgradeItemName: "\u79FB\u52D5\u901F\u5EA6"
-    UpgradeItemIcon: {fileID: -1596805310, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: 2141605885, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 1.5
     UpgradeItemPrice: c80000009001000058020000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u79FB\u52D5\u901F\u5EA6\u63D0\u9AD81.5,
       \u6700\u591A4.5"
   - UpgradeItemType: 4
-    UpgradeItemName: "\u6E1B\u5C11\u50B7\u5BB3"
-    UpgradeItemIcon: {fileID: 1787706319, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemName: "\u50B7\u5BB3\u6E1B\u5C11"
+    UpgradeItemIcon: {fileID: 1665722022, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 3
     UpgradeItemPrice: c80000009001000058020000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u6E1B\u5C11\u50B7\u5BB3\u63D0\u9AD83,
       \u6700\u591A9"
   - UpgradeItemType: 5
     UpgradeItemName: "\u6BCF\u79D2\u751F\u547D\u56DE\u5FA9"
-    UpgradeItemIcon: {fileID: 1543525236, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: 2040085341, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 0.5
     UpgradeItemPrice: c8000000900100005802000020030000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u6BCF\u79D2\u751F\u547D\u56DE\u5FA9\u63D0\u9AD80.5,
       \u6700\u591A2"
   - UpgradeItemType: 6
     UpgradeItemName: "\u51B7\u537B\u6642\u9593\u6E1B\u5C11"
-    UpgradeItemIcon: {fileID: 828782831, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: -2007085582, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 0.1
     UpgradeItemPrice: c800000090010000580200002003000020030000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u51B7\u537B\u6642\u9593\u6E1B\u5C110.1\u79D2,
       \u6700\u591A0.5\u79D2"
   - UpgradeItemType: 7
     UpgradeItemName: "\u62FE\u53D6\u7BC4\u570D"
-    UpgradeItemIcon: {fileID: 1638775749, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: 1106281703, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 1
     UpgradeItemPrice: c80000009001000058020000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u62FE\u53D6\u7BC4\u570D\u63D0\u9AD81,
       \u6700\u591A3"
   - UpgradeItemType: 8
     UpgradeItemName: "\u7206\u64CA\u6A5F\u7387"
-    UpgradeItemIcon: {fileID: -1984016468, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: 1006146165, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 2
     UpgradeItemPrice: c8000000900100009001000090010000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u7206\u64CA\u6A5F\u7387\u63D0\u9AD82%,
       \u6700\u591A8%"
   - UpgradeItemType: 9
     UpgradeItemName: "\u7206\u64CA\u50B7\u5BB3\u52A0\u6210"
-    UpgradeItemIcon: {fileID: -1378960612, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: 1480022662, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 15
     UpgradeItemPrice: c80000009001000058020000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u7206\u64CA\u50B7\u5BB3\u52A0\u6210\u63D0\u9AD815%,
       \u6700\u591A45%"
   - UpgradeItemType: 10
     UpgradeItemName: "\u6280\u80FD\u6578\u91CF"
-    UpgradeItemIcon: {fileID: 300482850, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: 2031120073, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 1
     UpgradeItemPrice: c800000090010000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u6280\u80FD\u6578\u91CF\u589E\u52A01,
       \u6700\u591A2"
   - UpgradeItemType: 12
     UpgradeItemName: "\u6301\u7E8C\u6642\u9593"
-    UpgradeItemIcon: {fileID: 645026409, guid: 7251df901e12b9942957afa5369a5fdd, type: 3}
+    UpgradeItemIcon: {fileID: -1567012253, guid: 6161b681664f3274982601c37666ac8c, type: 3}
     UpgradeItemAddValue: 0.25
     UpgradeItemPrice: c8000000900100005802000058020000
     UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u6280\u80FD\u6301\u7E8C\u6642\u9593\u589E\u52A00.25\u79D2,
       \u6700\u591A1\u79D2"
+  - UpgradeItemType: 13
+    UpgradeItemName: "\u5E78\u904B\u503C"
+    UpgradeItemIcon: {fileID: 1814854009, guid: 6161b681664f3274982601c37666ac8c, type: 3}
+    UpgradeItemAddValue: 15
+    UpgradeItemPrice: 900100002003000040060000f00a0000
+    UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u5E78\u904B\u503C\u589E\u52A015,
+      \u6709\u6A5F\u6703\u958B\u555F\u6280\u80FD\u9078\u9805\u7B2C4\u6B04\u4F4D"
+  - UpgradeItemType: 14
+    UpgradeItemName: "\u91CD\u9078\u6B21\u6578"
+    UpgradeItemIcon: {fileID: 18366314, guid: 6161b681664f3274982601c37666ac8c, type: 3}
+    UpgradeItemAddValue: 1
+    UpgradeItemPrice: 58020000b0040000d0070000b80b000068100000
+    UpgradeItemDescribe: "\u6BCF\u5F37\u53161\u7D1A, \u91CD\u9078\u6280\u80FD\u6B21\u6578+1"

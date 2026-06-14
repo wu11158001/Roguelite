@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: EnemySystemConfig
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystemConfig
   MaxEnemyCount: 500
-  InitHp: 35
+  InitHp: 15
   InitAttack: 20
   AttackRange: 2.4
   SpawnRadius: 35
-  SeparationWeight: 20
+  SeparationWeight: 10
   EnemySeparationRadius: 0.8
-  AttackHysteresis: 0.5
+  AttackHysteresis: 1
   Mode1_InitialSpawnInterval: 1.9
-  Mode1_MinSpawnInterval: 0.1
+  Mode1_MinSpawnInterval: 0.5
+  Mode1_MinSpawnCount: 1
+  Mode1_MaxSpawnCount: 10
   Mode1_MoveSpeed: 4
-  Mode1_EnemyHpIncreaseMultiplier: 0.7
+  Mode1_EnemyHpIncreaseMultiplier: 2
   Mode1_EnemyAttackIncreaseMultiplier: 0.4
   Mode2_WaveCount: 4
   Mode2_WaveInterval: 8
@@ -31,7 +33,7 @@ MonoBehaviour:
   Mode2_GroupRadius: 5.8
   Mode2_MoveSpeed: 16
   Mode2_HpWeaken: 0.2
-  Mode2_AttackWeaken: 0.5
+  Mode2_AttackWeaken: 0.2
   Mode3_Radius: 33
   Mode3_EnemyCount: 80
   Mode3_During: 30
@@ -41,8 +43,8 @@ MonoBehaviour:
   Mode4_TotalSpawnCount: 40
   Mode4_BulletSpeed: 4.5
   Mode4_ShotDistance: 28
-  Boss_HpMultiplier: 5
-  Boss_AttackMultiplier: 2
+  Boss_HpMultiplier: 8
+  Boss_AttackMultiplier: 3
   Boss_MoveMultiplier: 0.8
   Boss_SizeMultiplier: 2
   Boss_OutlineMaterial: {fileID: 2100000, guid: ad4968255592a8c4eb0c1425bf7386bb, type: 2}

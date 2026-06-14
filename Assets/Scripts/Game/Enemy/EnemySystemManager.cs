@@ -219,7 +219,7 @@ public class EnemySystemManager : MonoBehaviour
                 }
 
                 EnemyView enemyView = obj.TryGetComponent(out EnemyView view) ? view : obj.AddComponent<EnemyView>();
-                enemyView.ResetState();
+                enemyView.ResetState(isBoss);
 
                 // 計算攻擊觸發動畫百分比
                 float calculatedNormalizedTime = 0f;

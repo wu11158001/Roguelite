@@ -91,6 +91,14 @@ public class EnemySystemConfig : ScriptableObject
     public float Mode1_MinSpawnInterval = 0.5f;
 
     [BoxGroup("模式1:追隨")]
+    [Label("模式1:最小產生敵人數量")]
+    public int Mode1_MinSpawnCount = 1;
+
+    [BoxGroup("模式1:追隨")]
+    [Label("模式1:最大產生敵人數量")]
+    public int Mode1_MaxSpawnCount = 10;
+
+    [BoxGroup("模式1:追隨")]
     [Label("模式1:敵人移動速度")]
     public float Mode1_MoveSpeed = 4.0f;
 

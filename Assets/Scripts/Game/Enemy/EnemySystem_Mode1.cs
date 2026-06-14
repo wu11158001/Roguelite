@@ -14,7 +14,6 @@ public class EnemySystem_Mode1
     private LevelConfigData _levelConfig;
 
     private bool _isAutoSpawnRunning;
-    private float _spawnDecreaseRate;
     private float _model1_spawnTimer;
 
     // 使用 CompositeDisposable 統一管理訂閱，中途 StopSpawn 或 OnDestroy 時一鍵清空
@@ -29,12 +28,6 @@ public class EnemySystem_Mode1
 
         _disposables.Clear();
         _isAutoSpawnRunning = false;
-
-        // 讓第0秒就開始產第一隻敵人
-        _model1_spawnTimer = _enemyConfig.Mode1_InitialSpawnInterval;
-
-        // 計算:每秒生成遞減率
-        _spawnDecreaseRate = (_enemyConfig.Mode1_InitialSpawnInterval - _enemyConfig.Mode1_MinSpawnInterval) / _levelConfig.TimeLimit;
 
         // 開始自動生成
         SetAutoSpawnActive(true);
@@ -60,6 +53,7 @@ public class EnemySystem_Mode1
                 .Subscribe(_ => HandleAutoSpawn())
                 .AddTo(_disposables);
 
+            // 讓第0秒就開始產第一隻敵人
             _model1_spawnTimer = _enemyConfig.Mode1_InitialSpawnInterval;
         }
     }
@@ -72,28 +66,39 @@ public class EnemySystem_Mode1
         float currentLevelTime = GameplayManager.CurrentContext.GameController.ElapsedTime.Value;
         float initialInterval = _enemyConfig.Mode1_InitialSpawnInterval;
         float minInterval = _enemyConfig.Mode1_MinSpawnInterval;
-        float decreaseRate = _spawnDecreaseRate;
         int maxEnemyCount = _enemyConfig.MaxEnemyCount;
 
-
-
-        // 使用平方曲線，時間越往後，加速越劇烈
+        // 遊戲時間進度
         float timeLimit = _levelConfig.TimeLimit - 300; // 讓遊戲最後5分鐘就達到最高生產頻率
         float progress = currentLevelTime / timeLimit;
+
+        // 平方曲線，時間越往後，加速越劇烈
         float speedCurve = Mathf.Pow(progress, 2f);
         float currentInterval = Mathf.Lerp(initialInterval, minInterval, speedCurve);
 
-        _model1_spawnTimer += Time.deltaTime;
+        // 依照時間推移每次產生數量增加
+        int minSpawnCount = _enemyConfig.Mode1_MinSpawnCount;
+        int maxSpawnCount = _enemyConfig.Mode1_MaxSpawnCount;
 
+        _model1_spawnTimer += Time.deltaTime;
         if (_model1_spawnTimer >= currentInterval)
         {
             _model1_spawnTimer = 0f;
 
-            // 檢查當前畫面上敵人總數
-            if (_manager.ActiveEnemyCount < maxEnemyCount)
+            int spawnCount = Mathf.RoundToInt(Mathf.Lerp(minSpawnCount, maxSpawnCount, progress));
+
+            for (int i = 0; i < spawnCount; i++)
             {
-                // 執行生產敵人
-                ExecuteSpawn();
+                // 檢查當前畫面上敵人總數
+                if (_manager.ActiveEnemyCount < maxEnemyCount)
+                {
+                    // 執行生產敵人
+                    ExecuteSpawn();
+                }
+                else
+                {
+                    break;
+                }
             }
         }
     }
