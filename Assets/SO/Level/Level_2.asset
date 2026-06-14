@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08dd521366665fb429e02531c6c81007, type: 3}
+  m_Name: Level_2
+  m_EditorClassIdentifier: Assembly-CSharp::LevelConfigData
+  LevelName: "\u96EA\u5730"
+  GroundTexture: {fileID: 2800000, guid: e30bb4af423b8b147a8e9e7833ac6a5e, type: 3}
+  LevelIcon: {fileID: 21300000, guid: 01e6feecd238c2f449c2d0cac9ad7b99, type: 3}
+  LevelIndex: 1
+  TimeLimit: 1800
+  CoinBonus: 0.2
+  ExpBonus: 0.1
+  EnemyHpIncreaseMultiplier: 1.2
+  EnemyAttackIncreaseMultiplier: 1.2
+  Mode1EnemyTypes: 39000000350000003400000037000000390000003500000032000000360000003700000032000000330000003a000000380000003400000036000000
+  Mode2EnemyTypes: 3500000032000000340000003a000000370000003600000038000000
+  Mode3EnemyTypes: 3700000037000000340000003400000037000000
+  Mode4EnemyTypes: 380000003600000038000000360000003900000039000000
