@@ -17,6 +17,7 @@ public class GameView : BaseView
     [SerializeField] private TextMeshProUGUI _text_Time;
     [SerializeField] private TextMeshProUGUI _text_LimitTimeTip;
     [SerializeField] private Slider _sli_ExpBar;
+    [SerializeField] private TextMeshProUGUI _text_EnemyCount;
 
     [HorizontalLine(color: EColor.Gray)]
     [Header("技能欄")]
@@ -92,6 +93,12 @@ public class GameView : BaseView
     private void BindViewModel()
     {
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
+
+        // 敵人數量
+        GameplayManager.CurrentContext.EnemySystemManager.ActiveEnemyCount.Subscribe(enemyCount =>
+        {
+            _text_EnemyCount.text = $": {enemyCount}";
+        });
 
         // 角色等級
         GameplayManager.CurrentContext.CharacterController.CurrentLevel.Subscribe(level =>

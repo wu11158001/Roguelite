@@ -75,7 +75,7 @@ public class LobbyView : BaseView
                 callback: (view) =>
                 {
                     view.SetContent(
-                        contentText: "是否移除所有資料!?",
+                        contentText: "是否移除所有資料?",
                         confirmAction: () =>
                         {
                             PlayerPrefsManager.DeleteAllData();

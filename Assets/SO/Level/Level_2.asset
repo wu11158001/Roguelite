@@ -18,7 +18,7 @@ MonoBehaviour:
   LevelIndex: 2
   TimeLimit: 900
   CoinBonus: 0.2
-  ExpBonus: 0.1
+  ExpBonus: 0.2
   EnemyHpIncreaseMultiplier: 1.2
   EnemyAttackIncreaseMultiplier: 1.2
   Mode1EnemyTypes: 39000000350000003400000037000000390000003500000032000000360000003700000032000000330000003a000000380000003400000036000000

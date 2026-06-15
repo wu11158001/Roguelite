@@ -41,8 +41,9 @@ public class EnemySystemManager : MonoBehaviour
     private List<EnemyJobData> _enemyDataList = new();
     public List<EnemyView> ActiveEnemyViews { get; private set; } = new();
 
-    // 檢查目前數量的公開屬性
-    public int ActiveEnemyCount => _activeGameObjects.Count;
+    /// <summary> 當前敵人數量 </summary>
+    private readonly ReactiveProperty<int> _activeEnemyCount = new(0);
+    public IReadOnlyReactiveProperty<int> ActiveEnemyCount => _activeEnemyCount;
 
     private TransformAccessArray _transformArray;
     private NativeArray<EnemyJobData> _dataArray;
@@ -317,6 +318,8 @@ public class EnemySystemManager : MonoBehaviour
                 _enemyDataList.Add(data);
                 _transformArray.Add(obj.transform);
 
+                _activeEnemyCount.Value = _activeGameObjects.Count;
+
                 callback?.Invoke(obj);
             });
     }
@@ -556,7 +559,9 @@ public class EnemySystemManager : MonoBehaviour
         ActiveEnemyViews.RemoveAt(lastIndex);
         _transformArray.RemoveAtSwapBack(index);
 
-        if(isBoss)
+        _activeEnemyCount.Value = _activeGameObjects.Count;
+
+        if (isBoss)
         {
             ResetEnemyVisualForPool(obj);
         }

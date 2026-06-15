@@ -90,7 +90,7 @@ public class EnemySystem_Mode1
             for (int i = 0; i < spawnCount; i++)
             {
                 // 檢查當前畫面上敵人總數
-                if (_manager.ActiveEnemyCount < maxEnemyCount)
+                if (_manager.ActiveEnemyCount.Value < maxEnemyCount)
                 {
                     // 執行生產敵人
                     ExecuteSpawn();
