@@ -26,6 +26,8 @@ public enum SKILL_TYPE
     Skill_SingleHit,
     /// <summary> 前方打擊 </summary>
     Skill_FrontHit,
+    /// <summary> 跟隨機器人 </summary>
+    Skill_Robot,
 }
 
 /// <summary>
@@ -45,6 +47,8 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InCharacterBottomAndOnly,
     /// <summary> 產生在角色中間與八方向輪替 </summary>
     InCharacterMiddle8Way,
+    /// <summary> 場上唯一 </summary>
+    Only,
 }
 
 /// <summary>

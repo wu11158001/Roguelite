@@ -284,9 +284,8 @@ public class PlayerView : BaseCharacter
     /// </summary>
     private void TestDebugInput()
     {
-        if (Keyboard.current.numpad1Key.wasPressedThisFrame) _controller.GainExp(5);
-        if (Keyboard.current.numpad2Key.wasPressedThisFrame) _controller.GainExp(3);
-        if (Keyboard.current.numpad4Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(10);
+        if (Keyboard.current.numpad1Key.wasPressedThisFrame) _controller.GainExp(50);
+        if (Keyboard.current.numpad4Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(20);
         if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(1000);
 
         if (Keyboard.current.numpad9Key.wasPressedThisFrame)
@@ -329,6 +328,17 @@ public class PlayerView : BaseCharacter
         if (Keyboard.current.digit7Key.wasPressedThisFrame)
         {
             Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_StraightProjectile, 1));
+        }
+        // 直升技能:機器人
+        if (Keyboard.current.digit8Key.wasPressedThisFrame)
+        {
+            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_Robot, 1));
+        }
+
+        // 直升技能:機器人
+        if (Keyboard.current.digit9Key.wasPressedThisFrame)
+        {
+            Test_GainSkill(GameStateData.AllSkillConfigData.GetPassiveSkill(PASSIVE_SKILL_TYPE.CdReduce, 1));
         }
     }
 

@@ -1,8 +1,10 @@
 using Cysharp.Threading.Tasks;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 技能_靈氣
+/// </summary>
 public class Skill_AuraView : BaseSkill
 {
     private CapsuleCollider _capsuleCollider;

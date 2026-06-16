@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 using UniRx;
 
@@ -16,8 +15,7 @@ public class EnemySystem_Mode1
     private bool _isAutoSpawnRunning;
     private float _model1_spawnTimer;
 
-    // 使用 CompositeDisposable 統一管理訂閱，中途 StopSpawn 或 OnDestroy 時一鍵清空
-    private readonly CompositeDisposable _disposables = new CompositeDisposable();
+    private readonly CompositeDisposable _disposables = new();
 
     public EnemySystem_Mode1(EnemySystemManager manager, Transform player, EnemySystemConfig enemyConfig, LevelConfigData levelConfig)
     {

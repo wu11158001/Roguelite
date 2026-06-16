@@ -178,7 +178,8 @@ public class SkillSpawner
     /// 產生技能_角色底部且唯一
     /// </summary>
     /// <param name="data"></param>
-    public async void InCharacterBottomAndOnly(SkillItemData data)
+    /// <param name="isInParent">是否放入角色物件內</param>
+    public async void InCharacterBottomAndOnly(SkillItemData data, bool isInParent = true)
     {
         // 防呆：如果因為非同步時間差，字典裡已經有相同 Key，直接先回收它，避免重複
         if (_onlySkills.ContainsKey(data.SkillName))
@@ -207,7 +208,7 @@ public class SkillSpawner
             AsyncOperationHandle<GameObject> handle = data.PrefabReference.InstantiateAsync(
                 position: bottomPoint.position,
                 rotation: Quaternion.identity,
-                parent: bottomPoint);
+                parent: isInParent ? bottomPoint : null);
 
             await handle.Task;
 
@@ -218,18 +219,18 @@ public class SkillSpawner
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
 
-                if(obj.TryGetComponent(out Skill_AuraView skill_AuraView))
+                if(obj.TryGetComponent(out BaseSkill baseSkill))
                 {
-                    skill_AuraView.Setup(data);
+                    baseSkill.Setup(data);
                 }
 
-                OnlySkillData auraData = new()
+                OnlySkillData skillData = new()
                 {
                     Level = data.SkillLevel,
                     Obj = obj
                 };
 
-                _onlySkills[data.SkillName] = auraData;
+                _onlySkills[data.SkillName] = skillData;
             }
         }
         catch (Exception e)
@@ -474,7 +475,7 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 獲取畫面中所有敵人（外部呼叫這個！）
+    /// 獲取畫面中所有敵人
     /// </summary>
     public List<EnemyView> GetAllEnemyInCamera()
     {
@@ -493,7 +494,7 @@ public class SkillSpawner
     }
 
     /// <summary>
-    /// 獲取畫面中所有箱子（外部呼叫這個！）
+    /// 獲取畫面中所有箱子
     /// </summary>
     public List<MapProps_BoxView> GetAllBoxInCamera()
     {

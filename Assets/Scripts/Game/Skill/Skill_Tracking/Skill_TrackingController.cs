@@ -1,6 +1,4 @@
 using UnityEngine;
-using UniRx;
-using System;
 using System.Collections.Generic;
 
 public class Skill_TrackingController

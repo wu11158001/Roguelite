@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afdcbea22e895b54db0ea1c1cb76cd35, type: 3}
+  m_Name: Skill_Robot
+  m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
+  SkillItems:
+  - SkillName: "\u9059\u63A7\u5668"
+    SkillIcon: {fileID: 0}
+    SkillDescribe: "\u62DB\u559A\u4E00\u53F0\u6A5F\u5668\u4EBA, \u6A5F\u5668\u4EBA\u5C07\u8DDF\u96A8\u4E26\u5411\u6700\u8FD1\u7684\u6575\u4EBA\u767C\u5C04\u96F7\u5C04"
+    NeedActiveSkills:
+    - Type: 2
+      Level: 4
+    - Type: 6
+      Level: 4
+    NeedPassiveSkills: []
+    _skillType: 8
+    IsUpdateNow: 1
+    SkillLevel: 1
+    SkillSpawnModeType: 6
+    PrefabReference:
+      m_AssetGUID: 2cd1d7b1a99a17f4f81f482c2ac1cfea
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0.1
+    SkillAttack: 10
+    SkillShotCount: 1
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 15
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0

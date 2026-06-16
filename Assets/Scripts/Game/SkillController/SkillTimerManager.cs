@@ -28,7 +28,7 @@ public class SkillTimerManager
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
         if (characterConfig.CdReduce.Value == 0) return skill.SkillCd;
 
-        float actualCd = skill.SkillCd * (1 - characterConfig.CdReduce.Value);
+        float actualCd = skill.SkillCd - characterConfig.CdReduce.Value;
         return Mathf.Max(0.1f, actualCd);
     }
 

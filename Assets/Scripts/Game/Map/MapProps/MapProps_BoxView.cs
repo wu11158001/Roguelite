@@ -108,23 +108,31 @@ public class MapProps_BoxView : BaseGameObject, ITargetable
 
         if (_targetLayer.Contains(other.gameObject.layer))
         {
-            _isTriggered = true;
-            _boxCollider.enabled = false;
+            OnBoxBreak();
+        }
+    }
 
-            _moveObj.DOKill();
-            _moveObj.DOMoveY(0f, _dropDuration)
-                .SetEase(Ease.OutBounce)
-                .OnComplete(() =>
-                {
+    /// <summary>
+    /// 箱子被擊破
+    /// </summary>
+    public void OnBoxBreak()
+    {
+        _isTriggered = true;
+        _boxCollider.enabled = false;
+
+        _moveObj.DOKill();
+        _moveObj.DOMoveY(0f, _dropDuration)
+            .SetEase(Ease.OutBounce)
+            .OnComplete(() =>
+            {
                     // 音效
                     AudioManager.Instance.PlaySFX(AUDIO_TYPE.BoxBreak).Forget();
 
-                    SpawnRandomMapProps();
-                    StartCoroutine(IHandleBang());
-                });
+                SpawnRandomMapProps();
+                StartCoroutine(IHandleBang());
+            });
 
-            OnBoxTriggered?.Invoke();
-        }
+        OnBoxTriggered?.Invoke();
     }
 
     /// <summary>

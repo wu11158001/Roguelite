@@ -56,6 +56,8 @@ public enum AUDIO_TYPE
     Skill_StraightProjectile,
     /// <summary> 技能:追蹤彈音效 </summary>
     Skill_Tracking,
+    /// <summary> 技能:機器人雷射音效 </summary>
+    Skill_Robot_Laser,
 }
 
 /// <summary>

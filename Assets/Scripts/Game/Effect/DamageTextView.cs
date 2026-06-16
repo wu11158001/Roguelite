@@ -1,9 +1,10 @@
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using Cysharp.Threading.Tasks;
-using UnityEngine.AddressableAssets;
 
+/// <summary>
+/// 傷害文字
+/// </summary>
 public class DamageTextView : BaseGameObject
 {
     [SerializeField] private GameObject _criticalImg;

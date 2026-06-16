@@ -97,7 +97,6 @@ public class SkillTrackData
     {
         TimeSpan timeSpan = DateTime.UtcNow - GetTime;
 
-        // 使用 TotalMinutes 可以確保超過 60 分鐘時，分鐘數會持續累加（例如 65:30）
         int minutes = (int)Math.Floor(timeSpan.TotalMinutes);
         int seconds = timeSpan.Seconds;
 
@@ -223,8 +222,6 @@ public class SkillController : MonoBehaviour
     /// <param name="newSkill"></param>
     public void AddOrUpgradeSkill(SkillItemData newSkill)
     {
-        CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
-
         // 被動技能處理
         GameplayManager.CurrentContext.SkillController.OnGainPassiveHandle(newSkill);
 
@@ -267,10 +264,22 @@ public class SkillController : MonoBehaviour
     {
         if (!skill.IsPassive && !skill.IsProps)
         {
-            // 靈氣光環特殊，不啟動Timer
-            if (skill.SkillType == SKILL_TYPE.Skill_Aura)
+            // 不啟動Timer類型
+            if (skill.SkillSpawnModeType == SKILL_SPAWN_MODEL_TYPE.Only)
             {
-                _spawner.InCharacterBottomAndOnly(skill); 
+                switch (skill.SkillType)
+                {
+                    // 靈氣
+                    case SKILL_TYPE.Skill_Aura:
+                        _spawner.InCharacterBottomAndOnly(skill, true);
+                        break;
+
+                    // 機器人
+                    case SKILL_TYPE.Skill_Robot:
+                        _spawner.InCharacterBottomAndOnly(skill, false);
+                        break;
+                }
+                
                 return;
             }
             _timerManager.StartSkillTimer(skill);

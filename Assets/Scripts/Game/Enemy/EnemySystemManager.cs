@@ -621,7 +621,7 @@ public class EnemySystemManager : MonoBehaviour
         float offsetZ = Mathf.Sin(randomAngle) * spawnRadius;
 
         Vector3 playerPos = _playerObj.position;
-        return new Vector3(playerPos.x + offsetX, playerPos.y, playerPos.z + offsetZ);
+        return new Vector3(playerPos.x + offsetX, 0, playerPos.z + offsetZ);
     }
 
     /// <summary>

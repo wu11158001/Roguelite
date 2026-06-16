@@ -101,10 +101,15 @@ public class GameView : BaseView
         });
 
         // 角色等級
-        GameplayManager.CurrentContext.CharacterController.CurrentLevel.Subscribe(level =>
+        GameplayManager.CurrentContext.CharacterController.CurrentLevel.Pairwise().Subscribe(level =>
         {
-            _text_Level.text = $"等級:{level + 1}";
-            _viewModel.OnLevelUp(level);
+            int currentLevel = level.Current;
+            int preLevel = level.Previous;
+
+            _text_Level.text = $"等級:{currentLevel + 1}";
+            _viewModel.OnLevelUp(
+                currentLevel: currentLevel, 
+                differenceLevel: currentLevel - preLevel);
         }).AddTo(this);
 
         // 經驗條進度

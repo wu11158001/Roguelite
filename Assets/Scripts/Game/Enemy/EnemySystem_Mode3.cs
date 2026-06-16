@@ -4,7 +4,7 @@ using UnityEngine;
 using UniRx;
 
 /// <summary>
-/// 模式3 (包圍_圓形包圍角色, 持續一段時間後消失, 包圍期間暫停模式1自動生成)
+/// 敵人系統_模式3:包圍_圓形包圍角色, 持續一段時間後消失, 包圍期間暫停模式1自動生成)
 /// </summary>
 public class EnemySystem_Mode3
 {

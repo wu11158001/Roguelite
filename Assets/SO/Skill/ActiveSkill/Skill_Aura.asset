@@ -21,7 +21,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 1
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -55,7 +55,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 2
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -90,7 +90,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 3
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -125,7 +125,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 4
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -159,7 +159,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 5
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -193,7 +193,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 6
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -227,7 +227,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 7
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -262,7 +262,7 @@ MonoBehaviour:
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 8
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: a3b723f5e5829b44ea81e61a1643120f
       m_SubObjectName: 
@@ -292,12 +292,16 @@ MonoBehaviour:
     SkillIcon: {fileID: 21300000, guid: d359cffafe45e0e4c82527e85234799b, type: 3}
     SkillDescribe: "\u9748\u6C23\u9032\u5316: \u6575\u4EBA\u9020\u6210\u6E1B\u901F35%,
       \u6E1B\u901F\u6301\u7E8C\u6642\u95931\u79D2 "
-    NeedActiveSkills: []
-    NeedPassiveSkills: []
+    NeedActiveSkills:
+    - Type: 3
+      Level: 8
+    NeedPassiveSkills:
+    - Type: 3
+      Level: 2
     _skillType: 3
     IsUpdateNow: 1
     SkillLevel: 9
-    SkillSpawnModeType: 4
+    SkillSpawnModeType: 6
     PrefabReference:
       m_AssetGUID: 312acb0049606a8499b01a5ce6cd3175
       m_SubObjectName: 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UniRx;
 using Cysharp.Threading.Tasks;
+using System;
 
 public class SelectSkillView : BaseView
 {
@@ -16,6 +17,7 @@ public class SelectSkillView : BaseView
     [SerializeField] private TextMeshProUGUI _text_ReselectCount;
 
     private List<GameObject> _itemObjs = new();
+    private Action _callback;
 
     private void Start()
     {
@@ -32,7 +34,7 @@ public class SelectSkillView : BaseView
 
             // 刷新技能
             List<SkillItemData> items = GameplayManager.CurrentContext.SkillController.GetRandomSkillDatas();
-            SetSkillItemData(items);
+            SetSkillItemData(items, _callback);
 
         }).AddTo(this);
     }
@@ -41,8 +43,11 @@ public class SelectSkillView : BaseView
     /// 設置可選技能項目
     /// </summary>
     /// <param name="datas"></param>
-    public void SetSkillItemData(List<SkillItemData> datas)
+    /// <param name="callback"></param>
+    public void SetSkillItemData(List<SkillItemData> datas, Action callback)
     {
+        _callback = callback;
+
         _btn_Reselect.interactable = GameStateData.SelectedCharacter.ReselectCount.Value > 0;
         _text_ReselectCount.text = $"重選技能次數: {GameStateData.SelectedCharacter.ReselectCount}";
 
@@ -68,25 +73,19 @@ public class SelectSkillView : BaseView
                     isNewSkill: data.SkillLevel == 1,
                     isShowCurrentLevel: true,
                     isLock: isLock,
-                    clickCallback: SelectSkill);
+                    clickCallback: (data) =>
+                    {
+                        // 遊戲暫停結束
+                        GameplayManager.CurrentContext.GameController.GamePause(false);
+                        // 學習技能
+                        GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(data);
+                        _callback?.Invoke();
+                        Close();
+                    });
             }
 
             _itemObjs.Add(obj);
             index++;
         }
-    }
-
-    /// <summary>
-    /// 玩家選擇技能
-    /// </summary>
-    /// <param name="data"></param>
-    private void SelectSkill(SkillItemData data)
-    {
-        // 遊戲暫停結束
-        GameplayManager.CurrentContext.GameController.GamePause(false);
-        // 學習技能
-        GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(data);
-
-        Close();
     }
 }

@@ -24,6 +24,9 @@ public class GameViewModel
     private float _marginPercentageX;
     private float _marginPercentageY;
 
+    // 升級時的等級差距,用來判斷要顯示幾次技能選擇介面
+    private int _differenceLevel;
+
     /// <summary>
     /// 初始化
     /// </summary>
@@ -58,25 +61,48 @@ public class GameViewModel
     /// <summary>
     /// 等級提升
     /// </summary>
-    /// <param name="level"></param>
-    public void OnLevelUp(int level)
+    /// <param name="currentLevel">當前實際等級</param>
+    /// <param name="differenceLevel">等級差距</param>
+    public void OnLevelUp(int currentLevel, int differenceLevel)
     {
+        _differenceLevel = differenceLevel - 1;
+
         // 升級
-        if (level > 0)
+        if (currentLevel > 0)
         {
-            // 音效
-            AudioManager.Instance.PlaySFX(AUDIO_TYPE.LevelUp).Forget();
-            // 遊戲暫停
-            GameplayManager.CurrentContext.GameController.GamePause(true);
-            // 開啟選擇技能介面
-            ViewManager.Instance.OpenView<SelectSkillView>(
-                viewType: VIEW_TYPE.SelectSkillView,
-                callback: (view) =>
-                {
-                    List<SkillItemData> items = GameplayManager.CurrentContext.SkillController.GetRandomSkillDatas();
-                    view.SetSkillItemData(items);
-                }).Forget();
+            ShowSelectSkillView();
         }
+    }
+
+    /// <summary>
+    /// 檢查等級差距,判斷是否要顯示技能選擇介面
+    /// </summary>
+    private void ChechDifferenceLevel()
+    {
+        if(_differenceLevel > 0)
+        {
+            ShowSelectSkillView();
+            _differenceLevel--;
+        }
+    }
+
+    /// <summary>
+    /// 顯示技能選擇介面
+    /// </summary>
+    private void ShowSelectSkillView()
+    {
+        // 音效
+        AudioManager.Instance.PlaySFX(AUDIO_TYPE.LevelUp).Forget();
+        // 遊戲暫停
+        GameplayManager.CurrentContext.GameController.GamePause(true);
+        // 開啟選擇技能介面
+        ViewManager.Instance.OpenView<SelectSkillView>(
+            viewType: VIEW_TYPE.SelectSkillView,
+            callback: (view) =>
+            {
+                List<SkillItemData> items = GameplayManager.CurrentContext.SkillController.GetRandomSkillDatas();
+                view.SetSkillItemData(datas: items, callback: ChechDifferenceLevel);
+            }).Forget();
     }
 
     #region 雷達項目
