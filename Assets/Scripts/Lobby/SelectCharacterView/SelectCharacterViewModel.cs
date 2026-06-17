@@ -107,6 +107,7 @@ public class SelectCharacterViewModel
 
                 case PASSIVE_SKILL_TYPE.MaxHp:
                     character.MaxHp.Value += (int)upgradeValue;
+                    character.Hp.Value = character.MaxHp.Value;
                     break;
 
                 case PASSIVE_SKILL_TYPE.MoveSpeed:

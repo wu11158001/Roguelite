@@ -25,6 +25,8 @@ public enum EFFET_TYPE
     Invincible,
     /// <summary> 道具擊殺效果 </summary>
     PropsKill,
+    /// <summary> 灼燒效果 </summary>
+    Burning,
 }
 
 /// <summary>

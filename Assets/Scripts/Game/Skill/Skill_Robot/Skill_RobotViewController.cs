@@ -58,6 +58,8 @@ public class Skill_RobotViewController
     /// <param name="state"></param>
     private void HandleStateChanged(SKILL_ROBOT_STATE state)
     {
+        if (_robotModel.PlayerTransform == null) return;
+
         switch (state)
         {
             // 待機狀態
@@ -168,11 +170,10 @@ public class Skill_RobotViewController
             fireDirection = _view.transform.forward;
         }
 
-        // 物理射線檢測(起點, 方向, 最大距離, 目標 Layer)
-        RaycastHit[] hits = Physics.RaycastAll(startPos, fireDirection, _robotModel.LaserDistance, _enemyLayer);
+        float laserRadius = _robotModel.LaserWidth;
 
-        // 計算雷射終點
-        Vector3 endPos = startPos + (fireDirection * _robotModel.LaserDistance);
+        // 參數: (起點, 球體半徑, 方向, 最大距離, 目標 Layer)
+        RaycastHit[] hits = Physics.SphereCastAll(startPos, laserRadius, fireDirection, _robotModel.LaserDistance, _enemyLayer);
 
         // 判斷擊中目標
         if (hits.Length > 0)
@@ -197,6 +198,7 @@ public class Skill_RobotViewController
         }
 
         // 顯示雷射特效
+        Vector3 endPos = startPos + (fireDirection * _robotModel.LaserDistance);
         _view.ShowLaser(startPos, endPos);
         _robotModel.CurrentState.Value = SKILL_ROBOT_STATE.Attack;
 

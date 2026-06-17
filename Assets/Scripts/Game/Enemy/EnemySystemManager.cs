@@ -27,6 +27,11 @@ public struct DamageEvent
     public float SlowDuration;
     // 速度變更 (0~1)
     public float SlowSpeedMultiplier;
+
+    // 灼燒續時間
+    public float BurningDuration;
+    // 灼燒傷害(最大生命%)
+    public float BurningDamage;
 }
 
 /// <summary>
@@ -219,8 +224,8 @@ public class EnemySystemManager : MonoBehaviour
                     return;
                 }
 
-                EnemyView enemyView = obj.TryGetComponent(out EnemyView view) ? view : obj.AddComponent<EnemyView>();
-                enemyView.ResetState(isBoss);
+                spawnPos.y = 0;
+                obj.transform.position = spawnPos;
 
                 // 計算攻擊觸發動畫百分比
                 float calculatedNormalizedTime = 0f;
@@ -252,13 +257,13 @@ public class EnemySystemManager : MonoBehaviour
                 // 模式2:襲擊_朝玩家方向移動,中途不會變更方向,碰撞後死亡
                 if (moveType == EnemyMoveType.Mode2_StraightAndDie)
                 {
-                    if(isBullet)
+                    // 子彈
+                    if (isBullet)
                     {
-                        // 子彈以模式2行為,攻擊力以當前模式1
-                        currentHp = 1;
                         moveSpeed = _enemyConfig.Mode4_BulletSpeed;
                         enemySeparationRadius = 0;
                     }
+                    // 襲擊敵人
                     else
                     {
                         currentHp = Mathf.CeilToInt(currentHp * _enemyConfig.Mode2_HpWeaken);
@@ -289,6 +294,10 @@ public class EnemySystemManager : MonoBehaviour
                 finalAttack = Mathf.Max(1, finalAttack);
                 currentHp = Mathf.Max(1, currentHp);
 
+                // 敵人View
+                EnemyView enemyView = obj.TryGetComponent(out EnemyView view) ? view : obj.AddComponent<EnemyView>();
+                enemyView.ResetState(isBoss, currentHp);
+
                 EnemyJobData data = new()
                 {
                     InstanceID = obj.GetInstanceID(),
@@ -299,6 +308,7 @@ public class EnemySystemManager : MonoBehaviour
                     MoveSpeed = moveSpeed,
                     EnemySeparationRadius = enemySeparationRadius,
                     AttackRange = enemyView != null ? enemyView.AttackRange : 1.5f,
+                    MaxHp = currentHp,
                     CurrentHp = currentHp,
                     Attack = finalAttack,
                     AttackNormalizedTime = 0f,
@@ -533,8 +543,12 @@ public class EnemySystemManager : MonoBehaviour
             Damage = hitData.Attack,
             KnockbackForce = hitData.Knockback,
             DamageSourcePosition = GameplayManager.CurrentContext.ControlCharacter.transform.position,
+
             SlowDuration = hitData.SpeedModifierTime,
             SlowSpeedMultiplier = hitData.SpeedModifier,
+
+            BurningDamage = hitData.BurningDamage,
+            BurningDuration = hitData.BurningDuration,
         });
     }
 

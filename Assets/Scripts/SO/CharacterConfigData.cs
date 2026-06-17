@@ -105,7 +105,6 @@ public class CharacterConfigData : ScriptableObject
 
     public void Initialize()
     {
-        Hp = new ReactiveProperty<int>(MaxHp.Value);
         MoveSpeed = new ReactiveProperty<float>(_baseMoveSpeed);
         AddAttack = new ReactiveProperty<int>(_baseAddAttack);
         MaxHp = new ReactiveProperty<int>(_baseMaxHp);
@@ -120,6 +119,8 @@ public class CharacterConfigData : ScriptableObject
         AddKeepTime = new ReactiveProperty<float>(_baseAddKeepTime);
         AddLucky = new ReactiveProperty<int>(_baseAddLucky);
         ReselectCount = new ReactiveProperty<int>(_baseReselectCount);
+
+        Hp = new ReactiveProperty<int>(MaxHp.Value);
     }
 
     public CharacterConfigData Clone()

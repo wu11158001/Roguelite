@@ -34,6 +34,11 @@ public class HitData
     public float SpeedModifier;
     /// <summary> 移動速度變更時間 </summary>
     public float SpeedModifierTime;
+
+    // 灼燒續時間
+    public float BurningDuration;
+    // 灼燒傷害(最大生命%)
+    public float BurningDamage;
 }
 
 /// <summary>

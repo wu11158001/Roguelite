@@ -164,6 +164,14 @@ public class PlayerView : BaseCharacter
                 }).Forget();
         }
 
+        // 最大生命質變化
+        _characterConfig.MaxHp.Subscribe(value =>
+        {
+            // 更新血條 UI
+            float hpRatio = (float)_characterConfig.Hp.Value / value;
+            if (_hpBarView != null) _hpBarView.SetHpBar(hpRatio);
+        }).AddTo(this);
+
         // 監聽角色生命變化
         _characterConfig.Hp.Pairwise()
             .Subscribe(pair =>
@@ -338,7 +346,7 @@ public class PlayerView : BaseCharacter
         // 直升技能:機器人
         if (Keyboard.current.digit9Key.wasPressedThisFrame)
         {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetPassiveSkill(PASSIVE_SKILL_TYPE.CdReduce, 1));
+            Test_GainSkill(GameStateData.AllSkillConfigData.GetPassiveSkill(PASSIVE_SKILL_TYPE.MaxHp, 1));
         }
     }
 

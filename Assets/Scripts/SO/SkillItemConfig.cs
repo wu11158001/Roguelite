@@ -260,10 +260,21 @@ public class SkillItemData
     [BoxGroup("主動技能數值")][Label("敵人移動速度變更(0 = 正常, 0.1 = 減速10%)")]
     [ShowIf(nameof(_isShowSkill))]
     public float SpeedModifier;
+
     [AllowNesting]
     [BoxGroup("主動技能數值")][Label("敵人移動速度變更持續時間(秒)")]
     [ShowIf(nameof(_isShowSkill))]
     public float SpeedModifierTime;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("灼燒傷害(最大生命%)(0 = 正常, 0.1 = 每秒傷害最大生命10%")]
+    [ShowIf(nameof(_isShowSkill))]
+    public float BurningDamage;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("灼燒效果持續時間(秒)")]
+    [ShowIf(nameof(_isShowSkill))]
+    public float BurningDuration;
 
     // --------被動技能--------
     [AllowNesting][Label("是否為被動技能")]

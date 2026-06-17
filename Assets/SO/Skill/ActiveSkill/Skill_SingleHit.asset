@@ -35,7 +35,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2.5
-    SkillAttack: 15
+    SkillAttack: 17
     SkillShotCount: 3
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -47,6 +47,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -69,7 +71,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2.5
-    SkillAttack: 18
+    SkillAttack: 23
     SkillShotCount: 3
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -81,6 +83,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -103,7 +107,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2.5
-    SkillAttack: 18
+    SkillAttack: 23
     SkillShotCount: 5
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -115,6 +119,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -137,7 +143,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2.3
-    SkillAttack: 18
+    SkillAttack: 23
     SkillShotCount: 5
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -149,6 +155,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -171,7 +179,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2.15
-    SkillAttack: 18
+    SkillAttack: 23
     SkillShotCount: 5
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -183,6 +191,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -205,7 +215,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2.15
-    SkillAttack: 20
+    SkillAttack: 26
     SkillShotCount: 6
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -217,6 +227,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -239,7 +251,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2
-    SkillAttack: 22
+    SkillAttack: 29
     SkillShotCount: 6
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -251,6 +263,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -273,7 +287,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
     SkillCd: 2
-    SkillAttack: 22
+    SkillAttack: 29
     SkillShotCount: 6
     SkillShotInterval: 0.2
     SkillPenetrate: 0
@@ -285,6 +299,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0

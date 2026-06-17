@@ -99,14 +99,23 @@ public class BaseSkill : BaseGameObject
         // 減速持續時間(秒)
         float speedModifierTime = _data.SpeedModifierTime;
 
+        // 灼燒續時間
+        float burningDuration = _data.BurningDuration;
+        // 灼燒傷害(最大生命%)
+        float burningDamage = _data.BurningDamage;
+
         HitData hitData = new()
         {
             SkillType = _data.SkillType,
             Attack = totalAttack,
             IsCritical = isCritical,
             Knockback = _data.SkillKnockback,
+
             SpeedModifier = speedModifier,
             SpeedModifierTime = speedModifierTime,
+
+            BurningDuration = burningDuration,
+            BurningDamage = burningDamage,
         };
 
         return hitData;

@@ -32,6 +32,8 @@ public class Skill_RobotModel
     /// <summary> 角色位置 </summary>
     public Transform PlayerTransform;
 
+    /// <summary> 雷射寬度 </summary>
+    public float LaserWidth;
     /// <summary> 雷射發射位置 </summary>
     public Transform FirePoint;
     /// <summary> 雷射長度 </summary>
@@ -109,6 +111,7 @@ public class Skill_RobotView : BaseSkill
 
             PlayerTransform = GameplayManager.CurrentContext.ControlCharacter.BottomPoint,
 
+            LaserWidth = _laserLineRenderer.startWidth,
             FirePoint = _firePoint,
             LaserDistance = _laserDistance,
             LaserVisibleDuration = _laserVisibleDuration,

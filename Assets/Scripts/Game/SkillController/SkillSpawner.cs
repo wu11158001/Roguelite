@@ -216,7 +216,9 @@ public class SkillSpawner
             {
                 GameObject obj = handle.Result;
 
-                obj.transform.localPosition = Vector3.zero;
+                if (isInParent) obj.transform.localPosition = Vector3.zero;
+                else obj.transform.position = bottomPoint.position;
+
                 obj.transform.rotation = Quaternion.identity;
 
                 if(obj.TryGetComponent(out BaseSkill baseSkill))

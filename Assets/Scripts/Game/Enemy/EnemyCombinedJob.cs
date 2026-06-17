@@ -42,6 +42,8 @@ public struct EnemyJobData
     // 產生時的波等級(判別經驗球等級或其他)
     public int LevelOnSpawnTime;
 
+    // 最大HP
+    public int MaxHp;
     // 當前HP
     public int CurrentHp;
     // 攻擊距離(距離玩家多遠)
@@ -53,10 +55,18 @@ public struct EnemyJobData
 
     // 移動速度
     public float MoveSpeed;
+
     // 減速剩餘持續時間(秒)
     public float SlowDuration;
     // 減速後的速度倍率(0 = 無法移動, 1=正常移動)
     public float SlowSpeedMultiplier;
+
+    // 灼燒續時間
+    public float BurningDuration;
+    // 灼燒傷害(最大生命%)
+    public float BurningDamage;
+    // 灼燒計時器
+    public float BurningTimerBuffer;
 
     // 紀錄當前攻擊動畫播到百分之幾(0.0 ~ 1.0)
     public float AttackNormalizedTime;
@@ -208,7 +218,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                     data.KnockbackVelocity += knockbackDir * DamageEvents[i].KnockbackForce;
                 }
 
-                // 減速
+                // 減速效果
                 if (DamageEvents[i].SlowDuration > 0f)
                 {
                     // 減速值較低的優先
@@ -216,6 +226,17 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                     {
                         data.SlowDuration = math.max(data.SlowDuration, DamageEvents[i].SlowDuration);
                         data.SlowSpeedMultiplier = DamageEvents[i].SlowSpeedMultiplier;
+                    }
+                }
+
+                // 灼燒效果
+                if(DamageEvents[i].BurningDuration > 0f)
+                {
+                    // 減灼燒傷害高的優先
+                    if (DamageEvents[i].BurningDamage >= data.BurningDamage)
+                    {
+                        data.BurningDuration = math.max(data.BurningDuration, DamageEvents[i].BurningDuration);
+                        data.BurningDamage = DamageEvents[i].BurningDamage;
                     }
                 }
             }
@@ -576,6 +597,34 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             {
                 data.SlowDuration = 0f;
                 data.SlowSpeedMultiplier = 1.0f;
+            }
+        }
+
+        // 灼燒倒計時與每秒扣血處理
+        if (data.BurningDuration > 0f)
+        {
+            // 減少總灼燒剩餘時間
+            data.BurningDuration -= DeltaTime;
+
+            // 累加灼燒計時器
+            data.BurningTimerBuffer += DeltaTime;
+
+            // 灼燒計時器
+            if (data.BurningTimerBuffer >= 1.0f)
+            {
+                int damagePerSecond = (int)math.ceil((float)data.MaxHp * data.BurningDamage);
+                damagePerSecond = math.max(1, damagePerSecond);
+                data.CurrentHp -= damagePerSecond;
+
+                data.BurningTimerBuffer -= 1.0f;
+            }
+
+            // 灼燒徹底結束時的防呆重置
+            if (data.BurningDuration <= 0f)
+            {
+                data.BurningDuration = 0f;
+                data.BurningDamage = 0f;
+                data.BurningTimerBuffer = 0f;
             }
         }
     }

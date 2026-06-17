@@ -3,6 +3,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Cysharp.Threading.Tasks;
 using System;
+using UniRx;
 
 /// <summary>
 /// 敵人
@@ -13,8 +14,12 @@ public class EnemyView : BaseCharacter, ITargetable
     public bool IsActive => gameObject.activeInHierarchy;
 
     private bool _isBoss;
+    private int _maxHp;
 
+    // 減速效果
     private EffectRecycle _slowDownEffect;
+    // 灼燒效果
+    private EffectRecycle _burningEffect;
 
     // 攻擊範圍
     public float AttackRange => ColliderRadius * GameStateData.EnemySystemConfig.AttackRange;
@@ -34,6 +39,14 @@ public class EnemyView : BaseCharacter, ITargetable
 
     private readonly int _isAttackParamId = Animator.StringToHash("IsAttack");
 
+    private IDisposable _burningSubscription;
+
+    public override void OnDestroy()
+    {
+        _burningSubscription?.Dispose();
+        base.OnDestroy();
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -44,16 +57,22 @@ public class EnemyView : BaseCharacter, ITargetable
         {
             _capsuleCollider.isTrigger = true;
         }
-    }
+    } 
 
     /// <summary>
     /// 每次從物件池取出時呼叫，重置狀態
     /// </summary>
-    public void ResetState(bool isBoss)
+    public void ResetState(bool isBoss, int maxHp)
     {
         _isBoss = isBoss;
+        _maxHp = maxHp;
+
+        _burningSubscription?.Dispose();
+
         if (_capsuleCollider != null) _capsuleCollider.enabled = true;
         if (Anim != null) Anim.Rebind();
+        if (_slowDownEffect != null) _slowDownEffect.gameObject.SetActive(false);
+        if (_burningEffect != null) _burningEffect.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -71,6 +90,7 @@ public class EnemyView : BaseCharacter, ITargetable
         int myID = gameObject.GetInstanceID();
         EnemySystemManager controller = GameplayManager.CurrentContext.EnemySystemManager;
 
+        // 註冊傷害
         controller.RegisterDamage(myID, hitData);
 
         // 產生傷害數字
@@ -80,51 +100,107 @@ public class EnemyView : BaseCharacter, ITargetable
         // 產生減速效果
         if(hitData.SpeedModifier < 1 && hitData.SpeedModifierTime > 0)
         {
-            SpawnSlowEffect(hitData.SpeedModifierTime).Forget();
-        }
-    }
-
-    /// <summary>
-    /// 產生減速效果
-    /// </summary>
-    /// <param name="enableTime"></param>
-    /// <returns></returns>
-    private async UniTaskVoid SpawnSlowEffect(float enableTime)
-    {
-        try
-        {
             if(_slowDownEffect == null)
             {
-                EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.SlowDown);
-                if (data != null)
-                {
-                    AsyncOperationHandle<GameObject> handle = data.PrefabReference.InstantiateAsync(BottomPoint.position, BottomPoint.rotation, BottomPoint);
-                    await handle.Task;
-
-                    if (handle.Status == AsyncOperationStatus.Succeeded)
-                    {
-                        GameObject obj = handle.Result;
-                        obj.name = "減速效果";
-
-                        if (obj.TryGetComponent(out EffectRecycle effectRecycle))
-                        {
-                            effectRecycle.Setup(data.PrefabReference);
-                            effectRecycle.SetActiveTime(enableTime);
-
-                            _slowDownEffect = effectRecycle;
-                        }
-                    }
-                }
+                SpawnSlowEffect(
+                    effectType: EFFET_TYPE.SlowDown,
+                    enableTime: hitData.SpeedModifierTime,
+                    effectName: "減速效果",
+                    target: BottomPoint).Forget();
             }
             else
             {
                 _slowDownEffect.gameObject.SetActive(true);
-                _slowDownEffect.SetActiveTime(enableTime);
+                _slowDownEffect.SetActiveTime(hitData.SpeedModifierTime);
+            }            
+        }
+
+        // 產生灼燒效果
+        if (hitData.BurningDamage > 0 && hitData.BurningDuration > 0)
+        {
+            if (_burningEffect == null)
+            {
+                SpawnSlowEffect(
+                    effectType: EFFET_TYPE.Burning,
+                    enableTime: hitData.BurningDuration,
+                    effectName: "灼燒效果",
+                    target: MiddlePoint).Forget();
+            }
+            else
+            {
+                _burningEffect.gameObject.SetActive(true);
+                _burningEffect.SetActiveTime(hitData.BurningDuration);
+            }
+
+            // 模擬顯示傷害
+            int burnDamagePerSec = Mathf.CeilToInt(_maxHp * hitData.BurningDamage);
+            TimeSpan delay = TimeSpan.FromSeconds(1);
+            TimeSpan period = TimeSpan.FromSeconds(1);
+
+            _burningSubscription?.Dispose();
+            _burningSubscription = Observable.Interval(period)
+                .StartWith(0)
+                .TakeUntil(Observable.Timer(TimeSpan.FromSeconds(hitData.BurningDuration)))
+                .Subscribe(
+                    _ =>
+                    {
+                        // 顯示灼燒傷害文字
+                        HitData burnHit = new HitData
+                        {
+                            Attack = burnDamagePerSec,
+                            SkillType = SKILL_TYPE.None
+                        };
+                        GameInfoUIManager gameInfoUIManager = GameplayManager.CurrentContext.GameInfoUIManager;
+                        gameInfoUIManager.CreateDamageText(target: MiddlePoint, hitData: burnHit);
+                    })
+                .AddTo(this);
+        }
+    }
+
+    /// <summary>
+    /// 產生Debuff效果
+    /// </summary>
+    /// <param name="effectType">效果類型</param>
+    /// <param name="enableTime">持續時間</param>
+    /// <param name="effectName">效果名稱</param>
+    /// <param name="target">效果父物件</param>
+    /// <returns></returns>
+    private async UniTaskVoid SpawnSlowEffect(EFFET_TYPE effectType, float enableTime, string effectName, Transform target)
+    {
+        try
+        {
+            EffectData data = GameStateData.AllEffectPrefabData.GetEffect(effectType);
+            if (data != null)
+            {
+                AsyncOperationHandle<GameObject> handle = data.PrefabReference.InstantiateAsync(target.position, target.rotation, target);
+                await handle.Task;
+
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    GameObject obj = handle.Result;
+                    obj.transform.localPosition = Vector3.zero;
+                    obj.name = effectName;
+
+                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+                    {
+                        effectRecycle.Setup(data.PrefabReference);
+                        effectRecycle.SetActiveTime(enableTime);
+
+                        if (effectType == EFFET_TYPE.SlowDown)
+                        {
+                            _slowDownEffect = effectRecycle;
+                        }
+                        else if (effectType == EFFET_TYPE.Burning)
+                        {
+                            _burningEffect = effectRecycle;
+                        }
+                    }
+                }
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"產生減速效果錯誤: {e}");
+            Debug.LogError($"產生Debuff效果錯誤: {e}");
         }
     }
 
@@ -147,6 +223,8 @@ public class EnemyView : BaseCharacter, ITargetable
     {
         try
         {
+            _burningSubscription?.Dispose();
+
             // 立即關閉碰撞，防止在被 Remove 的瞬間還參與當影格的 Job 計算
             if (_capsuleCollider != null) _capsuleCollider.enabled = false;
 
