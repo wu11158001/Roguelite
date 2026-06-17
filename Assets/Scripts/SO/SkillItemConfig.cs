@@ -28,6 +28,8 @@ public enum SKILL_TYPE
     Skill_FrontHit,
     /// <summary> 跟隨機器人 </summary>
     Skill_Robot,
+    /// <summary> 水花(隨機位置) </summary>
+    Skill_WaterSplash,
 }
 
 /// <summary>
@@ -49,6 +51,8 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InCharacterMiddle8Way,
     /// <summary> 場上唯一 </summary>
     Only,
+    /// <summary> 產生在角色周圍隨機位置 </summary>
+    RandomInCharacter,
 }
 
 /// <summary>

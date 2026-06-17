@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -8,9 +9,13 @@ using UnityEngine;
 /// </summary>
 public class SkillTimerManager
 {
-    private readonly Dictionary<SKILL_TYPE, IDisposable> _skillTimers = new();
     private readonly Action<SkillItemData> _onTimerTrigger;
     private readonly MonoBehaviour _owner;
+
+    // Timer 的訂閱
+    private readonly Dictionary<SKILL_TYPE, IDisposable> _skillTimers = new();
+    // 管理所有技能的當前倒數進度（秒數）
+    private readonly Dictionary<SKILL_TYPE, float> _skillProgresses = new();
 
     public SkillTimerManager(MonoBehaviour owner, Action<SkillItemData> onTimerTrigger)
     {
@@ -38,13 +43,42 @@ public class SkillTimerManager
     /// <param name="skill"></param>
     public void StartSkillTimer(SkillItemData skill)
     {
-        StopSkillTimer(skill);
+        // 如果已經在計時，直接 return。
+        if (_skillTimers.ContainsKey(skill.SkillType))
+        {
+            return;
+        }
 
-        float cd = GetActualCd(skill);
-        TimeSpan startTime = skill.IsUpdateNow ? TimeSpan.Zero : TimeSpan.FromSeconds(cd);
+        // 初始化技能的進度(第一次獲得技能時)
+        if (!_skillProgresses.ContainsKey(skill.SkillType))
+        {
+            _skillProgresses[skill.SkillType] = skill.IsUpdateNow ? GetActualCd(skill) : 0f;
+        }
 
-        _skillTimers[skill.SkillType] = Observable.Timer(startTime, TimeSpan.FromSeconds(cd), Scheduler.MainThread)
-            .Subscribe(_ => _onTimerTrigger?.Invoke(skill))
+        float interval = 0.1f;
+        _skillTimers[skill.SkillType] = Observable.Interval(TimeSpan.FromSeconds(interval), Scheduler.MainThread)
+            .Subscribe(_ =>
+            {
+                // 獲取最新技能資料
+                var currentSkill = GameplayManager.CurrentContext.SkillController.OwnSkills
+                    .FirstOrDefault(s => s.SkillType == skill.SkillType);
+
+                if (currentSkill == null)
+                {
+                    StopSkillTimer(skill);
+                    return;
+                }
+
+                _skillProgresses[skill.SkillType] += interval;
+                float currentMaxCd = GetActualCd(currentSkill);
+
+                // 觸發技能
+                if (_skillProgresses[skill.SkillType] >= currentMaxCd)
+                {
+                    _onTimerTrigger?.Invoke(currentSkill);
+                    _skillProgresses[skill.SkillType] -= currentMaxCd;
+                }
+            })
             .AddTo(_owner);
     }
 
@@ -58,6 +92,12 @@ public class SkillTimerManager
         {
             d.Dispose();
             _skillTimers.Remove(skill.SkillType);
+        }
+
+        // 🌟 停止計時器時，順便把進度紀錄移除
+        if (_skillProgresses.ContainsKey(skill.SkillType))
+        {
+            _skillProgresses.Remove(skill.SkillType);
         }
     }
 

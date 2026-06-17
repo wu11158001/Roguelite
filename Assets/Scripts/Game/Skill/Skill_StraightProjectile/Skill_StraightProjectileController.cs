@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// 技能_直線投射物
+/// </summary>
 public class Skill_StraightProjectileController
 {
     // 是否攻擊已失效
@@ -54,7 +57,7 @@ public class Skill_StraightProjectileController
     /// 擊中敵人
     /// </summary>
     /// <param name="enemyObj"></param>
-    /// <param name="enemyObj"></param>
+    /// <param name="hitData"></param>
     public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if (_isExpired || _hitTargets.Contains(enemyObj)) return;

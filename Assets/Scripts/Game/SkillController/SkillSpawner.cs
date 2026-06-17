@@ -92,6 +92,13 @@ public class SkillSpawner
                     skillData: skill,
                     spawnAction: (index) => SpawnInCharacterMiddle8Way(skill, index)));
                 break;
+
+            // 在攝影機視野內隨機位置
+            case SKILL_SPAWN_MODEL_TYPE.RandomInCharacter:
+                _coroutineRunner.StartCoroutine(IShotSkill(
+                    skillData: skill,
+                    spawnAction: (index) => SpawnRandomInCamera(skill)));
+                break;
         }
     }
 
@@ -372,6 +379,28 @@ public class SkillSpawner
             });
     }
 
+    /// <summary>
+    /// 產生在角色周圍隨機位置
+    /// </summary>
+    private void SpawnRandomInCamera(SkillItemData data)
+    {
+        Transform point = GetFallbackTransform();
+
+        // 產生技能
+        GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+            parentName: data.SkillName,
+            assetRef: data.PrefabReference,
+            position: point.position,
+            rotation: point.rotation,
+            callback: (obj) =>
+            {
+                if (obj.TryGetComponent(out BaseSkill skill))
+                {
+                    skill.Setup(data: data);
+                }
+            });
+    }
+
     #region 功能類
 
     /// <summary>
@@ -427,7 +456,7 @@ public class SkillSpawner
     /// <returns></returns>
     public Transform GetFallbackTransform()
     {
-        float radius = 10;
+        float radius = 18;
 
         PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
         if (playerView == null) return null;

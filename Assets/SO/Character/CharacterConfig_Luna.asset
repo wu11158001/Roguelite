@@ -23,7 +23,7 @@ MonoBehaviour:
   Price: 2000
   HpBarHight: 3.2
   RotationSpeed: 10
-  InitSkill: 5
+  InitSkill: 9
   _baseMoveSpeed: 11
   MoveSpeed:
     value: 0
@@ -59,6 +59,12 @@ MonoBehaviour:
     value: 0
   _baseAddKeepTime: 0
   AddKeepTime:
+    value: 0
+  _baseAddLucky: 0
+  AddLucky:
+    value: 0
+  _baseReselectCount: 0
+  ReselectCount:
     value: 0
   Hp:
     value: 0

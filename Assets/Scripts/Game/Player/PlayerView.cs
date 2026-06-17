@@ -340,13 +340,13 @@ public class PlayerView : BaseCharacter
         // 直升技能:機器人
         if (Keyboard.current.digit8Key.wasPressedThisFrame)
         {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_Robot, 1));
+            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_WaterSplash, 1));
         }
 
-        // 直升技能:機器人
+        // 直升技能:被動
         if (Keyboard.current.digit9Key.wasPressedThisFrame)
         {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetPassiveSkill(PASSIVE_SKILL_TYPE.MaxHp, 1));
+            Test_GainSkill(GameStateData.AllSkillConfigData.GetPassiveSkill(PASSIVE_SKILL_TYPE.EffectRange, 1));
         }
     }
 

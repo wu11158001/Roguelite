@@ -274,31 +274,20 @@ public class SkillController : MonoBehaviour
             {
                 switch (skill.SkillType)
                 {
-                    // 靈氣
                     case SKILL_TYPE.Skill_Aura:
                         _spawner.InCharacterBottomAndOnly(skill, true);
                         break;
-
-                    // 機器人
                     case SKILL_TYPE.Skill_Robot:
                         _spawner.InCharacterBottomAndOnly(skill, false);
                         break;
                 }
-                
                 return;
             }
+
+            // 啟動計時器
             _timerManager.StartSkillTimer(skill);
         }
-        else if (skill.IsPassive && skill.PassiveType == PASSIVE_SKILL_TYPE.CdReduce)
-        {
-            // 被動技能屬於CD類型重啟Timer
-            foreach (var active in _inventory.OwnSkills.Where(s => !s.IsPassive && !s.IsProps))
-            {
-                _timerManager.StartSkillTimer(active);
-            }
-        }
     }
-
 
     /// <summary>
     /// 獲取被動技能處理
