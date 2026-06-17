@@ -211,8 +211,12 @@ public struct EnemyCombinedJob : IJobParallelForTransform
                 // 減速
                 if (DamageEvents[i].SlowDuration > 0f)
                 {
-                    data.SlowDuration = math.max(data.SlowDuration, DamageEvents[i].SlowDuration);
-                    data.SlowSpeedMultiplier = DamageEvents[i].SlowSpeedMultiplier;
+                    // 減速值較低的優先
+                    if(DamageEvents[i].SlowSpeedMultiplier <= data.SlowSpeedMultiplier)
+                    {
+                        data.SlowDuration = math.max(data.SlowDuration, DamageEvents[i].SlowDuration);
+                        data.SlowSpeedMultiplier = DamageEvents[i].SlowSpeedMultiplier;
+                    }
                 }
             }
         }
@@ -491,10 +495,10 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             float currentMoveSpeed = data.MoveSpeed;
             if (data.SlowDuration > 0f) currentMoveSpeed *= data.SlowSpeedMultiplier;
 
-            // 模式 3 的物理剛性疊加
+            // 模式3:的物理剛性疊加
             if (data.MoveType == EnemyMoveType.Mode3_Straight)
             {
-                // 模式 3：主動方向全速前進 + 外部物理推擠（不進行合體 normalize，避免抹平側向力）
+                // 模式3:主動方向全速前進 + 外部物理推擠（不進行合體 normalize，避免抹平側向力）
                 finalVelocity = nextVelocity * currentMoveSpeed + separationForce * SeparationWeight;
             }
             else

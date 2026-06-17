@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using Cysharp.Threading.Tasks;
+using System;
 
 /// <summary>
 /// 敵人
@@ -10,6 +13,8 @@ public class EnemyView : BaseCharacter, ITargetable
     public bool IsActive => gameObject.activeInHierarchy;
 
     private bool _isBoss;
+
+    private EffectRecycle _slowDownEffect;
 
     // 攻擊範圍
     public float AttackRange => ColliderRadius * GameStateData.EnemySystemConfig.AttackRange;
@@ -75,36 +80,51 @@ public class EnemyView : BaseCharacter, ITargetable
         // 產生減速效果
         if(hitData.SpeedModifier < 1 && hitData.SpeedModifierTime > 0)
         {
-            SpawnSlowEffect(
-                target: BottomPoint,
-                recycleTime: hitData.SpeedModifierTime);
+            SpawnSlowEffect(hitData.SpeedModifierTime).Forget();
         }
     }
 
     /// <summary>
     /// 產生減速效果
     /// </summary>
-    /// <param name="target"></param>
-    private void SpawnSlowEffect(Transform target, float recycleTime)
+    /// <param name="enableTime"></param>
+    /// <returns></returns>
+    private async UniTaskVoid SpawnSlowEffect(float enableTime)
     {
-        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.SlowDown);
-        if (data != null)
+        try
         {
-            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
-                parentName: "減速效果",
-                assetRef: data.PrefabReference,
-                position: target.position,
-                rotation: target.rotation,
-                callback: (obj) =>
+            if(_slowDownEffect == null)
+            {
+                EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.SlowDown);
+                if (data != null)
                 {
-                    obj.transform.SetParent(target);
-                    obj.transform.position = target.position;
+                    AsyncOperationHandle<GameObject> handle = data.PrefabReference.InstantiateAsync(BottomPoint.position, BottomPoint.rotation, BottomPoint);
+                    await handle.Task;
 
-                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+                    if (handle.Status == AsyncOperationStatus.Succeeded)
                     {
-                        effectRecycle.Setup(data.PrefabReference, recycleTime);
+                        GameObject obj = handle.Result;
+                        obj.name = "減速效果";
+
+                        if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+                        {
+                            effectRecycle.Setup(data.PrefabReference);
+                            effectRecycle.SetActiveTime(enableTime);
+
+                            _slowDownEffect = effectRecycle;
+                        }
                     }
-                });
+                }
+            }
+            else
+            {
+                _slowDownEffect.gameObject.SetActive(true);
+                _slowDownEffect.SetActiveTime(enableTime);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"產生減速效果錯誤: {e}");
         }
     }
 
@@ -156,7 +176,7 @@ public class EnemyView : BaseCharacter, ITargetable
                 GameplayManager.CurrentContext.GameController.OnEnemyDie();
 
                 // 判斷經驗球掉落機率
-                if(Random.value < GameStateData.GameConfig.ExpBallRate)
+                if(UnityEngine.Random.value < GameStateData.GameConfig.ExpBallRate)
                 {
                     // 掉落經驗球
                     AssetReferenceGameObject expBallRef = GameStateData.GameConfig.ExpBallPrefabReference;

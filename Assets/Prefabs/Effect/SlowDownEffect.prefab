@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb9c792613801248994deb8dd168959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlowDownEffectView
-  _recycleTime: 2
+  _recycleTime: 0
 --- !u!1 &3190628285105841970
 GameObject:
   m_ObjectHideFlags: 0

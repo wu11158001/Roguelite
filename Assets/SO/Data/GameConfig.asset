@@ -28,7 +28,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   MaxBoxCountInGround: 2
-  SpawnBoxRate: 0.5
+  SpawnBoxRate: 0.65
   ExpBallRate: 0.7
   ExpBallPrefabReference:
     m_AssetGUID: 85a224a8259e48840b29faa30437ddbc

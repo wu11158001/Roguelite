@@ -42,7 +42,8 @@ public class MapProps_Kills : BaseMapProps
 
                     if (obj.TryGetComponent(out EffectRecycle effectRecycle))
                     {
-                        effectRecycle.Setup(data.PrefabReference, recycleTime);
+                        effectRecycle.Setup(data.PrefabReference);
+                        effectRecycle.SetRecycleTime(recycleTime);
                     }
                 });
         }

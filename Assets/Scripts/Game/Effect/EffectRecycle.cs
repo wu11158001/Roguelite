@@ -1,6 +1,8 @@
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UniRx;
+using System;
 
 /// <summary>
 /// 效果回收
@@ -8,30 +10,56 @@ using UnityEngine.AddressableAssets;
 public class EffectRecycle : BaseGameObject
 {
     [Label("回收時間")]
-    [SerializeField] private float _recycleTime = 1;
+    [SerializeField] private float _recycleTime = 0;
+
+    private IDisposable timerSubscription;
 
     public override void OnDestroy()
     {
-        CancelInvoke(nameof(Recycle));
-
+        timerSubscription.Dispose();
         base.OnDestroy();
     }
 
-    public void Setup(AssetReferenceGameObject myRef, float recycleTime = 0)
+    public override void Setup(AssetReferenceGameObject myRef)
     {
         base.Setup(myRef);
 
-        if(recycleTime > 0) _recycleTime = recycleTime;
-
-        CancelInvoke(nameof(Recycle));
-        Invoke(nameof(Recycle), _recycleTime);
+        if (_recycleTime > 0)
+        {
+            SetRecycleTime(_recycleTime);
+        }
     }
 
     /// <summary>
-    /// 回收
+    /// 設置回收時間
     /// </summary>
-    private void Recycle()
+    /// <param name="recycleTime">回收時間(秒)</param>
+    public void SetRecycleTime(float recycleTime)
     {
-        GameplayManager.CurrentContext.GameScenePool.ReturnToPool(gameObject);
+        if(recycleTime > 0)
+        {
+            timerSubscription?.Dispose();
+            timerSubscription = Observable.Timer(TimeSpan.FromSeconds(recycleTime))
+                .Subscribe(_ =>
+                {
+                    GameplayManager.CurrentContext.GameScenePool.ReturnToPool(gameObject);
+                })
+                .AddTo(this);
+        }
+    }
+
+    /// <summary>
+    /// 設置激活時間
+    /// </summary>
+    /// <param name="enableTime">激活時間(秒)</param>
+    public void SetActiveTime(float enableTime)
+    {
+        timerSubscription?.Dispose();
+        timerSubscription = Observable.Timer(TimeSpan.FromSeconds(enableTime))
+            .Subscribe(_ =>
+            {
+                gameObject.SetActive(false);
+            })
+            .AddTo(this);
     }
 }
