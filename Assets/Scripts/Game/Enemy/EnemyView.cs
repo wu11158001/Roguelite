@@ -179,6 +179,11 @@ public class EnemyView : BaseCharacter, ITargetable
                 {
                     GameObject obj = handle.Result;
                     obj.transform.localPosition = Vector3.zero;
+                    Transform[] allChildren = obj.GetComponentsInChildren<Transform>();
+                    foreach (Transform child in allChildren)
+                    {
+                        child.localScale = transform.localScale;
+                    }
                     obj.name = effectName;
 
                     if (obj.TryGetComponent(out EffectRecycle effectRecycle))
