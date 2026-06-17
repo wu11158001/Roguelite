@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemySystemConfig
   m_EditorClassIdentifier: Assembly-CSharp::EnemySystemConfig
   MaxEnemyCount: 500
-  InitHp: 18
+  InitHp: 15
   InitAttack: 20
   AttackRange: 2.4
   SpawnRadius: 35
