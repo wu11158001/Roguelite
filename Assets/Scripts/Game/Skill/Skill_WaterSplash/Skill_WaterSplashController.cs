@@ -3,7 +3,7 @@ using UniRx;
 using System;
 
 /// <summary>
-/// 技能_水花
+/// 技能_水花(角色周圍隨機)
 /// </summary>
 public class Skill_WaterSplashController : IDisposable
 {
@@ -25,7 +25,7 @@ public class Skill_WaterSplashController : IDisposable
 
     public void Dispose()
     {
-        _disposables.Dispose();
+        _disposables?.Dispose();
     }
 
     /// <summary>

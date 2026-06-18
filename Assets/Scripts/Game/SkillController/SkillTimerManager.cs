@@ -43,9 +43,15 @@ public class SkillTimerManager
     /// <param name="skill"></param>
     public void StartSkillTimer(SkillItemData skill)
     {
-        // 如果已經在計時，直接 return。
+        // 如果已經在計時
         if (_skillTimers.ContainsKey(skill.SkillType))
         {
+            // 立即更新技能直接在執行技能
+            if(skill.IsUpdateNow)
+            {
+                _skillProgresses[skill.SkillType] = GetActualCd(skill);
+            }
+
             return;
         }
 
@@ -94,7 +100,7 @@ public class SkillTimerManager
             _skillTimers.Remove(skill.SkillType);
         }
 
-        // 🌟 停止計時器時，順便把進度紀錄移除
+        // 停止計時器，進度紀錄移除
         if (_skillProgresses.ContainsKey(skill.SkillType))
         {
             _skillProgresses.Remove(skill.SkillType);

@@ -1,9 +1,9 @@
 using UnityEngine;
 using UniRx;
 using UnityEngine.AddressableAssets;
-using UniRx.Triggers;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// 技能_物件圍繞
@@ -15,13 +15,19 @@ public class Skill_AroundView : BaseSkill
     [Label("基礎距離角色水平距離")]
     [SerializeField] private float _baseDistance = 3.5f;
 
-    private float _distance;
-    private float _size;
-
     private List<Skill_Around_AttackObjView> _attackObjs = new();
 
     private Skill_AroundModel _model;
     private Skill_AroundController _controller;
+
+    private IDisposable timerSubscription;
+
+    public override void OnDestroy()
+    {
+        timerSubscription.Dispose();
+        _controller.Dispose();
+        base.OnDestroy();
+    }
 
     public override void Setup(SkillItemData data, EnemyView targetEnemy = null)
     {
@@ -30,15 +36,17 @@ public class Skill_AroundView : BaseSkill
         _model = new(data, _baseDistance);
         _controller = new Skill_AroundController(this, _model);
 
-        // 使用 UniRx 的 Update 觸發器
-        this.UpdateAsObservable()
-            .Subscribe(_ => _controller.ExecuteTick(Time.deltaTime))
+        // 回收計時
+        timerSubscription?.Dispose();
+        timerSubscription = Observable.Timer(TimeSpan.FromSeconds(_model.KeepTime))
+            .Subscribe(_ =>
+            {
+                Recycle();
+            })
             .AddTo(_disposables);
 
         // 產生攻擊物件
         SpawnAttackObjs();
-
-        Invoke(nameof(Recycle), _model.KeepTime);
     }
 
     /// <summary>
@@ -46,8 +54,6 @@ public class Skill_AroundView : BaseSkill
     /// </summary>
     public override void Recycle()
     {
-        CancelInvoke(nameof(Recycle));
-
         if(gameObject.activeInHierarchy)
         {
             foreach (var attackObj in _attackObjs)

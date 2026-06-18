@@ -16,11 +16,7 @@ MonoBehaviour:
   - SkillName: "\u96DE\u817F"
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u62DB\u559A\u4E00\u53F0\u6A5F\u5668\u4EBA, \u6A5F\u5668\u4EBA\u5C07\u8DDF\u96A8\u4E26\u5411\u6700\u8FD1\u7684\u6575\u4EBA\u767C\u5C04\u96F7\u5C04"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1
@@ -56,11 +52,7 @@ MonoBehaviour:
   - SkillName: "\u96DE\u817F"
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u96F7\u5C04\u50B7\u5BB3\u589E\u52A0"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1
@@ -96,11 +88,7 @@ MonoBehaviour:
   - SkillName: "\u96DE\u817F"
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u96F7\u5C04\u50B7\u5BB3\u589E\u52A0, \u64CA\u9000\u6548\u679C\u589E\u52A0"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1
@@ -137,11 +125,7 @@ MonoBehaviour:
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u96F7\u5C04\u5C0D\u6575\u4EBA\u9020\u6210\u707C\u71D2, \u6BCF\u79D2\u9020\u6210\u6575\u4EBA\u6700\u5927\u751F\u547D1%\u7684\u707C\u71D2\u50B7\u5BB3,
       \u6301\u7E8C3\u79D2"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1
@@ -178,11 +162,7 @@ MonoBehaviour:
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u96F7\u5C04\u50B7\u5BB3\u589E\u52A0, \u707C\u71D2\u50B7\u5BB3\u63D0\u5347,
       \u6BCF\u79D2\u9020\u6210\u6575\u4EBA\u6700\u5927\u751F\u547D2%\u7684\u707C\u71D2\u50B7\u5BB3"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1
@@ -218,11 +198,7 @@ MonoBehaviour:
   - SkillName: "\u96DE\u817F"
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u96F7\u5C04\u50B7\u5BB3\u589E\u52A0, \u707C\u71D2\u6301\u7E8C\u6642\u9593+1\u79D2"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1
@@ -259,11 +235,7 @@ MonoBehaviour:
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u96F7\u5C04\u50B7\u5BB3\u589E\u52A0, \u707C\u71D2\u50B7\u5BB3\u63D0\u5347,
       \u6BCF\u79D2\u9020\u6210\u6575\u4EBA\u6700\u5927\u751F\u547D3%\u7684\u707C\u71D2\u50B7\u5BB3"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1
@@ -300,11 +272,7 @@ MonoBehaviour:
     SkillIcon: {fileID: 21300000, guid: 6f17b16f02b2246499ac554b97a16d4a, type: 3}
     SkillDescribe: "\u96F7\u5C04, \u707C\u71D2\u50B7\u5BB3\u63D0\u5347, \u6BCF\u79D2\u9020\u6210\u6575\u4EBA\u6700\u5927\u751F\u547D5%\u7684\u707C\u71D2\u50B7\u5BB3,
       \u707C\u71D2\u6301\u7E8C\u6642\u9593+1\u79D2"
-    NeedActiveSkills:
-    - Type: 0
-      Level: 4
-    - Type: 0
-      Level: 4
+    NeedActiveSkills: []
     NeedPassiveSkills: []
     _skillType: 8
     IsUpdateNow: 1

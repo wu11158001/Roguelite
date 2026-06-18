@@ -4,7 +4,7 @@ using UniRx;
 using UnityEngine;
 
 /// <summary>
-/// 技能_水花
+/// 技能_水花(角色周圍隨機)
 /// </summary>
 public class Skill_WaterSplashView : BaseSkill
 {
@@ -17,6 +17,7 @@ public class Skill_WaterSplashView : BaseSkill
 
     public override void OnDestroy()
     {
+        _controller?.Dispose();
         timerSubscription?.Dispose();
         base.OnDestroy();
     }

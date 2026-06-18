@@ -20,7 +20,7 @@ public class BaseSkill : BaseGameObject
 
     public override void OnDestroy()
     {
-        _disposables.Dispose();
+        _disposables?.Dispose();
         base.OnDestroy();
     }
 

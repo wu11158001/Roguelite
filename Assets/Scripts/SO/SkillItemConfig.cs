@@ -30,6 +30,8 @@ public enum SKILL_TYPE
     Skill_Robot,
     /// <summary> 水花(隨機位置) </summary>
     Skill_WaterSplash,
+    /// <summary> 水領域(畫面反彈) </summary>
+    Skill_WaterArea
 }
 
 /// <summary>
@@ -41,7 +43,7 @@ public enum SKILL_SPAWN_MODEL_TYPE
     InPoint,
     /// <summary> 產生在角色發射點周圍隨機位置 </summary>
     InPointRandom,
-    /// <summary> 在攝影機視野內隨機敵人, 在角色底部 </summary>
+    /// <summary> 在攝影機視野內隨機敵人 </summary>
     RandomEnemyInBottom,
     /// <summary> 產生在物件池內且唯一 </summary>
     InPoolAndOnly,

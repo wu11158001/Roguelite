@@ -5012,7 +5012,7 @@ GameObject:
   - component: {fileID: 6384845015812624040}
   - component: {fileID: 304322884284306997}
   m_Layer: 10
-  m_Name: Water_Splash_B
+  m_Name: Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -49,8 +49,10 @@ public class Skill_FrontHitController : IDisposable
     }
 
     /// <summary>
-    /// 擊中敵人邏輯
+    /// 擊中敵人
     /// </summary>
+    /// <param name="enemyObj"></param>
+    /// <param name="hitData"></param>
     public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if (enemyObj == null || !enemyObj.activeInHierarchy) return;

@@ -1,9 +1,12 @@
 using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
+using System;
 
 /// <summary>
 /// 技能_物件圍繞
 /// </summary>
-public class Skill_AroundController
+public class Skill_AroundController : IDisposable
 {
     private Vector3 _currentPosition;
     private Quaternion _currentRotation;
@@ -11,12 +14,29 @@ public class Skill_AroundController
     private Skill_AroundView _view;
     private Skill_AroundModel _model;
 
+    private readonly CompositeDisposable _disposables = new();
+
+    public void Dispose()
+    {
+        _disposables.Dispose();
+    }
+
     public Skill_AroundController(Skill_AroundView view, Skill_AroundModel model)
     {
         _view = view;
         _model = model;
 
+        BindViewModel();
+
         _currentRotation = _view.transform.rotation;
+    }
+
+    private void BindViewModel()
+    {
+        // 每幀驅動
+        _view.UpdateAsObservable()
+            .Subscribe(_ => ExecuteTick(Time.deltaTime))
+            .AddTo(_disposables);
     }
 
     /// <summary>

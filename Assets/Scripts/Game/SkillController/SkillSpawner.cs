@@ -79,7 +79,7 @@ public class SkillSpawner
                     onlySelf: true));
                 break;
 
-            // 在攝影機視野內隨機敵人, 在角色底部
+            // 在攝影機視野內隨機敵人
             case SKILL_SPAWN_MODEL_TYPE.RandomEnemyInBottom:
                 _coroutineRunner.StartCoroutine(IShotSkill(
                     skillData: skill,

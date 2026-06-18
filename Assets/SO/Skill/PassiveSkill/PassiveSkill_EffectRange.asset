@@ -41,6 +41,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 1
     _passiveType: 11
     PassiveAddValue: 0.1
@@ -75,6 +77,8 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 1
     _passiveType: 11
     PassiveAddValue: 0.1
@@ -109,6 +113,44 @@ MonoBehaviour:
     SkillKeepTime: 0
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 1
+    _passiveType: 11
+    PassiveAddValue: 0.1
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u6548\u679C\u7BC4\u570D"
+    SkillIcon: {fileID: 351534398, guid: 6161b681664f3274982601c37666ac8c, type: 3}
+    SkillDescribe: "\u88AB\u52D5\u6280\u80FD-\u6548\u679C\u7BC4\u570D\u589E\u52A0"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 1
+    SkillLevel: 4
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 1
     _passiveType: 11
     PassiveAddValue: 0.1

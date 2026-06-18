@@ -95,6 +95,12 @@ public class Skill_Around_AttackObjController : IDisposable
         }
     }
 
+    /// <summary>
+    /// 擊中敵人
+    /// </summary>
+    /// <param name="enemyObj"></param>
+    /// <param name="hitData"></param>
+    /// <param name="audioType"></param>
     public void HitEnemy(GameObject enemyObj, HitData hitData, AUDIO_TYPE audioType)
     {
         if (enemyObj == null || !enemyObj.activeInHierarchy) return;
