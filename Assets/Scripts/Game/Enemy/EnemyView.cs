@@ -271,14 +271,18 @@ public class EnemyView : BaseCharacter, ITargetable
                 
             }
 
-            // 掉落Boss獎勵
+            // Boss
             if(isBoss)
             {
+                // 掉落Boss獎勵
                 AssetReferenceGameObject bonusRef = GameStateData.EnemySystemConfig.Boss_BonusPrefabReference;
                 GameplayManager.CurrentContext.InfiniteMapController.SpawnPropsAtWorld(
                     worldPos: transform.position,
                     prefabRef: bonusRef,
                     isLocked: true);
+
+                // 清除物件池(Boss類型敵人)
+                GameplayManager.CurrentContext.GameScenePool.ClearInactiveObjectsInPool(gameObject);
             }
         }
         catch (System.Exception e)

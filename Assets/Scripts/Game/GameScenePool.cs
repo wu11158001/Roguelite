@@ -24,6 +24,9 @@ public class GameScenePool : MonoBehaviour
     // 記錄目前在畫面上的物件
     private HashSet<GameObject> _activeObjects = new();
 
+    // 每種類型最大數量
+    private int _maxCount = 30;
+
     /// <summary>
     /// 生成物件
     /// </summary>
@@ -100,15 +103,59 @@ public class GameScenePool : MonoBehaviour
             return;
         }
 
+        string key = mark.PoolKey;
+
+        // 檢查是否超過上限
+        if (_poolDictionary.TryGetValue(key, out var queue) && queue.Count >= _maxCount)
+        {
+            // 超過上限，直接釋放記憶體
+            Addressables.ReleaseInstance(obj);
+            return;
+        }
+
         obj.SetActive(false);
 
-        // 確保回收時它會回到正確的父物件底下
+        // 回收時回到正確的父物件底下
         if (_poolParents.TryGetValue(mark.PoolKey, out Transform parent))
         {
             obj.transform.SetParent(parent);
         }
 
         _poolDictionary[mark.PoolKey].Enqueue(obj);
+    }
+
+    /// <summary>
+    /// 清理指定所有未激活的物件
+    /// </summary>
+    /// <param name="targetObj"></param>
+    public void ClearInactiveObjectsInPool(GameObject targetObj)
+    {
+        try
+        {
+            PoolObjectMark mark = targetObj.GetComponent<PoolObjectMark>();
+            if (mark == null)
+            {
+                return;
+            }
+
+            string poolKey = mark.PoolKey;
+
+            if (_poolDictionary.TryGetValue(poolKey, out Queue<GameObject> queue))
+            {
+                while (queue.Count > 1)
+                {
+                    GameObject obj = queue.Dequeue();
+                    if (obj != null)
+                    {
+                        Addressables.ReleaseInstance(obj);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"清理指定物件池錯誤: {e}");
+        }
     }
 
     /// <summary>
