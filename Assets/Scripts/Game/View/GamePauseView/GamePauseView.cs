@@ -57,8 +57,13 @@ public class GamePauseView : BaseView
         {
             GameplayManager.CurrentContext.GameController.GamePause(false);
             GameplayManager.CurrentContext.GameController.SetGameOver();
-            GameplayManager.CurrentContext.GameController.GameOverClear();
-            ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
+            ViewManager.Instance?.ClearAll();
+            ViewManager.Instance.OpenView<GameOverView>(
+                viewType: VIEW_TYPE.GameOverView,
+                callback: (view) =>
+                {
+                    GameplayManager.CurrentContext.GameController.GameOverClear();
+                }).Forget();
         }).AddTo(this);
     }
 

@@ -281,8 +281,13 @@ public class PlayerView : BaseCharacter
         float animationLength = stateInfo.length;
         yield return new WaitForSeconds(animationLength);
 
-        GameplayManager.CurrentContext.GameController.GameOverClear();
-        ViewManager.Instance.OpenView<GameOverView>(viewType: VIEW_TYPE.GameOverView).Forget();
+        ViewManager.Instance?.ClearAll();
+        ViewManager.Instance.OpenView<GameOverView>(
+            viewType: VIEW_TYPE.GameOverView, 
+            callback: (view) =>
+            {
+                GameplayManager.CurrentContext.GameController.GameOverClear();
+            }).Forget();
     }
 
     #region 測試用

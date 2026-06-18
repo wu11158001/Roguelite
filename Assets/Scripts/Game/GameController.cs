@@ -53,7 +53,6 @@ public class GameController : MonoBehaviour
         GameplayManager.CurrentContext.InfiniteMapController?.ClearGround();
         GameplayManager.CurrentContext.GameInfoUIManager?.ClearAll();
         GameplayManager.CurrentContext.GameScenePool?.ClearAllPools();
-        ViewManager.Instance?.ClearAll();
     }
 
     /// <summary>
