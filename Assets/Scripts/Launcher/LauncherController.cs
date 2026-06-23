@@ -131,6 +131,9 @@ public class LauncherController : MonoBehaviour
                 }
             }
 
+            // 收集所有音訊的載入 Task
+            loadTasks.Add(AudioManager.Instance.PreloadAllAudioAsync());
+
             await UniTask.WhenAll(loadTasks);
         }
         catch (Exception e)

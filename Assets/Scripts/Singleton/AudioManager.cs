@@ -41,16 +41,6 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         _fadeCts?.Cancel();
         _fadeCts?.Dispose();
 
-        ClearAll();
-
-        base.OnDestroy();
-    }
-
-    /// <summary>
-    /// 清理所有載入的資源
-    /// </summary>
-    public void ClearAll()
-    {
         // 釋放 Addressables 資源與快取
         foreach (var clip in _audioCache.Values)
         {
@@ -61,6 +51,16 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
         }
         _audioCache.Clear();
 
+        ClearAll();
+
+        base.OnDestroy();
+    }
+
+    /// <summary>
+    /// 清理所有載入的資源
+    /// </summary>
+    public void ClearAll()
+    {
         // 清理所有動態生成的音效物件
         foreach (var source in _allSfxSources)
         {
@@ -120,6 +120,26 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
             _isMusicOn = savedSetting.IsOnMusic;
             _isSoundOn = savedSetting.IsOnSound;
         }
+    }
+
+    /// <summary>
+    /// 載設所有的音訊資源
+    /// </summary>
+    public async UniTask PreloadAllAudioAsync()
+    {
+        if (GameStateData.AudioConfigData?.AudioDatas == null) return;
+
+        List<UniTask<AudioClip>> loadTasks = new();
+
+        foreach (var data in GameStateData.AudioConfigData.AudioDatas)
+        {
+            if (data.AudioClip != null && data.AudioClip.RuntimeKeyIsValid())
+            {
+                loadTasks.Add(GetAudioClip(data.AudioType));
+            }
+        }
+
+        await UniTask.WhenAll(loadTasks);
     }
 
     /// <summary>
