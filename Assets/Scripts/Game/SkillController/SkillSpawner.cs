@@ -120,7 +120,7 @@ public class SkillSpawner
             spawnAction?.Invoke(index);
             if (shotCount > 1 && i < shotCount - 1)
             {
-                yield return new WaitForSeconds(skillData.SkillShotInterval);
+                yield return new WaitForSeconds(skillData.SkillShotInterval);                
             }
         }
     }

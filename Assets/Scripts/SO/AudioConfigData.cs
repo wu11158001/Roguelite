@@ -59,7 +59,9 @@ public enum AUDIO_TYPE
     /// <summary> 技能:機器人雷射音效 </summary>
     Skill_Robot_Laser,
     /// <summary> 技能:水花音效 </summary>
-    Skill_WaterSplash
+    Skill_WaterSplash,
+    /// <summary> 技能:紙鶴擊中音效 </summary>
+    Skill_Crane,
 }
 
 /// <summary>

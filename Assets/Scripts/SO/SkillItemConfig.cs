@@ -31,7 +31,9 @@ public enum SKILL_TYPE
     /// <summary> 水花(隨機位置) </summary>
     Skill_WaterSplash,
     /// <summary> 水領域(畫面反彈) </summary>
-    Skill_WaterArea
+    Skill_WaterArea,
+    /// <summary> 紙鶴(擊中分裂) </summary>
+    Skill_Crane,
 }
 
 /// <summary>
@@ -233,6 +235,16 @@ public class SkillItemData
     public int SkillPenetrate;
 
     [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("分裂數量")]
+    [ShowIf(nameof(_isShowSkill))]
+    public int SkillSplit;
+
+    [AllowNesting]
+    [BoxGroup("主動技能數值")][Label("分裂傷害變化(0.1 = 基礎傷害的10%)")]
+    [ShowIf(nameof(_isShowSkill))]
+    public float SkillSplitAttack;
+
+    [AllowNesting]
     [BoxGroup("主動技能數值")][Label("飛行速度")]
     [ShowIf(nameof(_isShowSkill))]
     public float SkillFlightSpeed;
@@ -366,5 +378,14 @@ public class SkillItemData
             return configList.FirstOrDefault(s =>
                 !s.IsPassive && !s.IsProps && s.SkillType == this.SkillType && s.SkillLevel == this.SkillLevel + 1);
         }
+    }
+
+    /// <summary>
+    /// 複製
+    /// </summary>
+    /// <returns></returns>
+    public SkillItemData Clone()
+    {
+        return this.MemberwiseClone() as SkillItemData;
     }
 }

@@ -20,7 +20,7 @@ public class Skill_StraightProjectileView : BaseSkill
         // 音效
         AudioManager.Instance.PlaySFX(_soundType).Forget();
 
-        // 使用 UniRx 的 Update 觸發器
+        // 每幀驅動
         this.UpdateAsObservable()
             .Subscribe(_ => _controller.ExecuteTick(Time.deltaTime))
             .AddTo(_disposables);

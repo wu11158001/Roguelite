@@ -95,7 +95,7 @@ public class Skill_WaterAreaController : IDisposable
         float currentZ = worldPos.z;
         float currentY = worldPos.y;
 
-        // 2. 精準算出螢幕邊界對應到世界座標的值
+        // 算出螢幕邊界對應到世界座標的值
         Vector3 screenLeftWorld = _model.MainCamera.ScreenToWorldPoint(new Vector3(0, Screen.height / 2f, _model.MainCamera.transform.position.y - currentY));
         Vector3 screenRightWorld = _model.MainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height / 2f, _model.MainCamera.transform.position.y - currentY));
         Vector3 screenBottomWorld = _model.MainCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2f, 0, _model.MainCamera.transform.position.y - currentY));
@@ -110,11 +110,11 @@ public class Skill_WaterAreaController : IDisposable
         bool reflected = false;
         Vector3 targetPos = _view.transform.position;
 
-        // 3. 檢查邊界、反彈並「強行鎖定位置（Clamp）」
+        // 檢查邊界、反彈
         if (worldPos.x <= minX)
         {
             _model.ReflectDirection(Vector3.right);
-            targetPos.x = minX; // 精準卡回邊界，不使用 += 0.05f
+            targetPos.x = minX;
             reflected = true;
         }
         else if (worldPos.x >= maxX)

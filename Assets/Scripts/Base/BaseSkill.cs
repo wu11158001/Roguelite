@@ -14,6 +14,9 @@ public class BaseSkill : BaseGameObject
     protected int _enemyLayer;
     protected int _boxLayer;
 
+    // 傷害倍率
+    protected float _damageScale;
+
     protected bool _isSetupComplete;
 
     protected EnemyView _targetEnemy;
@@ -34,6 +37,7 @@ public class BaseSkill : BaseGameObject
     {
         _data = data;
         _targetEnemy = targetEnemy;
+        _damageScale = 1.0f;
 
         // 清理舊的訂閱
         _disposables.Clear();
@@ -67,6 +71,15 @@ public class BaseSkill : BaseGameObject
     }
 
     /// <summary>
+    /// 設置傷害倍率
+    /// </summary>
+    /// <param name="scale"></param>
+    public void SetDamageScale(float scale)
+    {
+        _damageScale = scale;
+    }
+
+    /// <summary>
     /// 計算技能傷害
     /// </summary>
     public HitData CalculateAttack()
@@ -80,7 +93,8 @@ public class BaseSkill : BaseGameObject
         CharacterConfigData characterConfig = GameStateData.SelectedCharacter;
 
         // 攻擊力:技能攻擊力+被動攻擊力
-        int totalAttack = _data.SkillAttack + characterConfig.AddAttack.Value;
+        int baseSkillAttack = Mathf.RoundToInt(_data.SkillAttack * _damageScale);
+        int totalAttack = baseSkillAttack + characterConfig.AddAttack.Value;
 
         // 爆擊機率:技能爆擊機率+被動爆擊機率
         int totalCritical = _data.SkillCriticalChance + characterConfig.AddCriticalChance.Value;

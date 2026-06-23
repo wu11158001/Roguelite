@@ -32,7 +32,7 @@ public class Skill_WaterSplashController : IDisposable
     /// 擊中敵人
     /// </summary>
     /// <param name="enemyObj"></param>
-    /// <param name="enemyObj"></param>
+    /// <param name="hitData"></param>
     public void HitEnemy(GameObject enemyObj, HitData hitData)
     {
         if (hitData == null) return;

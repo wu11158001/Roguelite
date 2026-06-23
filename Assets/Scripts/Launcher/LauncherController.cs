@@ -27,7 +27,7 @@ public class LauncherController : MonoBehaviour
     private async UniTask DownloadAssets()
     {
         _text_Loading.text = "正在初始化資源系統...";
-        await Addressables.InitializeAsync().ToUniTask(); // 建議改用 ToUniTask() 比較安全
+        await Addressables.InitializeAsync().ToUniTask();
 
         _text_Loading.text = "正在下載資料...";
 
@@ -58,6 +58,8 @@ public class LauncherController : MonoBehaviour
         await PreLoadAssets();
 
         _text_Loading.text = "完成！進入大廳...";
+
+        await UniTask.Delay(500);
         SceneLoader.Instance.LoadSceneAsync(sceneType: SCENE_TYPE.Lobby).Forget();
     }
 
@@ -110,6 +112,22 @@ public class LauncherController : MonoBehaviour
                     {
                         loadTasks.Add(prefabRef.LoadAssetAsync<GameObject>().ToUniTask());
                     }
+                }
+            }
+
+            // 收集所有技能的載入 Task
+            if (GameStateData.AllSkillConfigData?.AllSkillItemConfigs != null)
+            {
+                foreach (var config in GameStateData.AllSkillConfigData.AllSkillItemConfigs)
+                {
+                    foreach (var item in config.SkillItems)
+                    {
+                        var prefabRef = item.PrefabReference;
+                        if (prefabRef != null && prefabRef.RuntimeKeyIsValid())
+                        {
+                            loadTasks.Add(prefabRef.LoadAssetAsync<GameObject>().ToUniTask());
+                        }
+                    }                    
                 }
             }
 

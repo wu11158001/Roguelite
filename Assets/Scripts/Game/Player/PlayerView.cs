@@ -299,7 +299,7 @@ public class PlayerView : BaseCharacter
     {
         if (Keyboard.current.numpad1Key.wasPressedThisFrame) _controller.GainExp(50);
         if (Keyboard.current.numpad4Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(20);
-        if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(1000);
+        if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(20);
 
         if (Keyboard.current.numpad9Key.wasPressedThisFrame)
         {
@@ -342,10 +342,10 @@ public class PlayerView : BaseCharacter
         {
             Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_StraightProjectile, 1));
         }
-        // 直升技能:機器人
+        // 直升技能:
         if (Keyboard.current.digit8Key.wasPressedThisFrame)
         {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_WaterArea, 1));
+            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_Crane, 1));
         }
 
         // 直升技能:被動
