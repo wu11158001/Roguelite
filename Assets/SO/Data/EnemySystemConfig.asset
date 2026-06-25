@@ -20,10 +20,10 @@ MonoBehaviour:
   SeparationWeight: 10
   EnemySeparationRadius: 0.8
   AttackHysteresis: 1
-  Mode1_InitialSpawnInterval: 1.9
+  Mode1_InitialSpawnInterval: 1.7
   Mode1_MinSpawnInterval: 0.5
   Mode1_MinSpawnCount: 1
-  Mode1_MaxSpawnCount: 10
+  Mode1_MaxSpawnCount: 15
   Mode1_MoveSpeed: 4
   Mode1_EnemyHpIncreaseMultiplier: 2
   Mode1_EnemyAttackIncreaseMultiplier: 0.4

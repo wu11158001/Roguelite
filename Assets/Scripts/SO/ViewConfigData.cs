@@ -22,6 +22,8 @@ public enum VIEW_TYPE
     GamePauseView,
     GameOverView,
     BossBonusView,
+
+    TestSkillUpgradeView = 500,
 }
 
 /// <summary>

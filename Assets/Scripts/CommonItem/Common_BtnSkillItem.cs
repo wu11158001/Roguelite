@@ -62,4 +62,17 @@ public class Common_BtnSkillItem : MonoBehaviour
                 }).Forget();
         }).AddTo(this);
     }
+    
+    /// <summary>
+    /// 重設按鈕事件
+    /// </summary>
+    /// <param name="btnAction"></param>
+    public void ResetBtnAction(Action btnAction)
+    {
+        _mainBtnSub?.Dispose();
+        _mainBtnSub = _btn_Main.OnClickAsObservable().Subscribe(_ =>
+        {
+            btnAction?.Invoke();
+        }).AddTo(this);
+    }
 }

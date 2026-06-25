@@ -55,25 +55,24 @@ public class PlayerController : IDisposable
     /// </summary>
     public void ExecuteTick(Vector2 input, float deltaTime)
     {
-        // 1. 玩家原始的輸入向量
+        // 玩家原始的輸入向量
         MoveDirection = new Vector3(input.x, 0, input.y).normalized;
         bool isMove = MoveDirection != Vector3.zero;
 
-        // 2. 計算最終位移：玩家想去的方向 + 怪物給的反作用力
-        // 假設 _currentBlockForce 是從 _playerView.SetBlockForce() 傳進來的 Vector3
+        // 計算最終位移：移動的方向 + 怪物給的反作用力
         Vector3 finalVelocity = MoveDirection * MoveSpeed + CurrentBlockForce;
 
         if (isMove || finalVelocity != Vector3.zero)
         {
-            // 3. 轉向依然只看玩家的輸入意圖（這樣被怪物卡住時才不會瘋狂亂轉）
+            // 轉向只看輸入意圖
             if (isMove)
             {
                 TargetRotation = Quaternion.LookRotation(MoveDirection);
             }
 
-            // 4. 計算下一幀的位置與旋轉
+            // 計算下一幀的位置與旋轉
             Vector3 translation = finalVelocity * deltaTime;
-            translation.y = 0; // 確保平面移動
+            translation.y = 0;
 
             Quaternion nextRotation = Quaternion.Slerp(_view.transform.rotation, TargetRotation, deltaTime * RotationSpeed);
 
@@ -81,14 +80,6 @@ public class PlayerController : IDisposable
         }
 
         _view.UpdateAnimation(isMove);
-    }
-
-    /// <summary>
-    /// 獲取經驗值
-    /// </summary>
-    public void GainExp(int value)
-    {
-        GameplayManager.CurrentContext.CharacterController.OnGainExp(value);
     }
 
     /// <summary>

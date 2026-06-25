@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UniRx;
 using Cysharp.Threading.Tasks;
-using System.Linq;
+using NaughtyAttributes;
+using UniRx.Triggers;
 
 /// <summary>
 /// 玩家角色
@@ -64,31 +65,36 @@ public class PlayerView : BaseCharacter
 
         _controller.Activate();
 
+        BindViewModel();
+
         // 開始自動產生敵人
         GameplayManager.CurrentContext.EnemySystemManager.InitAndStartAutoSpawn(this);
     }
 
-    private void Update()
+    private void BindViewModel()
     {
-        if (GameplayManager.CurrentContext.GameController.IsGamePause ||
-            GameplayManager.CurrentContext.GameController.IsGameOver) return;
-
-        // 移動控制
-        Vector2 keyboardInput = GetKeyboardInput();
-        // 複合輸入處理：比較鍵盤與搖桿，誰的推力大就用誰
-        if (keyboardInput.sqrMagnitude > _joystickInputVector.sqrMagnitude)
+        // 每幀驅動
+        this.UpdateAsObservable()
+        .Where(_ => !GameplayManager.CurrentContext.GameController.IsGamePause &&
+                    !GameplayManager.CurrentContext.GameController.IsGameOver)
+        .Subscribe(_ =>
         {
-            InputVector = keyboardInput;
-        }
-        else
-        {
-            InputVector = _joystickInputVector;
-        }
-        // 執行移動
-        _controller.ExecuteTick(InputVector, Time.deltaTime);
+            // 移動控制
+            Vector2 keyboardInput = GetKeyboardInput();
+            // 複合輸入處理：比較鍵盤與搖桿，誰的推力大就用誰
+            if (keyboardInput.sqrMagnitude > _joystickInputVector.sqrMagnitude)
+            {
+                InputVector = keyboardInput;
+            }
+            else
+            {
+                InputVector = _joystickInputVector;
+            }
 
-        // 測試用鍵盤輸入監聽
-        TestDebugInput();
+            // 執行移動
+            _controller.ExecuteTick(InputVector, Time.deltaTime);
+        })
+        .AddTo(this);
     }
 
     /// <summary>
@@ -290,152 +296,10 @@ public class PlayerView : BaseCharacter
             }).Forget();
     }
 
-    #region 測試用
-
-    /// <summary>
-    /// 測試用
-    /// </summary>
-    private void TestDebugInput()
-    {
-        if (Keyboard.current.numpad1Key.wasPressedThisFrame) _controller.GainExp(50);
-        if (Keyboard.current.numpad4Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerGetHit(20);
-        if (Keyboard.current.numpad5Key.wasPressedThisFrame) GameplayManager.CurrentContext.CharacterController.OnPlayerHpRecover(20);
-
-        if (Keyboard.current.numpad9Key.wasPressedThisFrame)
-        {
-            GameplayManager.CurrentContext.GameController.GamePause(true);
-            ViewManager.Instance.OpenView<BossBonusView>(viewType: VIEW_TYPE.BossBonusView).Forget();
-        }
-
-        // 直升技能:追蹤
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_Tracking, 1));
-        }
-        // 直升技能:靈氣
-        if (Keyboard.current.digit2Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_Aura, 1));
-        }
-        // 直升技能:圍繞
-        if (Keyboard.current.digit3Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_Around, 1));
-        }
-        // 直升技能:前方打擊
-        if (Keyboard.current.digit4Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_FrontHit, 1));
-        }
-        // 直升技能:範圍減速
-        if (Keyboard.current.digit5Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_RangeSlow, 1));
-        }
-        // 直升技能:單體攻擊
-        if (Keyboard.current.digit6Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_SingleHit, 1));
-        }
-        // 直升技能:飛鏢
-        if (Keyboard.current.digit7Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_StraightProjectile, 1));
-        }
-        // 直升技能:
-        if (Keyboard.current.digit8Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetActiveSkill(SKILL_TYPE.Skill_Crane, 1));
-        }
-
-        // 直升技能:被動
-        if (Keyboard.current.digit9Key.wasPressedThisFrame)
-        {
-            Test_GainSkill(GameStateData.AllSkillConfigData.GetPassiveSkill(PASSIVE_SKILL_TYPE.EffectRange, 1));
-        }
-    }
-
-    /// <summary>
-    /// 測試用:獲取技能
-    /// </summary>
-    /// <param name="skillItemData"></param>
-    private void Test_GainSkill(SkillItemData skillItemData)
-    {
-        if (skillItemData != null)
-        {
-            SkillItemData targetSkill = Test_GetNextLevelSkill(skillItemData);
-            if (targetSkill != null)
-            {
-                Debug.Log($"成功觸發技能獲取/升級！技能：{targetSkill.SkillType}, 等級：{targetSkill.SkillLevel}");
-                GameplayManager.CurrentContext.SkillController.AddOrUpgradeSkill(targetSkill);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 測試用:獲取下一級技能
-    /// </summary>
-    /// <param name="skillItemData"></param>
-    /// <returns></returns>
-    private SkillItemData Test_GetNextLevelSkill(SkillItemData skillItemData)
-    {
-        var allConfigs = GameStateData.AllSkillConfigData.AllSkillItemConfigs.SelectMany(c => c.SkillItems).ToList();
-        var ownedSkills = GameplayManager.CurrentContext.SkillController.OwnSkills.ToList();
-        var activeOwned = ownedSkills.Where(s => !s.IsPassive && !s.IsProps).ToList();
-
-        if (skillItemData.IsProps) return null;
-
-        // 檢查目前是否已經擁有「同種類」的技能
-        bool alreadyHasSkill = skillItemData.IsPassive
-            ? ownedSkills.Any(o => o.IsPassive && o.PassiveType == skillItemData.PassiveType)
-            : ownedSkills.Any(o => !o.IsPassive && o.SkillType == skillItemData.SkillType);
-
-        if (!alreadyHasSkill && !skillItemData.IsPassive && activeOwned.Count >= 6)
-        {
-            Debug.LogWarning("主動技能已滿 6 個，無法獲得新主動技能！");
-            return null;
-        }
-
-        // 如果是全新獲得的技能 (當前等級為 1 且玩家沒有)
-        if (!alreadyHasSkill)
-        {
-            // 確保設定檔裡存在這筆等級 1 的資料
-            return allConfigs.FirstOrDefault(s =>
-                s.IsPassive == skillItemData.IsPassive &&
-                !s.IsProps &&
-                (skillItemData.IsPassive ? s.PassiveType == skillItemData.PassiveType : s.SkillType == skillItemData.SkillType) &&
-                s.SkillLevel == 1);
-        }
-
-        // 已經有了，查找下一級
-        var currentOwnedSkill = ownedSkills.FirstOrDefault(o =>
-            o.IsPassive == skillItemData.IsPassive &&
-            (skillItemData.IsPassive ? o.PassiveType == skillItemData.PassiveType : o.SkillType == skillItemData.SkillType));
-
-        int currentLevel = currentOwnedSkill != null ? currentOwnedSkill.SkillLevel : skillItemData.SkillLevel;
-
-        SkillItemData nextLevel = allConfigs.FirstOrDefault(s =>
-            s.IsPassive == skillItemData.IsPassive &&
-            !s.IsProps &&
-            (skillItemData.IsPassive ? s.PassiveType == skillItemData.PassiveType : s.SkillType == skillItemData.SkillType) &&
-            s.SkillLevel == currentLevel + 1);
-
-        if (nextLevel == null)
-        {
-            Debug.LogWarning($"該技能已達到最大等級 (等級 {currentLevel})，無法再升級！");
-            return null;
-        }
-
-        return nextLevel;
-    }
-
-
-    [SerializeField] private float distanceRadius = 30;
+    [Label("距離測試")] [SerializeField] private float _distanceRadius = 30;
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, distanceRadius);
+        Gizmos.DrawWireSphere(transform.position, _distanceRadius);
     }
-
-    #endregion
 }

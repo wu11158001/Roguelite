@@ -13,9 +13,14 @@ public class GameLauncher : MonoBehaviour
 
             CreateMainItems();
 
+            // 產生搖桿控制介面
             ViewManager.Instance.OpenView<JoystickView>(viewType: VIEW_TYPE.JoystickView).Forget();
-            
+            // 產生遊戲介面
             await ViewManager.Instance.OpenView<GameView>(viewType: VIEW_TYPE.GameView);
+            // 產生測試用_技能直升介面
+            await ViewManager.Instance.OpenView<TestSkillUpgradeView>(viewType: VIEW_TYPE.TestSkillUpgradeView);
+
+            // 產生控制角色與地圖
             await SpawnPlayerAndMap();
 
             SceneLoader.Instance.CloseLoading();
