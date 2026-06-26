@@ -298,6 +298,10 @@ public class EnemySystemManager : MonoBehaviour
                 EnemyView enemyView = obj.TryGetComponent(out EnemyView view) ? view : obj.AddComponent<EnemyView>();
                 enemyView.ResetState(isBoss, currentHp);
 
+                // 高度鎖定
+                spawnPos.y = 0;
+                obj.transform.position = spawnPos;
+
                 EnemyJobData data = new()
                 {
                     InstanceID = obj.GetInstanceID(),

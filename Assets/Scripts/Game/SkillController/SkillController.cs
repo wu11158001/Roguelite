@@ -253,7 +253,7 @@ public class SkillController : MonoBehaviour
     /// </summary>
     /// <param name="origin"></param>
     /// <returns></returns>
-    public Transform GetNearestTarget(Vector3 origin) => _spawner.GetNearestTarget<ITargetable>(origin);
+    public Transform GetNearestTarget(Vector3 origin, Transform exclude = null) => _spawner.GetNearestTarget<ITargetable>(origin, exclude);
 
     /// <summary>
     /// 獲取畫面中所有敵人

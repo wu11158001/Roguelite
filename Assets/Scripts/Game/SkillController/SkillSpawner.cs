@@ -575,7 +575,11 @@ public class SkillSpawner
     /// <summary>
     /// 獲取最近的目標位置
     /// </summary>
-    public Transform GetNearestTarget<T>(Vector3 origin) where T : class, ITargetable
+    /// <typeparam name="T"></typeparam>
+    /// <param name="origin">判斷距離目標位置</param>
+    /// <param name="exclude">排除目標</param>
+    /// <returns></returns>
+    public Transform GetNearestTarget<T>(Vector3 origin, Transform exclude = null) where T : class, ITargetable
     {
         UpdatePlanes();
         CombineAllTargets();
@@ -591,6 +595,7 @@ public class SkillSpawner
 
             if (target == null || !target.IsActive) continue;
             if (target is not T) continue;
+            if (target.TargetTransform == exclude) continue;
 
             Vector3 directionToTarget = target.TargetTransform.position - origin;
             float dSqrToTarget = directionToTarget.sqrMagnitude;

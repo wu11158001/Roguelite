@@ -62,6 +62,8 @@ public enum AUDIO_TYPE
     Skill_WaterSplash,
     /// <summary> 技能:紙鶴擊中音效 </summary>
     Skill_Crane,
+    /// <summary> 技能:連鎖閃電音效 </summary>
+    Skill_ChainLightning,
 }
 
 /// <summary>

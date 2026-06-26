@@ -57,6 +57,7 @@
     <type fullname="Skill_Around_AttackObjView" preserve="all" />
     <type fullname="Skill_AroundView" preserve="all" />
     <type fullname="Skill_AuraView" preserve="all" />
+    <type fullname="Skill_ChainLightningView" preserve="all" />
     <type fullname="Skill_CraneView" preserve="all" />
     <type fullname="Skill_FrontHitView" preserve="all" />
     <type fullname="Skill_RangeSlowView" preserve="all" />

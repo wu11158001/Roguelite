@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: d359cffafe45e0e4c82527e85234799b
+guid: 8661c2c7e325a33438f06b02458fd199
 AssetOrigin:
   serializedVersion: 1
   productId: 143805
   packageName: 'Fantasy Inventory Icons [Free]'
   packageVersion: 1.2
-  assetPath: Assets/FantasyIconsPackFree/Icons/Armor/ManticoreArmor.png
+  assetPath: Assets/FantasyIconsPackFree/Icons/Other/Ring/GoldenRing.png
   uploadId: 607428
 TextureImporter:
   internalIDToNameTable: []
@@ -70,9 +70,9 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 0
+  applyGammaDecoding: 1
   swizzle: 50462976
-  cookieLightType: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform

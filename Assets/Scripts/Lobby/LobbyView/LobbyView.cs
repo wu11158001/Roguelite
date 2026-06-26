@@ -90,7 +90,7 @@ public class LobbyView : BaseView
         if (UnityEngine.InputSystem.Keyboard.current.numpad7Key.wasPressedThisFrame)
         {
             PlayerInfoData data = PlayerInfoStateData.PlayerInfo.Value;
-            data.Coin += 200;
+            data.Coin += 1000;
             PlayerInfoStateData.PlayerInfo.Value = data;
         }
     }

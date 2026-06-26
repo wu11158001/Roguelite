@@ -175,7 +175,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
             float randomAngle = random.NextFloat(0f, math.PI * 2f);
             float offsetX = math.cos(randomAngle) * SpawnRadius;
             float offsetZ = math.sin(randomAngle) * SpawnRadius;
-            float3 teleportPos = new float3(PlayerPos.x + offsetX, PlayerPos.y, PlayerPos.z + offsetZ);
+            float3 teleportPos = new float3(PlayerPos.x + offsetX, 0, PlayerPos.z + offsetZ);
 
             transform.position = (Vector3)teleportPos;
             currentPos = teleportPos;
@@ -543,6 +543,7 @@ public struct EnemyCombinedJob : IJobParallelForTransform
 
         // 疊加擊退
         finalVelocity += data.KnockbackVelocity;
+        finalVelocity.y = 0;
 
         // 執行 Transform 位移與面向旋轉
         if (math.lengthsq(finalVelocity) > 0.01f)

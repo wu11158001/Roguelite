@@ -1,0 +1,373 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afdcbea22e895b54db0ea1c1cb76cd35, type: 3}
+  m_Name: Skill_ChainLightning
+  m_EditorClassIdentifier: Assembly-CSharp::SkillItemConfig
+  SkillItems:
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u5C04\u51FA\u4E00\u9053\u9023\u9396\u9583\u96FB, \u5C0D2\u540D\u6575\u4EBA\u9020\u6210\u50B7\u5BB3,
+      \u9583\u96FB\u7206\u64CA\u6A5F\u7387+10%"
+    NeedActiveSkills:
+    - Type: 6
+      Level: 4
+    NeedPassiveSkills:
+    - Type: 9
+      Level: 1
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 1
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 13
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 2
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3
+    SkillCriticalChance: 10
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u4E32\u63A5\u6578\u91CF+2"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 2
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 13
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 4
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3
+    SkillCriticalChance: 10
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u50B7\u5BB3\u589E\u52A0"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 3
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 17
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 4
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3
+    SkillCriticalChance: 10
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u4E32\u63A5\u6578\u91CF+1, \u50B7\u5BB3\u589E\u52A0"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 4
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 19
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 5
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3
+    SkillCriticalChance: 10
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u4E32\u63A5\u6578\u91CF+1, \u50B7\u5BB3\u589E\u52A0,
+      \u7206\u64CA\u6A5F\u7387+5%"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 5
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 20
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 6
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3
+    SkillCriticalChance: 15
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u4E32\u63A5\u6578\u91CF+1, \u7206\u64CA\u50B7\u5BB3+15%,
+      \u7206\u64CA\u6A5F\u7387+5%"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 6
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 20
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 7
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3
+    SkillCriticalChance: 20
+    SkillCriticalMultiplier: 15
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u4E32\u63A5\u6578\u91CF+1, \u7206\u64CA\u50B7\u5BB3+15%,
+      \u64CA\u9000\u6548\u679C\u589E\u52A0"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 7
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 20
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 8
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3.5
+    SkillCriticalChance: 20
+    SkillCriticalMultiplier: 30
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u4E32\u63A5\u6578\u91CF+2"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 8
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: ae272725b5bbae341a7fbb73074641a6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 20
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 10
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3.5
+    SkillCriticalChance: 20
+    SkillCriticalMultiplier: 30
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u91D1\u6212\u6307"
+    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillDescribe: "\u9023\u9396\u9583\u96FB\u9032\u5316: \u6575\u4EBA\u9020\u6210\u707C\u71D2,
+      \u6BCF\u79D2\u9020\u6210\u6575\u4EBA\u6700\u5927\u751F\u547D2%\u7684\u707C\u71D2\u50B7\u5BB3,
+      \u6301\u7E8C3\u79D2, \u7206\u64CA\u6A5F\u7387+5%"
+    NeedActiveSkills:
+    - Type: 12
+      Level: 8
+    NeedPassiveSkills:
+    - Type: 9
+      Level: 2
+    - Type: 8
+      Level: 1
+    _skillType: 12
+    IsUpdateNow: 0
+    SkillLevel: 9
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: b87440f9b9606a0479da201bd13e4a9f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 2.5
+    SkillAttack: 20
+    SkillShotCount: 1
+    SkillShotInterval: 0.2
+    SkillPenetrate: 10
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 3.5
+    SkillCriticalChance: 25
+    SkillCriticalMultiplier: 30
+    SkillEffectRange: 0
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0.2
+    BurningDuration: 3
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0

@@ -22,6 +22,7 @@ public class MakeupListView : BaseView
     [SerializeField] private RectTransform _leftGroup;
     [SerializeField] private RectTransform _rightGroup;
     [SerializeField] private RectTransform _content;
+    [SerializeField] private ScrollRect scrollRect;
 
     private List<SkillItemData> _usingSkills = new();
 
@@ -49,6 +50,10 @@ public class MakeupListView : BaseView
         LayoutRebuilder.ForceRebuildLayoutImmediate(_leftGroup);
         LayoutRebuilder.ForceRebuildLayoutImmediate(_rightGroup);
         LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
+
+        Canvas.ForceUpdateCanvases();
+        await UniTask.NextFrame();
+        scrollRect.verticalNormalizedPosition = 1;
     }
 
     /// <summary>

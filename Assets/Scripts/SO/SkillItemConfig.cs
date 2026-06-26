@@ -34,6 +34,8 @@ public enum SKILL_TYPE
     Skill_WaterArea,
     /// <summary> 紙鶴(擊中分裂) </summary>
     Skill_Crane,
+    /// <summary> 連鎖閃電 </summary>
+    Skill_ChainLightning,
 }
 
 /// <summary>
