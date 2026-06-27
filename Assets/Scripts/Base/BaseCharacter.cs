@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using UniRx;
 using UnityEngine;
 
 public class BaseCharacter : BaseGameObject
@@ -15,6 +17,14 @@ public class BaseCharacter : BaseGameObject
     public Animator Anim { get; private set; }
     protected Renderer[] _renderers;
     protected MaterialPropertyBlock _propBlock;
+
+    private IDisposable _animDisposable;
+
+    public override void OnDestroy()
+    {
+        _animDisposable?.Dispose();
+        base.OnDestroy();
+    }
 
     protected virtual void Awake()
     {
@@ -35,19 +45,38 @@ public class BaseCharacter : BaseGameObject
     }
 
     /// <summary>
-    /// 受擊動畫
+    /// 播放受擊動畫
     /// </summary>
-    /// <returns></returns>
-    protected IEnumerator IGetHitAnim()
+    protected void PlayHitAnim()
+    {
+        SetRenderersColor(Color.red);
+
+        _animDisposable?.Dispose();
+        _animDisposable = Observable.Timer(TimeSpan.FromSeconds(0.1f))
+            .Subscribe(_ => ClearRenderersProperty())
+            .AddTo(this);
+    }
+
+    /// <summary>
+    /// 設置模型顏色
+    /// </summary>
+    /// <param name="color"></param>
+    private void SetRenderersColor(Color color)
     {
         foreach (var renderer in _renderers)
         {
             if (renderer == null) continue;
             renderer.GetPropertyBlock(_propBlock);
-            _propBlock.SetColor("_BaseColor", Color.red);
+            _propBlock.SetColor("_BaseColor", color);
             renderer.SetPropertyBlock(_propBlock);
         }
-        yield return new WaitForSeconds(0.1f);
+    }
+
+    /// <summary>
+    /// 還原模型顏色
+    /// </summary>
+    private void ClearRenderersProperty()
+    {
         foreach (var renderer in _renderers)
         {
             if (renderer == null) continue;

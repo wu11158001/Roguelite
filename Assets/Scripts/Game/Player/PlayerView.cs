@@ -24,7 +24,6 @@ public class PlayerView : BaseCharacter
     private HpBarView _hpBarView;
     private CharacterConfigData _characterConfig;
 
-    private Coroutine _hitCoroutine;
     private PlayerController _controller;
 
     public override void OnDestroy()
@@ -198,8 +197,7 @@ public class PlayerView : BaseCharacter
                 else if (previousHp > currentHp)
                 {
                     // 減少生命
-                    if (_hitCoroutine != null) StopCoroutine(_hitCoroutine);
-                    _hitCoroutine = StartCoroutine(IGetHitAnim());
+                    PlayHitAnim();
                 }
 
                 // 更新血條 UI
@@ -297,7 +295,7 @@ public class PlayerView : BaseCharacter
     }
 
     [Label("距離測試")] [SerializeField] private float _distanceRadius = 30;
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _distanceRadius);

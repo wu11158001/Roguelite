@@ -201,8 +201,8 @@ public class EnemySystemConfig : ScriptableObject
     public float Boss_SizeMultiplier = 2.0f;
 
     [BoxGroup("Boss")]
-    [Label("Boss:外框材質球")]
-    public Material Boss_OutlineMaterial;
+    [Label("Boss:外觀材質球")]
+    public Material Boss_SkinMaterial;
 
     [BoxGroup("Boss")]
     [Label("Boss:獎勵道具物件")]

@@ -456,12 +456,12 @@ public class SkillSpawner
     /// <returns></returns>
     public Transform GetFallbackTransform()
     {
-        float radius = 18;
+        float radius = 17;
 
         PlayerView playerView = GameplayManager.CurrentContext.ControlCharacter;
         if (playerView == null) return null;
 
-        Vector2 randomCircle = UnityEngine.Random.insideUnitCircle.normalized * radius;
+        Vector2 randomCircle = UnityEngine.Random.insideUnitCircle * radius;
         Vector3 spawnPosition = playerView.transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
 
         // 生成一個虛擬的 Transform 物件

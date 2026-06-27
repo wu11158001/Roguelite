@@ -285,9 +285,6 @@ public class EnemySystemManager : MonoBehaviour
                     finalAttack = Mathf.RoundToInt(finalAttack * _enemyConfig.Boss_AttackMultiplier);
                     moveSpeed = _enemyConfig.Mode1_MoveSpeed * _enemyConfig.Boss_MoveMultiplier;
                     enemySeparationRadius = _enemyConfig.EnemySeparationRadius * _enemyConfig.Boss_SizeMultiplier;
-
-                    // 設置Boss外觀
-                    HandleBossObj(ref obj);
                 }
 
                 // Hp/攻擊力至少有1
@@ -336,33 +333,6 @@ public class EnemySystemManager : MonoBehaviour
 
                 callback?.Invoke(obj);
             });
-    }
-
-    /// <summary>
-    /// 處理Boss外觀
-    /// </summary>
-    /// <param name="obj"></param>
-    private void HandleBossObj(ref GameObject obj)
-    {
-        // 體積變化
-        float bossSizeMultiplier = _enemyConfig.Boss_SizeMultiplier;
-        obj.transform.localScale = Vector3.one * bossSizeMultiplier;
-
-        // 添加外框材質球
-        Material outlineMaterial = _enemyConfig.Boss_OutlineMaterial;
-        Renderer renderer = obj.GetComponentInChildren<Renderer>();
-        if (renderer != null && outlineMaterial != null)
-        {
-            // 疊加外框材質球
-            Material[] currentSharedMaterials = renderer.sharedMaterials;
-            Material[] newMaterials = new Material[currentSharedMaterials.Length + 1];
-            for (int i = 0; i < currentSharedMaterials.Length; i++)
-            {
-                newMaterials[i] = currentSharedMaterials[i];
-            }
-            newMaterials[newMaterials.Length - 1] = outlineMaterial;
-            renderer.materials = newMaterials;
-        }
     }
 
     /// <summary>
@@ -579,11 +549,6 @@ public class EnemySystemManager : MonoBehaviour
 
         _activeEnemyCount.Value = _activeGameObjects.Count;
 
-        if (isBoss)
-        {
-            ResetEnemyVisualForPool(obj);
-        }
-
         if (obj != null)
         {
             GameplayManager.CurrentContext.GameScenePool.ReturnToPool(obj);
@@ -640,29 +605,5 @@ public class EnemySystemManager : MonoBehaviour
 
         Vector3 playerPos = _playerObj.position;
         return new Vector3(playerPos.x + offsetX, 0, playerPos.z + offsetZ);
-    }
-
-    /// <summary>
-    /// Boss回收前還原外觀
-    /// </summary>
-    /// <param name="enemyGo"></param>
-    public void ResetEnemyVisualForPool(GameObject enemyGo)
-    {
-        // 還原縮放
-        enemyGo.transform.localScale = Vector3.one;
-
-        // 還原材質球
-        Renderer renderer = enemyGo.GetComponentInChildren<Renderer>();
-        if (renderer != null)
-        {
-            Material[] currentMaterials = renderer.materials;
-            if (currentMaterials.Length > 1)
-            {
-                // 重新給予一個乾淨的、只包含原本基礎材質的陣列
-                Material[] originalMaterials = new Material[1];
-                originalMaterials[0] = currentMaterials[0];
-                renderer.materials = originalMaterials;
-            }
-        }
     }
 }

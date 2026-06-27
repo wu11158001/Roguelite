@@ -33,6 +33,8 @@ MonoBehaviour:
     SkillShotCount: 3
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 120
     SkillKnockback: 0.5
     SkillCriticalChance: 0
@@ -41,6 +43,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -67,6 +71,8 @@ MonoBehaviour:
     SkillShotCount: 3
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 140
     SkillKnockback: 0.5
     SkillCriticalChance: 0
@@ -75,6 +81,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -101,6 +109,8 @@ MonoBehaviour:
     SkillShotCount: 4
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 140
     SkillKnockback: 0.5
     SkillCriticalChance: 0
@@ -109,6 +119,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -135,6 +147,8 @@ MonoBehaviour:
     SkillShotCount: 4
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 140
     SkillKnockback: 1
     SkillCriticalChance: 0
@@ -143,6 +157,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -170,6 +186,8 @@ MonoBehaviour:
     SkillShotCount: 4
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 160
     SkillKnockback: 1
     SkillCriticalChance: 0
@@ -178,6 +196,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -204,6 +224,8 @@ MonoBehaviour:
     SkillShotCount: 4
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 180
     SkillKnockback: 1
     SkillCriticalChance: 0
@@ -212,6 +234,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -238,6 +262,8 @@ MonoBehaviour:
     SkillShotCount: 4
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 180
     SkillKnockback: 1
     SkillCriticalChance: 0
@@ -246,6 +272,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -272,6 +300,8 @@ MonoBehaviour:
     SkillShotCount: 5
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 200
     SkillKnockback: 1
     SkillCriticalChance: 0
@@ -280,6 +310,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0
@@ -287,7 +319,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u624B\u5957"
-    SkillIcon: {fileID: 21300000, guid: 7b7b7063f51899d4ab6475ddb0f94ca9, type: 3}
+    SkillIcon: {fileID: 21300000, guid: 9309c4b66286c02498fce9e465b4916b, type: 3}
     SkillDescribe: "\u7403\u9AD4\u9032\u5316: \u7403\u9AD4\u6578\u91CF+1, \u65CB\u8F49\u901F\u5EA6\u589E\u52A0,
       \u64CA\u9000\u6548\u679C\u589E\u52A0"
     NeedActiveSkills:
@@ -311,6 +343,8 @@ MonoBehaviour:
     SkillShotCount: 6
     SkillShotInterval: 0
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 230
     SkillKnockback: 1.5
     SkillCriticalChance: 0
@@ -319,6 +353,8 @@ MonoBehaviour:
     SkillKeepTime: 8
     SpeedModifier: 0
     SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
     IsPassive: 0
     _passiveType: 0
     PassiveAddValue: 0

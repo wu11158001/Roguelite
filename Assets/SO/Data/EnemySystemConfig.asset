@@ -47,7 +47,7 @@ MonoBehaviour:
   Boss_AttackMultiplier: 3
   Boss_MoveMultiplier: 0.8
   Boss_SizeMultiplier: 2
-  Boss_OutlineMaterial: {fileID: 2100000, guid: ad4968255592a8c4eb0c1425bf7386bb, type: 2}
+  Boss_SkinMaterial: {fileID: 2100000, guid: ece2b6713c2871143a569151e6ea8635, type: 2}
   Boss_BonusPrefabReference:
     m_AssetGUID: 88640607465ec59438b1505fa73939f3
     m_SubObjectName: 

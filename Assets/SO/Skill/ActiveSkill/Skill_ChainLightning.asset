@@ -326,7 +326,7 @@ MonoBehaviour:
     _propsSkillType: 0
     PropsAddValue: 0
   - SkillName: "\u91D1\u6212\u6307"
-    SkillIcon: {fileID: 21300000, guid: 8661c2c7e325a33438f06b02458fd199, type: 3}
+    SkillIcon: {fileID: 21300000, guid: f66c057114b8725409847a8a8e83a75b, type: 3}
     SkillDescribe: "\u9023\u9396\u9583\u96FB\u9032\u5316: \u6575\u4EBA\u9020\u6210\u707C\u71D2,
       \u6BCF\u79D2\u9020\u6210\u6575\u4EBA\u6700\u5927\u751F\u547D2%\u7684\u707C\u71D2\u50B7\u5BB3,
       \u6301\u7E8C3\u79D2, \u7206\u64CA\u6A5F\u7387+5%"

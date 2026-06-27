@@ -105,7 +105,7 @@ public class BaseSkill : BaseGameObject
         {
             float totalCriticalMultiplier = _data.SkillCriticalMultiplier + characterConfig.CriticalMultiplier.Value;
 
-            totalAttack = (int)(totalAttack * (totalCriticalMultiplier / 100));
+            totalAttack = Mathf.CeilToInt(totalAttack * (totalCriticalMultiplier / 100));
         }
 
         // 減速值

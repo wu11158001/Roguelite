@@ -13,6 +13,9 @@ public class EnemyView : BaseCharacter, ITargetable
     public Transform TargetTransform => transform;
     public bool IsActive => gameObject.activeInHierarchy;
 
+    private Renderer _renderer;
+    private Material[] _originalMat;
+
     private bool _isBoss;
     private int _maxHp;
 
@@ -53,6 +56,12 @@ public class EnemyView : BaseCharacter, ITargetable
 
         _capsuleCollider = GetComponent<CapsuleCollider>();
 
+        _renderer = gameObject.GetComponentInChildren<Renderer>();
+        if(_renderer)
+        {
+            _originalMat = _renderer.materials;
+        }
+
         if (_capsuleCollider != null)
         {
             _capsuleCollider.isTrigger = true;
@@ -73,6 +82,28 @@ public class EnemyView : BaseCharacter, ITargetable
         if (Anim != null) Anim.Rebind();
         if (_slowDownEffect != null) _slowDownEffect.gameObject.SetActive(false);
         if (_burningEffect != null) _burningEffect.gameObject.SetActive(false);
+
+        // 外觀設置
+        if(_isBoss)
+        {
+            // 體積變化
+            float bossSizeMultiplier = GameStateData.EnemySystemConfig.Boss_SizeMultiplier;
+            gameObject.transform.localScale = Vector3.one * bossSizeMultiplier;
+
+            Material bossMaterial = GameStateData.EnemySystemConfig.Boss_SkinMaterial;
+            if (_renderer != null && bossMaterial != null)
+            {
+                _renderer.material = bossMaterial;
+            }
+        }
+        else
+        {
+            gameObject.transform.localScale = Vector3.one;
+            if (_renderer != null)
+            {
+                _renderer.materials = _originalMat;
+            }
+        }
     }
 
     /// <summary>
@@ -89,6 +120,9 @@ public class EnemyView : BaseCharacter, ITargetable
 
         int myID = gameObject.GetInstanceID();
         EnemySystemManager controller = GameplayManager.CurrentContext.EnemySystemManager;
+
+        // 播放受擊動畫
+        PlayHitAnim();
 
         // 註冊傷害
         controller.RegisterDamage(myID, hitData);

@@ -64,6 +64,12 @@ public enum AUDIO_TYPE
     Skill_Crane,
     /// <summary> 技能:連鎖閃電音效 </summary>
     Skill_ChainLightning,
+    /// <summary> 技能:骷髏傭兵_產生音效 </summary>
+    Skill_Mercenaries_Spawn,
+    /// <summary> 技能:骷髏傭兵_攻擊音效 </summary>
+    Skill_Mercenaries_Attack,
+    /// <summary> 技能:骷髏傭兵_絕招音效 </summary>
+    Skill_Mercenaries_SpuerbSkill,
 }
 
 /// <summary>

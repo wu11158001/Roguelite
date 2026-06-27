@@ -36,6 +36,10 @@ public enum SKILL_TYPE
     Skill_Crane,
     /// <summary> 連鎖閃電 </summary>
     Skill_ChainLightning,
+    /// <summary> 骷髏傭兵(攻擊警戒範圍敵人) </summary>
+    Skill_Mercenaries,
+    /// <summary> 骷髏傭兵絕招 </summary>
+    Skill_Mercenaries_SuperbSkill,
 }
 
 /// <summary>

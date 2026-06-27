@@ -60,6 +60,8 @@
     <type fullname="Skill_ChainLightningView" preserve="all" />
     <type fullname="Skill_CraneView" preserve="all" />
     <type fullname="Skill_FrontHitView" preserve="all" />
+    <type fullname="Skill_Mercenaries_SuperbSkillView" preserve="all" />
+    <type fullname="Skill_MercenariesView" preserve="all" />
     <type fullname="Skill_RangeSlowView" preserve="all" />
     <type fullname="Skill_RobotView" preserve="all" />
     <type fullname="Skill_SingleHitView" preserve="all" />

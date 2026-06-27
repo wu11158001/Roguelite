@@ -35,11 +35,10 @@ public class DamageTextView : BaseGameObject
         _cameraTransform = cameraTransform;
         _isAnimating = true;
 
-        string colorStr = hitData.IsCritical ? "FFDA58" : "F33636";
+        string colorStr = hitData.IsCritical ? "FFDF00" : "F33636";
         _criticalImg.SetActive(hitData.IsCritical);
         _text_Damage.text = $"<color=#{colorStr}>{hitData.Attack}</color>";
 
-        // 重設狀態（避免 Object Pooling 殘留狀態）
         transform.localScale = hitData.IsCritical ? Vector3.one * 1.5f : Vector3.one;
         if (_canvasGroup != null) _canvasGroup.alpha = 1f;
 
