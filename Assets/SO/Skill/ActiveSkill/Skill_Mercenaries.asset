@@ -21,13 +21,11 @@ MonoBehaviour:
     NeedActiveSkills:
     - Type: 8
       Level: 4
-    - Type: 10
-      Level: 1
     NeedPassiveSkills:
     - Type: 2
-      Level: 1
+      Level: 2
     - Type: 4
-      Level: 1
+      Level: 2
     _skillType: 13
     IsUpdateNow: 1
     SkillLevel: 1
@@ -350,6 +348,44 @@ MonoBehaviour:
     SkillAttack: 46
     SkillShotCount: 3
     SkillShotInterval: 0.6
+    SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 10
+    SkillKnockback: 15
+    SkillCriticalChance: 40
+    SkillCriticalMultiplier: 30
+    SkillEffectRange: 7
+    SkillKeepTime: 26
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u76FE\u724C"
+    SkillIcon: {fileID: 21300000, guid: d1debd018f9877c408ca2c35857bb8c2, type: 3}
+    SkillDescribe: "\u9AB7\u9ACF\u653B\u64CACD\u6E1B\u5C110.5\u79D2"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 13
+    IsUpdateNow: 1
+    SkillLevel: 10
+    SkillSpawnModeType: 7
+    PrefabReference:
+      m_AssetGUID: f60fe109f7fd8c6449dcfbef96aa4327
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 25
+    SkillAttack: 46
+    SkillShotCount: 3
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
     SkillSplit: 0
     SkillSplitAttack: 0

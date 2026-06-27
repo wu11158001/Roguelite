@@ -4,7 +4,6 @@ using UniRx;
 using System;
 using NaughtyAttributes;
 using UnityEngine.AddressableAssets;
-using System.Collections.Generic;
 
 /// <summary>
 /// 技能_骷髏傭兵
@@ -127,17 +126,17 @@ public class Skill_MercenariesView : BaseSkill
     /// <summary>
     /// 產生絕招
     /// </summary>
-    /// <param name="target"></param>
+    /// <param name="targetPos"></param>
     /// <param name="hitData"></param>
     /// <param name="skillLevel"></param>
-    public void CreateSuperbSkill(Transform target, HitData hitData, int skillLevel)
+    public void CreateSuperbSkill(Vector3 targetPos, HitData hitData, int skillLevel)
     {
-        if (target == null || hitData == null) return;
+        if (hitData == null) return;
 
         GameplayManager.CurrentContext.GameScenePool.SpawnObject(
             parentName: "骷髏傭兵絕招",
             assetRef: _superbSkillRef,
-            position: target.position,
+            position: targetPos,
             rotation: Quaternion.identity,
             callback: (obj) =>
             {

@@ -37,7 +37,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 2
@@ -76,7 +76,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 2
@@ -115,7 +115,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 2
@@ -154,7 +154,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 3
@@ -193,7 +193,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 3
@@ -232,7 +232,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 3
@@ -271,7 +271,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 3
@@ -310,7 +310,7 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 4
@@ -349,7 +349,46 @@ MonoBehaviour:
     SkillSplit: 0
     SkillSplitAttack: 0
     SkillFlightSpeed: 0
-    SkillKnockback: 15
+    SkillKnockback: 0
+    SkillCriticalChance: 0
+    SkillCriticalMultiplier: 0
+    SkillEffectRange: 4
+    SkillKeepTime: 0
+    SpeedModifier: 0
+    SpeedModifierTime: 0
+    BurningDamage: 0
+    BurningDuration: 0
+    IsPassive: 0
+    _passiveType: 0
+    PassiveAddValue: 0
+    IsProps: 0
+    _propsSkillType: 0
+    PropsAddValue: 0
+  - SkillName: "\u9AB7\u9ACF\u50AD\u5175\u7D55\u62DB"
+    SkillIcon: {fileID: 0}
+    SkillDescribe: "\u653B\u64CA\u529B\u8207\u7206\u64CA\u4E0D\u9700\u8A2D\u7F6E,
+      \u4E3B\u8981\u7528\u4F86\u8A2D\u7F6E\u6548\u679C\u7BC4\u570D, \u6216\u6E1B\u901F\u707C\u71D2"
+    NeedActiveSkills: []
+    NeedPassiveSkills: []
+    _skillType: 0
+    IsUpdateNow: 0
+    SkillLevel: 10
+    SkillSpawnModeType: 0
+    PrefabReference:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    SkillCd: 0
+    SkillAttack: 0
+    SkillShotCount: 0
+    SkillShotInterval: 0
+    SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
+    SkillFlightSpeed: 0
+    SkillKnockback: 0
     SkillCriticalChance: 0
     SkillCriticalMultiplier: 0
     SkillEffectRange: 4

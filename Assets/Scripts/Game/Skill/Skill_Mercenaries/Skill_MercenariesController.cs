@@ -27,6 +27,8 @@ public class Skill_MercenariesController
     private bool _isAttacking;
     // 用來防止單次動畫內連發傷害
     private bool _hasDealtDamage;
+    // 紀錄目標最後位置,防止目標死亡絕招無法產生
+    private Vector3 _lastTargetPosition;
 
     private Skill_MercenariesView _view;
     private SkillItemData _model;
@@ -176,8 +178,10 @@ public class Skill_MercenariesController
     private void DoAttack()
     {
         if (_isAttacking) return;
+
         _isAttacking = true;
         _hasDealtDamage = false;
+        _lastTargetPosition = _currentTarget.position;
 
         // 面向目標
         Vector3 direction = (_currentTarget.position - _view.ViewObj.position).normalized;
@@ -221,6 +225,22 @@ public class Skill_MercenariesController
     {
         float currentProgress = _stateInfo.normalizedTime % 1.0f;
 
+        // 絕招攻擊
+        if (_stateInfo.IsName("SuperbSkill") && currentProgress > 0.01f && !_hasDealtDamage)
+        {
+            if (currentProgress > _view.SuperbSkillTime)
+            {
+                _hasDealtDamage = true;
+
+                _view.CreateSuperbSkill(
+                    targetPos: _lastTargetPosition,
+                    hitData: _currentHitData,
+                    skillLevel: _model.SkillLevel - 1);
+
+                _currentHitData = null;
+            }
+        }
+
         // 檢測攻擊時機點
         if (_currentTarget != null && _currentTarget.gameObject.activeInHierarchy)
         {
@@ -241,26 +261,11 @@ public class Skill_MercenariesController
                     _hasDealtDamage = true;
                     HitEnemy(enemyObj: _currentTarget.gameObject);
                 }
-            }
-            // 絕招攻擊
-            else if (_stateInfo.IsName("SuperbSkill") && currentProgress > 0.01f && !_hasDealtDamage)
-            {
-                if (currentProgress > _view.SuperbSkillTime)
-                {
-                    _hasDealtDamage = true;
-
-                    _view.CreateSuperbSkill(
-                        target: _currentTarget, 
-                        hitData: _currentHitData,
-                        skillLevel: _model.SkillLevel - 1);
-
-                    _currentHitData = null; 
-                }
-            }
+            }            
         }
 
         // 攻擊判斷重製
-        if(_isAttacking &&
+        if (_isAttacking &&
             (_stateInfo.IsName("Attack") || _stateInfo.IsName("CriticalAttack") || _stateInfo.IsName("SuperbSkill")) && 
             currentProgress > 0.9f)
         {
