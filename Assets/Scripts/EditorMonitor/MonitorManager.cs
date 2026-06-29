@@ -112,7 +112,7 @@ public class MonitorManager : SingletonMonoBehaviour<MonitorManager>
                          $"SetPass Calls: {setPassCalls}";
 
 #else
-        _perfText.text = $"FPS: {fpsText}";
+        _text_Content.text = $"FPS: {fpsText}";
 #endif
     }
 
