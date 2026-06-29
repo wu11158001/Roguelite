@@ -85,11 +85,11 @@ public class TestSkillUpgradeViewModel
     /// 計算技能描述介面顯示位置
     /// </summary>
     /// <param name="viewRect"></param>
-    /// <param name="uIHoverDetector"></param>
+    /// <param name="uiEventHandler"></param>
     /// <param name="yOffset"></param>
-    public void CalculateDescribleViewPosition(RectTransform viewRect, UIHoverDetector uIHoverDetector, float yOffset)
+    public void CalculateDescribleViewPosition(RectTransform viewRect, UIEventHandler uiEventHandler, float yOffset)
     {
-        if (viewRect == null || uIHoverDetector == null) return;
+        if (viewRect == null || uiEventHandler == null) return;
 
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(viewRect);
@@ -100,7 +100,7 @@ public class TestSkillUpgradeViewModel
         Camera uiCamera = (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceOverlay) ? null : Camera.main;
 
         // 先移到原本預計的位置
-        Vector3 btnPos = uIHoverDetector.MainRect.position;
+        Vector3 btnPos = uiEventHandler.MainRect.position;
         viewRect.transform.position = btnPos;
 
         viewRect.transform.localPosition += new Vector3(0, yOffset, 0);

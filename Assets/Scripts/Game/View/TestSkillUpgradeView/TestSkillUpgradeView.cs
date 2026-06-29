@@ -194,10 +194,10 @@ public class TestSkillUpgradeView : BaseView
                 });
             }
 
-            // 懸停偵測器
-            if (obj.TryGetComponent(out UIHoverDetector uIHoverDetector))
+            // 懸停偵測
+            if (obj.TryGetComponent(out UIEventHandler uiEventHandler))
             {
-                uIHoverDetector.EnterAction = () =>
+                uiEventHandler.EnterAction = (eventData) =>
                 {
                     _testDescribeView.SetEnable(true);
                     _testDescribeView.SetSkillDescribe(data);
@@ -205,11 +205,11 @@ public class TestSkillUpgradeView : BaseView
                     RectTransform viewRect = _testDescribeView.GetComponent<RectTransform>();
                     _viewModel.CalculateDescribleViewPosition(
                         viewRect: viewRect,
-                        uIHoverDetector: uIHoverDetector,
+                        uiEventHandler: uiEventHandler,
                         yOffset: _yOffset);
                 };
 
-                uIHoverDetector.ExitAction = () =>
+                uiEventHandler.ExitAction = (eventData) =>
                 {
                     _testDescribeView.SetEnable(false);
                 };
