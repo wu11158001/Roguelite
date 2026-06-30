@@ -180,6 +180,7 @@ public class MonitorManager : SingletonMonoBehaviour<MonitorManager>
 
         _snapTween?.Kill();
         _snapTween = _drpgRect.DOAnchorPosX(targetX, 0.3f)
-            .SetEase(Ease.OutBack);
+            .SetEase(Ease.OutBack)
+            .SetUpdate(true);
     }
 }

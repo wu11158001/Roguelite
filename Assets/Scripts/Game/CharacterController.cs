@@ -54,6 +54,12 @@ public class CharacterController : MonoBehaviour
     /// <param name="attack">攻擊值</param>
     public void OnPlayerGetHit(int attack)
     {
+        // 角色無敵
+        if(GameplayManager.CurrentContext.GameController.IsCharacterInvincible)
+        {
+            return;
+        }
+
         CharacterConfigData characterConfigData = GameStateData.SelectedCharacter;
 
         // 計算減少傷害(至少1點傷害)

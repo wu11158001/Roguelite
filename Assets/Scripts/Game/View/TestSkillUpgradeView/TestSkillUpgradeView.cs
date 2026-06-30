@@ -82,6 +82,39 @@ public class TestSkillUpgradeView : BaseView
                     GameplayManager.CurrentContext.GameController.GamePause(true);
                     ViewManager.Instance.OpenView<BossBonusView>(viewType: VIEW_TYPE.BossBonusView).Forget();
                 }
+                // 無敵
+                if (Keyboard.current.numpad3Key.wasPressedThisFrame)
+                {
+                    float invincibleTime = 5;
+                    GameplayManager.CurrentContext.GameController.SetCharacterInvincible(invincibleTime).Forget();
+
+                    Transform target = GameplayManager.CurrentContext.ControlCharacter.BottomPoint;
+                    SpawnInvincibleEffect(target, invincibleTime);
+
+                    void SpawnInvincibleEffect(Transform target, float recycleTime)
+                    {
+                        EffectData data = GameStateData.AllEffectPrefabData.GetEffect(EFFET_TYPE.Invincible);
+                        if (data != null)
+                        {
+                            GameplayManager.CurrentContext.GameScenePool.SpawnObject(
+                                parentName: "無敵效果",
+                                assetRef: data.PrefabReference,
+                                position: target.position,
+                                rotation: target.rotation,
+                                callback: (obj) =>
+                                {
+                                    obj.transform.SetParent(target);
+                                    obj.transform.position = target.position;
+
+                                    if (obj.TryGetComponent(out EffectRecycle effectRecycle))
+                                    {
+                                        effectRecycle.Setup(data.PrefabReference);
+                                        effectRecycle.SetRecycleTime(recycleTime);
+                                    }
+                                });
+                        }
+                    }
+                }
             })
             .AddTo(this);
 

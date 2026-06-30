@@ -20,6 +20,9 @@ public class GameController : MonoBehaviour
     /// <summary> 累積獲得金幣數量 </summary>
     public int GetCoinCount { get; private set; }
 
+    // 無敵結束時間
+    private float _invincibleEndTime = 0f;
+
     /// <summary>
     /// 遊戲暫停
     /// </summary>
@@ -61,9 +64,23 @@ public class GameController : MonoBehaviour
     /// <param name="time">無敵時間</param>
     public async UniTaskVoid SetCharacterInvincible(float time)
     {
+        float targetEndTime = Time.time + time;
+        if (targetEndTime > _invincibleEndTime)
+        {
+            _invincibleEndTime = targetEndTime;
+        }
+
         IsCharacterInvincible = true;
-        await UniTask.WaitForSeconds(time);
-        IsCharacterInvincible = false;
+
+        while (Time.time < _invincibleEndTime)
+        {
+            await UniTask.Yield();
+        }
+
+        if (Time.time >= _invincibleEndTime)
+        {
+            IsCharacterInvincible = false;
+        }
     }
 
     /// <summary>

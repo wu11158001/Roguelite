@@ -65,6 +65,8 @@ public class Skill_WaterAreaView : BaseSkill
     {
         base.Setup(data, targetEnemy);
 
+        _controller?.Dispose();
+
         Skill_WaterAreaModel model = new();
         model.SkillData = data;
         model.MainCamera = Camera.main;
@@ -76,6 +78,8 @@ public class Skill_WaterAreaView : BaseSkill
         timerSubscription = Observable.Timer(TimeSpan.FromSeconds(data.SkillKeepTime))
             .Subscribe(_ =>
             {
+                _controller?.Dispose();
+                _controller = null;
                 Recycle();
             })
             .AddTo(_disposables);

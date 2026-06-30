@@ -73,7 +73,7 @@ public class BossBonusDiceController : MonoBehaviour
         // 取得目標點數的角度
         Vector3 targetAngle = diceRotations[targetResult - 1];
 
-        // 為了讓旋轉看起來更自然、轉更多圈，在目標角度上加上隨機的圈數 (360度的倍數)
+        // 在目標角度上加上隨機的圈數
         Vector3 animationRotation = targetAngle + new Vector3(
             UnityEngine.Random.Range(2, 4) * 360,
             UnityEngine.Random.Range(2, 4) * 360,
@@ -84,7 +84,6 @@ public class BossBonusDiceController : MonoBehaviour
         Vector3 currentPos = transform.position;
         Vector3 targetPosition = currentPos + new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), 0, UnityEngine.Random.Range(-1.0f, 1.0f));
 
-        // 建立一個 DOTween 動畫序列
         _diceSequence = DOTween.Sequence();
 
         // 跳躍控制

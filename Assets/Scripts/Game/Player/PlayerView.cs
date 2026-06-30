@@ -184,25 +184,20 @@ public class PlayerView : BaseCharacter
                 int previousHp = pair.Previous;
                 int currentHp = pair.Current;
 
+                // 更新血條 UI
+                float hpRatio = (float)currentHp / _characterConfig.MaxHp.Value;
+                if (_hpBarView != null) _hpBarView.SetHpBar(hpRatio);
+
                 if (currentHp > previousHp)
                 {
                     // 回復生命
                     _controller.TriggerHpRecoverEffect();
-                }
-                // 角色無敵
-                else if (GameplayManager.CurrentContext.GameController.IsCharacterInvincible)
-                {
-                    _characterConfig.Hp.Value = previousHp;
                 }
                 else if (previousHp > currentHp)
                 {
                     // 減少生命
                     PlayHitAnim();
                 }
-
-                // 更新血條 UI
-                float hpRatio = (float)currentHp / _characterConfig.MaxHp.Value;
-                if (_hpBarView != null) _hpBarView.SetHpBar(hpRatio);
 
                 // 死亡
                 if (currentHp <= 0)
