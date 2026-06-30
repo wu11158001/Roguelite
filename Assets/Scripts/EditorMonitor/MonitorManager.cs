@@ -67,7 +67,7 @@ public class MonitorManager : SingletonMonoBehaviour<MonitorManager>
                 // 控制顯示
                 if (Keyboard.current.tabKey.wasPressedThisFrame)
                 {
-                    _btn_Content.gameObject.SetActive(!_btn_Content.gameObject.activeSelf);
+                    _drpgRect.gameObject.SetActive(!_drpgRect.gameObject.activeSelf);
                 }
             })
             .AddTo(this);

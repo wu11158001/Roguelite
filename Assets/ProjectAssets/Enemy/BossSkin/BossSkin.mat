@@ -47,7 +47,7 @@ Material:
     - _edge_threshold: 0.5
     m_Colors:
     - _base_color: {r: 0, g: 0.7433963, b: 0.11952641, a: 0}
-    - _glow_color: {r: 0.77254903, g: 0.08620716, b: 0.05490194, a: 1}
+    - _glow_color: {r: 1, g: 0.50463796, b: 0.023584902, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &7972110635937092140
