@@ -25,7 +25,7 @@ MonoBehaviour:
   Mode1_MinSpawnCount: 1
   Mode1_MaxSpawnCount: 15
   Mode1_MoveSpeed: 4
-  Mode1_EnemyHpIncreaseMultiplier: 2
+  Mode1_EnemyHpIncreaseMultiplier: 1.5
   Mode1_EnemyAttackIncreaseMultiplier: 0.4
   Mode2_WaveCount: 4
   Mode2_WaveInterval: 8
@@ -38,7 +38,7 @@ MonoBehaviour:
   Mode3_EnemyCount: 80
   Mode3_During: 30
   Mode3_MoveSpeed: 0.5
-  Mode3_HpEnhance: 1.5
+  Mode3_HpEnhance: 2
   Mode3_HpMultiplier: 2
   Mode4_TotalSpawnCount: 40
   Mode4_BulletSpeed: 4.5

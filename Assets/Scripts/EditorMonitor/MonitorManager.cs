@@ -35,6 +35,8 @@ public class MonitorManager : SingletonMonoBehaviour<MonitorManager>
 
     private void Start()
     {
+        _drpgRect.gameObject.SetActive(false);
+
         _btn_Show.gameObject.SetActive(true);
         _btn_Content.gameObject.SetActive(false);
         

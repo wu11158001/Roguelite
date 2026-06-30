@@ -34,11 +34,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2.5
+    SkillCd: 3.1
     SkillAttack: 17
     SkillShotCount: 3
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 0
@@ -70,11 +72,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2.5
+    SkillCd: 3.1
     SkillAttack: 23
     SkillShotCount: 3
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 0
@@ -106,11 +110,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2.5
+    SkillCd: 3.1
     SkillAttack: 23
     SkillShotCount: 5
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 0
@@ -142,11 +148,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2.3
+    SkillCd: 2.9
     SkillAttack: 23
     SkillShotCount: 5
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 5
@@ -178,11 +186,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2.15
+    SkillCd: 2.7
     SkillAttack: 23
     SkillShotCount: 5
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 5
@@ -214,11 +224,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2.15
+    SkillCd: 2.7
     SkillAttack: 26
     SkillShotCount: 6
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 5
@@ -250,11 +262,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2
+    SkillCd: 2.5
     SkillAttack: 29
     SkillShotCount: 6
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 5
@@ -286,11 +300,13 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-    SkillCd: 2
+    SkillCd: 2.5
     SkillAttack: 29
     SkillShotCount: 6
-    SkillShotInterval: 0.2
+    SkillShotInterval: 0.1
     SkillPenetrate: 0
+    SkillSplit: 0
+    SkillSplitAttack: 0
     SkillFlightSpeed: 0
     SkillKnockback: 0
     SkillCriticalChance: 10

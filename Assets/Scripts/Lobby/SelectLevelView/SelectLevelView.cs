@@ -41,6 +41,20 @@ public class SelectLevelView : BaseView
         CreateLevelItemView();
     }
 
+    private void Update()
+    {
+        // 測試用:解鎖關卡
+        if (UnityEngine.InputSystem.Keyboard.current.numpad7Key.wasPressedThisFrame)
+        {
+            PlayerInfoData infoData = PlayerInfoStateData.PlayerInfo.Value;
+            infoData.PassLevel = 3;
+            PlayerInfoStateData.PlayerInfo.Value = infoData;
+
+            Close();
+            ViewManager.Instance.OpenView<SelectLevelView>(VIEW_TYPE.SelectLevelView).Forget();
+        }
+    }
+
     public override void CloseViewHandle()
     {
         ViewManager.Instance?.CloseView(true);
